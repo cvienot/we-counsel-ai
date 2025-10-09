@@ -124,16 +124,20 @@ run_dev() {
     
     # Start Express server if needed
     if [ "$server_running" = "false" ] || [ "$should_reset" = "true" ]; then
-        log $CYAN "🚀 Starting Express server..."
-        npx nodemon src/server.js &
-        local server_pid=$!
-        echo $server_pid > .server.pid
-        
-        if wait_for_service 3000 "Express server"; then
-            log $GREEN "✅ Express server started successfully"
+        if [ "$server_running" = "true" ] && [ "$should_reset" = "false" ]; then
+            log $YELLOW "🔄 Server already running. Use 'npm run dev:reset' to restart, or 'npm run dev:stop' then 'npm run dev'"
         else
-            log $RED "❌ Failed to start Express server"
-            exit 1
+            log $CYAN "🚀 Starting Express server..."
+            npx nodemon src/server.js &
+            local server_pid=$!
+            echo $server_pid > .server.pid
+            
+            if wait_for_service 3000 "Express server"; then
+                log $GREEN "✅ Express server started successfully"
+            else
+                log $RED "❌ Failed to start Express server"
+                exit 1
+            fi
         fi
     fi
     

@@ -5,7 +5,9 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "./scripts/dev.sh",
+    "dev": "./scripts/dev-manager.sh server",
+    "dev:full": "./scripts/dev-manager.sh full", 
+    "dev:logs": "./scripts/dev-manager.sh logs",
     "dev:reset": "./scripts/dev.sh reset",
     "dev:stop": "./scripts/stop.sh",
     "dynamodb": "node scripts/start-dynamodb.js",
