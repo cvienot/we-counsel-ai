@@ -10,7 +10,6 @@ const conversationRoutes = require('./routes/conversations');
 const messageRoutes = require('./routes/messages');
 
 const errorHandler = require('./middleware/errorHandler');
-const { createTables } = require('./config/database');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -59,23 +58,11 @@ app.use((req, res) => {
 // Error handling middleware
 app.use(errorHandler);
 
-// Initialize database tables and start server
-const startServer = async () => {
-  try {
-    // Create tables if in development
-    await createTables();
-    
-    app.listen(PORT, () => {
-      console.log(`🚀 We Counsel API server running on port ${PORT}`);
-      console.log(`📊 Environment: ${process.env.NODE_ENV}`);
-      console.log(`🔗 Health check: http://localhost:${PORT}/health`);
-    });
-  } catch (error) {
-    console.error('❌ Failed to start server:', error);
-    process.exit(1);
-  }
-};
-
-startServer();
+// Start server
+app.listen(PORT, () => {
+  console.log(`🚀 We Counsel API server running on port ${PORT}`);
+  console.log(`📊 Environment: ${process.env.NODE_ENV}`);
+  console.log(`🔗 Health check: http://localhost:${PORT}/health`);
+});
 
 module.exports = app;

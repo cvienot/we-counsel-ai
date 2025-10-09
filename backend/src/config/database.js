@@ -15,8 +15,9 @@ const dynamoConfig = {
 // Use local DynamoDB for development
 if (process.env.NODE_ENV === 'development') {
   dynamoConfig.endpoint = process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000';
-  dynamoConfig.accessKeyId = process.env.AWS_ACCESS_KEY_ID;
-  dynamoConfig.secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+  // DynamoDB Local requires these specific dummy credentials
+  dynamoConfig.accessKeyId = 'local';
+  dynamoConfig.secretAccessKey = 'local';
 }
 
 const dynamodb = new AWS.DynamoDB(dynamoConfig);

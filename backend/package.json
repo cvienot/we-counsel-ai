@@ -5,9 +5,12 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "nodemon src/server.js",
+    "dev": "./scripts/dev.sh",
+    "dev:reset": "./scripts/dev.sh reset",
+    "dev:stop": "./scripts/stop.sh",
     "dynamodb": "node scripts/start-dynamodb.js",
-    "dev:full": "npm run dynamodb & npm run dev",
+    "setup:db": "node scripts/setup-database.js",
+    "reset:db": "node scripts/reset-database.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
