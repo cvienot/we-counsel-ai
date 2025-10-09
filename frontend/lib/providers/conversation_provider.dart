@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dio/dio.dart';
 import '../models/conversation.dart';
 import '../models/message.dart';
 import '../services/api_service.dart';
@@ -94,11 +93,11 @@ class ConversationsNotifier extends StateNotifier<ConversationsState> {
           isLoading: false,
         );
       }
-    } on DioException catch (e) {
-      final apiError = ApiService.handleError(e);
+    } catch (e) {
+      // Error handled by API service
       state = state.copyWith(
         isLoading: false,
-        error: apiError.message,
+        error: e.toString(),
       );
     }
   }
@@ -124,11 +123,11 @@ class ConversationsNotifier extends StateNotifier<ConversationsState> {
           isLoading: false,
         );
       }
-    } on DioException catch (e) {
-      final apiError = ApiService.handleError(e);
+    } catch (e) {
+      // Error handled by API service
       state = state.copyWith(
         isLoading: false,
-        error: apiError.message,
+        error: e.toString(),
       );
       rethrow;
     }
@@ -154,9 +153,9 @@ class ConversationsNotifier extends StateNotifier<ConversationsState> {
         
         state = state.copyWith(conversations: updatedConversations);
       }
-    } on DioException catch (e) {
-      final apiError = ApiService.handleError(e);
-      state = state.copyWith(error: apiError.message);
+    } catch (e) {
+      // Error handled by API service
+      state = state.copyWith(error: e.toString());
       rethrow;
     }
   }
@@ -170,9 +169,9 @@ class ConversationsNotifier extends StateNotifier<ConversationsState> {
           .toList();
       
       state = state.copyWith(conversations: updatedConversations);
-    } on DioException catch (e) {
-      final apiError = ApiService.handleError(e);
-      state = state.copyWith(error: apiError.message);
+    } catch (e) {
+      // Error handled by API service
+      state = state.copyWith(error: e.toString());
       rethrow;
     }
   }
@@ -208,11 +207,11 @@ class MessagesNotifier extends StateNotifier<MessagesState> {
           isLoading: false,
         );
       }
-    } on DioException catch (e) {
-      final apiError = ApiService.handleError(e);
+    } catch (e) {
+      // Error handled by API service
       state = state.copyWith(
         isLoading: false,
-        error: apiError.message,
+        error: e.toString(),
       );
     }
   }
@@ -250,11 +249,11 @@ class MessagesNotifier extends StateNotifier<MessagesState> {
           isSending: false,
         );
       }
-    } on DioException catch (e) {
-      final apiError = ApiService.handleError(e);
+    } catch (e) {
+      // Error handled by API service
       state = state.copyWith(
         isSending: false,
-        error: apiError.message,
+        error: e.toString(),
       );
       rethrow;
     }
@@ -278,9 +277,9 @@ class MessagesNotifier extends StateNotifier<MessagesState> {
         
         state = state.copyWith(messages: updatedMessages);
       }
-    } on DioException catch (e) {
-      final apiError = ApiService.handleError(e);
-      state = state.copyWith(error: apiError.message);
+    } catch (e) {
+      // Error handled by API service
+      state = state.copyWith(error: e.toString());
       rethrow;
     }
   }
@@ -297,9 +296,9 @@ class MessagesNotifier extends StateNotifier<MessagesState> {
       }).toList();
       
       state = state.copyWith(messages: updatedMessages);
-    } on DioException catch (e) {
-      final apiError = ApiService.handleError(e);
-      state = state.copyWith(error: apiError.message);
+    } catch (e) {
+      // Error handled by API service
+      state = state.copyWith(error: e.toString());
       rethrow;
     }
   }

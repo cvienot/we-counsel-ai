@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dio/dio.dart';
 import '../models/user.dart';
 import '../services/api_service.dart';
 
@@ -75,11 +74,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
           isAuthenticated: true,
         );
       }
-    } on DioException catch (e) {
-      final apiError = ApiService.handleError(e);
+    } catch (e) {
       state = state.copyWith(
         isLoading: false,
-        error: apiError.message,
+        error: e.toString(),
       );
       rethrow;
     }
@@ -105,11 +103,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
           isAuthenticated: true,
         );
       }
-    } on DioException catch (e) {
-      final apiError = ApiService.handleError(e);
+    } catch (e) {
       state = state.copyWith(
         isLoading: false,
-        error: apiError.message,
+        error: e.toString(),
       );
       rethrow;
     }
@@ -150,11 +147,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
           isLoading: false,
         );
       }
-    } on DioException catch (e) {
-      final apiError = ApiService.handleError(e);
+    } catch (e) {
       state = state.copyWith(
         isLoading: false,
-        error: apiError.message,
+        error: e.toString(),
       );
       rethrow;
     }
@@ -173,11 +169,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
       );
       
       state = state.copyWith(isLoading: false);
-    } on DioException catch (e) {
-      final apiError = ApiService.handleError(e);
+    } catch (e) {
       state = state.copyWith(
         isLoading: false,
-        error: apiError.message,
+        error: e.toString(),
       );
       rethrow;
     }
@@ -193,11 +188,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
       await getCurrentUser();
       
       state = state.copyWith(isLoading: false);
-    } on DioException catch (e) {
-      final apiError = ApiService.handleError(e);
+    } catch (e) {
       state = state.copyWith(
         isLoading: false,
-        error: apiError.message,
+        error: e.toString(),
       );
       rethrow;
     }
