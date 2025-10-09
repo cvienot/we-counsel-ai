@@ -55,6 +55,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     required String password,
     required String firstName,
     required String lastName,
+    String? invitationId,
   }) async {
     state = state.copyWith(isLoading: true, error: null);
     
@@ -73,6 +74,16 @@ class AuthNotifier extends StateNotifier<AuthState> {
           isLoading: false,
           isAuthenticated: true,
         );
+        
+        // If there's a pending invitation, accept it automatically
+        if (invitationId != null) {
+          try {
+            await acceptInvitation(invitationId);
+          } catch (e) {
+            // Log the error but don't fail the registration
+            print('Failed to auto-accept invitation: $e');
+          }
+        }
       }
     } catch (e) {
       state = state.copyWith(
@@ -86,6 +97,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> login({
     required String email,
     required String password,
+    String? invitationId,
   }) async {
     state = state.copyWith(isLoading: true, error: null);
     
@@ -102,6 +114,16 @@ class AuthNotifier extends StateNotifier<AuthState> {
           isLoading: false,
           isAuthenticated: true,
         );
+        
+        // If there's a pending invitation, accept it automatically
+        if (invitationId != null) {
+          try {
+            await acceptInvitation(invitationId);
+          } catch (e) {
+            // Log the error but don't fail the login
+            print('Failed to auto-accept invitation: $e');
+          }
+        }
       }
     } catch (e) {
       state = state.copyWith(
@@ -227,3 +249,6 @@ final hasPartnerProvider = Provider<bool>((ref) {
   final user = ref.watch(currentUserProvider);
   return user?.hasPartner ?? false;
 });
+
+// Provider to store pending invitation ID
+final pendingInvitationProvider = StateProvider<String?>((ref) => null);

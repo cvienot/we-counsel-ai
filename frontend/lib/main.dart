@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_strategy/url_strategy.dart';
 
 import 'providers/auth_provider.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/auth/register_screen.dart';
+import 'screens/auth/invitation_screen.dart';
 import 'screens/home/home_screen.dart';
 import 'screens/conversations/conversation_list_screen.dart';
 import 'screens/conversations/conversation_screen.dart';
@@ -12,6 +14,8 @@ import 'screens/profile/profile_screen.dart';
 import 'screens/invite/invite_partner_screen.dart';
 
 void main() {
+  // Use path-based routing instead of hash-based routing
+  setPathUrlStrategy();
   runApp(const ProviderScope(child: WeCounselApp()));
 }
 
@@ -63,10 +67,18 @@ class WeCounselApp extends ConsumerWidget {
   GoRouter _createRouter(WidgetRef ref) {
     return GoRouter(
       initialLocation: '/login',
+      debugLogDiagnostics: true,
       redirect: (context, state) {
         final isAuthenticated = ref.read(isAuthenticatedProvider);
-        final isLoginRoute = state.fullPath == '/login';
-        final isRegisterRoute = state.fullPath == '/register';
+        final location = state.uri.toString();
+        final isLoginRoute = location == '/login';
+        final isRegisterRoute = location == '/register';
+        final isInvitationRoute = location.startsWith('/invitation/');
+
+        // Allow invitation routes without authentication
+        if (isInvitationRoute) {
+          return null;
+        }
 
         // If not authenticated and not on auth routes, redirect to login
         if (!isAuthenticated && !isLoginRoute && !isRegisterRoute) {
@@ -88,6 +100,13 @@ class WeCounselApp extends ConsumerWidget {
         GoRoute(
           path: '/register',
           builder: (context, state) => const RegisterScreen(),
+        ),
+        GoRoute(
+          path: '/invitation/:id',
+          builder: (context, state) {
+            final invitationId = state.pathParameters['id']!;
+            return InvitationScreen(invitationId: invitationId);
+          },
         ),
         GoRoute(
           path: '/home',

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../providers/auth_provider.dart';
+import 'invitation_screen.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -25,12 +26,27 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Future<void> _handleLogin() async {
     if (_formKey.currentState!.validate()) {
       try {
+        final pendingInvitation = ref.read(pendingInvitationProvider);
+        
         await ref.read(authProvider.notifier).login(
           email: _emailController.text.trim(),
           password: _passwordController.text,
+          invitationId: pendingInvitation,
         );
         
         if (mounted) {
+          // Clear the pending invitation
+          ref.read(pendingInvitationProvider.notifier).state = null;
+          
+          if (pendingInvitation != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Successfully logged in and joined your partner!'),
+                backgroundColor: Colors.green,
+              ),
+            );
+          }
+          
           context.go('/home');
         }
       } catch (e) {

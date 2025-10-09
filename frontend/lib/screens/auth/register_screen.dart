@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../providers/auth_provider.dart';
+import 'invitation_screen.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
@@ -31,14 +32,29 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   Future<void> _handleRegister() async {
     if (_formKey.currentState!.validate()) {
       try {
+        final pendingInvitation = ref.read(pendingInvitationProvider);
+        
         await ref.read(authProvider.notifier).register(
           email: _emailController.text.trim(),
           password: _passwordController.text,
           firstName: _firstNameController.text.trim(),
           lastName: _lastNameController.text.trim(),
+          invitationId: pendingInvitation,
         );
         
         if (mounted) {
+          // Clear the pending invitation
+          ref.read(pendingInvitationProvider.notifier).state = null;
+          
+          if (pendingInvitation != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Account created and successfully joined your partner!'),
+                backgroundColor: Colors.green,
+              ),
+            );
+          }
+          
           context.go('/home');
         }
       } catch (e) {
