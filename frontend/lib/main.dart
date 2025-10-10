@@ -8,6 +8,7 @@ import 'screens/auth/login_screen.dart';
 import 'screens/auth/register_screen.dart';
 import 'screens/auth/invitation_screen.dart';
 import 'screens/home/home_screen.dart';
+import 'screens/main_thread/main_thread_screen.dart';
 import 'screens/conversations/conversation_list_screen.dart';
 import 'screens/conversations/conversation_screen.dart';
 import 'screens/profile/profile_screen.dart';
@@ -110,7 +111,7 @@ class WeCounselApp extends ConsumerWidget {
         ),
         GoRoute(
           path: '/home',
-          builder: (context, state) => const HomeScreen(),
+          builder: (context, state) => const MainThreadScreen(),
         ),
         GoRoute(
           path: '/conversations',
@@ -130,6 +131,10 @@ class WeCounselApp extends ConsumerWidget {
         GoRoute(
           path: '/invite',
           builder: (context, state) => const InvitePartnerScreen(),
+        ),
+        GoRoute(
+          path: '/dashboard',
+          builder: (context, state) => const HomeScreen(),
         ),
       ],
     );

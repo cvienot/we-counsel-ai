@@ -42,12 +42,82 @@ router.get('/', authenticateToken, async (req, res) => {
   }
 });
 
+// @route   GET /api/conversations/main-thread
+// @desc    Get or create the main thread for a couple
+// @access  Private
+router.get('/main-thread', authenticateToken, async (req, res) => {
+  try {
+    if (!req.user.coupleId) {
+      return res.status(400).json({
+        error: 'No couple',
+        message: 'You need to be paired with a partner to access the main thread'
+      });
+    }
+
+    // First, try to get existing main thread
+    const params = {
+      TableName: TABLES.CONVERSATIONS,
+      IndexName: 'couple-index',
+      KeyConditionExpression: 'coupleId = :coupleId',
+      FilterExpression: 'isMainThread = :isMainThread',
+      ExpressionAttributeValues: {
+        ':coupleId': req.user.coupleId,
+        ':isMainThread': true
+      }
+    };
+
+    const result = await docClient.query(params).promise();
+
+    if (result.Items && result.Items.length > 0) {
+      // Main thread exists, return it
+      return res.json({
+        success: true,
+        mainThread: result.Items[0]
+      });
+    }
+
+    // No main thread exists, create one
+    const conversationId = randomUUID();
+    const mainThreadData = {
+      conversationId,
+      coupleId: req.user.coupleId,
+      title: 'Main Conversation',
+      topic: 'Your ongoing journey together',
+      createdBy: req.user.userId,
+      createdAt: new Date().toISOString(),
+      lastMessageAt: new Date().toISOString(),
+      isActive: true,
+      isMainThread: true,
+      messageCount: 0
+    };
+
+    const createParams = {
+      TableName: TABLES.CONVERSATIONS,
+      Item: mainThreadData
+    };
+
+    await docClient.put(createParams).promise();
+
+    res.json({
+      success: true,
+      mainThread: mainThreadData
+    });
+
+  } catch (error) {
+    console.error('Get/Create main thread error:', error);
+    res.status(500).json({
+      error: 'Server error',
+      message: 'Failed to get or create main thread'
+    });
+  }
+});
+
 // @route   POST /api/conversations
 // @desc    Create a new conversation
 // @access  Private
 router.post('/', authenticateToken, async (req, res) => {
   try {
-    const { title, topic } = req.body;
+    const { title, topic, isMainThread = false } = req.body;
 
     if (!req.user.coupleId) {
       return res.status(400).json({
@@ -64,6 +134,28 @@ router.post('/', authenticateToken, async (req, res) => {
       });
     }
 
+    // Check if trying to create another main thread
+    if (isMainThread) {
+      const mainThreadParams = {
+        TableName: TABLES.CONVERSATIONS,
+        IndexName: 'couple-index',
+        KeyConditionExpression: 'coupleId = :coupleId',
+        FilterExpression: 'isMainThread = :isMainThread',
+        ExpressionAttributeValues: {
+          ':coupleId': req.user.coupleId,
+          ':isMainThread': true
+        }
+      };
+
+      const existingMainThread = await docClient.query(mainThreadParams).promise();
+      if (existingMainThread.Items && existingMainThread.Items.length > 0) {
+        return res.status(400).json({
+          error: 'Main thread exists',
+          message: 'A main thread already exists for this couple'
+        });
+      }
+    }
+
     const conversationId = randomUUID();
     const conversationData = {
       conversationId,
@@ -74,6 +166,7 @@ router.post('/', authenticateToken, async (req, res) => {
       createdAt: new Date().toISOString(),
       lastMessageAt: new Date().toISOString(),
       isActive: true,
+      isMainThread: isMainThread,
       messageCount: 0
     };
 

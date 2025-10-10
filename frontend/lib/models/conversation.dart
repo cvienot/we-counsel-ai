@@ -8,6 +8,7 @@ class Conversation {
   final DateTime lastMessageAt;
   final bool isActive;
   final int messageCount;
+  final bool isMainThread;
   final DateTime? updatedAt;
   final DateTime? archivedAt;
 
@@ -21,6 +22,7 @@ class Conversation {
     required this.lastMessageAt,
     required this.isActive,
     required this.messageCount,
+    this.isMainThread = false,
     this.updatedAt,
     this.archivedAt,
   });
@@ -36,6 +38,7 @@ class Conversation {
       lastMessageAt: DateTime.parse(json['lastMessageAt'] ?? DateTime.now().toIso8601String()),
       isActive: json['isActive'] ?? true,
       messageCount: json['messageCount'] ?? 0,
+      isMainThread: json['isMainThread'] ?? false,
       updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
       archivedAt: json['archivedAt'] != null ? DateTime.parse(json['archivedAt']) : null,
     );
@@ -52,6 +55,7 @@ class Conversation {
       'lastMessageAt': lastMessageAt.toIso8601String(),
       'isActive': isActive,
       'messageCount': messageCount,
+      'isMainThread': isMainThread,
       'updatedAt': updatedAt?.toIso8601String(),
       'archivedAt': archivedAt?.toIso8601String(),
     };

@@ -62,6 +62,67 @@ class MessagesState {
   }
 }
 
+// Main Thread state
+class MainThreadState {
+  final Conversation? mainThread;
+  final bool isLoading;
+  final String? error;
+
+  const MainThreadState({
+    this.mainThread,
+    this.isLoading = false,
+    this.error,
+  });
+
+  MainThreadState copyWith({
+    Conversation? mainThread,
+    bool? isLoading,
+    String? error,
+  }) {
+    return MainThreadState(
+      mainThread: mainThread ?? this.mainThread,
+      isLoading: isLoading ?? this.isLoading,
+      error: error,
+    );
+  }
+}
+
+// Main Thread provider
+class MainThreadNotifier extends StateNotifier<MainThreadState> {
+  final ApiService _apiService;
+  final Ref _ref;
+
+  MainThreadNotifier(this._apiService, this._ref) : super(const MainThreadState());
+
+  Future<void> loadMainThread() async {
+    // Only load if user has a partner
+    final hasPartner = _ref.read(hasPartnerProvider);
+    if (!hasPartner) {
+      state = state.copyWith(mainThread: null);
+      return;
+    }
+
+    state = state.copyWith(isLoading: true, error: null);
+    
+    try {
+      final response = await _apiService.getMainThread();
+      
+      if (response['success'] == true && response['mainThread'] != null) {
+        final mainThread = Conversation.fromJson(response['mainThread']);
+        state = state.copyWith(
+          mainThread: mainThread,
+          isLoading: false,
+        );
+      }
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: e.toString(),
+      );
+    }
+  }
+}
+
 // Conversations provider
 class ConversationsNotifier extends StateNotifier<ConversationsState> {
   final ApiService _apiService;
@@ -309,6 +370,10 @@ class MessagesNotifier extends StateNotifier<MessagesState> {
 }
 
 // Providers
+final mainThreadProvider = StateNotifierProvider<MainThreadNotifier, MainThreadState>((ref) {
+  return MainThreadNotifier(ref.read(apiServiceProvider), ref);
+});
+
 final conversationsProvider = StateNotifierProvider<ConversationsNotifier, ConversationsState>((ref) {
   return ConversationsNotifier(ref.read(apiServiceProvider), ref);
 });

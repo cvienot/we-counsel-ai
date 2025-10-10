@@ -282,6 +282,15 @@ class ApiService {
     }
   }
 
+  Future<Map<String, dynamic>> getMainThread() async {
+    try {
+      final response = await _dio.get('/conversations/main-thread');
+      return response.data;
+    } on DioException catch (e) {
+      throw Exception(_extractErrorMessage(e));
+    }
+  }
+
   Future<Map<String, dynamic>> createConversation({
     required String title,
     String? topic,
