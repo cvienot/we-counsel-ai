@@ -3,9 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../providers/conversation_provider.dart';
 import '../../providers/auth_provider.dart';
-import '../../models/message.dart';
 import '../../widgets/message_bubble.dart';
-import 'package:intl/intl.dart';
 
 class MainThreadScreen extends ConsumerStatefulWidget {
   const MainThreadScreen({super.key});

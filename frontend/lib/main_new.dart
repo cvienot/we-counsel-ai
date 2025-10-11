@@ -34,10 +34,10 @@ class WeCounselApp extends ConsumerWidget {
           elevation: 0,
           centerTitle: true,
         ),
-        cardTheme: CardTheme(
+        cardTheme: const CardThemeData(
           elevation: 2,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.all(Radius.circular(12)),
           ),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
@@ -65,7 +65,6 @@ class WeCounselApp extends ConsumerWidget {
       initialLocation: '/login',
       redirect: (context, state) {
         final isAuthenticated = ref.read(isAuthenticatedProvider);
-        final isAuthRoute = state.fullPath?.startsWith('/auth') ?? false;
         final isLoginRoute = state.fullPath == '/login';
         final isRegisterRoute = state.fullPath == '/register';
 

@@ -1,7 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:async';
 import '../models/conversation.dart';
 import '../models/message.dart';
 import '../services/api_service.dart';
+import '../services/realtime_service.dart';
+import '../services/streaming_message_service.dart';
 import 'auth_provider.dart';
 
 // Conversations state
@@ -36,6 +39,9 @@ class MessagesState {
   final bool isSending;
   final String? error;
   final String? conversationTitle;
+  final Map<String, bool> typingUsers;
+  final Map<String, String> streamingMessages;
+  final Set<String> streamingMessageIds;
 
   const MessagesState({
     this.messages = const [],
@@ -43,6 +49,9 @@ class MessagesState {
     this.isSending = false,
     this.error,
     this.conversationTitle,
+    this.typingUsers = const {},
+    this.streamingMessages = const {},
+    this.streamingMessageIds = const {},
   });
 
   MessagesState copyWith({
@@ -51,6 +60,9 @@ class MessagesState {
     bool? isSending,
     String? error,
     String? conversationTitle,
+    Map<String, bool>? typingUsers,
+    Map<String, String>? streamingMessages,
+    Set<String>? streamingMessageIds,
   }) {
     return MessagesState(
       messages: messages ?? this.messages,
@@ -58,6 +70,9 @@ class MessagesState {
       isSending: isSending ?? this.isSending,
       error: error,
       conversationTitle: conversationTitle ?? this.conversationTitle,
+      typingUsers: typingUsers ?? this.typingUsers,
+      streamingMessages: streamingMessages ?? this.streamingMessages,
+      streamingMessageIds: streamingMessageIds ?? this.streamingMessageIds,
     );
   }
 }
@@ -246,8 +261,106 @@ class ConversationsNotifier extends StateNotifier<ConversationsState> {
 class MessagesNotifier extends StateNotifier<MessagesState> {
   final ApiService _apiService;
   final String conversationId;
+  final RealtimeService _realtimeService = RealtimeService();
+  final StreamingMessageService _streamingService = StreamingMessageService();
+  
+  StreamSubscription? _newMessageSubscription;
+  StreamSubscription? _typingSubscription;
+  StreamSubscription? _aiStreamSubscription;
+  Timer? _typingTimer;
 
-  MessagesNotifier(this._apiService, this.conversationId) : super(const MessagesState());
+  MessagesNotifier(this._apiService, this.conversationId) : super(const MessagesState()) {
+    _setupRealtimeListeners();
+  }
+
+  void _setupRealtimeListeners() {
+    // Listen for new messages
+    _newMessageSubscription = _realtimeService.newMessageStream.listen((message) {
+      if (message.conversationId == conversationId) {
+        _addNewMessage(message);
+      }
+    });
+
+    // Listen for typing updates
+    _typingSubscription = _realtimeService.typingStream.listen((data) {
+      if (data['conversationId'] == conversationId) {
+        _updateTypingStatus(data);
+      }
+    });
+
+    // Listen for AI streaming chunks
+    _aiStreamSubscription = _realtimeService.aiStreamStream.listen((data) {
+      if (data['conversationId'] == conversationId) {
+        _handleAIStreamChunk(data);
+      }
+    });
+  }
+
+  void _addNewMessage(Message message) {
+    final updatedMessages = List<Message>.from(state.messages);
+    updatedMessages.add(message);
+    updatedMessages.sort((a, b) => a.timestamp.compareTo(b.timestamp));
+    
+    state = state.copyWith(messages: updatedMessages);
+  }
+
+  void _updateTypingStatus(Map<String, dynamic> data) {
+    final userId = data['userId'] as String;
+    final isTyping = data['isTyping'] as bool;
+    
+    final updatedTypingUsers = Map<String, bool>.from(state.typingUsers);
+    
+    if (isTyping) {
+      updatedTypingUsers[userId] = true;
+    } else {
+      updatedTypingUsers.remove(userId);
+    }
+    
+    state = state.copyWith(typingUsers: updatedTypingUsers);
+  }
+
+  void _handleAIStreamChunk(Map<String, dynamic> data) {
+    final messageId = data['messageId'] as String;
+    final chunk = data['chunk'] as String;
+    final isComplete = data['isComplete'] as bool;
+    
+    _streamingService.handleAIStreamChunk(messageId, chunk, isComplete);
+    
+    final updatedStreamingMessages = Map<String, String>.from(state.streamingMessages);
+    final updatedStreamingIds = Set<String>.from(state.streamingMessageIds);
+    
+    if (!isComplete) {
+      updatedStreamingMessages[messageId] = _streamingService.getStreamingContent(messageId);
+      updatedStreamingIds.add(messageId);
+    } else {
+      // Create the complete AI message and add to messages list
+      final completeContent = _streamingService.getStreamingContent(messageId);
+      if (completeContent.isNotEmpty) {
+        final aiMessage = Message(
+          messageId: messageId,
+          conversationId: conversationId,
+          senderId: 'ai-counsellor',
+          senderName: 'Dr. Sarah (AI Counsellor)',
+          senderType: MessageSenderType.ai,
+          content: completeContent,
+          recipientType: MessageRecipientType.both,
+          timestamp: DateTime.now().millisecondsSinceEpoch,
+          createdAt: DateTime.now(),
+        );
+        
+        _addNewMessage(aiMessage);
+      }
+      
+      updatedStreamingMessages.remove(messageId);
+      updatedStreamingIds.remove(messageId);
+      _streamingService.cleanupStream(messageId);
+    }
+    
+    state = state.copyWith(
+      streamingMessages: updatedStreamingMessages,
+      streamingMessageIds: updatedStreamingIds,
+    );
+  }
 
   Future<void> loadMessages() async {
     state = state.copyWith(isLoading: true, error: null);
@@ -284,34 +397,20 @@ class MessagesNotifier extends StateNotifier<MessagesState> {
     state = state.copyWith(isSending: true, error: null);
     
     try {
-      final response = await _apiService.sendMessage(
-        conversationId: conversationId,
-        content: content,
+      // Use streaming message service for AI responses
+      final userMessage = await _streamingService.sendMessageWithStreaming(
+        conversationId,
+        content,
         recipientType: recipientType,
       );
       
-      if (response['success'] == true) {
-        final List<Message> newMessages = [];
-        
-        // Add user message
-        if (response['userMessage'] != null) {
-          newMessages.add(Message.fromJson(response['userMessage']));
-        }
-        
-        // Add AI response if exists
-        if (response['aiResponse'] != null) {
-          newMessages.add(Message.fromJson(response['aiResponse']));
-        }
-        
-        final updatedMessages = [...state.messages, ...newMessages];
-        
-        state = state.copyWith(
-          messages: updatedMessages,
-          isSending: false,
-        );
+      if (userMessage != null) {
+        // Add user message immediately
+        _addNewMessage(userMessage);
       }
+      
+      state = state.copyWith(isSending: false);
     } catch (e) {
-      // Error handled by API service
       state = state.copyWith(
         isSending: false,
         error: e.toString(),
@@ -366,6 +465,49 @@ class MessagesNotifier extends StateNotifier<MessagesState> {
 
   void clearError() {
     state = state.copyWith(error: null);
+  }
+
+  Future<void> sendMessageWithStreaming({
+    required String content,
+    String recipientType = 'both',
+  }) async {
+    await sendMessage(content: content, recipientType: recipientType);
+  }
+
+  void startTyping() {
+    _typingTimer?.cancel();
+    _realtimeService.sendTypingStatus(conversationId, true);
+    
+    // Auto-stop typing after 3 seconds
+    _typingTimer = Timer(const Duration(seconds: 3), () {
+      stopTyping();
+    });
+  }
+
+  void stopTyping() {
+    _typingTimer?.cancel();
+    _realtimeService.sendTypingStatus(conversationId, false);
+  }
+
+  Stream<String> getAIMessageStream(String messageId) {
+    return _streamingService.getAIMessageStream(messageId);
+  }
+
+  String getStreamingContent(String messageId) {
+    return state.streamingMessages[messageId] ?? '';
+  }
+
+  bool isMessageStreaming(String messageId) {
+    return state.streamingMessageIds.contains(messageId);
+  }
+
+  @override
+  void dispose() {
+    _newMessageSubscription?.cancel();
+    _typingSubscription?.cancel();
+    _aiStreamSubscription?.cancel();
+    _typingTimer?.cancel();
+    super.dispose();
   }
 }
 

@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/user.dart';
 import '../services/api_service.dart';
+import '../services/realtime_service.dart';
 
 // Auth state
 class AuthState {
@@ -34,6 +35,7 @@ class AuthState {
 // Auth provider
 class AuthNotifier extends StateNotifier<AuthState> {
   final ApiService _apiService;
+  final RealtimeService _realtimeService = RealtimeService();
 
   AuthNotifier(this._apiService) : super(const AuthState()) {
     checkAuthStatus();
@@ -75,6 +77,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
           isAuthenticated: true,
         );
         
+        // Connect to realtime service after successful registration
+        await _realtimeService.connect();
+        
         // If there's a pending invitation, accept it automatically
         if (invitationId != null) {
           try {
@@ -115,6 +120,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
           isAuthenticated: true,
         );
         
+        // Connect to realtime service after successful login
+        await _realtimeService.connect();
+        
         // If there's a pending invitation, accept it automatically
         if (invitationId != null) {
           try {
@@ -144,6 +152,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
           user: user,
           isAuthenticated: true,
         );
+        
+        // Connect to realtime service if not connected
+        await _realtimeService.connect();
       }
     } catch (e) {
       rethrow;
@@ -221,6 +232,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   Future<void> logout() async {
     await _apiService.clearToken();
+    _realtimeService.disconnect();
     state = const AuthState();
   }
 

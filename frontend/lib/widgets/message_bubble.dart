@@ -14,7 +14,7 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isAI = message.senderType == 'ai';
+    final isAI = message.senderType == MessageSenderType.ai;
     final theme = Theme.of(context);
     
     return Padding(
@@ -99,7 +99,7 @@ class MessageBubble extends StatelessWidget {
   }
 
   Widget _buildAvatar(BuildContext context) {
-    final isAI = message.senderType == 'ai';
+    final isAI = message.senderType == MessageSenderType.ai;
     final theme = Theme.of(context);
 
     return CircleAvatar(
@@ -130,7 +130,7 @@ class MessageBubble extends StatelessWidget {
 
   Color _getBubbleColor(BuildContext context) {
     final theme = Theme.of(context);
-    final isAI = message.senderType == 'ai';
+    final isAI = message.senderType == MessageSenderType.ai;
 
     if (isAI) {
       return theme.colorScheme.primaryContainer;
@@ -143,7 +143,7 @@ class MessageBubble extends StatelessWidget {
 
   Color _getTextColor(BuildContext context) {
     final theme = Theme.of(context);
-    final isAI = message.senderType == 'ai';
+    final isAI = message.senderType == MessageSenderType.ai;
 
     if (isAI) {
       return theme.colorScheme.onPrimaryContainer;

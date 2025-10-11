@@ -1,7 +1,8 @@
 const express = require('express');
 const { docClient, TABLES } = require('../config/database');
 const { authenticateToken } = require('../middleware/authMiddleware');
-const { generateCounsellorResponse } = require('../services/aiService');
+const { generateCounsellorResponse, generateCounsellorResponseStream } = require('../services/aiService');
+const streamingService = require('../services/streamingService');
 const { randomUUID } = require('crypto');
 
 const router = express.Router();
@@ -137,6 +138,9 @@ router.post('/:conversationId', authenticateToken, async (req, res) => {
 
     await docClient.put(messageParams).promise();
 
+    // Send real-time message notification to partner
+    streamingService.sendMessageNotification(conversationId, req.user.userId, messageData);
+
     // Update conversation last message time and count
     const updateConversationParams = {
       TableName: TABLES.CONVERSATIONS,
@@ -197,6 +201,9 @@ router.post('/:conversationId', authenticateToken, async (req, res) => {
 
         await docClient.put(aiMessageParams).promise();
 
+        // Send real-time AI response notification
+        streamingService.sendMessageNotification(conversationId, 'ai-counsellor', aiResponse);
+
         // Update conversation count again
         await docClient.update({
           ...updateConversationParams,
@@ -209,7 +216,47 @@ router.post('/:conversationId', authenticateToken, async (req, res) => {
 
       } catch (aiError) {
         console.error('AI response generation failed:', aiError);
-        // Continue without AI response
+        
+        // Create an error message for non-streaming AI failures
+        try {
+          const aiMessageId = randomUUID();
+          const errorMessage = {
+            messageId: aiMessageId,
+            conversationId,
+            senderId: 'ai-counsellor',
+            senderName: 'Dr. Sarah (AI Counsellor)',
+            senderType: 'ai',
+            content: '❌ I apologize, but I\'m currently unable to respond due to technical issues. Your message has been saved and I\'ll respond when I\'m back online.',
+            recipientType: 'both',
+            timestamp: Date.now() + 1,
+            createdAt: new Date().toISOString()
+          };
+
+          // Save error message
+          const errorMessageParams = {
+            TableName: TABLES.MESSAGES,
+            Item: errorMessage
+          };
+          await docClient.put(errorMessageParams).promise();
+
+          // Send error message via real-time
+          streamingService.sendMessageNotification(conversationId, 'ai-counsellor', errorMessage);
+
+          // Update conversation count
+          await docClient.update({
+            ...updateConversationParams,
+            UpdateExpression: 'SET lastMessageAt = :lastMessageAt, messageCount = messageCount + :increment',
+            ExpressionAttributeValues: {
+              ':lastMessageAt': new Date().toISOString(),
+              ':increment': 1
+            }
+          }).promise();
+
+          aiResponse = errorMessage;
+        } catch (dbError) {
+          console.error('Failed to save AI error message:', dbError);
+          // Continue without AI response but user message is still sent
+        }
       }
     }
 
@@ -227,6 +274,219 @@ router.post('/:conversationId', authenticateToken, async (req, res) => {
 
   } catch (error) {
     console.error('Send message error:', error);
+    res.status(500).json({
+      error: 'Server error',
+      message: 'Failed to send message'
+    });
+  }
+});
+
+// @route   POST /api/messages/:conversationId/ai-stream
+// @desc    Send a message and get streaming AI response
+// @access  Private
+router.post('/:conversationId/ai-stream', authenticateToken, async (req, res) => {
+  try {
+    const { conversationId } = req.params;
+    const { content, recipientType = 'both' } = req.body;
+
+    // Validation
+    if (!content || content.trim().length === 0) {
+      return res.status(400).json({
+        error: 'Validation error',
+        message: 'Message content is required'
+      });
+    }
+
+    // Verify user has access to this conversation
+    const conversationParams = {
+      TableName: TABLES.CONVERSATIONS,
+      Key: { conversationId }
+    };
+
+    const conversationResult = await docClient.get(conversationParams).promise();
+
+    if (!conversationResult.Item) {
+      return res.status(404).json({
+        error: 'Not found',
+        message: 'Conversation not found'
+      });
+    }
+
+    if (conversationResult.Item.coupleId !== req.user.coupleId) {
+      return res.status(403).json({
+        error: 'Forbidden',
+        message: 'You do not have access to this conversation'
+      });
+    }
+
+    const conversation = conversationResult.Item;
+    const messageId = randomUUID();
+    const timestamp = Date.now();
+
+    // Create user message
+    const messageData = {
+      messageId,
+      conversationId,
+      senderId: req.user.userId,
+      senderName: `${req.user.firstName} ${req.user.lastName}`,
+      senderType: 'user',
+      content: content.trim(),
+      recipientType,
+      timestamp,
+      createdAt: new Date().toISOString()
+    };
+
+    // Save user message
+    const messageParams = {
+      TableName: TABLES.MESSAGES,
+      Item: messageData
+    };
+
+    await docClient.put(messageParams).promise();
+
+    // Send real-time message notification to partner
+    streamingService.sendMessageNotification(conversationId, req.user.userId, messageData);
+
+    // Update conversation
+    const updateConversationParams = {
+      TableName: TABLES.CONVERSATIONS,
+      Key: { conversationId },
+      UpdateExpression: 'SET lastMessageAt = :lastMessageAt, messageCount = messageCount + :increment',
+      ExpressionAttributeValues: {
+        ':lastMessageAt': new Date().toISOString(),
+        ':increment': 1
+      }
+    };
+
+    await docClient.update(updateConversationParams).promise();
+
+    // Return user message immediately
+    res.status(201).json({
+      success: true,
+      message: 'Message sent successfully',
+      userMessage: messageData
+    });
+
+    // Generate streaming AI response if appropriate
+    if (recipientType === 'both' || recipientType === 'counsellor') {
+      try {
+        // Get recent messages for context
+        const recentMessagesParams = {
+          TableName: TABLES.MESSAGES,
+          IndexName: 'conversation-timestamp-index',
+          KeyConditionExpression: 'conversationId = :conversationId',
+          ExpressionAttributeValues: {
+            ':conversationId': conversationId
+          },
+          ScanIndexForward: false,
+          Limit: 10
+        };
+
+        const recentMessagesResult = await docClient.query(recentMessagesParams).promise();
+        const recentMessages = recentMessagesResult.Items.reverse();
+
+        const aiMessageId = randomUUID();
+        let aiResponseContent = '';
+
+        // Stream AI response with proper error handling
+        try {
+          await generateCounsellorResponseStream({
+            messages: [...recentMessages, messageData],
+            context: `Conversation: ${conversation.title}${conversation.topic ? `, Topic: ${conversation.topic}` : ''}`,
+            onChunk: (chunk) => {
+              aiResponseContent += chunk;
+              streamingService.streamAIResponse(conversationId, aiMessageId, chunk, false);
+            },
+            onComplete: async (fullResponse) => {
+              // Save complete AI response to database
+              const aiResponse = {
+                messageId: aiMessageId,
+                conversationId,
+                senderId: 'ai-counsellor',
+                senderName: 'Dr. Sarah (AI Counsellor)',
+                senderType: 'ai',
+                content: fullResponse,
+                recipientType: 'both',
+                timestamp: Date.now(),
+                createdAt: new Date().toISOString()
+              };
+
+              const aiMessageParams = {
+                TableName: TABLES.MESSAGES,
+                Item: aiResponse
+              };
+
+              await docClient.put(aiMessageParams).promise();
+
+              // Update conversation count
+              await docClient.update({
+                ...updateConversationParams,
+                UpdateExpression: 'SET lastMessageAt = :lastMessageAt, messageCount = messageCount + :increment',
+                ExpressionAttributeValues: {
+                  ':lastMessageAt': new Date().toISOString(),
+                  ':increment': 1
+                }
+              }).promise();
+
+              // Send completion notification
+              streamingService.streamAIResponse(conversationId, aiMessageId, '', true);
+              streamingService.sendMessageNotification(conversationId, 'ai-counsellor', aiResponse);
+            },
+            onError: (error) => {
+              console.error('AI streaming error:', error);
+              // Send error message to stream
+              streamingService.streamAIResponse(conversationId, aiMessageId, '❌ I apologize, but I\'m experiencing technical difficulties right now. Please try again in a moment.', true);
+            }
+          });
+        } catch (aiError) {
+          console.error('AI response generation failed:', aiError);
+          
+          // Create an error message that will be saved and sent to both users
+          const errorMessage = {
+            messageId: aiMessageId,
+            conversationId,
+            senderId: 'ai-counsellor',
+            senderName: 'Dr. Sarah (AI Counsellor)',
+            senderType: 'ai',
+            content: '❌ I apologize, but I\'m currently unable to respond due to technical issues. Your conversation is still being saved, and I\'ll be back online soon.',
+            recipientType: 'both',
+            timestamp: Date.now(),
+            createdAt: new Date().toISOString()
+          };
+
+          // Save error message to database
+          try {
+            const errorMessageParams = {
+              TableName: TABLES.MESSAGES,
+              Item: errorMessage
+            };
+            await docClient.put(errorMessageParams).promise();
+
+            // Update conversation count for error message too
+            await docClient.update({
+              ...updateConversationParams,
+              UpdateExpression: 'SET lastMessageAt = :lastMessageAt, messageCount = messageCount + :increment',
+              ExpressionAttributeValues: {
+                ':lastMessageAt': new Date().toISOString(),
+                ':increment': 1
+              }
+            }).promise();
+
+            // Send error message to both users via streaming
+            streamingService.sendMessageNotification(conversationId, 'ai-counsellor', errorMessage);
+          } catch (dbError) {
+            console.error('Failed to save AI error message:', dbError);
+            // At least try to send a real-time notification
+            streamingService.streamAIResponse(conversationId, aiMessageId, '❌ Technical difficulties - please refresh and try again.', true);
+          }
+        }
+      } catch (aiGenerationError) {
+        console.error('Error in AI generation section:', aiGenerationError);
+      }
+    }
+
+  } catch (error) {
+    console.error('Send streaming message error:', error);
     res.status(500).json({
       error: 'Server error',
       message: 'Failed to send message'
