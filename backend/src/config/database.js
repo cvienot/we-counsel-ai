@@ -44,7 +44,8 @@ const createTables = async () => {
       ],
       AttributeDefinitions: [
         { AttributeName: 'userId', AttributeType: 'S' },
-        { AttributeName: 'email', AttributeType: 'S' }
+        { AttributeName: 'email', AttributeType: 'S' },
+        { AttributeName: 'coupleId', AttributeType: 'S' }
       ],
       GlobalSecondaryIndexes: [
         {
@@ -52,11 +53,14 @@ const createTables = async () => {
           KeySchema: [
             { AttributeName: 'email', KeyType: 'HASH' }
           ],
-          Projection: { ProjectionType: 'ALL' },
-          ProvisionedThroughput: {
-            ReadCapacityUnits: 5,
-            WriteCapacityUnits: 5
-          }
+          Projection: { ProjectionType: 'ALL' }
+        },
+        {
+          IndexName: 'couple-index',
+          KeySchema: [
+            { AttributeName: 'coupleId', KeyType: 'HASH' }
+          ],
+          Projection: { ProjectionType: 'ALL' }
         }
       ],
       BillingMode: 'PAY_PER_REQUEST'
@@ -86,11 +90,7 @@ const createTables = async () => {
           KeySchema: [
             { AttributeName: 'coupleId', KeyType: 'HASH' }
           ],
-          Projection: { ProjectionType: 'ALL' },
-          ProvisionedThroughput: {
-            ReadCapacityUnits: 5,
-            WriteCapacityUnits: 5
-          }
+          Projection: { ProjectionType: 'ALL' }
         }
       ],
       BillingMode: 'PAY_PER_REQUEST'
@@ -112,11 +112,7 @@ const createTables = async () => {
             { AttributeName: 'conversationId', KeyType: 'HASH' },
             { AttributeName: 'timestamp', KeyType: 'RANGE' }
           ],
-          Projection: { ProjectionType: 'ALL' },
-          ProvisionedThroughput: {
-            ReadCapacityUnits: 5,
-            WriteCapacityUnits: 5
-          }
+          Projection: { ProjectionType: 'ALL' }
         }
       ],
       BillingMode: 'PAY_PER_REQUEST'

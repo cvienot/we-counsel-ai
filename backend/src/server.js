@@ -8,8 +8,10 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const conversationRoutes = require('./routes/conversations');
 const messageRoutes = require('./routes/messages');
+const streamingRoutes = require('./routes/streaming');
 
 const errorHandler = require('./middleware/errorHandler');
+const streamingService = require('./services/streamingService');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -46,6 +48,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/conversations', conversationRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/streaming', streamingRoutes);
 
 // 404 handler
 app.use((req, res) => {
@@ -58,11 +61,179 @@ app.use((req, res) => {
 // Error handling middleware
 app.use(errorHandler);
 
+// Setup streaming service event handlers
+streamingService.on('conversationMessage', async ({ conversationId, senderUserId, data }) => {
+  try {
+    // Get conversation details to find the partner
+    const { docClient, TABLES } = require('./config/database');
+    const params = {
+      TableName: TABLES.CONVERSATIONS,
+      Key: { conversationId }
+    };
+    
+    const result = await docClient.get(params).promise();
+    const conversation = result.Item;
+    
+    if (conversation && conversation.coupleId) {
+      // Get all users in the couple
+      const userParams = {
+        TableName: TABLES.USERS,
+        IndexName: 'couple-index',
+        KeyConditionExpression: 'coupleId = :coupleId',
+        ExpressionAttributeValues: {
+          ':coupleId': conversation.coupleId
+        }
+      };
+      
+      const userResult = await docClient.query(userParams).promise();
+      const users = userResult.Items;
+      
+      // Send to all users except the sender
+      users.forEach(user => {
+        if (user.userId !== senderUserId) {
+          streamingService.sendToUser(user.userId, data);
+        }
+      });
+    }
+  } catch (error) {
+    console.error('Error handling conversation message:', error);
+  }
+});
+
+streamingService.on('typingUpdate', async ({ conversationId, userId, isTyping, typingUsers }) => {
+  try {
+    // Get conversation details to find the partner
+    const { docClient, TABLES } = require('./config/database');
+    const params = {
+      TableName: TABLES.CONVERSATIONS,
+      Key: { conversationId }
+    };
+    
+    const result = await docClient.get(params).promise();
+    const conversation = result.Item;
+    
+    if (conversation && conversation.coupleId) {
+      // Get all users in the couple
+      const userParams = {
+        TableName: TABLES.USERS,
+        IndexName: 'couple-index',
+        KeyConditionExpression: 'coupleId = :coupleId',
+        ExpressionAttributeValues: {
+          ':coupleId': conversation.coupleId
+        }
+      };
+      
+      const userResult = await docClient.query(userParams).promise();
+      const users = userResult.Items;
+      
+      // Send typing update to all users except the one who's typing
+      users.forEach(user => {
+        if (user.userId !== userId) {
+          streamingService.sendToUser(user.userId, {
+            type: 'typing',
+            conversationId,
+            isTyping,
+            userId,
+            typingUsers: typingUsers.filter(id => id !== user.userId)
+          });
+        }
+      });
+    }
+  } catch (error) {
+    console.error('Error handling typing update:', error);
+  }
+});
+
+streamingService.on('aiStreamChunk', async ({ conversationId, messageId, chunk, isComplete }) => {
+  try {
+    // Get conversation details to find all participants
+    const { docClient, TABLES } = require('./config/database');
+    const params = {
+      TableName: TABLES.CONVERSATIONS,
+      Key: { conversationId }
+    };
+    
+    const result = await docClient.get(params).promise();
+    const conversation = result.Item;
+    
+    if (conversation && conversation.coupleId) {
+      // Get all users in the couple
+      const userParams = {
+        TableName: TABLES.USERS,
+        IndexName: 'couple-index',
+        KeyConditionExpression: 'coupleId = :coupleId',
+        ExpressionAttributeValues: {
+          ':coupleId': conversation.coupleId
+        }
+      };
+      
+      const userResult = await docClient.query(userParams).promise();
+      const users = userResult.Items;
+      
+      // Send AI stream chunk to all users in the conversation
+      users.forEach(user => {
+        streamingService.sendToUser(user.userId, {
+          type: 'aiStream',
+          conversationId,
+          messageId,
+          chunk,
+          isComplete
+        });
+      });
+    }
+  } catch (error) {
+    console.error('Error handling AI stream chunk:', error);
+  }
+});
+
+streamingService.on('newMessage', async ({ conversationId, senderUserId, message }) => {
+  try {
+    // Get conversation details to find the partner
+    const { docClient, TABLES } = require('./config/database');
+    const params = {
+      TableName: TABLES.CONVERSATIONS,
+      Key: { conversationId }
+    };
+    
+    const result = await docClient.get(params).promise();
+    const conversation = result.Item;
+    
+    if (conversation && conversation.coupleId) {
+      // Get all users in the couple
+      const userParams = {
+        TableName: TABLES.USERS,
+        IndexName: 'couple-index',
+        KeyConditionExpression: 'coupleId = :coupleId',
+        ExpressionAttributeValues: {
+          ':coupleId': conversation.coupleId
+        }
+      };
+      
+      const userResult = await docClient.query(userParams).promise();
+      const users = userResult.Items;
+      
+      // Send new message to all users except the sender
+      users.forEach(user => {
+        if (user.userId !== senderUserId) {
+          streamingService.sendToUser(user.userId, {
+            type: 'newMessage',
+            conversationId,
+            message
+          });
+        }
+      });
+    }
+  } catch (error) {
+    console.error('Error handling new message:', error);
+  }
+});
+
 // Start server
 app.listen(PORT, () => {
   console.log(`🚀 We Counsel API server running on port ${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV}`);
   console.log(`🔗 Health check: http://localhost:${PORT}/health`);
+  console.log(`📡 Streaming service initialized`);
 });
 
 module.exports = app;

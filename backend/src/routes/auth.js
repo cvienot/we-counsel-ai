@@ -65,7 +65,7 @@ router.post('/register', async (req, res) => {
     const userData = {
       userId,
       email: email.toLowerCase(),
-      password: hashedPassword,
+      passwordHash: hashedPassword,
       firstName,
       lastName,
       createdAt: new Date().toISOString(),
@@ -85,7 +85,7 @@ router.post('/register', async (req, res) => {
     const token = generateToken(userId);
 
     // Remove password from response
-    const { password: _, ...userResponse } = userData;
+    const { passwordHash: _, ...userResponse } = userData;
 
     res.status(201).json({
       success: true,
@@ -140,7 +140,7 @@ router.post('/login', async (req, res) => {
     const user = result.Items[0];
 
     // Check password
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, user.passwordHash);
 
     if (!isMatch) {
       return res.status(401).json({
@@ -161,7 +161,7 @@ router.post('/login', async (req, res) => {
     const token = generateToken(user.userId);
 
     // Remove password from response
-    const { password: _, ...userResponse } = user;
+    const { passwordHash: _, ...userResponse } = user;
 
     res.json({
       success: true,
