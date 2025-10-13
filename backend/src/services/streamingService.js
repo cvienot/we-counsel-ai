@@ -85,15 +85,17 @@ class StreamingService extends EventEmitter {
     if (isTyping) {
       typingSet.add(userId);
       
-      // Clear existing timeout
+      // Clear any existing timeout
       if (this.typingTimeouts.has(userId)) {
         clearTimeout(this.typingTimeouts.get(userId));
       }
       
-      // Set timeout to automatically stop typing after 3 seconds
+      // Set a long fallback timeout (30 seconds) only as a safety measure
+      // The client should handle stopping typing based on input content
       const timeout = setTimeout(() => {
+        console.log(`⏰ Typing timeout reached for user ${userId} in conversation ${conversationId}`);
         this.setTyping(conversationId, userId, false);
-      }, 3000);
+      }, 30000);
       
       this.typingTimeouts.set(userId, timeout);
     } else {

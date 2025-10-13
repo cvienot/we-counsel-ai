@@ -236,24 +236,30 @@ class RealtimeService extends ChangeNotifier {
   // Helper methods for sending events
   Future<void> sendTypingStatus(String conversationId, bool isTyping) async {
     try {
+      debugPrint('📤 SENDING TYPING STATUS: conversationId=$conversationId, isTyping=$isTyping');
+      
       final token = await AuthService().getToken();
-      if (token == null) return;
+      if (token == null) {
+        debugPrint('❌ No auth token available for typing status');
+        return;
+      }
 
       final response = await _makeHttpRequest(
         'POST',
-        '/streaming/typing',
+        '/messages/$conversationId/typing',
         body: {
-          'conversationId': conversationId,
           'isTyping': isTyping,
         },
         headers: {'Authorization': 'Bearer $token'},
       );
 
-      if (response.statusCode != 200) {
-        debugPrint('RealtimeService: Failed to send typing status: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        debugPrint('✅ TYPING STATUS SENT SUCCESSFULLY: ${response.body}');
+      } else {
+        debugPrint('❌ FAILED TO SEND TYPING STATUS: ${response.statusCode} - ${response.body}');
       }
     } catch (error) {
-      debugPrint('RealtimeService: Error sending typing status: $error');
+      debugPrint('💥 ERROR SENDING TYPING STATUS: $error');
     }
   }
 

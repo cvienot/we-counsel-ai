@@ -652,4 +652,53 @@ router.delete('/:messageId', authenticateToken, async (req, res) => {
   }
 });
 
+// @route   POST /api/messages/:conversationId/typing
+// @desc    Set typing indicator for a conversation
+// @access  Private
+router.post('/:conversationId/typing', authenticateToken, async (req, res) => {
+  try {
+    const { conversationId } = req.params;
+    const { isTyping = false } = req.body;
+    const userId = req.user.userId;
+
+    // Verify user has access to this conversation
+    const conversationParams = {
+      TableName: TABLES.CONVERSATIONS,
+      Key: { conversationId }
+    };
+
+    const conversationResult = await docClient.get(conversationParams).promise();
+
+    if (!conversationResult.Item) {
+      return res.status(404).json({
+        error: 'Not found',
+        message: 'Conversation not found'
+      });
+    }
+
+    if (conversationResult.Item.coupleId !== req.user.coupleId) {
+      return res.status(403).json({
+        error: 'Forbidden',
+        message: 'You do not have access to this conversation'
+      });
+    }
+
+    // Set typing status
+    streamingService.setTyping(conversationId, userId, isTyping);
+
+    res.json({
+      success: true,
+      isTyping,
+      userId
+    });
+
+  } catch (error) {
+    console.error('Set typing error:', error);
+    res.status(500).json({
+      error: 'Server error',
+      message: 'Failed to set typing status'
+    });
+  }
+});
+
 module.exports = router;

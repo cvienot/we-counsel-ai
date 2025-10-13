@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import '../../providers/conversation_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../widgets/message_bubble.dart';
+import '../../services/realtime_service.dart';
+import 'dart:async';
 
 class MainThreadScreen extends ConsumerStatefulWidget {
   const MainThreadScreen({super.key});
@@ -15,20 +17,122 @@ class MainThreadScreen extends ConsumerStatefulWidget {
 class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
   final _messageController = TextEditingController();
   final _scrollController = ScrollController();
+  final _realtimeService = RealtimeService();
+  
+  StreamSubscription<Map<String, dynamic>>? _typingSubscription;
+  Timer? _typingTimer;
+  Timer? _typingHeartbeat;
+  Set<String> _typingUsers = {};
+  bool _isTyping = false;
 
   @override
   void initState() {
     super.initState();
+    debugPrint('🏠 MainThreadScreen initState called');
+    
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadMainThread();
     });
+    
+    // Listen to typing events
+    _typingSubscription = _realtimeService.typingStream.listen((data) {
+      debugPrint('👂 MAIN THREAD - Received typing event: $data');
+      // We'll set up conversation ID filtering once we have the main thread loaded
+      setState(() {
+        if (data['isTyping'] == true) {
+          _typingUsers.add(data['userId']);
+        } else {
+          _typingUsers.remove(data['userId']);
+        }
+      });
+    });
+    
+    // Listen to text changes to send typing status
+    debugPrint('🎹 MAIN THREAD - Adding text controller listener');
+    _messageController.addListener(() {
+      debugPrint('🎹 MAIN THREAD - Text controller listener triggered - text: "${_messageController.text}"');
+      _handleTextChange();
+    });
+    
+    debugPrint('🏠 MainThreadScreen initState completed');
   }
 
   @override
   void dispose() {
+    _typingSubscription?.cancel();
+    _typingTimer?.cancel();
+    _typingHeartbeat?.cancel();
     _messageController.dispose();
     _scrollController.dispose();
+    
+    // Stop typing when leaving the screen
+    if (_isTyping) {
+      final mainThread = ref.read(mainThreadProvider).mainThread;
+      if (mainThread != null) {
+        _realtimeService.sendTypingStatus(mainThread.conversationId, false);
+      }
+    }
+    
     super.dispose();
+  }
+
+  void _handleTextChange() {
+    debugPrint('🔤 MAIN THREAD - _handleTextChange called at ${DateTime.now()}');
+    final hasText = _messageController.text.trim().isNotEmpty;
+    final mainThread = ref.read(mainThreadProvider).mainThread;
+    
+    if (mainThread == null) {
+      debugPrint('❌ MAIN THREAD - No main thread available for typing status');
+      return;
+    }
+    
+    debugPrint('🔤 MAIN THREAD - TEXT CHANGE: hasText=$hasText, _isTyping=$_isTyping, text="${_messageController.text}"');
+    
+    if (hasText && !_isTyping) {
+      // Start typing
+      _isTyping = true;
+      debugPrint('▶️ MAIN THREAD - STARTING TYPING for conversation: ${mainThread.conversationId}');
+      _realtimeService.sendTypingStatus(mainThread.conversationId, true);
+      
+      // Start heartbeat to keep typing status alive
+      _startTypingHeartbeat(mainThread.conversationId);
+      
+    } else if (!hasText && _isTyping) {
+      // Text was cleared, stop typing immediately
+      _isTyping = false;
+      _typingTimer?.cancel();
+      _typingHeartbeat?.cancel();
+      debugPrint('⏹️ MAIN THREAD - STOPPING TYPING (text cleared) for conversation: ${mainThread.conversationId}');
+      _realtimeService.sendTypingStatus(mainThread.conversationId, false);
+      return;
+    }
+    
+    // Cancel any existing timer since we want typing to persist as long as there's text
+    _typingTimer?.cancel();
+    
+    // Only set a timeout if there's text (as a fallback in case of network issues)
+    if (hasText) {
+      _typingTimer = Timer(const Duration(seconds: 15), () {
+        if (_isTyping && mainThread != null) {
+          _isTyping = false;
+          _typingHeartbeat?.cancel();
+          debugPrint('⏱️ MAIN THREAD - STOPPING TYPING (fallback timeout) for conversation: ${mainThread.conversationId}');
+          _realtimeService.sendTypingStatus(mainThread.conversationId, false);
+        }
+      });
+    }
+  }
+
+  void _startTypingHeartbeat(String conversationId) {
+    _typingHeartbeat?.cancel();
+    _typingHeartbeat = Timer.periodic(const Duration(seconds: 5), (timer) {
+      if (_isTyping && _messageController.text.trim().isNotEmpty) {
+        debugPrint('💓 MAIN THREAD - TYPING HEARTBEAT for conversation: $conversationId');
+        _realtimeService.sendTypingStatus(conversationId, true);
+      } else {
+        timer.cancel();
+      }
+    });
   }
 
   Future<void> _loadMainThread() async {
@@ -49,6 +153,15 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
     if (mainThread == null) return;
 
     _messageController.clear();
+    
+    // Stop typing when sending message
+    if (_isTyping) {
+      _isTyping = false;
+      _typingTimer?.cancel();
+      _typingHeartbeat?.cancel();
+      debugPrint('⏹️ MAIN THREAD - STOPPING TYPING (message sent) for conversation: ${mainThread.conversationId}');
+      _realtimeService.sendTypingStatus(mainThread.conversationId, false);
+    }
 
     try {
       await ref
@@ -297,6 +410,47 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                           ),
           ),
 
+          // Typing indicator
+          if (_typingUsers.isNotEmpty)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 16,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    child: const Icon(
+                      Icons.person,
+                      size: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          '${_typingUsers.length > 1 ? "Partners are" : "Partner is"} typing',
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Theme.of(context).colorScheme.outline,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        const _TypingAnimation(),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
           // Message input
           Container(
             padding: const EdgeInsets.all(16),
@@ -328,6 +482,10 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                     maxLines: null,
                     textCapitalization: TextCapitalization.sentences,
                     onSubmitted: (_) => _sendMessage(),
+                    onChanged: (text) {
+                      debugPrint('🔤 MAIN THREAD - onChanged triggered: "$text"');
+                      // Don't call _handleTextChange here since the listener should handle it
+                    },
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -450,6 +608,75 @@ class _WaitingRoomScreen extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _TypingAnimation extends StatefulWidget {
+  const _TypingAnimation({Key? key}) : super(key: key);
+
+  @override
+  _TypingAnimationState createState() => _TypingAnimationState();
+}
+
+class _TypingAnimationState extends State<_TypingAnimation>
+    with TickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    );
+    
+    _animation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+    
+    _animationController.repeat();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: List.generate(3, (index) {
+            final delay = index * 0.2;
+            final opacity = ((_animation.value + delay) % 1.0);
+            return Container(
+              margin: const EdgeInsets.symmetric(horizontal: 1),
+              child: AnimatedOpacity(
+                opacity: opacity > 0.5 ? 1 - opacity : opacity,
+                duration: const Duration(milliseconds: 100),
+                child: Container(
+                  width: 4,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.outline,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
+            );
+          }),
+        );
+      },
     );
   }
 }

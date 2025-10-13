@@ -21,7 +21,8 @@ app.use(helmet());
 app.use(cors({
   origin: [
     'http://localhost:3000',
-    'http://localhost:8080',  // Flutter web dev server
+    'http://localhost:8080',  // Flutter web dev server (primary)
+    'http://localhost:8081',  // Flutter web dev server (secondary for testing)
     process.env.FRONTEND_URL
   ].filter(Boolean),
   credentials: true
@@ -102,6 +103,8 @@ streamingService.on('conversationMessage', async ({ conversationId, senderUserId
 
 streamingService.on('typingUpdate', async ({ conversationId, userId, isTyping, typingUsers }) => {
   try {
+    console.log(`🔔 TYPING UPDATE EVENT: conversationId=${conversationId}, userId=${userId}, isTyping=${isTyping}, typingUsers=[${typingUsers.join(', ')}]`);
+    
     // Get conversation details to find the partner
     const { docClient, TABLES } = require('./config/database');
     const params = {
@@ -129,13 +132,17 @@ streamingService.on('typingUpdate', async ({ conversationId, userId, isTyping, t
       // Send typing update to all users except the one who's typing
       users.forEach(user => {
         if (user.userId !== userId) {
-          streamingService.sendToUser(user.userId, {
+          const typingData = {
             type: 'typing',
             conversationId,
             isTyping,
             userId,
             typingUsers: typingUsers.filter(id => id !== user.userId)
-          });
+          };
+          console.log(`📨 SENDING TYPING UPDATE to user ${user.userId}:`, typingData);
+          streamingService.sendToUser(user.userId, typingData);
+        } else {
+          console.log(`🚫 SKIPPING typing update for sender ${user.userId}`);
         }
       });
     }

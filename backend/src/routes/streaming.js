@@ -19,8 +19,11 @@ router.get('/events', authenticateToken, (req, res) => {
 router.post('/typing', authenticateToken, async (req, res) => {
   try {
     const { conversationId, isTyping } = req.body;
+    
+    console.log(`📤 TYPING REQUEST: userId=${req.user.userId}, conversationId=${conversationId}, isTyping=${isTyping}`);
 
     if (!conversationId || typeof isTyping !== 'boolean') {
+      console.log('❌ TYPING REQUEST VALIDATION FAILED:', { conversationId, isTyping });
       return res.status(400).json({
         error: 'Bad request',
         message: 'conversationId and isTyping (boolean) are required'
@@ -51,8 +54,10 @@ router.post('/typing', authenticateToken, async (req, res) => {
     }
 
     // Update typing status
+    console.log(`🔄 SETTING TYPING STATUS: conversationId=${conversationId}, userId=${req.user.userId}, isTyping=${isTyping}`);
     streamingService.setTyping(conversationId, req.user.userId, isTyping);
 
+    console.log(`✅ TYPING STATUS RESPONSE SENT`);
     res.json({
       success: true,
       message: 'Typing status updated'
