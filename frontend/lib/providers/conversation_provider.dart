@@ -298,6 +298,15 @@ class MessagesNotifier extends StateNotifier<MessagesState> {
 
   void _addNewMessage(Message message) {
     final updatedMessages = List<Message>.from(state.messages);
+    
+    // Check if message already exists to prevent duplicates
+    final existingMessageIndex = updatedMessages.indexWhere((m) => m.messageId == message.messageId);
+    
+    if (existingMessageIndex != -1) {
+      // Message already exists, don't add duplicate
+      return;
+    }
+    
     updatedMessages.add(message);
     updatedMessages.sort((a, b) => a.timestamp.compareTo(b.timestamp));
     
@@ -333,24 +342,8 @@ class MessagesNotifier extends StateNotifier<MessagesState> {
       updatedStreamingMessages[messageId] = _streamingService.getStreamingContent(messageId);
       updatedStreamingIds.add(messageId);
     } else {
-      // Create the complete AI message and add to messages list
-      final completeContent = _streamingService.getStreamingContent(messageId);
-      if (completeContent.isNotEmpty) {
-        final aiMessage = Message(
-          messageId: messageId,
-          conversationId: conversationId,
-          senderId: 'ai-counsellor',
-          senderName: 'Dr. Sarah (AI Counsellor)',
-          senderType: MessageSenderType.ai,
-          content: completeContent,
-          recipientType: MessageRecipientType.both,
-          timestamp: DateTime.now().millisecondsSinceEpoch,
-          createdAt: DateTime.now(),
-        );
-        
-        _addNewMessage(aiMessage);
-      }
-      
+      // Don't add the AI message here - it will be added via the real-time message notification
+      // Just clean up the streaming state
       updatedStreamingMessages.remove(messageId);
       updatedStreamingIds.remove(messageId);
       _streamingService.cleanupStream(messageId);
