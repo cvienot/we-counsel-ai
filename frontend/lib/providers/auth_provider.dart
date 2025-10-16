@@ -38,18 +38,39 @@ class AuthNotifier extends StateNotifier<AuthState> {
   final RealtimeService _realtimeService = RealtimeService();
 
   AuthNotifier(this._apiService) : super(const AuthState()) {
-    checkAuthStatus();
+    _initializeAuth();
+  }
+
+  Future<void> _initializeAuth() async {
+    print('🔐 AUTH: Starting auth initialization...');
+    state = state.copyWith(isLoading: true);
+    
+    try {
+      final token = await _apiService.getToken();
+      print('🔐 AUTH: Token check - ${token != null ? "Token found" : "No token"}');
+      
+      if (token != null && token.isNotEmpty) {
+        // Token exists, verify it's still valid by getting current user
+        print('🔐 AUTH: Verifying token with server...');
+        await getCurrentUser();
+        print('🔐 AUTH: Token verified successfully');
+      } else {
+        // No token, user is not authenticated
+        print('🔐 AUTH: No token found, user not authenticated');
+        state = state.copyWith(
+          isLoading: false,
+          isAuthenticated: false,
+        );
+      }
+    } catch (e) {
+      // Token is invalid or expired, clear it and logout
+      print('🔐 AUTH: Token verification failed: $e');
+      await logout();
+    }
   }
 
   Future<void> checkAuthStatus() async {
-    final token = await _apiService.getToken();
-    if (token != null) {
-      try {
-        await getCurrentUser();
-      } catch (e) {
-        await logout();
-      }
-    }
+    await _initializeAuth();
   }
 
   Future<void> register({
@@ -151,12 +172,28 @@ class AuthNotifier extends StateNotifier<AuthState> {
         state = state.copyWith(
           user: user,
           isAuthenticated: true,
+          isLoading: false,
+          error: null,
         );
         
         // Connect to realtime service if not connected
         await _realtimeService.connect();
+      } else {
+        // Invalid response, treat as unauthenticated
+        state = state.copyWith(
+          user: null,
+          isAuthenticated: false,
+          isLoading: false,
+          error: null,
+        );
       }
     } catch (e) {
+      state = state.copyWith(
+        user: null,
+        isAuthenticated: false,
+        isLoading: false,
+        error: e.toString(),
+      );
       rethrow;
     }
   }

@@ -67,33 +67,44 @@ class WeCounselApp extends ConsumerWidget {
 
   GoRouter _createRouter(WidgetRef ref) {
     return GoRouter(
-      initialLocation: '/login',
+      initialLocation: '/splash', // Start with splash to check auth
       debugLogDiagnostics: true,
+      refreshListenable: _AuthStateNotifier(ref), // Listen to auth changes
       redirect: (context, state) {
-        final isAuthenticated = ref.read(isAuthenticatedProvider);
+        final authState = ref.read(authProvider);
         final location = state.uri.toString();
         final isLoginRoute = location == '/login';
         final isRegisterRoute = location == '/register';
         final isInvitationRoute = location.startsWith('/invitation/');
+        final isSplashRoute = location == '/splash';
 
         // Allow invitation routes without authentication
         if (isInvitationRoute) {
           return null;
         }
 
-        // If not authenticated and not on auth routes, redirect to login
-        if (!isAuthenticated && !isLoginRoute && !isRegisterRoute) {
+        // If still loading auth state, stay on splash
+        if (authState.isLoading && !isSplashRoute) {
+          return '/splash';
+        }
+
+        // If done loading and not authenticated, go to login (unless already there)
+        if (!authState.isLoading && !authState.isAuthenticated && !isLoginRoute && !isRegisterRoute && !isSplashRoute) {
           return '/login';
         }
 
-        // If authenticated and on auth routes, redirect to home
-        if (isAuthenticated && (isLoginRoute || isRegisterRoute)) {
+        // If authenticated and on auth/splash routes, redirect to home
+        if (authState.isAuthenticated && (isLoginRoute || isRegisterRoute || isSplashRoute)) {
           return '/home';
         }
 
         return null;
       },
       routes: [
+        GoRoute(
+          path: '/splash',
+          builder: (context, state) => const SplashScreen(),
+        ),
         GoRoute(
           path: '/login',
           builder: (context, state) => const LoginScreen(),
@@ -137,6 +148,65 @@ class WeCounselApp extends ConsumerWidget {
           builder: (context, state) => const HomeScreen(),
         ),
       ],
+    );
+  }
+}
+
+class _AuthStateNotifier extends ChangeNotifier {
+  final WidgetRef _ref;
+
+  _AuthStateNotifier(this._ref) {
+    _ref.listen<AuthState>(authProvider, (previous, next) {
+      notifyListeners();
+    });
+  }
+}
+
+class SplashScreen extends ConsumerWidget {
+  const SplashScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Listen to auth state changes to trigger navigation
+    ref.listen<AuthState>(authProvider, (previous, next) {
+      if (!next.isLoading) {
+        // Auth check is complete, router will handle navigation
+      }
+    });
+
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.favorite,
+              size: 80,
+              color: Colors.white,
+            ),
+            const SizedBox(height: 24),
+            Text(
+              'We Counsel',
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Your relationship journey together',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Colors.white.withOpacity(0.9),
+              ),
+            ),
+            const SizedBox(height: 48),
+            const CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
