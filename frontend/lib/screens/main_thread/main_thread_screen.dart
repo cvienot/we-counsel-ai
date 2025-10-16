@@ -59,13 +59,15 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
 
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_scrollController.hasClients) {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-        );
-      }
+      Future.delayed(const Duration(milliseconds: 100), () {
+        if (_scrollController.hasClients) {
+          _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+          );
+        }
+      });
     });
   }
 
@@ -153,7 +155,9 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
     
     if (mainThread != null) {
       // Load messages for the main thread
-      ref.read(messagesProvider(mainThread.conversationId).notifier).loadMessages();
+      await ref.read(messagesProvider(mainThread.conversationId).notifier).loadMessages();
+      // Scroll to bottom after messages are loaded
+      _scrollToBottom();
     }
   }
 
@@ -263,9 +267,18 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
 
     final messagesState = ref.watch(messagesProvider(mainThread.conversationId));
 
-    // Auto-scroll when new streaming content arrives
+    // Auto-scroll when messages are loaded or streaming content arrives
     ref.listen<MessagesState>(messagesProvider(mainThread.conversationId), (previous, next) {
-      if (previous != null && next.streamingMessages.isNotEmpty) {
+      // Scroll to bottom when messages are first loaded
+      if (previous == null && next.messages.isNotEmpty && !next.isLoading) {
+        _scrollToBottom();
+      }
+      // Scroll to bottom when new streaming content arrives
+      else if (previous != null && next.streamingMessages.isNotEmpty) {
+        _scrollToBottom();
+      }
+      // Scroll to bottom when new messages are added
+      else if (previous != null && next.messages.length > previous.messages.length) {
         _scrollToBottom();
       }
     });

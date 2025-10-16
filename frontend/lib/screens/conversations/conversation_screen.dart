@@ -32,8 +32,9 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(messagesProvider(widget.conversationId).notifier).loadMessages();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await ref.read(messagesProvider(widget.conversationId).notifier).loadMessages();
+      _scrollToBottom();
     });
     
     // Listen to typing events
@@ -153,13 +154,15 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
 
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_scrollController.hasClients) {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-        );
-      }
+      Future.delayed(const Duration(milliseconds: 100), () {
+        if (_scrollController.hasClients) {
+          _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+          );
+        }
+      });
     });
   }
 
@@ -168,9 +171,18 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
     final messagesState = ref.watch(messagesProvider(widget.conversationId));
     final currentUser = ref.watch(currentUserProvider);
 
-    // Auto-scroll when new streaming content arrives
+    // Auto-scroll when messages are loaded or streaming content arrives
     ref.listen<MessagesState>(messagesProvider(widget.conversationId), (previous, next) {
-      if (previous != null && next.streamingMessages.isNotEmpty) {
+      // Scroll to bottom when messages are first loaded
+      if (previous == null && next.messages.isNotEmpty && !next.isLoading) {
+        _scrollToBottom();
+      }
+      // Scroll to bottom when new streaming content arrives
+      else if (previous != null && next.streamingMessages.isNotEmpty) {
+        _scrollToBottom();
+      }
+      // Scroll to bottom when new messages are added
+      else if (previous != null && next.messages.length > previous.messages.length) {
         _scrollToBottom();
       }
     });
