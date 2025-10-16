@@ -57,6 +57,18 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
     debugPrint('🏠 MainThreadScreen initState completed');
   }
 
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+
   @override
   void dispose() {
     _typingSubscription?.cancel();
@@ -251,6 +263,13 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
 
     final messagesState = ref.watch(messagesProvider(mainThread.conversationId));
 
+    // Auto-scroll when new streaming content arrives
+    ref.listen<MessagesState>(messagesProvider(mainThread.conversationId), (previous, next) {
+      if (previous != null && next.streamingMessages.isNotEmpty) {
+        _scrollToBottom();
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: Column(
@@ -399,13 +418,31 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                         : ListView.builder(
                             controller: _scrollController,
                             padding: const EdgeInsets.symmetric(horizontal: 16),
-                            itemCount: messagesState.messages.length,
+                            itemCount: messagesState.messages.length + messagesState.streamingMessageIds.length,
                             itemBuilder: (context, index) {
-                              final message = messagesState.messages[index];
-                              return MessageBubble(
-                                message: message,
-                                isCurrentUser: message.senderId == currentUser?.userId,
-                              );
+                              // Show regular messages first
+                              if (index < messagesState.messages.length) {
+                                final message = messagesState.messages[index];
+                                return MessageBubble(
+                                  message: message,
+                                  isCurrentUser: message.senderId == currentUser?.userId,
+                                );
+                              }
+                              
+                              // Show streaming messages
+                              final streamingIndex = index - messagesState.messages.length;
+                              final streamingIds = messagesState.streamingMessageIds.toList();
+                              if (streamingIndex < streamingIds.length) {
+                                final messageId = streamingIds[streamingIndex];
+                                final streamingContent = messagesState.streamingMessages[messageId] ?? '';
+                                
+                                return _StreamingMessageBubble(
+                                  content: streamingContent,
+                                  isStreaming: true,
+                                );
+                              }
+                              
+                              return const SizedBox.shrink();
                             },
                           ),
           ),
@@ -429,7 +466,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
+                      color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Row(
@@ -677,6 +714,101 @@ class _TypingAnimationState extends State<_TypingAnimation>
           }),
         );
       },
+    );
+  }
+}
+
+class _StreamingMessageBubble extends StatelessWidget {
+  final String content;
+  final bool isStreaming;
+
+  const _StreamingMessageBubble({
+    required this.content,
+    required this.isStreaming,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CircleAvatar(
+            radius: 16,
+            backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+            child: Icon(
+              Icons.psychology,
+              size: 16,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+          const SizedBox(width: 8),
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: Text(
+                    'Dr. Sarah (AI Counsellor)',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary.withOpacity(0.05),
+                    borderRadius: BorderRadius.circular(18).copyWith(
+                      bottomLeft: const Radius.circular(4),
+                    ),
+                    border: Border.all(
+                      color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                      width: 1,
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (content.isNotEmpty)
+                        Text(
+                          content,
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                        ),
+                      if (isStreaming) ...[
+                        if (content.isNotEmpty) const SizedBox(height: 8),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'Typing',
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            const _TypingAnimation(),
+                          ],
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
