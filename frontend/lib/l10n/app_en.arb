@@ -1,0 +1,196 @@
+{
+  "@@locale": "en",
+  "appTitle": "We Counsel",
+  "@appTitle": {
+    "description": "The application title"
+  },
+  "appSubtitle": "Your relationship journey together",
+  "@appSubtitle": {
+    "description": "The application subtitle"
+  },
+  
+  "login": "Login",
+  "@login": {
+    "description": "Login button text"
+  },
+  "register": "Register",
+  "@register": {
+    "description": "Register button text"
+  },
+  "logout": "Logout",
+  "@logout": {
+    "description": "Logout button text"
+  },
+  "email": "Email",
+  "@email": {
+    "description": "Email field label"
+  },
+  "password": "Password",
+  "@password": {
+    "description": "Password field label"
+  },
+  "firstName": "First Name",
+  "@firstName": {
+    "description": "First name field label"
+  },
+  "lastName": "Last Name",
+  "@lastName": {
+    "description": "Last name field label"
+  },
+  "confirmPassword": "Confirm Password",
+  "@confirmPassword": {
+    "description": "Confirm password field label"
+  },
+  
+  "welcomeTitle": "Welcome to your journey together",
+  "@welcomeTitle": {
+    "description": "Welcome message title"
+  },
+  "welcomeMessage": "This is your main conversation space where you and your partner can share thoughts, feelings, and receive guidance from Dr. Sarah, your AI counsellor.",
+  "@welcomeMessage": {
+    "description": "Welcome message description"
+  },
+  "shareThoughts": "Share what's on your mind. Dr. Sarah is here to help guide your conversation.",
+  "@shareThoughts": {
+    "description": "Placeholder message when no messages"
+  },
+  
+  "conversations": "Conversations",
+  "@conversations": {
+    "description": "Conversations screen title"
+  },
+  "profile": "Profile",
+  "@profile": {
+    "description": "Profile screen title"
+  },
+  "mainConversation": "Main Conversation",
+  "@mainConversation": {
+    "description": "Main conversation title"
+  },
+  "otherConversations": "Other Conversations",
+  "@otherConversations": {
+    "description": "Other conversations menu item"
+  },
+  
+  "typeMessage": "Type a message...",
+  "@typeMessage": {
+    "description": "Message input placeholder"
+  },
+  "send": "Send",
+  "@send": {
+    "description": "Send button text"
+  },
+  "typing": "Typing",
+  "@typing": {
+    "description": "Typing indicator text"
+  },
+  "partnerTyping": "Partner is typing",
+  "@partnerTyping": {
+    "description": "Partner typing indicator"
+  },
+  "partnersTyping": "Partners are typing",
+  "@partnersTyping": {
+    "description": "Multiple partners typing indicator"
+  },
+  
+  "loading": "Loading...",
+  "@loading": {
+    "description": "Loading indicator text"
+  },
+  "error": "Error",
+  "@error": {
+    "description": "Generic error title"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "description": "Retry button text"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+  "save": "Save",
+  "@save": {
+    "description": "Save button text"
+  },
+  
+  "invitePartner": "Invite Partner",
+  "@invitePartner": {
+    "description": "Invite partner button text"
+  },
+  "waitingForPartner": "Waiting for your partner to join...",
+  "@waitingForPartner": {
+    "description": "Waiting for partner message"
+  },
+  "invitePartnerMessage": "Share this invitation with your partner to start your counselling journey together.",
+  "@invitePartnerMessage": {
+    "description": "Invite partner description"
+  },
+  
+  "createNewConversation": "Create New Conversation",
+  "@createNewConversation": {
+    "description": "Create new conversation button"
+  },
+  "conversationTitle": "Conversation Title",
+  "@conversationTitle": {
+    "description": "Conversation title field label"
+  },
+  "conversationTopic": "Topic (Optional)",
+  "@conversationTopic": {
+    "description": "Conversation topic field label"
+  },
+  "create": "Create",
+  "@create": {
+    "description": "Create button text"
+  },
+  
+  "failedToLoad": "Failed to load",
+  "@failedToLoad": {
+    "description": "Failed to load error message"
+  },
+  "failedToSend": "Failed to send message",
+  "@failedToSend": {
+    "description": "Failed to send message error"
+  },
+  "startConversation": "Start the conversation by sending a message!",
+  "@startConversation": {
+    "description": "Empty conversation message"
+  },
+  
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings menu item"
+  },
+  "language": "Language",
+  "@language": {
+    "description": "Language settings label"
+  },
+  "selectLanguage": "Select Language",
+  "@selectLanguage": {
+    "description": "Language selection title"
+  },
+  "mainConversationTitle": "Main Conversation",
+  "@mainConversationTitle": {
+    "description": "Main conversation thread title"
+  },
+  "mainConversationTopic": "Your ongoing journey together",
+  "@mainConversationTopic": {
+    "description": "Main conversation thread topic"
+  },
+  "aiCounsellor": "AI Counsellor",
+  "@aiCounsellor": {
+    "description": "AI Counsellor label"
+  },
+  "drSarahAiCounsellor": "Dr. Sarah (AI Counsellor)",
+  "@drSarahAiCounsellor": {
+    "description": "Dr. Sarah AI Counsellor full name"
+  },
+  "startFirstConversationMessage": "Start your first conversation with your partner and get guidance from our AI counsellor.",
+  "@startFirstConversationMessage": {
+    "description": "Message encouraging users to start their first conversation"
+  },
+  "partnerInvitationMessage": "Once your partner accepts the invitation and creates their account, you'll both have access to your main conversation thread where you can start sharing and receiving guidance from our AI counsellor.",
+  "@partnerInvitationMessage": {
+    "description": "Message explaining what happens after partner accepts invitation"
+  }
+}

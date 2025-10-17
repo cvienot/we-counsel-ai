@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_strategy/url_strategy.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'l10n/app_localizations.dart';
 
 import 'providers/auth_provider.dart';
+import 'providers/language_provider.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/auth/register_screen.dart';
 import 'screens/auth/invitation_screen.dart';
@@ -13,6 +16,7 @@ import 'screens/conversations/conversation_list_screen.dart';
 import 'screens/conversations/conversation_screen.dart';
 import 'screens/profile/profile_screen.dart';
 import 'screens/invite/invite_partner_screen.dart';
+import 'screens/settings/language_selection_screen.dart';
 
 void main() {
   // Use path-based routing instead of hash-based routing
@@ -26,9 +30,22 @@ class WeCounselApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = _createRouter(ref);
+    final currentLocale = ref.watch(currentLocaleProvider);
 
     return MaterialApp.router(
       title: 'We Counsel',
+      locale: currentLocale,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', ''),
+        Locale('fr', ''),
+        Locale('es', ''),
+      ],
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xFF6B73FF),
@@ -147,6 +164,10 @@ class WeCounselApp extends ConsumerWidget {
           path: '/dashboard',
           builder: (context, state) => const HomeScreen(),
         ),
+        GoRoute(
+          path: '/language',
+          builder: (context, state) => const LanguageSelectionScreen(),
+        ),
       ],
     );
   }
@@ -187,7 +208,7 @@ class SplashScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 24),
             Text(
-              'We Counsel',
+              AppLocalizations.of(context)?.appTitle ?? 'We Counsel',
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -195,7 +216,7 @@ class SplashScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'Your relationship journey together',
+              AppLocalizations.of(context)?.appSubtitle ?? 'Your relationship journey together',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Colors.white.withOpacity(0.9),
               ),

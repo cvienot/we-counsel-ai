@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../l10n/app_localizations.dart';
 import '../../providers/conversation_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../models/message.dart';
@@ -574,7 +575,7 @@ class _StreamingMessageBubble extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 4),
                   child: Text(
-                    'Dr. Sarah (AI Counsellor)',
+                    AppLocalizations.of(context)!.drSarahAiCounsellor,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       fontWeight: FontWeight.w600,
                       color: Theme.of(context).colorScheme.primary,

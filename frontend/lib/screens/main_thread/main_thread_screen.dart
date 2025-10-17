@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../l10n/app_localizations.dart';
 import '../../providers/conversation_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../widgets/message_bubble.dart';
@@ -206,8 +207,25 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
     }
   }
 
+  String _getLocalizedTitle(String title, AppLocalizations l10n) {
+    // Check if it's the default English title from backend
+    if (title == 'Main Conversation') {
+      return l10n.mainConversationTitle;
+    }
+    return title;
+  }
+
+  String _getLocalizedTopic(String topic, AppLocalizations l10n) {
+    // Check if it's the default English topic from backend
+    if (topic == 'Your ongoing journey together') {
+      return l10n.mainConversationTopic;
+    }
+    return topic;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final hasPartner = ref.watch(hasPartnerProvider);
     final mainThreadState = ref.watch(mainThreadProvider);
     final currentUser = ref.watch(currentUserProvider);
@@ -238,7 +256,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
               ),
               const SizedBox(height: 16),
               Text(
-                'Failed to load main conversation',
+                l10n.failedToLoad,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 8),
@@ -250,7 +268,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: _loadMainThread,
-                child: const Text('Retry'),
+                child: Text(l10n.retry),
               ),
             ],
           ),
@@ -260,8 +278,8 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
 
     final mainThread = mainThreadState.mainThread;
     if (mainThread == null) {
-      return const Scaffold(
-        body: Center(child: Text('No main conversation found')),
+      return Scaffold(
+        body: Center(child: Text(l10n.failedToLoad)),
       );
     }
 
@@ -288,10 +306,10 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(mainThread.title),
+            Text(_getLocalizedTitle(mainThread.title, l10n)),
             if (mainThread.topic.isNotEmpty)
               Text(
-                mainThread.topic,
+                _getLocalizedTopic(mainThread.topic, l10n),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
                 ),
@@ -303,21 +321,31 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
             itemBuilder: (context) => [
               PopupMenuItem(
                 onTap: () => context.push('/conversations'),
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.forum),
-                    SizedBox(width: 8),
-                    Text('Other Conversations'),
+                    const Icon(Icons.forum),
+                    const SizedBox(width: 8),
+                    Text(l10n.otherConversations),
                   ],
                 ),
               ),
               PopupMenuItem(
                 onTap: () => context.push('/profile'),
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.person),
-                    SizedBox(width: 8),
-                    Text('Profile'),
+                    const Icon(Icons.person),
+                    const SizedBox(width: 8),
+                    Text(l10n.profile),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                onTap: () => context.push('/language'),
+                child: Row(
+                  children: [
+                    const Icon(Icons.language),
+                    const SizedBox(width: 8),
+                    Text(l10n.language),
                   ],
                 ),
               ),
@@ -328,11 +356,11 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                     context.go('/login');
                   }
                 },
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.logout),
-                    SizedBox(width: 8),
-                    Text('Logout'),
+                    const Icon(Icons.logout),
+                    const SizedBox(width: 8),
+                    Text(l10n.logout),
                   ],
                 ),
               ),
@@ -362,7 +390,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      'Welcome to your journey together',
+                      l10n.welcomeTitle,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         color: Theme.of(context).colorScheme.primary,
                         fontWeight: FontWeight.bold,
@@ -372,7 +400,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'This is your main conversation space where you and your partner can share thoughts, feelings, and receive guidance from Dr. Sarah, your AI counsellor.',
+                  l10n.welcomeMessage,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(context).colorScheme.onPrimaryContainer,
                   ),
@@ -421,7 +449,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  'Share what\'s on your mind. Dr. Sarah is here to help guide your conversation.',
+                                  l10n.shareThoughts,
                                   style: Theme.of(context).textTheme.bodyMedium,
                                   textAlign: TextAlign.center,
                                 ),
@@ -486,7 +514,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          '${_typingUsers.length > 1 ? "Partners are" : "Partner is"} typing',
+                          _typingUsers.length > 1 ? l10n.partnersTyping : l10n.partnerTyping,
                           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: Theme.of(context).colorScheme.outline,
                             fontStyle: FontStyle.italic,
@@ -520,7 +548,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                   child: TextField(
                     controller: _messageController,
                     decoration: InputDecoration(
-                      hintText: 'Share your thoughts...',
+                      hintText: l10n.typeMessage,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24),
                       ),
@@ -641,7 +669,7 @@ class _WaitingRoomScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      'Once your partner accepts the invitation and creates their account, you\'ll both have access to your main conversation thread where you can start sharing and receiving guidance from our AI counsellor.',
+                      AppLocalizations.of(context)!.partnerInvitationMessage,
                       style: Theme.of(context).textTheme.bodyMedium,
                       textAlign: TextAlign.center,
                     ),
@@ -765,7 +793,7 @@ class _StreamingMessageBubble extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 4),
                   child: Text(
-                    'Dr. Sarah (AI Counsellor)',
+                    AppLocalizations.of(context)!.drSarahAiCounsellor,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       fontWeight: FontWeight.w600,
                       color: Theme.of(context).colorScheme.primary,
@@ -803,7 +831,7 @@ class _StreamingMessageBubble extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              'Typing',
+                              AppLocalizations.of(context)!.typing,
                               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                 color: Theme.of(context).colorScheme.primary,
                                 fontStyle: FontStyle.italic,

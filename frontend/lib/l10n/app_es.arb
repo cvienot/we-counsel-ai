@@ -1,0 +1,73 @@
+{
+  "@@locale": "es",
+  "appTitle": "We Counsel",
+  "appSubtitle": "Su viaje de relación juntos",
+  
+  "login": "Iniciar Sesión",
+  "register": "Registrarse",
+  "logout": "Cerrar Sesión",
+  "email": "Correo Electrónico",
+  "password": "Contraseña",
+  "firstName": "Nombre",
+  "lastName": "Apellido",
+  "confirmPassword": "Confirmar Contraseña",
+  
+  "welcomeTitle": "Bienvenidos a su viaje juntos",
+  "welcomeMessage": "Este es su espacio principal de conversación donde usted y su pareja pueden compartir pensamientos, sentimientos y recibir orientación de la Dra. Sarah, su consejera de IA.",
+  "shareThoughts": "Comparte lo que tienes en mente. La Dra. Sarah está aquí para ayudar a guiar su conversación.",
+  
+  "conversations": "Conversaciones",
+  "profile": "Perfil",
+  "mainConversation": "Conversación Principal",
+  "otherConversations": "Otras Conversaciones",
+  
+  "typeMessage": "Escriba un mensaje...",
+  "send": "Enviar",
+  "typing": "Escribiendo",
+  "partnerTyping": "La pareja está escribiendo",
+  "partnersTyping": "Las parejas están escribiendo",
+  
+  "loading": "Cargando...",
+  "error": "Error",
+  "retry": "Reintentar",
+  "cancel": "Cancelar",
+  "save": "Guardar",
+  
+  "invitePartner": "Invitar Pareja",
+  "waitingForPartner": "Esperando a su pareja...",
+  "invitePartnerMessage": "Comparta esta invitación con su pareja para comenzar su viaje de consejería juntos.",
+  
+  "createNewConversation": "Crear Nueva Conversación",
+  "conversationTitle": "Título de la Conversación",
+  "conversationTopic": "Tema (Opcional)",
+  "create": "Crear",
+  
+  "failedToLoad": "Error al cargar",
+  "failedToSend": "Error al enviar mensaje",
+  "startConversation": "¡Comience la conversación enviando un mensaje!",
+  
+  "settings": "Configuración",
+  "language": "Idioma",
+  "selectLanguage": "Seleccionar Idioma",
+  "mainConversationTitle": "Conversación Principal",
+    "mainConversationTopic": "Su viaje continuo juntos",
+  "@mainConversationTopic": {
+    "description": "Tema del hilo de conversación principal"
+  },
+  "aiCounsellor": "Consejero IA",
+  "@aiCounsellor": {
+    "description": "Etiqueta del consejero IA"
+  },
+  "drSarahAiCounsellor": "Dra. Sarah (Consejero IA)",
+  "@drSarahAiCounsellor": {
+    "description": "Nombre completo de la Dra. Sarah consejero IA"
+  },
+  "startFirstConversationMessage": "Comience su primera conversación con su pareja y reciba orientación de nuestro consejero IA.",
+  "@startFirstConversationMessage": {
+    "description": "Mensaje que anima a los usuarios a comenzar su primera conversación"
+  },
+  "partnerInvitationMessage": "Una vez que su pareja acepte la invitación y cree su cuenta, ambos tendrán acceso a su hilo de conversación principal donde pueden comenzar a compartir y recibir orientación de nuestro consejero IA.",
+  "@partnerInvitationMessage": {
+    "description": "Mensaje que explica qué sucede después de que la pareja acepta la invitación"
+  }
+}

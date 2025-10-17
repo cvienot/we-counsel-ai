@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
 
 class TypingIndicator extends StatefulWidget {
   final bool isVisible;
@@ -171,7 +172,7 @@ class StreamingMessageBubble extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                'Dr. Sarah (AI Counsellor)',
+                AppLocalizations.of(context)!.drSarahAiCounsellor,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 12,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../l10n/app_localizations.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/conversation_provider.dart';
 import '../../models/conversation.dart';
@@ -244,7 +245,7 @@ class _EmptyConversations extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Start your first conversation with your partner and get guidance from our AI counsellor.',
+              AppLocalizations.of(context)!.startFirstConversationMessage,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium,
             ),

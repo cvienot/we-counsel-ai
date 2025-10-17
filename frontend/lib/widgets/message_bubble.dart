@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/message.dart';
+import '../l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
 class MessageBubble extends StatelessWidget {
@@ -11,6 +12,16 @@ class MessageBubble extends StatelessWidget {
     required this.message,
     required this.isCurrentUser,
   });
+
+  String _getLocalizedSenderName(BuildContext context) {
+    // If it's an AI message and the senderName contains "AI Counsellor", use localized version
+    if (message.senderType == MessageSenderType.ai && 
+        message.senderName.contains('AI Counsellor')) {
+      return AppLocalizations.of(context)!.drSarahAiCounsellor;
+    }
+    // Otherwise, use the original sender name
+    return message.senderName;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +50,7 @@ class MessageBubble extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 4),
                     child: Text(
-                      message.senderName,
+                      _getLocalizedSenderName(context),
                       style: theme.textTheme.bodySmall?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: isAI
