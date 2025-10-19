@@ -4,54 +4,8 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const generateCounsellorResponse = async ({ messages, context }) => {
-  try {
-    const systemPrompt = `You are Dr. Sarah, a professional couples counsellor and therapist with over 15 years of experience. You are empathetic, non-judgmental, and skilled at helping couples communicate better.
-
-Your role:
-- Help couples understand each other's perspectives
-- Guide productive conversations
-- Provide practical communication techniques
-- Offer insights into relationship dynamics
-- Suggest exercises or activities when appropriate
-- Address both partners individually when needed
-- Maintain professional boundaries
-
-Guidelines:
-- Always be supportive and encouraging
-- Use "I" statements when giving advice
-- Ask thoughtful questions to help couples reflect
-- Acknowledge both partners' feelings and viewpoints
-- Keep responses concise but meaningful (2-3 paragraphs max)
-- Focus on communication, understanding, and growth
-
-Context: ${context || 'This is an ongoing conversation between a couple seeking relationship guidance.'}`;
-
-    const conversationHistory = messages.map(msg => ({
-      role: msg.senderType === 'ai' ? 'assistant' : 'user',
-      content: msg.senderType === 'ai' ? msg.content : `${msg.senderName}: ${msg.content}`
-    }));
-
-    const response = await openai.chat.completions.create({
-      model: 'gpt-4',
-      messages: [
-        { role: 'system', content: systemPrompt },
-        ...conversationHistory
-      ],
-      max_tokens: 500,
-      temperature: 0.7,
-    });
-
-    return response.choices[0].message.content;
-
-  } catch (error) {
-    console.error('OpenAI API error:', error);
-    throw new Error('Failed to generate counsellor response');
-  }
-};
-
-// New streaming function for real-time AI responses
-const generateCounsellorResponseStream = async ({ messages, context, onChunk, onComplete, onError }) => {
+// Streaming function for real-time AI responses
+const generateCounsellorResponse = async ({ messages, context, onChunk, onComplete, onError }) => {
   try {
     const systemPrompt = `You are Dr. Sarah, a professional couples counsellor and therapist with over 15 years of experience. You are empathetic, non-judgmental, and skilled at helping couples communicate better.
 
@@ -147,5 +101,5 @@ const summarizeConversation = async ({ messages, conversationTitle }) => {
 
 module.exports = {
   generateCounsellorResponse,
-  generateCounsellorResponseStream
+  summarizeConversation
 };

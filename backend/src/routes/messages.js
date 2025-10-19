@@ -1,7 +1,7 @@
 const express = require('express');
 const { docClient, TABLES } = require('../config/database');
 const { authenticateToken } = require('../middleware/authMiddleware');
-const { generateCounsellorResponse, generateCounsellorResponseStream } = require('../services/aiService');
+const { generateCounsellorResponse } = require('../services/aiService');
 const streamingService = require('../services/streamingService');
 const { randomUUID } = require('crypto');
 
@@ -390,7 +390,7 @@ router.post('/:conversationId/ai-stream', authenticateToken, async (req, res) =>
 
         // Stream AI response with proper error handling
         try {
-          await generateCounsellorResponseStream({
+          await generateCounsellorResponse({
             messages: [...recentMessages, messageData],
             context: `Conversation: ${conversation.title}${conversation.topic ? `, Topic: ${conversation.topic}` : ''}`,
             onChunk: (chunk) => {
