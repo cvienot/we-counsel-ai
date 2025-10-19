@@ -46,21 +46,42 @@ class StreamingService extends EventEmitter {
     console.log(`SSE connection closed for user: ${userId}`);
   }
 
-  // Send message to specific user(s)
+  // Send message to specific user(s) - returns Promise for sequential writes
   sendToUser(userId, data) {
-    if (this.connections.has(userId)) {
-      const connections = this.connections.get(userId);
-      const message = `data: ${JSON.stringify(data)}\n\n`;
-      
-      connections.forEach(res => {
-        try {
-          res.write(message);
-        } catch (error) {
-          console.error('Error sending message to user:', error);
-          this.removeConnection(userId, res);
+    return new Promise((resolve) => {
+      if (this.connections.has(userId)) {
+        const connections = this.connections.get(userId);
+        const message = `data: ${JSON.stringify(data)}\n\n`;
+        
+        let writePromises = [];
+        connections.forEach(res => {
+          try {
+            // res.write returns false if the internal buffer is full
+            const needsDrain = !res.write(message);
+            
+            if (needsDrain) {
+              // Wait for drain event before continuing
+              writePromises.push(new Promise(drainResolve => {
+                res.once('drain', drainResolve);
+              }));
+            }
+          } catch (error) {
+            console.error('Error sending message to user:', error);
+            this.removeConnection(userId, res);
+          }
+        });
+        
+        // Wait for all drains to complete, then resolve
+        if (writePromises.length > 0) {
+          Promise.all(writePromises).then(resolve);
+        } else {
+          // If no drains needed, resolve immediately with setImmediate
+          setImmediate(resolve);
         }
-      });
-    }
+      } else {
+        resolve();
+      }
+    });
   }
 
   // Send message to all users in a conversation
@@ -117,15 +138,24 @@ class StreamingService extends EventEmitter {
     });
   }
 
-  // Stream AI response chunks
-  streamAIResponse(conversationId, messageId, chunk, isComplete = false) {
-    this.emit('aiStreamChunk', {
+  // Stream AI response chunks - returns Promise to ensure sequential processing
+  async streamAIResponse(conversationId, messageId, chunk, isComplete = false) {
+    // Create a promise that will be resolved by the event handler
+    const eventData = {
       conversationId,
       messageId,
       chunk,
       isComplete,
       timestamp: Date.now()
-    });
+    };
+    
+    // Emit the event and wait for async handlers
+    const listeners = this.listeners('aiStreamChunk');
+    
+    if (listeners.length > 0) {
+      // Call all listeners and wait for them to complete
+      await Promise.all(listeners.map(listener => listener(eventData)));
+    }
   }
 
   // Send new message notification

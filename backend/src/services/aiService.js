@@ -50,7 +50,7 @@ Context: ${context || 'This is an ongoing conversation between a couple seeking 
       const content = chunk.choices[0]?.delta?.content || '';
       if (content) {
         fullResponse += content;
-        onChunk(content);
+        await onChunk(content);
       }
     }
 

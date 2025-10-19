@@ -151,42 +151,60 @@ streamingService.on('typingUpdate', async ({ conversationId, userId, isTyping, t
   }
 });
 
+// Cache for conversation participants to avoid repeated DB queries
+const conversationParticipantsCache = new Map();
+
 streamingService.on('aiStreamChunk', async ({ conversationId, messageId, chunk, isComplete }) => {
   try {
-    // Get conversation details to find all participants
-    const { docClient, TABLES } = require('./config/database');
-    const params = {
-      TableName: TABLES.CONVERSATIONS,
-      Key: { conversationId }
-    };
+    let userIds = conversationParticipantsCache.get(conversationId);
     
-    const result = await docClient.get(params).promise();
-    const conversation = result.Item;
-    
-    if (conversation && conversation.coupleId) {
-      // Get all users in the couple
-      const userParams = {
-        TableName: TABLES.USERS,
-        IndexName: 'couple-index',
-        KeyConditionExpression: 'coupleId = :coupleId',
-        ExpressionAttributeValues: {
-          ':coupleId': conversation.coupleId
-        }
+    // If not cached, fetch from database
+    if (!userIds) {
+      const { docClient, TABLES } = require('./config/database');
+      const params = {
+        TableName: TABLES.CONVERSATIONS,
+        Key: { conversationId }
       };
       
-      const userResult = await docClient.query(userParams).promise();
-      const users = userResult.Items;
+      const result = await docClient.get(params).promise();
+      const conversation = result.Item;
       
-      // Send AI stream chunk to all users in the conversation
-      users.forEach(user => {
-        streamingService.sendToUser(user.userId, {
+      if (conversation && conversation.coupleId) {
+        // Get all users in the couple
+        const userParams = {
+          TableName: TABLES.USERS,
+          IndexName: 'couple-index',
+          KeyConditionExpression: 'coupleId = :coupleId',
+          ExpressionAttributeValues: {
+            ':coupleId': conversation.coupleId
+          }
+        };
+        
+        const userResult = await docClient.query(userParams).promise();
+        userIds = userResult.Items.map(user => user.userId);
+        
+        // Cache the user IDs
+        conversationParticipantsCache.set(conversationId, userIds);
+      }
+    }
+    
+    // Send AI stream chunk to all users sequentially
+    if (userIds && userIds.length > 0) {
+      // Send to all users in parallel but await all sends
+      await Promise.all(userIds.map(userId => 
+        streamingService.sendToUser(userId, {
           type: 'aiStream',
           conversationId,
           messageId,
           chunk,
           isComplete
-        });
-      });
+        })
+      ));
+    }
+    
+    // Clear cache when streaming completes
+    if (isComplete) {
+      conversationParticipantsCache.delete(conversationId);
     }
   } catch (error) {
     console.error('Error handling AI stream chunk:', error);

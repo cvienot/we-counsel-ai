@@ -393,9 +393,9 @@ router.post('/:conversationId/ai-stream', authenticateToken, async (req, res) =>
           await generateCounsellorResponse({
             messages: [...recentMessages, messageData],
             context: `Conversation: ${conversation.title}${conversation.topic ? `, Topic: ${conversation.topic}` : ''}`,
-            onChunk: (chunk) => {
+            onChunk: async (chunk) => {
               aiResponseContent += chunk;
-              streamingService.streamAIResponse(conversationId, aiMessageId, chunk, false);
+              await streamingService.streamAIResponse(conversationId, aiMessageId, chunk, false);
             },
             onComplete: async (fullResponse) => {
               // Save complete AI response to database
