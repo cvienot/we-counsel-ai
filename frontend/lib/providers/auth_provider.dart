@@ -65,7 +65,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
     } catch (e) {
       // Token is invalid or expired, clear it and logout
       print('🔐 AUTH: Token verification failed: $e');
-      await logout();
+      await _apiService.clearToken();
+      _realtimeService.disconnect();
+      state = state.copyWith(
+        user: null,
+        isLoading: false,
+        isAuthenticated: false,
+        error: null,
+      );
+      print('🔐 AUTH: State updated - isAuthenticated: ${state.isAuthenticated}, isLoading: ${state.isLoading}');
     }
   }
 

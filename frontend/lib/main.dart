@@ -95,26 +95,33 @@ class WeCounselApp extends ConsumerWidget {
         final isInvitationRoute = location.startsWith('/invitation/');
         final isSplashRoute = location == '/splash';
 
+        print('🔀 ROUTER: Redirect check - location: $location, isAuth: ${authState.isAuthenticated}, isLoading: ${authState.isLoading}');
+
         // Allow invitation routes without authentication
         if (isInvitationRoute) {
+          print('🔀 ROUTER: Allowing invitation route');
           return null;
         }
 
         // If still loading auth state, stay on splash
         if (authState.isLoading && !isSplashRoute) {
+          print('🔀 ROUTER: Still loading, redirect to /splash');
           return '/splash';
         }
 
         // If done loading and not authenticated, go to login (unless already there)
-        if (!authState.isLoading && !authState.isAuthenticated && !isLoginRoute && !isRegisterRoute && !isSplashRoute) {
+        if (!authState.isLoading && !authState.isAuthenticated && !isLoginRoute && !isRegisterRoute) {
+          print('🔀 ROUTER: Not authenticated, redirect to /login');
           return '/login';
         }
 
         // If authenticated and on auth/splash routes, redirect to home
         if (authState.isAuthenticated && (isLoginRoute || isRegisterRoute || isSplashRoute)) {
+          print('🔀 ROUTER: Authenticated, redirect to /home');
           return '/home';
         }
 
+        print('🔀 ROUTER: No redirect needed');
         return null;
       },
       routes: [
@@ -178,6 +185,7 @@ class _AuthStateNotifier extends ChangeNotifier {
 
   _AuthStateNotifier(this._ref) {
     _ref.listen<AuthState>(authProvider, (previous, next) {
+      print('🔔 AUTH STATE CHANGED: isAuth: ${next.isAuthenticated}, isLoading: ${next.isLoading}');
       notifyListeners();
     });
   }
