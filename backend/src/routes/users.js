@@ -70,6 +70,20 @@ router.put('/profile', authenticateToken, async (req, res) => {
     const result = await docClient.update(params).promise();
     const { password, ...updatedUser } = result.Attributes;
 
+    // Get partner info if exists
+    if (updatedUser.partnerId) {
+      const partnerParams = {
+        TableName: TABLES.USERS,
+        Key: { userId: updatedUser.partnerId }
+      };
+      
+      const partnerResult = await docClient.get(partnerParams).promise();
+      if (partnerResult.Item) {
+        const { password, ...partnerInfo } = partnerResult.Item;
+        updatedUser.partner = partnerInfo;
+      }
+    }
+
     res.json({
       success: true,
       message: 'Profile updated successfully',

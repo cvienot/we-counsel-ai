@@ -162,6 +162,20 @@ router.post('/login', async (req, res) => {
 
     // Remove password from response
     const { passwordHash: _, ...userResponse } = user;
+    
+    // Get partner info if exists
+    if (user.partnerId) {
+      const partnerParams = {
+        TableName: TABLES.USERS,
+        Key: { userId: user.partnerId }
+      };
+      
+      const partnerResult = await docClient.get(partnerParams).promise();
+      if (partnerResult.Item) {
+        const { passwordHash: _, ...partnerInfo } = partnerResult.Item;
+        userResponse.partner = partnerInfo;
+      }
+    }
 
     res.json({
       success: true,
@@ -311,12 +325,35 @@ router.post('/invite-partner', authenticateToken, async (req, res) => {
 // @route   GET /api/auth/me
 // @desc    Get current user
 // @access  Private
-router.get('/me', authenticateToken, (req, res) => {
-  const { password, ...userResponse } = req.user;
-  res.json({
-    success: true,
-    user: userResponse
-  });
+router.get('/me', authenticateToken, async (req, res) => {
+  try {
+    const { passwordHash, ...userResponse } = req.user;
+    
+    // Get partner info if exists
+    if (req.user.partnerId) {
+      const partnerParams = {
+        TableName: TABLES.USERS,
+        Key: { userId: req.user.partnerId }
+      };
+      
+      const partnerResult = await docClient.get(partnerParams).promise();
+      if (partnerResult.Item) {
+        const { passwordHash: _, ...partnerInfo } = partnerResult.Item;
+        userResponse.partner = partnerInfo;
+      }
+    }
+    
+    res.json({
+      success: true,
+      user: userResponse
+    });
+  } catch (error) {
+    console.error('Get current user error:', error);
+    res.status(500).json({
+      error: 'Server error',
+      message: 'Failed to get current user'
+    });
+  }
 });
 
 module.exports = router;

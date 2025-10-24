@@ -14,7 +14,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
-  bool _isEditing = false;
+  bool _isEditing = true;
 
   @override
   void initState() {
@@ -43,10 +43,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           lastName: _lastNameController.text.trim(),
         );
         
-        setState(() {
-          _isEditing = false;
-        });
-        
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Profile updated successfully')),
@@ -63,6 +59,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         }
       }
     }
+  }
+
+  String _getInitials(String firstName, String lastName) {
+    final firstInitial = firstName.isNotEmpty ? firstName[0] : '';
+    final lastInitial = lastName.isNotEmpty ? lastName[0] : '';
+    final initials = '$firstInitial$lastInitial'.toUpperCase();
+    return initials.isNotEmpty ? initials : '?';
   }
 
   Future<void> _logout() async {
@@ -107,16 +110,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       appBar: AppBar(
         title: const Text('Profile'),
         actions: [
-          if (_isEditing)
-            TextButton(
-              onPressed: authState.isLoading ? null : _saveProfile,
-              child: const Text('Save'),
-            )
-          else
-            IconButton(
-              onPressed: () => setState(() => _isEditing = true),
-              icon: const Icon(Icons.edit),
-            ),
+          TextButton(
+            onPressed: authState.isLoading ? null : _saveProfile,
+            child: const Text('Save'),
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -132,7 +129,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     radius: 50,
                     backgroundColor: Theme.of(context).colorScheme.primary,
                     child: Text(
-                      '${user.firstName[0]}${user.lastName[0]}'.toUpperCase(),
+                      _getInitials(user.firstName, user.lastName),
                       style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                         color: Theme.of(context).colorScheme.onPrimary,
                       ),
@@ -236,7 +233,16 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       'Relationship Status',
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 8),
+                    // Debug info
+                    Text(
+                      'Debug: partnerId=${user.partnerId}, hasPartner=${user.hasPartner}, partner=${user.partner != null ? "not null" : "null"}',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Colors.grey,
+                        fontSize: 10,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
                     
                     if (user.hasPartner && user.partner != null) ...[
                       Row(
