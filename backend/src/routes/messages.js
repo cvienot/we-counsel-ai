@@ -7,6 +7,13 @@ const { randomUUID } = require('crypto');
 
 const router = express.Router();
 
+// Helper function to get user's full name with fallback
+const getUserFullName = (user) => {
+  const firstName = user.firstName || 'User';
+  const lastName = user.lastName || '';
+  return `${firstName} ${lastName}`.trim();
+};
+
 // @route   GET /api/messages/:conversationId
 // @desc    Get all messages for a conversation
 // @access  Private
@@ -58,7 +65,43 @@ router.get('/:conversationId', authenticateToken, async (req, res) => {
     const messagesResult = await docClient.query(messagesParams).promise();
 
     // Reverse to show oldest first
-    const messages = messagesResult.Items.reverse();
+    const rawMessages = messagesResult.Items.reverse();
+
+    // Get unique user IDs from messages
+    const userIds = [...new Set(
+      rawMessages
+        .filter(m => m.senderType === 'user')
+        .map(m => m.senderId)
+    )];
+
+    // Fetch user information for all senders
+    const userMap = {};
+    if (userIds.length > 0) {
+      const userPromises = userIds.map(userId =>
+        docClient.get({
+          TableName: TABLES.USERS,
+          Key: { userId }
+        }).promise()
+      );
+      
+      const userResults = await Promise.all(userPromises);
+      userResults.forEach(result => {
+        if (result.Item) {
+          userMap[result.Item.userId] = getUserFullName(result.Item);
+        }
+      });
+    }
+
+    // Populate sender names dynamically
+    const messages = rawMessages.map(message => {
+      if (message.senderType === 'user' && userMap[message.senderId]) {
+        return {
+          ...message,
+          senderName: userMap[message.senderId]
+        };
+      }
+      return message;
+    });
 
     res.json({
       success: true,
@@ -122,7 +165,7 @@ router.post('/:conversationId', authenticateToken, async (req, res) => {
       messageId,
       conversationId,
       senderId: req.user.userId,
-      senderName: `${req.user.firstName} ${req.user.lastName}`,
+      senderName: getUserFullName(req.user),
       senderType: 'user',
       content: content.trim(),
       recipientType,
@@ -328,7 +371,7 @@ router.post('/:conversationId/ai-stream', authenticateToken, async (req, res) =>
       messageId,
       conversationId,
       senderId: req.user.userId,
-      senderName: `${req.user.firstName} ${req.user.lastName}`,
+      senderName: getUserFullName(req.user),
       senderType: 'user',
       content: content.trim(),
       recipientType,
