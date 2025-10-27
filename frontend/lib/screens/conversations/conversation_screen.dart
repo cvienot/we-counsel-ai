@@ -5,6 +5,7 @@ import '../../providers/conversation_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../models/message.dart';
 import '../../services/realtime_service.dart';
+import '../../widgets/message_bubble.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
 
@@ -231,7 +232,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                               // Show regular messages first
                               if (index < messagesState.messages.length) {
                                 final message = messagesState.messages[index];
-                                return _MessageBubble(
+                                return MessageBubble(
                                   message: message,
                                   isCurrentUser: message.senderId == currentUser?.userId,
                                 );
@@ -350,128 +351,6 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
   }
 }
 
-class _MessageBubble extends StatelessWidget {
-  final Message message;
-  final bool isCurrentUser;
-
-  const _MessageBubble({
-    required this.message,
-    required this.isCurrentUser,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final isAI = message.senderType == MessageSenderType.ai;
-    
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: Row(
-        mainAxisAlignment: isCurrentUser && !isAI
-            ? MainAxisAlignment.end
-            : MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (!isCurrentUser || isAI) ...[
-            CircleAvatar(
-              radius: 16,
-              backgroundColor: isAI 
-                  ? Theme.of(context).colorScheme.secondary
-                  : Theme.of(context).colorScheme.primary,
-              child: Icon(
-                isAI ? Icons.psychology : Icons.person,
-                size: 16,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-            ),
-            const SizedBox(width: 8),
-          ],
-          
-          Flexible(
-            child: Container(
-              constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width * 0.75,
-              ),
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: isCurrentUser && !isAI
-                    ? Theme.of(context).colorScheme.primary
-                    : isAI
-                        ? Theme.of(context).colorScheme.secondary.withOpacity(0.1)
-                        : Theme.of(context).colorScheme.outline.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (!isCurrentUser || isAI)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
-                      child: Text(
-                        message.senderName,
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: isAI ? Theme.of(context).colorScheme.secondary : null,
-                        ),
-                      ),
-                    ),
-                  
-                  Text(
-                    message.content,
-                    style: TextStyle(
-                      color: isCurrentUser && !isAI
-                          ? Theme.of(context).colorScheme.onPrimary
-                          : Theme.of(context).colorScheme.onSurface,
-                    ),
-                  ),
-                  
-                  const SizedBox(height: 4),
-                  
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        DateFormat('HH:mm').format(message.createdAt),
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: isCurrentUser && !isAI
-                              ? Theme.of(context).colorScheme.onPrimary.withOpacity(0.7)
-                              : Theme.of(context).colorScheme.outline,
-                        ),
-                      ),
-                      if (message.isEdited) ...[
-                        const SizedBox(width: 4),
-                        Icon(
-                          Icons.edit,
-                          size: 12,
-                          color: isCurrentUser && !isAI
-                              ? Theme.of(context).colorScheme.onPrimary.withOpacity(0.7)
-                              : Theme.of(context).colorScheme.outline,
-                        ),
-                      ],
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-          
-          if (isCurrentUser && !isAI) ...[
-            const SizedBox(width: 8),
-            CircleAvatar(
-              radius: 16,
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              child: Icon(
-                Icons.person,
-                size: 16,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-}
-
 class _TypingAnimation extends StatefulWidget {
   const _TypingAnimation({Key? key}) : super(key: key);
 
@@ -553,18 +432,21 @@ class _StreamingMessageBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.only(
+        bottom: 16,
+        right: 48.0, // Add margin to keep AI messages from right edge
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CircleAvatar(
             radius: 16,
-            backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+            backgroundColor: Theme.of(context).colorScheme.secondary,
             child: Icon(
               Icons.psychology,
               size: 16,
-              color: Theme.of(context).colorScheme.primary,
+              color: Theme.of(context).colorScheme.onPrimary,
             ),
           ),
           const SizedBox(width: 8),
@@ -578,17 +460,20 @@ class _StreamingMessageBubble extends StatelessWidget {
                     AppLocalizations.of(context)!.drSarahAiCounsellor,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: Theme.of(context).colorScheme.primary,
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                   ),
                 ),
                 Container(
+                  constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width * 0.70,
+                  ),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 12,
                   ),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary.withOpacity(0.05),
+                    color: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(18).copyWith(
                       bottomLeft: const Radius.circular(4),
                     ),

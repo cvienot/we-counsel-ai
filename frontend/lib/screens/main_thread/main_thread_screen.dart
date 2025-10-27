@@ -771,18 +771,21 @@ class _StreamingMessageBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.only(
+        bottom: 16,
+        right: 48.0, // Add margin to keep AI messages from right edge
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CircleAvatar(
             radius: 16,
-            backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-            child: Icon(
+            backgroundColor: Theme.of(context).colorScheme.secondary,
+            child: const Icon(
               Icons.psychology,
               size: 16,
-              color: Theme.of(context).colorScheme.primary,
+              color: Colors.white,
             ),
           ),
           const SizedBox(width: 8),
@@ -796,23 +799,22 @@ class _StreamingMessageBubble extends StatelessWidget {
                     AppLocalizations.of(context)!.drSarahAiCounsellor,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: Theme.of(context).colorScheme.primary,
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                   ),
                 ),
                 Container(
+                  constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width * 0.70,
+                  ),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 12,
                   ),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary.withOpacity(0.05),
+                    color: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(18).copyWith(
                       bottomLeft: const Radius.circular(4),
-                    ),
-                    border: Border.all(
-                      color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
-                      width: 1,
                     ),
                   ),
                   child: Column(
@@ -833,7 +835,7 @@ class _StreamingMessageBubble extends StatelessWidget {
                             Text(
                               AppLocalizations.of(context)!.typing,
                               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: Theme.of(context).colorScheme.primary,
+                                color: Theme.of(context).colorScheme.secondary,
                                 fontStyle: FontStyle.italic,
                               ),
                             ),

@@ -26,27 +26,36 @@ class MessageBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isAI = message.senderType == MessageSenderType.ai;
+    final alignRight = isCurrentUser && !isAI;
     final theme = Theme.of(context);
     
+    // Debug logging
+    print('🎨 MessageBubble: senderId=${message.senderId}, senderName=${message.senderName}, isCurrentUser=$isCurrentUser, isAI=$isAI, alignRight=$alignRight');
+    
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: EdgeInsets.only(
+        bottom: 16,
+        // Add horizontal margins to keep messages from edges
+        left: alignRight ? 48.0 : 0,
+        right: alignRight ? 0 : 48.0,
+      ),
       child: Row(
-        mainAxisAlignment: isCurrentUser && !isAI
+        mainAxisAlignment: alignRight
             ? MainAxisAlignment.end
             : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (!isCurrentUser || isAI) ...[
+          if (!alignRight) ...[
             _buildAvatar(context),
             const SizedBox(width: 8),
           ],
           Flexible(
             child: Column(
-              crossAxisAlignment: isCurrentUser && !isAI
+              crossAxisAlignment: alignRight
                   ? CrossAxisAlignment.end
                   : CrossAxisAlignment.start,
               children: [
-                if (!isCurrentUser || isAI)
+                if (!alignRight)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 4),
                     child: Text(
@@ -54,12 +63,15 @@ class MessageBubble extends StatelessWidget {
                       style: theme.textTheme.bodySmall?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: isAI
-                            ? theme.colorScheme.primary
+                            ? theme.colorScheme.secondary
                             : theme.colorScheme.onSurface.withOpacity(0.7),
                       ),
                     ),
                   ),
                 Container(
+                  constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width * 0.70,
+                  ),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 12,
@@ -67,10 +79,10 @@ class MessageBubble extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: _getBubbleColor(context),
                     borderRadius: BorderRadius.circular(18).copyWith(
-                      bottomLeft: !isCurrentUser || isAI
+                      bottomLeft: !alignRight
                           ? const Radius.circular(4)
                           : const Radius.circular(18),
-                      bottomRight: isCurrentUser && !isAI
+                      bottomRight: alignRight
                           ? const Radius.circular(4)
                           : const Radius.circular(18),
                     ),
@@ -100,7 +112,7 @@ class MessageBubble extends StatelessWidget {
               ],
             ),
           ),
-          if (isCurrentUser && !isAI) ...[
+          if (alignRight) ...[
             const SizedBox(width: 8),
             _buildAvatar(context),
           ],
@@ -116,10 +128,8 @@ class MessageBubble extends StatelessWidget {
     return CircleAvatar(
       radius: 16,
       backgroundColor: isAI
-          ? theme.colorScheme.primary
-          : isCurrentUser
-              ? theme.colorScheme.secondary
-              : theme.colorScheme.tertiary,
+          ? theme.colorScheme.secondary
+          : theme.colorScheme.primary,
       child: isAI
           ? const Icon(
               Icons.psychology,
@@ -142,26 +152,26 @@ class MessageBubble extends StatelessWidget {
   Color _getBubbleColor(BuildContext context) {
     final theme = Theme.of(context);
     final isAI = message.senderType == MessageSenderType.ai;
+    final alignRight = isCurrentUser && !isAI;
 
     if (isAI) {
-      return theme.colorScheme.primaryContainer;
-    } else if (isCurrentUser) {
+      return theme.colorScheme.secondary.withOpacity(0.1);
+    } else if (alignRight) {
       return theme.colorScheme.primary;
     } else {
-      return theme.colorScheme.surfaceVariant;
+      return theme.colorScheme.outline.withOpacity(0.1);
     }
   }
 
   Color _getTextColor(BuildContext context) {
     final theme = Theme.of(context);
     final isAI = message.senderType == MessageSenderType.ai;
+    final alignRight = isCurrentUser && !isAI;
 
-    if (isAI) {
-      return theme.colorScheme.onPrimaryContainer;
-    } else if (isCurrentUser) {
+    if (alignRight) {
       return theme.colorScheme.onPrimary;
     } else {
-      return theme.colorScheme.onSurfaceVariant;
+      return theme.colorScheme.onSurface;
     }
   }
 }
