@@ -106,13 +106,13 @@ streamingService.on('typingUpdate', async ({ conversationId, userId, isTyping, t
     console.log(`🔔 TYPING UPDATE EVENT: conversationId=${conversationId}, userId=${userId}, isTyping=${isTyping}, typingUsers=[${typingUsers.join(', ')}]`);
     
     // Get conversation details to find the partner
-    const { docClient, TABLES } = require('./config/database');
+    const { docClient, TABLES, GetCommand, QueryCommand } = require('./config/database');
     const params = {
       TableName: TABLES.CONVERSATIONS,
       Key: { conversationId }
     };
     
-    const result = await docClient.get(params).promise();
+    const result = await docClient.send(new GetCommand(params));
     const conversation = result.Item;
     
     if (conversation && conversation.coupleId) {
@@ -126,7 +126,7 @@ streamingService.on('typingUpdate', async ({ conversationId, userId, isTyping, t
         }
       };
       
-      const userResult = await docClient.query(userParams).promise();
+      const userResult = await docClient.send(new QueryCommand(userParams));
       const users = userResult.Items;
       
       // Send typing update to all users except the one who's typing
@@ -160,13 +160,13 @@ streamingService.on('aiStreamChunk', async ({ conversationId, messageId, chunk, 
     
     // If not cached, fetch from database
     if (!userIds) {
-      const { docClient, TABLES } = require('./config/database');
+      const { docClient, TABLES, GetCommand, QueryCommand } = require('./config/database');
       const params = {
         TableName: TABLES.CONVERSATIONS,
         Key: { conversationId }
       };
       
-      const result = await docClient.get(params).promise();
+      const result = await docClient.send(new GetCommand(params));
       const conversation = result.Item;
       
       if (conversation && conversation.coupleId) {
@@ -180,7 +180,7 @@ streamingService.on('aiStreamChunk', async ({ conversationId, messageId, chunk, 
           }
         };
         
-        const userResult = await docClient.query(userParams).promise();
+        const userResult = await docClient.send(new QueryCommand(userParams));
         userIds = userResult.Items.map(user => user.userId);
         
         // Cache the user IDs
@@ -214,13 +214,13 @@ streamingService.on('aiStreamChunk', async ({ conversationId, messageId, chunk, 
 streamingService.on('newMessage', async ({ conversationId, senderUserId, message }) => {
   try {
     // Get conversation details to find the partner
-    const { docClient, TABLES } = require('./config/database');
+    const { docClient, TABLES, GetCommand, QueryCommand } = require('./config/database');
     const params = {
       TableName: TABLES.CONVERSATIONS,
       Key: { conversationId }
     };
     
-    const result = await docClient.get(params).promise();
+    const result = await docClient.send(new GetCommand(params));
     const conversation = result.Item;
     
     if (conversation && conversation.coupleId) {
@@ -234,7 +234,7 @@ streamingService.on('newMessage', async ({ conversationId, senderUserId, message
         }
       };
       
-      const userResult = await docClient.query(userParams).promise();
+      const userResult = await docClient.send(new QueryCommand(userParams));
       const users = userResult.Items;
       
       // Send new message to all users except the sender

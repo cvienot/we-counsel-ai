@@ -1,18 +1,21 @@
 #!/usr/bin/env node
 
 require('dotenv').config();
-const AWS = require('aws-sdk');
+const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBDocumentClient, PutCommand } = require('@aws-sdk/lib-dynamodb');
 const bcrypt = require('bcryptjs');
 
 // Configure AWS DynamoDB to use local instance
-AWS.config.update({
+const client = new DynamoDBClient({
   region: 'us-east-1',
   endpoint: 'http://localhost:8000',
-  accessKeyId: 'dummy',
-  secretAccessKey: 'dummy'
+  credentials: {
+    accessKeyId: 'dummy',
+    secretAccessKey: 'dummy'
+  }
 });
 
-const dynamodb = new AWS.DynamoDB.DocumentClient();
+const dynamodb = DynamoDBDocumentClient.from(client);
 
 // Helper function to add delay
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -66,21 +69,21 @@ async function seedDatabase() {
     // Insert users
     console.log('👥 Creating test users...');
     for (const user of users) {
-      await dynamodb.put({
+      await dynamodb.send(new PutCommand({
         TableName: 'we-counsel-users',
         Item: user,
         ConditionExpression: 'attribute_not_exists(userId)'
-      }).promise();
+      }));
       console.log(`   ✅ Created user: ${user.email}`);
       await delay(100); // Small delay between operations
     }
 
     // Create the couple relationship
     console.log('💕 Creating couple relationship...');
-    await dynamodb.put({
+    await dynamodb.send(new PutCommand({
       TableName: 'we-counsel-couples',
       Item: couple
-    }).promise();
+    }));
     console.log('   ✅ Created couple relationship between John and Jane');
 
     // Create a conversation between the users
@@ -96,10 +99,10 @@ async function seedDatabase() {
     };
 
     console.log('💬 Creating test conversation...');
-    await dynamodb.put({
+    await dynamodb.send(new PutCommand({
       TableName: 'we-counsel-conversations',
       Item: conversation
-    }).promise();
+    }));
     console.log('   ✅ Created conversation between John and Jane');
 
     // Create some test messages
@@ -148,10 +151,10 @@ async function seedDatabase() {
 
     console.log('📝 Creating test messages...');
     for (const message of messages) {
-      await dynamodb.put({
+      await dynamodb.send(new PutCommand({
         TableName: 'we-counsel-messages',
         Item: message
-      }).promise();
+      }));
       await delay(100); // Small delay between operations
     }
     console.log(`   ✅ Created ${messages.length} test messages`);
@@ -165,7 +168,7 @@ async function seedDatabase() {
     console.log('\n�💡 Both accounts are ACTIVE and ready for testing');
 
   } catch (error) {
-    if (error.code === 'ConditionalCheckFailedException') {
+    if (error.name === 'ConditionalCheckFailedException') {
       console.log('⚠️  Some test data already exists. Run "npm run db:reset" first to start fresh.');
     } else {
       console.error('❌ Error seeding database:', error);

@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { docClient, TABLES } = require('../config/database');
+const { docClient, TABLES, GetCommand } = require('../config/database');
 
 const authenticateToken = async (req, res, next) => {
   const authHeader = req.headers['authorization'];
@@ -21,7 +21,7 @@ const authenticateToken = async (req, res, next) => {
       Key: { userId: decoded.userId }
     };
 
-    const result = await docClient.get(params).promise();
+    const result = await docClient.send(new GetCommand(params));
     
     if (!result.Item) {
       return res.status(401).json({

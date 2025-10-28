@@ -29,9 +29,6 @@ class MessageBubble extends StatelessWidget {
     final alignRight = isCurrentUser && !isAI;
     final theme = Theme.of(context);
     
-    // Debug logging
-    print('🎨 MessageBubble: senderId=${message.senderId}, senderName=${message.senderName}, isCurrentUser=$isCurrentUser, isAI=$isAI, alignRight=$alignRight');
-    
     return Padding(
       padding: EdgeInsets.only(
         bottom: 16,

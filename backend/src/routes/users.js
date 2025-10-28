@@ -1,5 +1,5 @@
 const express = require('express');
-const { docClient, TABLES } = require('../config/database');
+const { docClient, TABLES, GetCommand, PutCommand, QueryCommand, UpdateCommand, ScanCommand } = require('../config/database');
 const { authenticateToken } = require('../middleware/authMiddleware');
 const { randomUUID } = require('crypto');
 
@@ -19,7 +19,7 @@ router.get('/profile', authenticateToken, async (req, res) => {
         Key: { userId: req.user.partnerId }
       };
       
-      const partnerResult = await docClient.get(partnerParams).promise();
+      const partnerResult = await docClient.send(new GetCommand(partnerParams));
       if (partnerResult.Item) {
         const { password, ...partnerInfo } = partnerResult.Item;
         userProfile.partner = partnerInfo;
@@ -67,7 +67,7 @@ router.put('/profile', authenticateToken, async (req, res) => {
       ReturnValues: 'ALL_NEW'
     };
 
-    const result = await docClient.update(params).promise();
+    const result = await docClient.send(new UpdateCommand(params));
     const { password, ...updatedUser } = result.Attributes;
 
     // Get partner info if exists
@@ -77,7 +77,7 @@ router.put('/profile', authenticateToken, async (req, res) => {
         Key: { userId: updatedUser.partnerId }
       };
       
-      const partnerResult = await docClient.get(partnerParams).promise();
+      const partnerResult = await docClient.send(new GetCommand(partnerParams));
       if (partnerResult.Item) {
         const { password, ...partnerInfo } = partnerResult.Item;
         updatedUser.partner = partnerInfo;
@@ -111,7 +111,7 @@ router.get('/invitations', authenticateToken, async (req, res) => {
       }
     };
 
-    const result = await docClient.scan(params).promise();
+    const result = await docClient.send(new ScanCommand(params));
 
     res.json({
       success: true,
@@ -140,7 +140,7 @@ router.post('/accept-invitation/:invitationId', authenticateToken, async (req, r
       Key: { invitationId }
     };
 
-    const invitationResult = await docClient.get(invitationParams).promise();
+    const invitationResult = await docClient.send(new GetCommand(invitationParams));
     
     if (!invitationResult.Item) {
       return res.status(404).json({
@@ -188,7 +188,7 @@ router.post('/accept-invitation/:invitationId', authenticateToken, async (req, r
       Key: { userId: invitation.inviterId }
     };
 
-    const inviterResult = await docClient.get(inviterParams).promise();
+    const inviterResult = await docClient.send(new GetCommand(inviterParams));
     
     if (!inviterResult.Item) {
       return res.status(404).json({

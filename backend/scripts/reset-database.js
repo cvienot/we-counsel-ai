@@ -7,7 +7,7 @@
  */
 
 require('dotenv').config();
-const AWS = require('aws-sdk');
+const { DynamoDBClient, DeleteTableCommand } = require('@aws-sdk/client-dynamodb');
 
 // Configure DynamoDB (same as in database.js)
 const dynamoConfig = {
@@ -16,11 +16,13 @@ const dynamoConfig = {
 
 if (process.env.NODE_ENV === 'development') {
   dynamoConfig.endpoint = process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000';
-  dynamoConfig.accessKeyId = 'local';
-  dynamoConfig.secretAccessKey = 'local';
+  dynamoConfig.credentials = {
+    accessKeyId: 'local',
+    secretAccessKey: 'local'
+  };
 }
 
-const dynamodb = new AWS.DynamoDB(dynamoConfig);
+const client = new DynamoDBClient(dynamoConfig);
 
 // Table names
 const TABLES = {
@@ -39,10 +41,10 @@ const resetDatabase = async () => {
     const tableNames = Object.values(TABLES);
     for (const tableName of tableNames) {
       try {
-        await dynamodb.deleteTable({ TableName: tableName }).promise();
+        await client.send(new DeleteTableCommand({ TableName: tableName }));
         console.log(`🗑️  Deleted table: ${tableName}`);
       } catch (error) {
-        if (error.code === 'ResourceNotFoundException') {
+        if (error.name === 'ResourceNotFoundException') {
           console.log(`⚠️  Table does not exist: ${tableName}`);
         } else {
           throw error;

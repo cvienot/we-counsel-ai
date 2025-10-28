@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { randomUUID } = require('crypto');
-const { docClient, TABLES } = require('../config/database');
+const { docClient, TABLES, QueryCommand, PutCommand, GetCommand } = require('../config/database');
 const { sendInvitationEmail } = require('../services/emailService');
 const { authenticateToken } = require('../middleware/authMiddleware');
 
@@ -47,7 +47,7 @@ router.post('/register', async (req, res) => {
       }
     };
 
-    const existingUser = await docClient.query(existingUserParams).promise();
+    const existingUser = await docClient.send(new QueryCommand(existingUserParams));
 
     if (existingUser.Items.length > 0) {
       return res.status(409).json({
@@ -61,7 +61,7 @@ router.post('/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     // Create user
-            const userId = randomUUID();
+    const userId = randomUUID();
     const userData = {
       userId,
       email: email.toLowerCase(),
@@ -69,9 +69,8 @@ router.post('/register', async (req, res) => {
       firstName,
       lastName,
       createdAt: new Date().toISOString(),
-      isActive: true,
-      partnerId: null,
-      coupleId: null
+      isActive: true
+      // Note: partnerId and coupleId are omitted (not set to null) for AWS SDK v3 compatibility
     };
 
     const params = {
@@ -79,7 +78,7 @@ router.post('/register', async (req, res) => {
       Item: userData
     };
 
-    await docClient.put(params).promise();
+    await docClient.send(new PutCommand(params));
 
     // Generate token
     const token = generateToken(userId);
@@ -128,7 +127,7 @@ router.post('/login', async (req, res) => {
       }
     };
 
-    const result = await docClient.query(params).promise();
+    const result = await docClient.send(new QueryCommand(params));
 
     if (result.Items.length === 0) {
       return res.status(401).json({
@@ -170,7 +169,7 @@ router.post('/login', async (req, res) => {
         Key: { userId: user.partnerId }
       };
       
-      const partnerResult = await docClient.get(partnerParams).promise();
+      const partnerResult = await docClient.send(new GetCommand(partnerParams));
       if (partnerResult.Item) {
         const { passwordHash: _, ...partnerInfo } = partnerResult.Item;
         userResponse.partner = partnerInfo;
@@ -235,7 +234,7 @@ router.post('/invite-partner', authenticateToken, async (req, res) => {
       }
     };
 
-    const partnerResult = await docClient.query(partnerParams).promise();
+    const partnerResult = await docClient.send(new QueryCommand(partnerParams));
 
     if (partnerResult.Items.length > 0 && partnerResult.Items[0].partnerId) {
       return res.status(400).json({
@@ -260,7 +259,7 @@ router.post('/invite-partner', authenticateToken, async (req, res) => {
       }
     };
 
-    const existingInvitation = await docClient.query(existingInvitationParams).promise();
+    const existingInvitation = await docClient.send(new QueryCommand(existingInvitationParams));
 
     if (existingInvitation.Items.length > 0) {
       return res.status(400).json({
@@ -287,7 +286,7 @@ router.post('/invite-partner', authenticateToken, async (req, res) => {
       Item: invitationData
     };
 
-    await docClient.put(invitationParams).promise();
+    await docClient.send(new PutCommand(invitationParams));
 
     // Send invitation email
     try {
@@ -336,7 +335,7 @@ router.get('/me', authenticateToken, async (req, res) => {
         Key: { userId: req.user.partnerId }
       };
       
-      const partnerResult = await docClient.get(partnerParams).promise();
+      const partnerResult = await docClient.send(new GetCommand(partnerParams));
       if (partnerResult.Item) {
         const { passwordHash: _, ...partnerInfo } = partnerResult.Item;
         userResponse.partner = partnerInfo;

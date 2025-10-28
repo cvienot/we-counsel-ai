@@ -1,5 +1,5 @@
 const express = require('express');
-const { docClient, TABLES } = require('../config/database');
+const { docClient, TABLES, QueryCommand, GetCommand, PutCommand, UpdateCommand } = require('../config/database');
 const { authenticateToken } = require('../middleware/authMiddleware');
 const { randomUUID } = require('crypto');
 
@@ -27,7 +27,7 @@ router.get('/', authenticateToken, async (req, res) => {
       ScanIndexForward: false // Sort by creation date descending
     };
 
-    const result = await docClient.query(params).promise();
+    const result = await docClient.send(new QueryCommand(params));
 
     res.json({
       success: true,
@@ -66,7 +66,7 @@ router.get('/main-thread', authenticateToken, async (req, res) => {
       }
     };
 
-    const result = await docClient.query(params).promise();
+    const result = await docClient.send(new QueryCommand(params));
 
     if (result.Items && result.Items.length > 0) {
       // Main thread exists, return it
@@ -96,9 +96,9 @@ router.get('/main-thread', authenticateToken, async (req, res) => {
       Item: mainThreadData
     };
 
-    await docClient.put(createParams).promise();
+    await docClient.send(new PutCommand(createParams));
 
-    res.json({
+    res.status(201).json({
       success: true,
       mainThread: mainThreadData
     });
@@ -147,7 +147,7 @@ router.post('/', authenticateToken, async (req, res) => {
         }
       };
 
-      const existingMainThread = await docClient.query(mainThreadParams).promise();
+      const existingMainThread = await docClient.send(new QueryCommand(mainThreadParams));
       if (existingMainThread.Items && existingMainThread.Items.length > 0) {
         return res.status(400).json({
           error: 'Main thread exists',
@@ -175,7 +175,7 @@ router.post('/', authenticateToken, async (req, res) => {
       Item: conversationData
     };
 
-    await docClient.put(params).promise();
+    await docClient.send(new PutCommand(params));
 
     res.status(201).json({
       success: true,
@@ -204,7 +204,7 @@ router.get('/:conversationId', authenticateToken, async (req, res) => {
       Key: { conversationId }
     };
 
-    const result = await docClient.get(params).promise();
+    const result = await docClient.send(new GetCommand(params));
 
     if (!result.Item) {
       return res.status(404).json({
@@ -259,7 +259,7 @@ router.put('/:conversationId', authenticateToken, async (req, res) => {
       Key: { conversationId }
     };
 
-    const getResult = await docClient.get(getParams).promise();
+    const getResult = await docClient.send(new GetCommand(getParams));
 
     if (!getResult.Item) {
       return res.status(404).json({
@@ -288,7 +288,7 @@ router.put('/:conversationId', authenticateToken, async (req, res) => {
       ReturnValues: 'ALL_NEW'
     };
 
-    const updateResult = await docClient.update(updateParams).promise();
+    const updateResult = await docClient.send(new UpdateCommand(updateParams));
 
     res.json({
       success: true,
@@ -318,7 +318,7 @@ router.delete('/:conversationId', authenticateToken, async (req, res) => {
       Key: { conversationId }
     };
 
-    const getResult = await docClient.get(getParams).promise();
+    const getResult = await docClient.send(new GetCommand(getParams));
 
     if (!getResult.Item) {
       return res.status(404).json({
@@ -346,7 +346,7 @@ router.delete('/:conversationId', authenticateToken, async (req, res) => {
       }
     };
 
-    await docClient.update(updateParams).promise();
+    await docClient.send(new UpdateCommand(updateParams));
 
     res.json({
       success: true,

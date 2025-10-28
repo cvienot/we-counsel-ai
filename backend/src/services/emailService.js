@@ -1,7 +1,7 @@
-const AWS = require('aws-sdk');
+const { SESClient, SendEmailCommand } = require('@aws-sdk/client-ses');
 
 // Configure SES
-const ses = new AWS.SES({
+const sesClient = new SESClient({
   region: process.env.SES_REGION || 'us-east-1'
 });
 
@@ -99,7 +99,8 @@ const sendInvitationEmail = async ({ to, inviterName, invitationId, message }) =
   };
 
   try {
-    const result = await ses.sendEmail(params).promise();
+    const command = new SendEmailCommand(params);
+    const result = await sesClient.send(command);
     console.log('Invitation email sent:', result.MessageId);
     return result;
   } catch (error) {
@@ -184,7 +185,8 @@ const sendWelcomeEmail = async ({ to, firstName }) => {
   };
 
   try {
-    const result = await ses.sendEmail(params).promise();
+    const command = new SendEmailCommand(params);
+    const result = await sesClient.send(command);
     console.log('Welcome email sent:', result.MessageId);
     return result;
   } catch (error) {

@@ -1,13 +1,7 @@
-const AWS = require('aws-sdk');
+const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBDocumentClient, PutCommand, GetCommand, QueryCommand, UpdateCommand, DeleteCommand, ScanCommand } = require('@aws-sdk/lib-dynamodb');
 
-// Configure AWS
-AWS.config.update({
-  region: process.env.DYNAMODB_REGION || 'us-east-1',
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-});
-
-// Configure DynamoDB
+// Configure DynamoDB client
 const dynamoConfig = {
   region: process.env.DYNAMODB_REGION || 'us-east-1'
 };
@@ -16,12 +10,22 @@ const dynamoConfig = {
 if (process.env.NODE_ENV === 'development') {
   dynamoConfig.endpoint = process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000';
   // DynamoDB Local requires these specific dummy credentials
-  dynamoConfig.accessKeyId = 'local';
-  dynamoConfig.secretAccessKey = 'local';
+  dynamoConfig.credentials = {
+    accessKeyId: 'local',
+    secretAccessKey: 'local'
+  };
+} else if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
+  dynamoConfig.credentials = {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+  };
 }
 
-const dynamodb = new AWS.DynamoDB(dynamoConfig);
-const docClient = new AWS.DynamoDB.DocumentClient(dynamoConfig);
+const client = new DynamoDBClient(dynamoConfig);
+const docClient = DynamoDBDocumentClient.from(client);
+
+// For backwards compatibility with v2 SDK patterns
+const dynamodb = client;
 
 // Table names
 const TABLES = {
@@ -35,6 +39,8 @@ const TABLES = {
 // Create tables if they don't exist (for development)
 const createTables = async () => {
   if (process.env.NODE_ENV !== 'development') return;
+
+  const { CreateTableCommand } = require('@aws-sdk/client-dynamodb');
 
   const tables = [
     {
@@ -145,10 +151,10 @@ const createTables = async () => {
 
   for (const table of tables) {
     try {
-      await dynamodb.createTable(table).promise();
+      await client.send(new CreateTableCommand(table));
       console.log(`✅ Created table: ${table.TableName}`);
     } catch (error) {
-      if (error.code === 'ResourceInUseException') {
+      if (error.name === 'ResourceInUseException') {
         console.log(`📋 Table already exists: ${table.TableName}`);
       } else {
         console.error(`❌ Error creating table ${table.TableName}:`, error);
@@ -161,5 +167,13 @@ module.exports = {
   dynamodb,
   docClient,
   TABLES,
-  createTables
+  createTables,
+  // Export command classes for use throughout the app
+  GetCommand: require('@aws-sdk/lib-dynamodb').GetCommand,
+  PutCommand: require('@aws-sdk/lib-dynamodb').PutCommand,
+  UpdateCommand: require('@aws-sdk/lib-dynamodb').UpdateCommand,
+  DeleteCommand: require('@aws-sdk/lib-dynamodb').DeleteCommand,
+  QueryCommand: require('@aws-sdk/lib-dynamodb').QueryCommand,
+  ScanCommand: require('@aws-sdk/lib-dynamodb').ScanCommand,
 };
+

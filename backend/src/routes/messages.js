@@ -1,5 +1,5 @@
 const express = require('express');
-const { docClient, TABLES } = require('../config/database');
+const { docClient, TABLES, GetCommand, PutCommand, QueryCommand, UpdateCommand } = require('../config/database');
 const { authenticateToken } = require('../middleware/authMiddleware');
 const { generateCounsellorResponse } = require('../services/aiService');
 const streamingService = require('../services/streamingService');
@@ -28,7 +28,7 @@ router.get('/:conversationId', authenticateToken, async (req, res) => {
       Key: { conversationId }
     };
 
-    const conversationResult = await docClient.get(conversationParams).promise();
+    const conversationResult = await docClient.send(new GetCommand(conversationParams));
 
     if (!conversationResult.Item) {
       return res.status(404).json({
@@ -62,7 +62,7 @@ router.get('/:conversationId', authenticateToken, async (req, res) => {
       // This is a simplified version
     }
 
-    const messagesResult = await docClient.query(messagesParams).promise();
+    const messagesResult = await docClient.send(new QueryCommand(messagesParams));
 
     // Reverse to show oldest first
     const rawMessages = messagesResult.Items.reverse();
@@ -78,10 +78,10 @@ router.get('/:conversationId', authenticateToken, async (req, res) => {
     const userMap = {};
     if (userIds.length > 0) {
       const userPromises = userIds.map(userId =>
-        docClient.get({
+        docClient.send(new GetCommand({
           TableName: TABLES.USERS,
           Key: { userId }
-        }).promise()
+        }))
       );
       
       const userResults = await Promise.all(userPromises);
@@ -140,7 +140,7 @@ router.post('/:conversationId', authenticateToken, async (req, res) => {
       Key: { conversationId }
     };
 
-    const conversationResult = await docClient.get(conversationParams).promise();
+    const conversationResult = await docClient.send(new GetCommand(conversationParams));
 
     if (!conversationResult.Item) {
       return res.status(404).json({
@@ -179,7 +179,7 @@ router.post('/:conversationId', authenticateToken, async (req, res) => {
       Item: messageData
     };
 
-    await docClient.put(messageParams).promise();
+    await docClient.send(new PutCommand(messageParams));
 
     // Send real-time message notification to partner
     streamingService.sendMessageNotification(conversationId, req.user.userId, messageData);
@@ -195,7 +195,7 @@ router.post('/:conversationId', authenticateToken, async (req, res) => {
       }
     };
 
-    await docClient.update(updateConversationParams).promise();
+    await docClient.send(new UpdateCommand(updateConversationParams));
 
     // Generate AI counsellor response if appropriate
     let aiResponse = null;
@@ -213,7 +213,7 @@ router.post('/:conversationId', authenticateToken, async (req, res) => {
           Limit: 10
         };
 
-        const recentMessagesResult = await docClient.query(recentMessagesParams).promise();
+        const recentMessagesResult = await docClient.send(new QueryCommand(recentMessagesParams));
         const recentMessages = recentMessagesResult.Items.reverse();
 
         const aiResponseContent = await generateCounsellorResponse({
@@ -242,7 +242,7 @@ router.post('/:conversationId', authenticateToken, async (req, res) => {
           Item: aiResponse
         };
 
-        await docClient.put(aiMessageParams).promise();
+        await docClient.send(new PutCommand(aiMessageParams));
 
         // Send real-time AI response notification
         streamingService.sendMessageNotification(conversationId, 'ai-counsellor', aiResponse);
@@ -280,7 +280,7 @@ router.post('/:conversationId', authenticateToken, async (req, res) => {
             TableName: TABLES.MESSAGES,
             Item: errorMessage
           };
-          await docClient.put(errorMessageParams).promise();
+          await docClient.send(new PutCommand(errorMessageParams));
 
           // Send error message via real-time
           streamingService.sendMessageNotification(conversationId, 'ai-counsellor', errorMessage);
@@ -346,7 +346,7 @@ router.post('/:conversationId/ai-stream', authenticateToken, async (req, res) =>
       Key: { conversationId }
     };
 
-    const conversationResult = await docClient.get(conversationParams).promise();
+    const conversationResult = await docClient.send(new GetCommand(conversationParams));
 
     if (!conversationResult.Item) {
       return res.status(404).json({
@@ -385,7 +385,7 @@ router.post('/:conversationId/ai-stream', authenticateToken, async (req, res) =>
       Item: messageData
     };
 
-    await docClient.put(messageParams).promise();
+    await docClient.send(new PutCommand(messageParams));
 
     // Send real-time message notification to partner
     streamingService.sendMessageNotification(conversationId, req.user.userId, messageData);
@@ -401,7 +401,7 @@ router.post('/:conversationId/ai-stream', authenticateToken, async (req, res) =>
       }
     };
 
-    await docClient.update(updateConversationParams).promise();
+    await docClient.send(new UpdateCommand(updateConversationParams));
 
     // Return user message immediately
     res.status(201).json({
@@ -425,7 +425,7 @@ router.post('/:conversationId/ai-stream', authenticateToken, async (req, res) =>
           Limit: 10
         };
 
-        const recentMessagesResult = await docClient.query(recentMessagesParams).promise();
+        const recentMessagesResult = await docClient.send(new QueryCommand(recentMessagesParams));
         const recentMessages = recentMessagesResult.Items.reverse();
 
         const aiMessageId = randomUUID();
@@ -459,17 +459,17 @@ router.post('/:conversationId/ai-stream', authenticateToken, async (req, res) =>
                 Item: aiResponse
               };
 
-              await docClient.put(aiMessageParams).promise();
+              await docClient.send(new PutCommand(aiMessageParams));
 
               // Update conversation count
-              await docClient.update({
+              await docClient.send(new UpdateCommand({
                 ...updateConversationParams,
                 UpdateExpression: 'SET lastMessageAt = :lastMessageAt, messageCount = messageCount + :increment',
                 ExpressionAttributeValues: {
                   ':lastMessageAt': new Date().toISOString(),
                   ':increment': 1
                 }
-              }).promise();
+              }));
 
               // Send completion notification
               streamingService.streamAIResponse(conversationId, aiMessageId, '', true);
@@ -503,7 +503,7 @@ router.post('/:conversationId/ai-stream', authenticateToken, async (req, res) =>
               TableName: TABLES.MESSAGES,
               Item: errorMessage
             };
-            await docClient.put(errorMessageParams).promise();
+            await docClient.send(new PutCommand(errorMessageParams));
 
             // Update conversation count for error message too
             await docClient.update({
@@ -559,7 +559,7 @@ router.put('/:messageId', authenticateToken, async (req, res) => {
       Key: { messageId }
     };
 
-    const messageResult = await docClient.get(messageParams).promise();
+    const messageResult = await docClient.send(new GetCommand(messageParams));
 
     if (!messageResult.Item) {
       return res.status(404).json({
@@ -611,7 +611,7 @@ router.put('/:messageId', authenticateToken, async (req, res) => {
       ReturnValues: 'ALL_NEW'
     };
 
-    const result = await docClient.update(updateParams).promise();
+    const result = await docClient.send(new UpdateCommand(updateParams));
 
     res.json({
       success: true,
@@ -641,7 +641,7 @@ router.delete('/:messageId', authenticateToken, async (req, res) => {
       Key: { messageId }
     };
 
-    const messageResult = await docClient.get(messageParams).promise();
+    const messageResult = await docClient.send(new GetCommand(messageParams));
 
     if (!messageResult.Item) {
       return res.status(404).json({
@@ -679,7 +679,7 @@ router.delete('/:messageId', authenticateToken, async (req, res) => {
       }
     };
 
-    await docClient.update(updateParams).promise();
+    await docClient.send(new UpdateCommand(updateParams));
 
     res.json({
       success: true,
@@ -710,7 +710,7 @@ router.post('/:conversationId/typing', authenticateToken, async (req, res) => {
       Key: { conversationId }
     };
 
-    const conversationResult = await docClient.get(conversationParams).promise();
+    const conversationResult = await docClient.send(new GetCommand(conversationParams));
 
     if (!conversationResult.Item) {
       return res.status(404).json({
