@@ -122,6 +122,27 @@
   "@waitingForPartner": {
     "description": "Waiting for partner message"
   },
+  "waitingForPartnerTitle": "Waiting for your partner",
+  "@waitingForPartnerTitle": {
+    "description": "Waiting room title"
+  },
+  "waitingRoomGreeting": "Hi {name}! Your counselling journey will begin once your partner joins you on We Counsel.",
+  "@waitingRoomGreeting": {
+    "description": "Waiting room greeting message",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "whatHappensNext": "What happens next?",
+  "@whatHappensNext": {
+    "description": "What happens next section title"
+  },
+  "sendAnotherInvitation": "Send Another Invitation",
+  "@sendAnotherInvitation": {
+    "description": "Send another invitation button"
+  },
   "invitePartnerMessage": "Share this invitation with your partner to start your counselling journey together.",
   "@invitePartnerMessage": {
     "description": "Invite partner description"
@@ -155,6 +176,10 @@
   "startConversation": "Start the conversation by sending a message!",
   "@startConversation": {
     "description": "Empty conversation message"
+  },
+  "startYourConversation": "Start your conversation",
+  "@startYourConversation": {
+    "description": "Start conversation prompt message"
   },
   
   "settings": "Settings",

@@ -35,6 +35,10 @@
   
   "invitePartner": "Invitar Pareja",
   "waitingForPartner": "Esperando a su pareja...",
+  "waitingForPartnerTitle": "Esperando a su pareja",
+  "waitingRoomGreeting": "¡Hola {name}! Su viaje de consejería comenzará una vez que su pareja se una a usted en We Counsel.",
+  "whatHappensNext": "¿Qué sucede después?",
+  "sendAnotherInvitation": "Enviar otra invitación",
   "invitePartnerMessage": "Comparta esta invitación con su pareja para comenzar su viaje de consejería juntos.",
   
   "createNewConversation": "Crear Nueva Conversación",
@@ -45,6 +49,7 @@
   "failedToLoad": "Error al cargar",
   "failedToSend": "Error al enviar mensaje",
   "startConversation": "¡Comience la conversación enviando un mensaje!",
+  "startYourConversation": "Comience su conversación",
   
   "settings": "Configuración",
   "language": "Idioma",

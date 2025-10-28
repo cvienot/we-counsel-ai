@@ -98,6 +98,20 @@ class AppLocalizationsFr extends AppLocalizations {
   String get waitingForPartner => 'En attente de votre partenaire...';
 
   @override
+  String get waitingForPartnerTitle => 'En attente de votre partenaire';
+
+  @override
+  String waitingRoomGreeting(String name) {
+    return 'Bonjour $name ! Votre parcours de conseil commencera une fois que votre partenaire vous rejoindra sur We Counsel.';
+  }
+
+  @override
+  String get whatHappensNext => 'Que se passe-t-il ensuite ?';
+
+  @override
+  String get sendAnotherInvitation => 'Envoyer une autre invitation';
+
+  @override
   String get invitePartnerMessage =>
       'Partagez cette invitation avec votre partenaire pour commencer votre parcours de conseil ensemble.';
 
@@ -122,6 +136,9 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get startConversation =>
       'Commencez la conversation en envoyant un message !';
+
+  @override
+  String get startYourConversation => 'Commencez votre conversation';
 
   @override
   String get settings => 'Paramètres';

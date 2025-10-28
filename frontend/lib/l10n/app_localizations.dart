@@ -274,6 +274,30 @@ abstract class AppLocalizations {
   /// **'Waiting for your partner to join...'**
   String get waitingForPartner;
 
+  /// Waiting room title
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for your partner'**
+  String get waitingForPartnerTitle;
+
+  /// Waiting room greeting message
+  ///
+  /// In en, this message translates to:
+  /// **'Hi {name}! Your counselling journey will begin once your partner joins you on We Counsel.'**
+  String waitingRoomGreeting(String name);
+
+  /// What happens next section title
+  ///
+  /// In en, this message translates to:
+  /// **'What happens next?'**
+  String get whatHappensNext;
+
+  /// Send another invitation button
+  ///
+  /// In en, this message translates to:
+  /// **'Send Another Invitation'**
+  String get sendAnotherInvitation;
+
   /// Invite partner description
   ///
   /// In en, this message translates to:
@@ -321,6 +345,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Start the conversation by sending a message!'**
   String get startConversation;
+
+  /// Start conversation prompt message
+  ///
+  /// In en, this message translates to:
+  /// **'Start your conversation'**
+  String get startYourConversation;
 
   /// Settings menu item
   ///

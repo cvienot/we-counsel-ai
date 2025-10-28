@@ -210,7 +210,8 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
   String _getLocalizedTitle(String title, AppLocalizations l10n) {
     // Check if it's the default English title from backend
     if (title == 'Main Conversation') {
-      return l10n.mainConversationTitle;
+      // Changed to "We Counsel AI" instead of localized version
+      return 'We Counsel AI';
     }
     return title;
   }
@@ -319,16 +320,17 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
         actions: [
           PopupMenuButton(
             itemBuilder: (context) => [
-              PopupMenuItem(
-                onTap: () => context.push('/conversations'),
-                child: Row(
-                  children: [
-                    const Icon(Icons.forum),
-                    const SizedBox(width: 8),
-                    Text(l10n.otherConversations),
-                  ],
-                ),
-              ),
+              // TODO: Re-enable when needed
+              // PopupMenuItem(
+              //   onTap: () => context.push('/conversations'),
+              //   child: Row(
+              //     children: [
+              //       const Icon(Icons.forum),
+              //       const SizedBox(width: 8),
+              //       Text(l10n.otherConversations),
+              //     ],
+              //   ),
+              // ),
               PopupMenuItem(
                 onTap: () => context.push('/profile'),
                 child: Row(
@@ -444,7 +446,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                                 ),
                                 const SizedBox(height: 16),
                                 Text(
-                                  'Start your conversation',
+                                  l10n.startYourConversation,
                                   style: Theme.of(context).textTheme.titleMedium,
                                 ),
                                 const SizedBox(height: 8),
@@ -592,21 +594,32 @@ class _WaitingRoomScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final user = ref.watch(currentUserProvider);
     
     return Scaffold(
       appBar: AppBar(
-        title: const Text('We Counsel'),
+        title: Text(l10n.appTitle),
         actions: [
           PopupMenuButton(
             itemBuilder: (context) => [
               PopupMenuItem(
                 onTap: () => context.push('/profile'),
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.person),
-                    SizedBox(width: 8),
-                    Text('Profile'),
+                    const Icon(Icons.person),
+                    const SizedBox(width: 8),
+                    Text(l10n.profile),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                onTap: () => context.push('/language'),
+                child: Row(
+                  children: [
+                    const Icon(Icons.language),
+                    const SizedBox(width: 8),
+                    Text(l10n.language),
                   ],
                 ),
               ),
@@ -617,11 +630,11 @@ class _WaitingRoomScreen extends ConsumerWidget {
                     context.go('/login');
                   }
                 },
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.logout),
-                    SizedBox(width: 8),
-                    Text('Logout'),
+                    const Icon(Icons.logout),
+                    const SizedBox(width: 8),
+                    Text(l10n.logout),
                   ],
                 ),
               ),
@@ -641,13 +654,13 @@ class _WaitingRoomScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 32),
             Text(
-              'Waiting for your partner',
+              l10n.waitingForPartnerTitle,
               style: Theme.of(context).textTheme.headlineMedium,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
             Text(
-              'Hi ${user?.firstName ?? 'there'}! Your counselling journey will begin once your partner joins you on We Counsel.',
+              l10n.waitingRoomGreeting(user?.firstName ?? 'there'),
               style: Theme.of(context).textTheme.bodyLarge,
               textAlign: TextAlign.center,
             ),
@@ -664,12 +677,12 @@ class _WaitingRoomScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'What happens next?',
+                      l10n.whatHappensNext,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      AppLocalizations.of(context)!.partnerInvitationMessage,
+                      l10n.partnerInvitationMessage,
                       style: Theme.of(context).textTheme.bodyMedium,
                       textAlign: TextAlign.center,
                     ),
@@ -681,7 +694,7 @@ class _WaitingRoomScreen extends ConsumerWidget {
             ElevatedButton.icon(
               onPressed: () => context.push('/invite'),
               icon: const Icon(Icons.email),
-              label: const Text('Send Another Invitation'),
+              label: Text(l10n.sendAnotherInvitation),
             ),
           ],
         ),
