@@ -32,7 +32,8 @@ async function seedDatabase() {
       {
         userId: uuidv4(),
         email: 'john@example.com',
-        name: 'John Doe',
+        firstName: 'John',
+        lastName: 'Doe',
         passwordHash: await bcrypt.hash('password123', 10),
         isActive: true,
         createdAt: new Date().toISOString(),
@@ -41,7 +42,8 @@ async function seedDatabase() {
       {
         userId: uuidv4(),
         email: 'jane@example.com',
-        name: 'Jane Smith',
+        firstName: 'Jane',
+        lastName: 'Doe',
         passwordHash: await bcrypt.hash('password123', 10),
         isActive: true,
         createdAt: new Date().toISOString(),
