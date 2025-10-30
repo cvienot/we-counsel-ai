@@ -1,12 +1,11 @@
 version: 1.0
-runtime: nodejs20
+runtime: nodejs22
 build:
   commands:
     build:
-      - npm install
-      - npm run build
+      - npm install --production
 run:
-  runtime-version: 20
+  runtime-version: 22.14.0
   command: npm start
   network:
     port: 3000
