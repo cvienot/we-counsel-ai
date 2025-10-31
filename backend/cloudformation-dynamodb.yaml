@@ -1,0 +1,142 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'DynamoDB tables for We Counsel AI application'
+
+Resources:
+  UsersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: we-counsel-users
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: userId
+          AttributeType: S
+        - AttributeName: email
+          AttributeType: S
+      KeySchema:
+        - AttributeName: userId
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: email-index
+          KeySchema:
+            - AttributeName: email
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+
+  ConversationsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: we-counsel-conversations
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: conversationId
+          AttributeType: S
+        - AttributeName: coupleId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: conversationId
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: coupleId-index
+          KeySchema:
+            - AttributeName: coupleId
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+
+  MessagesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: we-counsel-messages
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: messageId
+          AttributeType: S
+        - AttributeName: conversationId
+          AttributeType: S
+        - AttributeName: timestamp
+          AttributeType: N
+        - AttributeName: userId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: messageId
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: conversationId-timestamp-index
+          KeySchema:
+            - AttributeName: conversationId
+              KeyType: HASH
+            - AttributeName: timestamp
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+        - IndexName: userId-index
+          KeySchema:
+            - AttributeName: userId
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+
+  CouplesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: we-counsel-couples
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: coupleId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: coupleId
+          KeyType: HASH
+
+  InvitationsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: we-counsel-invitations
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: invitationId
+          AttributeType: S
+        - AttributeName: email
+          AttributeType: S
+      KeySchema:
+        - AttributeName: invitationId
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: email-index
+          KeySchema:
+            - AttributeName: email
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+
+Outputs:
+  UsersTableName:
+    Description: Name of the Users table
+    Value: !Ref UsersTable
+    Export:
+      Name: WeCounsel-UsersTable
+
+  ConversationsTableName:
+    Description: Name of the Conversations table
+    Value: !Ref ConversationsTable
+    Export:
+      Name: WeCounsel-ConversationsTable
+
+  MessagesTableName:
+    Description: Name of the Messages table
+    Value: !Ref MessagesTable
+    Export:
+      Name: WeCounsel-MessagesTable
+
+  CouplesTableName:
+    Description: Name of the Couples table
+    Value: !Ref CouplesTable
+    Export:
+      Name: WeCounsel-CouplesTable
+
+  InvitationsTableName:
+    Description: Name of the Invitations table
+    Value: !Ref InvitationsTable
+    Export:
+      Name: WeCounsel-InvitationsTable
