@@ -1,0 +1,148 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'App Runner service for We Counsel AI backend'
+
+Parameters:
+  GitHubConnectionArn:
+    Type: String
+    Description: ARN of the GitHub connection (you need to create this manually first)
+    # Example: arn:aws:apprunner:eu-west-3:123456789012:connection/my-connection/1234abcd
+  
+  GitHubRepo:
+    Type: String
+    Default: cvienot/we-counsel-ai
+    Description: GitHub repository in format owner/repo
+  
+  GitHubBranch:
+    Type: String
+    Default: main
+    Description: Branch to deploy
+  
+  JWTSecret:
+    Type: String
+    NoEcho: true
+    Description: JWT secret for authentication
+  
+  OpenAIAPIKey:
+    Type: String
+    NoEcho: true
+    Description: OpenAI API key
+  
+  AWSAccessKeyId:
+    Type: String
+    NoEcho: true
+    Description: AWS Access Key ID for DynamoDB and SES
+  
+  AWSSecretAccessKey:
+    Type: String
+    NoEcho: true
+    Description: AWS Secret Access Key for DynamoDB and SES
+  
+  EmailFrom:
+    Type: String
+    Description: Verified SES email address for sending emails
+    Default: noreply@example.com
+  
+  FrontendURL:
+    Type: String
+    Description: Frontend URL for CORS
+    Default: http://localhost:8080
+
+Resources:
+  # IAM Role for App Runner instance
+  AppRunnerInstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: WeCounselAppRunnerInstanceRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: tasks.apprunner.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+        - arn:aws:iam::aws:policy/AmazonSESFullAccess
+      Tags:
+        - Key: Application
+          Value: WeCounselAI
+
+  # IAM Role for App Runner service (to access ECR/GitHub)
+  AppRunnerAccessRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: WeCounselAppRunnerAccessRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: build.apprunner.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSAppRunnerServicePolicyForECRAccess
+
+  # App Runner Service
+  AppRunnerService:
+    Type: AWS::AppRunner::Service
+    Properties:
+      ServiceName: we-counsel-backend
+      SourceConfiguration:
+        AuthenticationConfiguration:
+          ConnectionArn: !Ref GitHubConnectionArn
+        AutoDeploymentsEnabled: true
+        CodeRepository:
+          RepositoryUrl: !Sub https://github.com/${GitHubRepo}
+          SourceCodeVersion:
+            Type: BRANCH
+            Value: !Ref GitHubBranch
+          CodeConfiguration:
+            ConfigurationSource: REPOSITORY
+            # Using apprunner.yaml from repository
+      InstanceConfiguration:
+        Cpu: '1 vCPU'
+        Memory: '2 GB'
+        InstanceRoleArn: !GetAtt AppRunnerInstanceRole.Arn
+      HealthCheckConfiguration:
+        Protocol: HTTP
+        Path: /health
+        Interval: 10
+        Timeout: 5
+        HealthyThreshold: 1
+        UnhealthyThreshold: 5
+      Tags:
+        - Key: Application
+          Value: WeCounselAI
+        - Key: Environment
+          Value: Production
+
+  # Auto Scaling Configuration
+  AppRunnerAutoScalingConfig:
+    Type: AWS::AppRunner::AutoScalingConfiguration
+    Properties:
+      AutoScalingConfigurationName: we-counsel-autoscaling
+      MaxConcurrency: 100
+      MaxSize: 25
+      MinSize: 1
+      Tags:
+        - Key: Application
+          Value: WeCounselAI
+
+Outputs:
+  ServiceUrl:
+    Description: URL of the App Runner service
+    Value: !GetAtt AppRunnerService.ServiceUrl
+    Export:
+      Name: WeCounsel-BackendURL
+  
+  ServiceArn:
+    Description: ARN of the App Runner service
+    Value: !GetAtt AppRunnerService.ServiceArn
+    Export:
+      Name: WeCounsel-BackendArn
+  
+  ServiceId:
+    Description: ID of the App Runner service
+    Value: !GetAtt AppRunnerService.ServiceId
+    Export:
+      Name: WeCounsel-BackendId
