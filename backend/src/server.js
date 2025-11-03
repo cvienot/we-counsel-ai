@@ -1,20 +1,34 @@
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const morgan = require('morgan');
 require('dotenv').config();
 
-const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/users');
-const conversationRoutes = require('./routes/conversations');
-const messageRoutes = require('./routes/messages');
-const streamingRoutes = require('./routes/streaming');
+// Load secrets FIRST before any other imports that need them
+const { loadSecrets, validateSecrets } = require('./config/secrets');
 
-const errorHandler = require('./middleware/errorHandler');
-const streamingService = require('./services/streamingService');
+// Main function to start server with async secret loading
+async function startServer() {
+  try {
+    // Load secrets from AWS Secrets Manager (production only)
+    await loadSecrets();
+    
+    // Validate all required secrets are present
+    validateSecrets();
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+    // NOW import modules that depend on secrets
+    const express = require('express');
+    const cors = require('cors');
+    const helmet = require('helmet');
+    const morgan = require('morgan');
+
+    const authRoutes = require('./routes/auth');
+    const userRoutes = require('./routes/users');
+    const conversationRoutes = require('./routes/conversations');
+    const messageRoutes = require('./routes/messages');
+    const streamingRoutes = require('./routes/streaming');
+
+    const errorHandler = require('./middleware/errorHandler');
+    const streamingService = require('./services/streamingService');
+
+    const app = express();
+    const PORT = process.env.PORT || 3000;
 
 // Security middleware
 app.use(helmet());
@@ -253,12 +267,21 @@ streamingService.on('newMessage', async ({ conversationId, senderUserId, message
   }
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`🚀 We Counsel API server running on port ${PORT}`);
-  console.log(`📊 Environment: ${process.env.NODE_ENV}`);
-  console.log(`🔗 Health check: http://localhost:${PORT}/health`);
-  console.log(`📡 Streaming service initialized`);
-});
+    // Start server
+    app.listen(PORT, () => {
+      console.log(`🚀 We Counsel API server running on port ${PORT}`);
+      console.log(`📊 Environment: ${process.env.NODE_ENV}`);
+      console.log(`🔗 Health check: http://localhost:${PORT}/health`);
+      console.log(`📡 Streaming service initialized`);
+    });
 
-module.exports = app;
+    module.exports = app;
+    
+  } catch (error) {
+    console.error('❌ Failed to start server:', error);
+    process.exit(1);
+  }
+}
+
+// Start the server
+startServer();

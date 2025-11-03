@@ -1,16 +1,19 @@
 #!/bin/bash
 
 # Deploy App Runner service using CloudFormation
-# This script helps you set up and deploy your App Runner service
+# Prerequisites: 
+#   1. Deploy secrets first: ./deploy-secrets.sh
+#   2. Create GitHub connection
 
 set -e
 
 REGION="eu-west-3"
 STACK_NAME="we-counsel-apprunner"
+SECRETS_STACK="we-counsel-secrets"
 
-echo "================================"
-echo "We Counsel AI - App Runner Setup"
-echo "================================"
+echo "======================================="
+echo "We Counsel AI - App Runner Deployment"
+echo "======================================="
 echo ""
 
 # Check if AWS CLI is configured
@@ -22,8 +25,29 @@ fi
 echo "✅ AWS CLI is configured"
 echo ""
 
+# Check if secrets stack exists
+echo "2. Checking for Secrets Manager stack..."
+if ! aws cloudformation describe-stacks --stack-name $SECRETS_STACK --region $REGION &> /dev/null; then
+    echo "❌ Secrets stack not found!"
+    echo ""
+    echo "You need to deploy secrets first:"
+    echo "  ./deploy-secrets.sh"
+    echo ""
+    read -p "Do you want to deploy secrets now? (y/N): " DEPLOY_SECRETS
+    
+    if [[ $DEPLOY_SECRETS =~ ^[Yy]$ ]]; then
+        ./deploy-secrets.sh
+    else
+        echo "Exiting. Please deploy secrets first."
+        exit 1
+    fi
+else
+    echo "✅ Secrets stack found"
+fi
+echo ""
+
 # Check if GitHub connection exists
-echo "2. Checking for GitHub connection..."
+echo "3. Checking for GitHub connection..."
 GITHUB_CONNECTION=$(aws apprunner list-connections --region $REGION --query 'ConnectionSummaryList[?ProviderType==`GITHUB`].ConnectionArn' --output text 2>/dev/null || echo "")
 
 if [ -z "$GITHUB_CONNECTION" ]; then
@@ -50,49 +74,32 @@ else
 fi
 echo ""
 
-# Collect required parameters
-echo "3. Collecting deployment parameters..."
-echo ""
+echo "4. Checking existing stack status..."
+STACK_STATUS=$(aws cloudformation describe-stacks \
+    --stack-name $STACK_NAME \
+    --region $REGION \
+    --query 'Stacks[0].StackStatus' \
+    --output text 2>/dev/null || echo "NOT_EXISTS")
 
-# JWT Secret
-read -sp "Enter JWT_SECRET (or press Enter to generate): " JWT_SECRET
-echo ""
-if [ -z "$JWT_SECRET" ]; then
-    JWT_SECRET=$(openssl rand -base64 32)
-    echo "Generated JWT_SECRET: $JWT_SECRET"
-fi
-
-# OpenAI API Key
-read -sp "Enter OPENAI_API_KEY: " OPENAI_API_KEY
-echo ""
-
-# AWS Credentials (optional - better to use IAM role)
-echo ""
-echo "For AWS credentials, you can either:"
-echo "  A) Provide AWS Access Keys (less secure)"
-echo "  B) Skip and use the IAM role created by CloudFormation (recommended)"
-echo ""
-read -p "Do you want to provide AWS Access Keys? (y/N): " USE_KEYS
-
-if [[ $USE_KEYS =~ ^[Yy]$ ]]; then
-    read -p "Enter AWS_ACCESS_KEY_ID: " AWS_KEY_ID
-    read -sp "Enter AWS_SECRET_ACCESS_KEY: " AWS_SECRET_KEY
+if [ "$STACK_STATUS" = "ROLLBACK_COMPLETE" ]; then
+    echo "⚠️  Stack is in ROLLBACK_COMPLETE state (previous deployment failed)"
+    echo "   Deleting the failed stack..."
+    
+    aws cloudformation delete-stack \
+        --stack-name $STACK_NAME \
+        --region $REGION
+    
+    echo "   Waiting for stack deletion to complete..."
+    aws cloudformation wait stack-delete-complete \
+        --stack-name $STACK_NAME \
+        --region $REGION
+    
+    echo "✅ Failed stack deleted successfully"
     echo ""
-else
-    AWS_KEY_ID="NOT_NEEDED_USING_IAM_ROLE"
-    AWS_SECRET_KEY="NOT_NEEDED_USING_IAM_ROLE"
-    echo "✅ Will use IAM role instead of access keys"
 fi
 
-# Email
-read -p "Enter EMAIL_FROM (verified SES email): " EMAIL_FROM
-
-# Frontend URL
-read -p "Enter FRONTEND_URL (default: http://localhost:8080): " FRONTEND_URL
-FRONTEND_URL=${FRONTEND_URL:-http://localhost:8080}
-
+echo "5. Deploying App Runner service..."
 echo ""
-echo "4. Creating CloudFormation stack..."
 
 # Create/Update the stack
 aws cloudformation deploy \
@@ -102,12 +109,6 @@ aws cloudformation deploy \
         GitHubConnectionArn="$GITHUB_CONNECTION" \
         GitHubRepo="cvienot/we-counsel-ai" \
         GitHubBranch="main" \
-        JWTSecret="$JWT_SECRET" \
-        OpenAIAPIKey="$OPENAI_API_KEY" \
-        AWSAccessKeyId="$AWS_KEY_ID" \
-        AWSSecretAccessKey="$AWS_SECRET_KEY" \
-        EmailFrom="$EMAIL_FROM" \
-        FrontendURL="$FRONTEND_URL" \
     --capabilities CAPABILITY_NAMED_IAM \
     --region $REGION
 

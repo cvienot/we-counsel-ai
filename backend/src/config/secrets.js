@@ -100,26 +100,28 @@ async function loadSpecificSecret(secretName) {
 }
 
 /**
- * Validate that all required secrets are present
+ * Validate that all required configuration is present
  */
 function validateSecrets() {
   const required = [
-    'JWT_SECRET',
-    'OPENAI_API_KEY',
-    'AWS_REGION',
-    'DYNAMODB_REGION',
-    'EMAIL_FROM'
+    'JWT_SECRET',      // From Secrets Manager
+    'OPENAI_API_KEY',  // From Secrets Manager
+    'AWS_REGION',      // From environment variables
+    'DYNAMODB_REGION', // From environment variables
+    'EMAIL_FROM'       // From environment variables
   ];
 
   const missing = required.filter(key => !process.env[key]);
 
   if (missing.length > 0) {
-    console.error('❌ Missing required environment variables:');
+    console.error('❌ Missing required configuration:');
     missing.forEach(key => console.error(`   - ${key}`));
-    throw new Error(`Missing required secrets: ${missing.join(', ')}`);
+    throw new Error(`Missing required configuration: ${missing.join(', ')}`);
   }
 
-  console.log('✅ All required secrets are present');
+  console.log('✅ All required configuration is present');
+  console.log('   📦 Non-sensitive: AWS_REGION, DYNAMODB_REGION, EMAIL_FROM, FRONTEND_URL, NODE_ENV');
+  console.log('   🔒 Sensitive (from Secrets Manager): JWT_SECRET, OPENAI_API_KEY');
 }
 
 module.exports = {

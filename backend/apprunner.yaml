@@ -11,5 +11,17 @@ run:
     port: 3000
     env: PORT
   env:
+    # Non-sensitive configuration (free!)
     - name: NODE_ENV
       value: production
+    - name: AWS_REGION
+      value: eu-west-3
+    - name: DYNAMODB_REGION
+      value: eu-west-3
+    - name: EMAIL_FROM
+      value: camille.vienot@gmail.com  # Update with your verified SES email
+    - name: FRONTEND_URL
+      value: http://localhost:8080  # Update with your frontend URL after deployment
+    
+    # Sensitive secrets loaded from AWS Secrets Manager at runtime
+    # JWT_SECRET and OPENAI_API_KEY are fetched by src/config/secrets.js

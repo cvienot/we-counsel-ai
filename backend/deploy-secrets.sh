@@ -39,31 +39,7 @@ echo "Enter OPENAI_API_KEY:"
 read -s OPENAI_API_KEY
 echo ""
 
-# AWS Credentials (optional)
-echo ""
-echo "AWS Credentials (optional - leave empty to use IAM roles):"
-echo "Enter AWS_ACCESS_KEY_ID (or press Enter to skip):"
-read AWS_KEY_ID
-AWS_KEY_ID=${AWS_KEY_ID:-USE_IAM_ROLE}
-
-if [ "$AWS_KEY_ID" != "USE_IAM_ROLE" ]; then
-    echo "Enter AWS_SECRET_ACCESS_KEY:"
-    read -s AWS_SECRET_KEY
-else
-    AWS_SECRET_KEY="USE_IAM_ROLE"
-    echo "✅ Will use IAM roles instead of credentials"
-fi
-echo ""
-
-# Email
-echo "Enter EMAIL_FROM (verified SES email):"
-read EMAIL_FROM
-echo ""
-
-# Frontend URL
-echo "Enter FRONTEND_URL (default: http://localhost:8080):"
-read FRONTEND_URL
-FRONTEND_URL=${FRONTEND_URL:-http://localhost:8080}
+echo "ℹ️  Non-sensitive config (AWS_REGION, EMAIL_FROM, FRONTEND_URL) is stored in apprunner.yaml"
 echo ""
 
 # Deploy secrets
@@ -76,10 +52,6 @@ aws cloudformation deploy \
     --parameter-overrides \
         JWTSecret="$JWT_SECRET" \
         OpenAIAPIKey="$OPENAI_API_KEY" \
-        AWSAccessKeyId="$AWS_KEY_ID" \
-        AWSSecretAccessKey="$AWS_SECRET_KEY" \
-        EmailFrom="$EMAIL_FROM" \
-        FrontendURL="$FRONTEND_URL" \
     --capabilities CAPABILITY_NAMED_IAM \
     --region $REGION
 

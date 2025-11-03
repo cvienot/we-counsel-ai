@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "dev:full": "./scripts/dev-manager.sh full", 
+    "dev:full": "./scripts/dev-manager.sh full",
     "dev:logs": "./scripts/dev-manager.sh logs",
     "dev:reset": "./scripts/dynamodb-manager.sh reset",
     "dev:stop": "./scripts/stop.sh",
@@ -33,6 +33,7 @@
   "license": "ISC",
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.679.0",
+    "@aws-sdk/client-secrets-manager": "^3.922.0",
     "@aws-sdk/client-ses": "^3.679.0",
     "@aws-sdk/lib-dynamodb": "^3.679.0",
     "bcryptjs": "^3.0.2",
