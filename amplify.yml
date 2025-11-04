@@ -1,0 +1,22 @@
+version: 1
+applications:
+  - appRoot: frontend
+    frontend:
+      phases:
+        preBuild:
+          commands:
+            - flutter channel stable
+            - flutter upgrade
+            - flutter pub get
+        build:
+          commands:
+            - flutter build web --release --dart-define=API_BASE_URL=$API_BASE_URL --dart-define=ENVIRONMENT=$ENVIRONMENT
+      artifacts:
+        baseDirectory: build/web
+        files:
+          - '**/*'
+      cache:
+        paths:
+          - .flutter-plugins
+          - .flutter-plugins-dependencies
+          - .dart_tool/**/*

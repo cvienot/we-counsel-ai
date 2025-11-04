@@ -103,7 +103,7 @@ Resources:
 Outputs:
   ServiceUrl:
     Description: URL of the App Runner service
-    Value: !GetAtt AppRunnerService.ServiceUrl
+    Value: !Sub 'https://${AppRunnerService.ServiceUrl}'
     Export:
       Name: WeCounsel-BackendURL
   

@@ -2,15 +2,16 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/foundation.dart';
+import '../config/environment.dart';
 
 class ApiService {
   late final Dio _dio;
-  static const String _baseUrl = 'http://localhost:3000/api'; // Update for production
+  static final String _baseUrl = Environment.apiBaseUrl;
   static const _storage = FlutterSecureStorage();
   static const String _tokenKey = 'auth_token';
   
   // Toggle for detailed API logging
-  static bool enableDetailedLogging = true;
+  static bool enableDetailedLogging = !Environment.isProduction;
 
   ApiService() {
     _dio = Dio(BaseOptions(

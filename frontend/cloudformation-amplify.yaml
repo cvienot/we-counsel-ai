@@ -1,0 +1,121 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'AWS Amplify Hosting for We Counsel Flutter Web App'
+
+Parameters:
+  AppName:
+    Type: String
+    Default: we-counsel-web
+    Description: Name of the Amplify app
+  
+  Repository:
+    Type: String
+    Default: cvienot/we-counsel-ai
+    Description: GitHub repository (owner/repo)
+  
+  Branch:
+    Type: String
+    Default: main
+    Description: Git branch to deploy
+  
+  GitHubToken:
+    Type: String
+    NoEcho: true
+    Description: GitHub Personal Access Token for repository access
+  
+  ApiBaseUrl:
+    Type: String
+    Default: https://your-app-runner-url.awsapprunner.com/api
+    Description: Backend API base URL
+
+Resources:
+  AmplifyApp:
+    Type: AWS::Amplify::App
+    Properties:
+      Name: !Ref AppName
+      Repository: !Sub 'https://github.com/${Repository}'
+      AccessToken: !Ref GitHubToken
+      BuildSpec: |
+        version: 1
+        frontend:
+          phases:
+            preBuild:
+              commands:
+                - flutter channel stable
+                - flutter upgrade
+                - cd frontend
+                - flutter pub get
+            build:
+              commands:
+                - flutter build web --release --dart-define=API_BASE_URL=$API_BASE_URL --dart-define=ENVIRONMENT=production
+          artifacts:
+            baseDirectory: frontend/build/web
+            files:
+              - '**/*'
+          cache:
+            paths:
+              - frontend/.flutter-plugins
+              - frontend/.flutter-plugins-dependencies
+              - frontend/.dart_tool/**/*
+      EnvironmentVariables:
+        - Name: API_BASE_URL
+          Value: !Ref ApiBaseUrl
+        - Name: ENVIRONMENT
+          Value: production
+        - Name: FLUTTER_VERSION
+          Value: stable
+      IAMServiceRole: !GetAtt AmplifyRole.Arn
+      CustomRules:
+        # SPA routing - redirect all requests to index.html
+        - Source: '</^[^.]+$|\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|woff2|ttf|map|json)$)([^.]+$)/>'
+          Target: /index.html
+          Status: '200'
+        # Redirect www to non-www
+        - Source: 'https://www.<YOUR_DOMAIN>'
+          Target: 'https://<YOUR_DOMAIN>'
+          Status: '301'
+  
+  AmplifyBranch:
+    Type: AWS::Amplify::Branch
+    Properties:
+      AppId: !GetAtt AmplifyApp.AppId
+      BranchName: !Ref Branch
+      EnableAutoBuild: true
+      EnablePullRequestPreview: true
+      Stage: PRODUCTION
+      EnvironmentVariables:
+        - Name: API_BASE_URL
+          Value: !Ref ApiBaseUrl
+        - Name: ENVIRONMENT
+          Value: production
+  
+  AmplifyRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: amplify.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess-Amplify
+
+Outputs:
+  AppId:
+    Description: Amplify App ID
+    Value: !GetAtt AmplifyApp.AppId
+    Export:
+      Name: !Sub '${AWS::StackName}-AppId'
+  
+  DefaultDomain:
+    Description: Amplify default domain
+    Value: !GetAtt AmplifyApp.DefaultDomain
+    Export:
+      Name: !Sub '${AWS::StackName}-DefaultDomain'
+  
+  AppUrl:
+    Description: Application URL
+    Value: !Sub 'https://${Branch}.${AmplifyApp.DefaultDomain}'
+    Export:
+      Name: !Sub '${AWS::StackName}-Url'
