@@ -10,6 +10,7 @@ applications:
             - export PATH="$PATH:/tmp/flutter/bin"
             - flutter --version
             - flutter config --no-analytics
+            - flutter config --enable-web
             - flutter precache --web
             - flutter pub get
         build:
