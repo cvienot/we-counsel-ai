@@ -5,11 +5,16 @@ applications:
       phases:
         preBuild:
           commands:
-            - flutter channel stable
-            - flutter upgrade
+            # Install Flutter
+            - git clone https://github.com/flutter/flutter.git -b stable --depth 1 /tmp/flutter
+            - export PATH="$PATH:/tmp/flutter/bin"
+            - flutter --version
+            - flutter config --no-analytics
+            - flutter precache --web
             - flutter pub get
         build:
           commands:
+            - export PATH="$PATH:/tmp/flutter/bin"
             - flutter build web --release --dart-define=API_BASE_URL=$API_BASE_URL --dart-define=ENVIRONMENT=$ENVIRONMENT
       artifacts:
         baseDirectory: build/web
