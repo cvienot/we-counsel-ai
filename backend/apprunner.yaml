@@ -21,7 +21,7 @@ run:
     - name: EMAIL_FROM
       value: camille.vienot@gmail.com  # Update with your verified SES email
     - name: FRONTEND_URL
-      value: http://localhost:8080  # Update with your frontend URL after deployment
+      value: https://main.d3ct6eeeltgvfr.amplifyapp.com
     
     # Sensitive secrets loaded from AWS Secrets Manager at runtime
     # JWT_SECRET and OPENAI_API_KEY are fetched by src/config/secrets.js
