@@ -1,0 +1,11 @@
+{
+  "FirstName": "Camille",
+  "LastName": "Vienot",
+  "ContactType": "PERSON",
+  "AddressLine1": "30 rue Claude Jusseaud",
+  "City": "Sainte-Foy-Les-Lyon",
+  "CountryCode": "FR",
+  "ZipCode": "69110",
+  "PhoneNumber": "+33.650629396",
+  "Email": "camille.vienot@gmail.com"
+}

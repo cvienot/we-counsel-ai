@@ -19,9 +19,9 @@ run:
     - name: DYNAMODB_REGION
       value: eu-west-3
     - name: EMAIL_FROM
-      value: camille.vienot@gmail.com  # Update with your verified SES email
+      value: noreply@we-counsel.com
     - name: FRONTEND_URL
-      value: https://main.d3ct6eeeltgvfr.amplifyapp.com
+      value: https://app.we-counsel.com
     
     # Sensitive secrets loaded from AWS Secrets Manager at runtime
     # JWT_SECRET and OPENAI_API_KEY are fetched by src/config/secrets.js
