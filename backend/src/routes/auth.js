@@ -261,15 +261,10 @@ router.post('/invite-partner', authenticateToken, async (req, res) => {
 
     const existingInvitation = await docClient.send(new QueryCommand(existingInvitationParams));
 
-    if (existingInvitation.Items.length > 0) {
-      return res.status(400).json({
-        error: 'Invitation exists',
-        message: 'You have already sent an invitation to this email'
-      });
-    }
-
-    // Create invitation
-    const invitationId = randomUUID();
+    // Use existing invitation ID if found, or create new one
+    const invitationId = existingInvitation.Items.length > 0 
+      ? existingInvitation.Items[0].invitationId 
+      : randomUUID();
     const invitationData = {
       invitationId,
       inviterId,
@@ -288,6 +283,8 @@ router.post('/invite-partner', authenticateToken, async (req, res) => {
 
     await docClient.send(new PutCommand(invitationParams));
 
+    const isResend = existingInvitation.Items.length > 0;
+
     // Send invitation email
     try {
       await sendInvitationEmail({
@@ -303,12 +300,13 @@ router.post('/invite-partner', authenticateToken, async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: 'Invitation sent successfully',
+      message: isResend ? 'Invitation resent successfully' : 'Invitation sent successfully',
       invitation: {
         invitationId,
         email: email.toLowerCase(),
         status: 'pending',
-        createdAt: invitationData.createdAt
+        createdAt: invitationData.createdAt,
+        resent: isResend
       }
     });
 
