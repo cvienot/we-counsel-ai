@@ -2,14 +2,14 @@ const { SESClient, SendEmailCommand } = require('@aws-sdk/client-ses');
 
 // Configure SES
 const sesClient = new SESClient({
-  region: process.env.SES_REGION || 'us-east-1'
+  region: process.env.AWS_REGION || 'eu-west-3'
 });
 
 const sendInvitationEmail = async ({ to, inviterName, invitationId, message }) => {
   const invitationUrl = `${process.env.FRONTEND_URL}/invitation/${invitationId}`;
   
   const params = {
-    Source: process.env.SES_FROM_EMAIL,
+    Source: process.env.EMAIL_FROM,
     Destination: {
       ToAddresses: [to]
     },
@@ -111,7 +111,7 @@ const sendInvitationEmail = async ({ to, inviterName, invitationId, message }) =
 
 const sendWelcomeEmail = async ({ to, firstName }) => {
   const params = {
-    Source: process.env.SES_FROM_EMAIL,
+    Source: process.env.EMAIL_FROM,
     Destination: {
       ToAddresses: [to]
     },
