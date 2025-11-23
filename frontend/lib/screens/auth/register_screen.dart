@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../providers/auth_provider.dart';
+import '../../providers/language_provider.dart';
 
 
 class RegisterScreen extends ConsumerStatefulWidget {
@@ -33,6 +34,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     if (_formKey.currentState!.validate()) {
       try {
         final pendingInvitation = ref.read(pendingInvitationProvider);
+        final currentLanguage = ref.read(currentLocaleProvider).languageCode;
         
         await ref.read(authProvider.notifier).register(
           email: _emailController.text.trim(),
@@ -40,6 +42,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           firstName: _firstNameController.text.trim(),
           lastName: _lastNameController.text.trim(),
           invitationId: pendingInvitation,
+          language: currentLanguage,
         );
         
         if (mounted) {

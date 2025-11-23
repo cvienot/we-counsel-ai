@@ -44,31 +44,58 @@ router.get('/profile', authenticateToken, async (req, res) => {
 // @access  Private
 router.put('/profile', authenticateToken, async (req, res) => {
   try {
-    const { firstName, lastName } = req.body;
+    const { firstName, lastName, language } = req.body;
     const userId = req.user.userId;
 
-    // Validation
-    if (!firstName || !lastName) {
+    // Build update expression dynamically
+    const updateExpressions = [];
+    const expressionAttributeValues = {
+      ':updatedAt': new Date().toISOString()
+    };
+    const expressionAttributeNames = {};
+
+    if (firstName) {
+      updateExpressions.push('firstName = :firstName');
+      expressionAttributeValues[':firstName'] = firstName;
+    }
+
+    if (lastName) {
+      updateExpressions.push('lastName = :lastName');
+      expressionAttributeValues[':lastName'] = lastName;
+    }
+
+    if (language) {
+      updateExpressions.push('#lang = :language');
+      expressionAttributeValues[':language'] = language;
+      expressionAttributeNames['#lang'] = 'language'; // 'language' is a reserved word in DynamoDB
+    }
+
+    // Always update timestamp
+    updateExpressions.push('updatedAt = :updatedAt');
+
+    if (updateExpressions.length === 1) {
+      // Only timestamp, no actual updates
       return res.status(400).json({
         error: 'Validation error',
-        message: 'First name and last name are required'
+        message: 'At least one field must be provided for update'
       });
     }
 
     const params = {
       TableName: TABLES.USERS,
       Key: { userId },
-      UpdateExpression: 'SET firstName = :firstName, lastName = :lastName, updatedAt = :updatedAt',
-      ExpressionAttributeValues: {
-        ':firstName': firstName,
-        ':lastName': lastName,
-        ':updatedAt': new Date().toISOString()
-      },
+      UpdateExpression: `SET ${updateExpressions.join(', ')}`,
+      ExpressionAttributeValues: expressionAttributeValues,
       ReturnValues: 'ALL_NEW'
     };
 
+    // Add ExpressionAttributeNames only if we have reserved words
+    if (Object.keys(expressionAttributeNames).length > 0) {
+      params.ExpressionAttributeNames = expressionAttributeNames;
+    }
+
     const result = await docClient.send(new UpdateCommand(params));
-    const { password, ...updatedUser } = result.Attributes;
+    const { passwordHash, ...updatedUser } = result.Attributes;
 
     // Get partner info if exists
     if (updatedUser.partnerId) {

@@ -20,7 +20,7 @@ const generateToken = (userId) => {
 // @access  Public
 router.post('/register', async (req, res) => {
   try {
-    const { email, password, firstName, lastName } = req.body;
+    const { email, password, firstName, lastName, language } = req.body;
 
     // Validation
     if (!email || !password || !firstName || !lastName) {
@@ -68,6 +68,7 @@ router.post('/register', async (req, res) => {
       passwordHash: hashedPassword,
       firstName,
       lastName,
+      language: language || 'en', // Default to English if not provided
       createdAt: new Date().toISOString(),
       isActive: true
       // Note: partnerId and coupleId are omitted (not set to null) for AWS SDK v3 compatibility
@@ -285,13 +286,14 @@ router.post('/invite-partner', authenticateToken, async (req, res) => {
 
     const isResend = existingInvitation.Items.length > 0;
 
-    // Send invitation email
+    // Send invitation email in inviter's language
     try {
       await sendInvitationEmail({
         to: email,
         inviterName: invitationData.inviterName,
         invitationId,
-        message
+        message,
+        language: req.user.language || 'en'
       });
     } catch (emailError) {
       console.error('Failed to send invitation email:', emailError);

@@ -1,12 +1,17 @@
 const { SESClient, SendEmailCommand } = require('@aws-sdk/client-ses');
+const emailTranslations = require('../locales/emailTranslations');
 
 // Configure SES
 const sesClient = new SESClient({
   region: process.env.AWS_REGION || 'eu-west-3'
 });
 
-const sendInvitationEmail = async ({ to, inviterName, invitationId, message }) => {
+const sendInvitationEmail = async ({ to, inviterName, invitationId, message, language = 'en' }) => {
   const invitationUrl = `${process.env.FRONTEND_URL}/invitation/${invitationId}`;
+  
+  // Get translations for the specified language, fallback to English
+  const lang = emailTranslations[language] || emailTranslations.en;
+  const t = lang.invitation;
   
   const params = {
     Source: process.env.EMAIL_FROM,
@@ -15,7 +20,7 @@ const sendInvitationEmail = async ({ to, inviterName, invitationId, message }) =
     },
     Message: {
       Subject: {
-        Data: `${inviterName} has invited you to join We Counsel`,
+        Data: t.subject(inviterName),
         Charset: 'UTF-8'
       },
       Body: {
@@ -25,7 +30,7 @@ const sendInvitationEmail = async ({ to, inviterName, invitationId, message }) =
             <html>
             <head>
               <meta charset="utf-8">
-              <title>We Counsel Invitation</title>
+              <title>${t.title}</title>
               <style>
                 body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
                 .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -46,26 +51,26 @@ const sendInvitationEmail = async ({ to, inviterName, invitationId, message }) =
             <body>
               <div class="container">
                 <div class="header">
-                  <h1>We Counsel</h1>
-                  <h2>Couples Counselling App</h2>
+                  <h1>${t.title}</h1>
+                  <h2>${t.subtitle}</h2>
                 </div>
                 <div class="content">
-                  <h3>You've been invited!</h3>
-                  <p><strong>${inviterName}</strong> has invited you to join them on We Counsel, a couples counselling app that helps strengthen relationships.</p>
-                  ${message ? `<p><em>Personal message: "${message}"</em></p>` : ''}
-                  <p>We Counsel provides:</p>
+                  <h3>${t.heading}</h3>
+                  <p>${t.body(inviterName)}</p>
+                  ${message ? `<p><em>${t.personalMessage} "${message}"</em></p>` : ''}
+                  <p>${t.features}</p>
                   <ul>
-                    <li>Private conversations between you and your partner</li>
-                    <li>AI-powered counselling guidance</li>
-                    <li>Safe space to communicate and grow together</li>
+                    <li>${t.feature1}</li>
+                    <li>${t.feature2}</li>
+                    <li>${t.feature3}</li>
                   </ul>
                   <div style="text-align: center;">
-                    <a href="${invitationUrl}" class="button">Accept Invitation</a>
+                    <a href="${invitationUrl}" class="button">${t.button}</a>
                   </div>
-                  <p><small>This invitation will expire in 7 days. If the button doesn't work, copy and paste this link: ${invitationUrl}</small></p>
+                  <p><small>${t.expiry} ${t.linkInfo} ${invitationUrl}</small></p>
                 </div>
                 <div class="footer">
-                  <p>We Counsel - Strengthening relationships through guided communication</p>
+                  <p>${t.footer}</p>
                 </div>
               </div>
             </body>
@@ -75,22 +80,19 @@ const sendInvitationEmail = async ({ to, inviterName, invitationId, message }) =
         },
         Text: {
           Data: `
-            We Counsel - Couples Counselling App
+            ${t.title} - ${t.subtitle}
 
-            You've been invited by ${inviterName} to join them on We Counsel!
+            ${t.plainBody(inviterName)}
 
-            ${message ? `Personal message: "${message}"` : ''}
+            ${message ? `${t.personalMessage} "${message}"` : ''}
 
-            We Counsel helps couples strengthen their relationships through:
-            - Private conversations between partners
-            - AI-powered counselling guidance  
-            - Safe space to communicate and grow together
+            ${t.plainFeatures}
 
-            Accept your invitation: ${invitationUrl}
+            ${t.plainAccept} ${invitationUrl}
 
-            This invitation expires in 7 days.
+            ${t.plainExpiry}
 
-            We Counsel - Strengthening relationships through guided communication
+            ${t.footer}
           `,
           Charset: 'UTF-8'
         }
@@ -109,7 +111,11 @@ const sendInvitationEmail = async ({ to, inviterName, invitationId, message }) =
   }
 };
 
-const sendWelcomeEmail = async ({ to, firstName }) => {
+const sendWelcomeEmail = async ({ to, firstName, language = 'en' }) => {
+  // Get translations for the specified language, fallback to English
+  const lang = emailTranslations[language] || emailTranslations.en;
+  const t = lang.welcome;
+  
   const params = {
     Source: process.env.EMAIL_FROM,
     Destination: {
@@ -117,7 +123,7 @@ const sendWelcomeEmail = async ({ to, firstName }) => {
     },
     Message: {
       Subject: {
-        Data: 'Welcome to We Counsel',
+        Data: t.subject,
         Charset: 'UTF-8'
       },
       Body: {
@@ -127,7 +133,7 @@ const sendWelcomeEmail = async ({ to, firstName }) => {
             <html>
             <head>
               <meta charset="utf-8">
-              <title>Welcome to We Counsel</title>
+              <title>${t.subject}</title>
               <style>
                 body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
                 .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -139,21 +145,21 @@ const sendWelcomeEmail = async ({ to, firstName }) => {
             <body>
               <div class="container">
                 <div class="header">
-                  <h1>Welcome to We Counsel</h1>
+                  <h1>${t.subject}</h1>
                 </div>
                 <div class="content">
-                  <h3>Hi ${firstName}!</h3>
-                  <p>Welcome to We Counsel! We're excited to help you and your partner strengthen your relationship.</p>
-                  <p>Next steps:</p>
+                  <h3>${t.heading(firstName)}</h3>
+                  <p>${t.body}</p>
+                  <p>${t.nextSteps}</p>
                   <ol>
-                    <li>Invite your partner to join you on the app</li>
-                    <li>Start your first conversation together</li>
-                    <li>Let our AI counsellor guide you through meaningful discussions</li>
+                    <li>${t.step1}</li>
+                    <li>${t.step2}</li>
+                    <li>${t.step3}</li>
                   </ol>
-                  <p>Remember, We Counsel is here to support you both on your journey together.</p>
+                  <p>${t.closing}</p>
                 </div>
                 <div class="footer">
-                  <p>We Counsel - Strengthening relationships through guided communication</p>
+                  <p>${t.footer}</p>
                 </div>
               </div>
             </body>
@@ -163,20 +169,15 @@ const sendWelcomeEmail = async ({ to, firstName }) => {
         },
         Text: {
           Data: `
-            Welcome to We Counsel!
+            ${t.subject}
 
-            Hi ${firstName}!
+            ${t.plainBody(firstName)}
 
-            Welcome to We Counsel! We're excited to help you and your partner strengthen your relationship.
+            ${t.plainSteps}
 
-            Next steps:
-            1. Invite your partner to join you on the app
-            2. Start your first conversation together  
-            3. Let our AI counsellor guide you through meaningful discussions
+            ${t.plainClosing}
 
-            Remember, We Counsel is here to support you both on your journey together.
-
-            We Counsel - Strengthening relationships through guided communication
+            ${t.footer}
           `,
           Charset: 'UTF-8'
         }

@@ -167,6 +167,7 @@ class ApiService {
     required String password,
     required String firstName,
     required String lastName,
+    String? language,
   }) async {
     try {
       final response = await _dio.post('/auth/register', data: {
@@ -174,6 +175,7 @@ class ApiService {
         'password': password,
         'firstName': firstName,
         'lastName': lastName,
+        if (language != null) 'language': language,
       });
       
       if (response.data['token'] != null) {
@@ -241,13 +243,27 @@ class ApiService {
   }
 
   Future<Map<String, dynamic>> updateProfile({
-    required String firstName,
-    required String lastName,
+    String? firstName,
+    String? lastName,
+    String? language,
   }) async {
     try {
+      final data = <String, dynamic>{};
+      if (firstName != null) data['firstName'] = firstName;
+      if (lastName != null) data['lastName'] = lastName;
+      if (language != null) data['language'] = language;
+      
+      final response = await _dio.put('/users/profile', data: data);
+      return response.data;
+    } on DioException catch (e) {
+      throw Exception(_extractErrorMessage(e));
+    }
+  }
+
+  Future<Map<String, dynamic>> updateLanguage(String language) async {
+    try {
       final response = await _dio.put('/users/profile', data: {
-        'firstName': firstName,
-        'lastName': lastName,
+        'language': language,
       });
       return response.data;
     } on DioException catch (e) {
