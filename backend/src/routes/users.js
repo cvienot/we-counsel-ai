@@ -178,14 +178,6 @@ router.post('/accept-invitation/:invitationId', authenticateToken, async (req, r
 
     const invitation = invitationResult.Item;
 
-    // Check if invitation is for this user
-    if (invitation.email !== req.user.email) {
-      return res.status(403).json({
-        error: 'Forbidden',
-        message: 'This invitation is not for you'
-      });
-    }
-
     // Check if invitation is still valid
     if (invitation.status !== 'pending') {
       return res.status(400).json({
