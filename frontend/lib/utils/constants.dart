@@ -1,9 +1,19 @@
+import '../config/environment.dart';
+
 class Constants {
-  // API Configuration
-  static const String apiBaseUrl = 'http://localhost:3000/api';
+  // API Configuration - uses environment configuration
+  static String get apiBaseUrl => Environment.apiBaseUrl;
   
-  // WebSocket/SSE Configuration
-  static const String wsBaseUrl = 'ws://localhost:3000';
+  // WebSocket/SSE Configuration - derive from API base URL
+  static String get wsBaseUrl {
+    final apiUrl = Environment.apiBaseUrl;
+    if (apiUrl.startsWith('https://')) {
+      return apiUrl.replaceFirst('https://', 'wss://').replaceFirst('/api', '');
+    } else if (apiUrl.startsWith('http://')) {
+      return apiUrl.replaceFirst('http://', 'ws://').replaceFirst('/api', '');
+    }
+    return 'ws://localhost:3000';
+  }
   
   // App Configuration
   static const String appName = 'We Counsel';
