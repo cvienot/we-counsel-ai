@@ -35,12 +35,13 @@ class _InvitePartnerScreenState extends ConsumerState<InvitePartnerScreen> {
         );
         
         if (mounted) {
+          final email = _emailController.text.trim();
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
               title: Text(l10n.invitationSent),
               content: Text(
-                l10n.invitationSentMessage.replaceAll('{email}', _emailController.text.trim()),
+                l10n.invitationSentMessage(email),
               ),
               actions: [
                 ElevatedButton(
