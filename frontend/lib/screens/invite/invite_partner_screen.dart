@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../providers/auth_provider.dart';
+import '../../l10n/app_localizations.dart';
+
 
 class InvitePartnerScreen extends ConsumerStatefulWidget {
   const InvitePartnerScreen({super.key});
@@ -25,6 +27,8 @@ class _InvitePartnerScreenState extends ConsumerState<InvitePartnerScreen> {
   Future<void> _sendInvitation() async {
     if (_formKey.currentState!.validate()) {
       try {
+        final l10n = AppLocalizations.of(context)!;
+        
         await ref.read(authProvider.notifier).invitePartner(
           email: _emailController.text.trim(),
           message: _messageController.text.trim(),
@@ -34,10 +38,9 @@ class _InvitePartnerScreenState extends ConsumerState<InvitePartnerScreen> {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: const Text('Invitation Sent!'),
+              title: Text(l10n.invitationSent),
               content: Text(
-                'An invitation has been sent to ${_emailController.text.trim()}. '
-                'They will receive an email with instructions to join you on We Counsel.',
+                l10n.invitationSentMessage.replaceAll('{email}', _emailController.text.trim()),
               ),
               actions: [
                 ElevatedButton(
@@ -45,7 +48,7 @@ class _InvitePartnerScreenState extends ConsumerState<InvitePartnerScreen> {
                     Navigator.of(context).pop();
                     context.go('/home');
                   },
-                  child: const Text('OK'),
+                  child: Text(l10n.ok),
                 ),
               ],
             ),
@@ -53,9 +56,10 @@ class _InvitePartnerScreenState extends ConsumerState<InvitePartnerScreen> {
         }
       } catch (e) {
         if (mounted) {
+          final l10n = AppLocalizations.of(context)!;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Failed to send invitation: ${e.toString()}'),
+              content: Text('${l10n.failedToSendInvitation}: ${e.toString()}'),
               backgroundColor: Colors.red,
             ),
           );
@@ -68,10 +72,11 @@ class _InvitePartnerScreenState extends ConsumerState<InvitePartnerScreen> {
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
     final user = authState.user;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Invite Your Partner'),
+        title: Text(l10n.inviteYourPartner),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -93,14 +98,14 @@ class _InvitePartnerScreenState extends ConsumerState<InvitePartnerScreen> {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          'Send Invitation',
+                          l10n.sendInvitation,
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                       ],
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Invite your partner to join you on We Counsel. They will receive an email with instructions to create their account and connect with you.',
+                      l10n.invitePartnerDescription,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ],
@@ -117,26 +122,26 @@ class _InvitePartnerScreenState extends ConsumerState<InvitePartnerScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Partner\'s Email Address',
+                    l10n.partnerEmailAddress,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 8),
                   TextFormField(
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(
-                      hintText: 'Enter your partner\'s email address',
-                      prefixIcon: Icon(Icons.email),
+                    decoration: InputDecoration(
+                      hintText: l10n.enterPartnerEmail,
+                      prefixIcon: const Icon(Icons.email),
                     ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return 'Please enter your partner\'s email';
+                        return l10n.pleaseEnterPartnerEmail;
                       }
                       if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value.trim())) {
-                        return 'Please enter a valid email address';
+                        return l10n.pleaseEnterValidEmail;
                       }
                       if (value.trim().toLowerCase() == user?.email.toLowerCase()) {
-                        return 'You cannot invite yourself';
+                        return l10n.cannotInviteYourself;
                       }
                       return null;
                     },
@@ -145,15 +150,15 @@ class _InvitePartnerScreenState extends ConsumerState<InvitePartnerScreen> {
                   const SizedBox(height: 24),
                   
                   Text(
-                    'Personal Message (Optional)',
+                    l10n.personalMessageOptional,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 8),
                   TextFormField(
                     controller: _messageController,
                     maxLines: 4,
-                    decoration: const InputDecoration(
-                      hintText: 'Add a personal message to your invitation...',
+                    decoration: InputDecoration(
+                      hintText: l10n.addPersonalMessage,
                       alignLabelWithHint: true,
                     ),
                     textCapitalization: TextCapitalization.sentences,
@@ -172,7 +177,7 @@ class _InvitePartnerScreenState extends ConsumerState<InvitePartnerScreen> {
                               width: 20,
                               child: CircularProgressIndicator(strokeWidth: 2),
                             )
-                          : const Text('Send Invitation'),
+                          : Text(l10n.sendInvitation),
                     ),
                   ),
                 ],
@@ -197,7 +202,7 @@ class _InvitePartnerScreenState extends ConsumerState<InvitePartnerScreen> {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          'What happens next?',
+                          l10n.whatHappensNext,
                           style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             color: Theme.of(context).colorScheme.primary,
                           ),
@@ -206,10 +211,7 @@ class _InvitePartnerScreenState extends ConsumerState<InvitePartnerScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      '1. Your partner will receive an email invitation\n'
-                      '2. They can click the link to create their account\n'
-                      '3. Once they accept, you\'ll both be connected\n'
-                      '4. You can start having conversations with AI guidance',
+                      l10n.invitationSteps.replaceAll('\\n', '\n'),
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ],

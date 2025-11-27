@@ -118,6 +118,132 @@
   "@invitePartner": {
     "description": "Invite partner button text"
   },
+  "inviteYourPartner": "Invite Your Partner",
+  "@inviteYourPartner": {
+    "description": "Invite partner screen title"
+  },
+  "sendInvitation": "Send Invitation",
+  "@sendInvitation": {
+    "description": "Send invitation card title"
+  },
+  "invitePartnerDescription": "Invite your partner to join you on We Counsel. They will receive an email with instructions to create their account and connect with you.",
+  "@invitePartnerDescription": {
+    "description": "Invite partner description text"
+  },
+  "partnerEmailAddress": "Partner's Email Address",
+  "@partnerEmailAddress": {
+    "description": "Partner email field label"
+  },
+  "enterPartnerEmail": "Enter your partner's email address",
+  "@enterPartnerEmail": {
+    "description": "Partner email field hint"
+  },
+  "pleaseEnterPartnerEmail": "Please enter your partner's email",
+  "@pleaseEnterPartnerEmail": {
+    "description": "Partner email validation error"
+  },
+  "pleaseEnterValidEmail": "Please enter a valid email address",
+  "@pleaseEnterValidEmail": {
+    "description": "Email format validation error"
+  },
+  "cannotInviteYourself": "You cannot invite yourself",
+  "@cannotInviteYourself": {
+    "description": "Self-invite validation error"
+  },
+  "personalMessageOptional": "Personal Message (Optional)",
+  "@personalMessageOptional": {
+    "description": "Personal message field label"
+  },
+  "addPersonalMessage": "Add a personal message to your invitation...",
+  "@addPersonalMessage": {
+    "description": "Personal message field hint"
+  },
+  "invitationSent": "Invitation Sent!",
+  "@invitationSent": {
+    "description": "Invitation sent dialog title"
+  },
+  "invitationSentMessage": "An invitation has been sent to {email}. They will receive an email with instructions to join you on We Counsel.",
+  "@invitationSentMessage": {
+    "description": "Invitation sent success message",
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "failedToSendInvitation": "Failed to send invitation",
+  "@failedToSendInvitation": {
+    "description": "Failed to send invitation error prefix"
+  },
+  "invitationSteps": "1. Your partner will receive an email invitation\\n2. They can click the link to create their account\\n3. Once they accept, you'll both be connected\\n4. You can start having conversations with AI guidance",
+  "@invitationSteps": {
+    "description": "Invitation process steps"
+  },
+  "ok": "OK",
+  "@ok": {
+    "description": "OK button text"
+  },
+  "inviteYourPartner": "Invite Your Partner",
+  "@inviteYourPartner": {
+    "description": "Invite partner screen title"
+  },
+  "sendInvitation": "Send Invitation",
+  "@sendInvitation": {
+    "description": "Send invitation card title"
+  },
+  "invitePartnerDescription": "Invite your partner to join you on We Counsel. They will receive an email with instructions to create their account and connect with you.",
+  "@invitePartnerDescription": {
+    "description": "Invite partner description text"
+  },
+  "partnerEmailAddress": "Partner's Email Address",
+  "@partnerEmailAddress": {
+    "description": "Partner email field label"
+  },
+  "enterPartnerEmail": "Enter your partner's email address",
+  "@enterPartnerEmail": {
+    "description": "Partner email field hint"
+  },
+  "pleaseEnterPartnerEmail": "Please enter your partner's email",
+  "@pleaseEnterPartnerEmail": {
+    "description": "Partner email validation error"
+  },
+  "pleaseEnterValidEmail": "Please enter a valid email address",
+  "@pleaseEnterValidEmail": {
+    "description": "Email format validation error"
+  },
+  "cannotInviteYourself": "You cannot invite yourself",
+  "@cannotInviteYourself": {
+    "description": "Self-invite validation error"
+  },
+  "personalMessageOptional": "Personal Message (Optional)",
+  "@personalMessageOptional": {
+    "description": "Personal message field label"
+  },
+  "addPersonalMessage": "Add a personal message to your invitation...",
+  "@addPersonalMessage": {
+    "description": "Personal message field hint"
+  },
+  "invitationSent": "Invitation Sent!",
+  "@invitationSent": {
+    "description": "Invitation sent dialog title"
+  },
+  "invitationSentMessage": "An invitation has been sent to {email}. They will receive an email with instructions to join you on We Counsel.",
+  "@invitationSentMessage": {
+    "description": "Invitation sent success message",
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "failedToSendInvitation": "Failed to send invitation",
+  "@failedToSendInvitation": {
+    "description": "Failed to send invitation error prefix"
+  },
+  "invitationSteps": "1. Your partner will receive an email invitation\n2. They can click the link to create their account\n3. Once they accept, you'll both be connected\n4. You can start having conversations with AI guidance",
+  "@invitationSteps": {
+    "description": "Invitation process steps"
+  },
   "waitingForPartner": "Waiting for your partner to join...",
   "@waitingForPartner": {
     "description": "Waiting for partner message"
