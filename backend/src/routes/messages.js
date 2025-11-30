@@ -47,7 +47,7 @@ router.get('/:conversationId', authenticateToken, async (req, res) => {
     // Get messages
     let messagesParams = {
       TableName: TABLES.MESSAGES,
-      IndexName: 'conversation-timestamp-index',
+      IndexName: 'conversationId-timestamp-index',
       KeyConditionExpression: 'conversationId = :conversationId',
       ExpressionAttributeValues: {
         ':conversationId': conversationId
@@ -204,7 +204,7 @@ router.post('/:conversationId', authenticateToken, async (req, res) => {
         // Get recent messages for context
         const recentMessagesParams = {
           TableName: TABLES.MESSAGES,
-          IndexName: 'conversation-timestamp-index',
+          IndexName: 'conversationId-timestamp-index',
           KeyConditionExpression: 'conversationId = :conversationId',
           ExpressionAttributeValues: {
             ':conversationId': conversationId
@@ -416,7 +416,7 @@ router.post('/:conversationId/ai-stream', authenticateToken, async (req, res) =>
         // Get recent messages for context
         const recentMessagesParams = {
           TableName: TABLES.MESSAGES,
-          IndexName: 'conversation-timestamp-index',
+          IndexName: 'conversationId-timestamp-index',
           KeyConditionExpression: 'conversationId = :conversationId',
           ExpressionAttributeValues: {
             ':conversationId': conversationId
