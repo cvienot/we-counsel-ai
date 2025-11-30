@@ -394,10 +394,11 @@ router.post('/:conversationId/ai-stream', authenticateToken, async (req, res) =>
     const updateConversationParams = {
       TableName: TABLES.CONVERSATIONS,
       Key: { conversationId },
-      UpdateExpression: 'SET lastMessageAt = :lastMessageAt, messageCount = messageCount + :increment',
+      UpdateExpression: 'SET lastMessageAt = :lastMessageAt, messageCount = if_not_exists(messageCount, :zero) + :increment',
       ExpressionAttributeValues: {
         ':lastMessageAt': new Date().toISOString(),
-        ':increment': 1
+        ':increment': 1,
+        ':zero': 0
       }
     };
 
