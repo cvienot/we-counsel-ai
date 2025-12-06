@@ -196,7 +196,116 @@ const sendWelcomeEmail = async ({ to, firstName, language = 'en' }) => {
   }
 };
 
+const sendMessageNotification = async ({ to, recipientName, senderName, messagePreview, conversationId, language = 'en' }) => {
+  const conversationUrl = `${process.env.FRONTEND_URL}/conversations`;
+  
+  // Get translations for the specified language, fallback to English
+  const lang = emailTranslations[language] || emailTranslations.en;
+  const t = lang.messageNotification;
+  
+  // Truncate message preview to 150 characters
+  const preview = messagePreview.length > 150 
+    ? messagePreview.substring(0, 150) + '...' 
+    : messagePreview;
+  
+  const params = {
+    Source: process.env.EMAIL_FROM,
+    Destination: {
+      ToAddresses: [to]
+    },
+    Message: {
+      Subject: {
+        Data: t.subject(senderName),
+        Charset: 'UTF-8'
+      },
+      Body: {
+        Html: {
+          Data: `
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <meta charset="utf-8">
+              <title>${t.subject(senderName)}</title>
+              <style>
+                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                .header { text-align: center; padding: 20px 0; }
+                .content { padding: 20px; background: #f9f9f9; border-radius: 8px; }
+                .message-preview { 
+                  background: white; 
+                  padding: 15px; 
+                  border-left: 4px solid #007bff; 
+                  margin: 20px 0;
+                  font-style: italic;
+                }
+                .button { 
+                  display: inline-block; 
+                  background: #007bff; 
+                  color: white; 
+                  padding: 12px 24px; 
+                  text-decoration: none; 
+                  border-radius: 4px; 
+                  margin: 20px 0; 
+                }
+                .footer { text-align: center; padding: 20px 0; font-size: 12px; color: #666; }
+              </style>
+            </head>
+            <body>
+              <div class="container">
+                <div class="header">
+                  <h1>We Counsel</h1>
+                </div>
+                <div class="content">
+                  <h2>${t.heading(senderName)}</h2>
+                  <p>${t.body(senderName)}</p>
+                  <p><strong>${t.preview}</strong></p>
+                  <div class="message-preview">
+                    "${preview}"
+                  </div>
+                  <a href="${conversationUrl}" class="button">${t.button}</a>
+                </div>
+                <div class="footer">
+                  <p>${t.footer}</p>
+                </div>
+              </div>
+            </body>
+            </html>
+          `,
+          Charset: 'UTF-8'
+        },
+        Text: {
+          Data: `
+            ${t.subject(senderName)}
+
+            ${t.plainBody(senderName)}
+
+            ${t.preview}
+            "${preview}"
+
+            ${t.plainView}
+            ${conversationUrl}
+
+            ${t.footer}
+          `,
+          Charset: 'UTF-8'
+        }
+      }
+    }
+  };
+
+  try {
+    const command = new SendEmailCommand(params);
+    const result = await sesClient.send(command);
+    console.log('Message notification email sent:', result.MessageId);
+    return result;
+  } catch (error) {
+    console.error('Error sending message notification email:', error);
+    throw error;
+  }
+};
+
 module.exports = {
   sendInvitationEmail,
-  sendWelcomeEmail
+  sendWelcomeEmail,
+  sendMessageNotification
 };

@@ -42,6 +42,17 @@ const emailTranslations = {
 2. Start your first conversation together  
 3. Let our AI counsellor guide you through meaningful discussions`,
       plainClosing: 'Remember, We Counsel is here to support you both on your journey together.'
+    },
+    messageNotification: {
+      subject: (senderName) => `${senderName} sent you a message on We Counsel`,
+      heading: (senderName) => `New message from ${senderName}`,
+      body: (senderName) => `${senderName} has sent you a message in your conversation.`,
+      preview: 'Message preview:',
+      button: 'View Message',
+      footer: 'We Counsel - Strengthening relationships through guided communication',
+      // Plain text version
+      plainBody: (senderName) => `${senderName} has sent you a message on We Counsel.`,
+      plainView: 'View your message:'
     }
   },
   fr: {
@@ -86,6 +97,17 @@ const emailTranslations = {
 2. Commencez votre première conversation ensemble
 3. Laissez notre conseiller IA vous guider dans des discussions significatives`,
       plainClosing: 'N\'oubliez pas, We Counsel est là pour vous soutenir tous les deux dans votre cheminement.'
+    },
+    messageNotification: {
+      subject: (senderName) => `${senderName} vous a envoyé un message sur We Counsel`,
+      heading: (senderName) => `Nouveau message de ${senderName}`,
+      body: (senderName) => `${senderName} vous a envoyé un message dans votre conversation.`,
+      preview: 'Aperçu du message :',
+      button: 'Voir le message',
+      footer: 'We Counsel - Renforcer les relations par une communication guidée',
+      // Plain text version
+      plainBody: (senderName) => `${senderName} vous a envoyé un message sur We Counsel.`,
+      plainView: 'Voir votre message :'
     }
   },
   es: {
@@ -130,6 +152,17 @@ const emailTranslations = {
 2. Comienza tu primera conversación juntos
 3. Deja que nuestro consejero de IA te guíe en discusiones significativas`,
       plainClosing: 'Recuerda, We Counsel está aquí para apoyarlos a ambos en su camino juntos.'
+    },
+    messageNotification: {
+      subject: (senderName) => `${senderName} te ha enviado un mensaje en We Counsel`,
+      heading: (senderName) => `Nuevo mensaje de ${senderName}`,
+      body: (senderName) => `${senderName} te ha enviado un mensaje en tu conversación.`,
+      preview: 'Vista previa del mensaje:',
+      button: 'Ver mensaje',
+      footer: 'We Counsel - Fortaleciendo relaciones a través de la comunicación guiada',
+      // Plain text version
+      plainBody: (senderName) => `${senderName} te ha enviado un mensaje en We Counsel.`,
+      plainView: 'Ver tu mensaje:'
     }
   }
 };

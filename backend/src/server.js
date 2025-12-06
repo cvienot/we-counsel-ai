@@ -229,6 +229,8 @@ streamingService.on('newMessage', async ({ conversationId, senderUserId, message
   try {
     // Get conversation details to find the partner
     const { docClient, TABLES, GetCommand, QueryCommand } = require('./config/database');
+    const emailService = require('./services/emailService');
+    
     const params = {
       TableName: TABLES.CONVERSATIONS,
       Key: { conversationId }
@@ -252,13 +254,32 @@ streamingService.on('newMessage', async ({ conversationId, senderUserId, message
       const users = userResult.Items;
       
       // Send new message to all users except the sender
-      users.forEach(user => {
+      users.forEach(async (user) => {
         if (user.userId !== senderUserId) {
+          // Send real-time notification
           streamingService.sendToUser(user.userId, {
             type: 'newMessage',
             conversationId,
             message
           });
+          
+          // Send email notification (only for user messages, not AI)
+          if (message.senderType === 'user') {
+            try {
+              await emailService.sendMessageNotification({
+                to: user.email,
+                recipientName: user.firstName,
+                senderName: message.senderName,
+                messagePreview: message.content,
+                conversationId,
+                language: user.language || 'en'
+              });
+              console.log(`📧 Email notification sent to ${user.email} for message from ${message.senderName}`);
+            } catch (emailError) {
+              console.error('Error sending email notification:', emailError);
+              // Don't throw - email failure shouldn't break the message flow
+            }
+          }
         }
       });
     }
