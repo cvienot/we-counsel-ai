@@ -21,7 +21,7 @@ const generateToken = (userId) => {
 // @access  Public
 router.post('/register', async (req, res) => {
   try {
-    const { email, password, firstName, lastName, language } = req.body;
+    const { email, password, firstName, lastName, language, termsAccepted } = req.body;
 
     // Validation
     if (!email || !password || !firstName || !lastName) {
@@ -35,6 +35,14 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({
         error: 'Validation error',
         message: 'Password must be at least 6 characters long'
+      });
+    }
+
+    // Check if terms have been accepted
+    if (!termsAccepted) {
+      return res.status(400).json({
+        error: 'Validation error',
+        message: 'You must accept the Terms of Service to create an account'
       });
     }
 
@@ -63,15 +71,19 @@ router.post('/register', async (req, res) => {
 
     // Create user
     const userId = randomUUID();
+    const currentTimestamp = new Date().toISOString();
+    const userLanguage = language || 'en';
     const userData = {
       userId,
       email: email.toLowerCase(),
       passwordHash: hashedPassword,
       firstName,
       lastName,
-      language: language || 'en', // Default to English if not provided
-      createdAt: new Date().toISOString(),
-      isActive: true
+      language: userLanguage, // Default to English if not provided
+      createdAt: currentTimestamp,
+      isActive: true,
+      termsAcceptedAt: currentTimestamp,
+      termsAcceptedVersion: `1.0.0-${userLanguage}` // Include language in version for tracking
       // Note: partnerId and coupleId are omitted (not set to null) for AWS SDK v3 compatibility
     };
 

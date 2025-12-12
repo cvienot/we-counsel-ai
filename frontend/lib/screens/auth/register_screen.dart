@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/language_provider.dart';
+import 'terms_of_service_screen.dart';
 
 
 class RegisterScreen extends ConsumerStatefulWidget {
@@ -19,6 +20,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _confirmPasswordController = TextEditingController();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
+  bool _termsAccepted = false;
 
   @override
   void dispose() {
@@ -30,8 +32,27 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     super.dispose();
   }
 
+  void _showTermsOfService() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const TermsOfServiceScreen(),
+      ),
+    );
+  }
+
   Future<void> _handleRegister() async {
     if (_formKey.currentState!.validate()) {
+      if (!_termsAccepted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('You must accept the Terms of Service to create an account'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+      
       try {
         final pendingInvitation = ref.read(pendingInvitationProvider);
         final currentLanguage = ref.read(currentLocaleProvider).languageCode;
@@ -43,6 +64,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           lastName: _lastNameController.text.trim(),
           invitationId: pendingInvitation,
           language: currentLanguage,
+          termsAccepted: _termsAccepted,
         );
         
         if (mounted) {
@@ -197,6 +219,52 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   },
                 ),
                 const SizedBox(height: 24),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Checkbox(
+                      value: _termsAccepted,
+                      onChanged: (value) {
+                        setState(() {
+                          _termsAccepted = value ?? false;
+                        });
+                      },
+                    ),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _termsAccepted = !_termsAccepted;
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 12.0),
+                          child: RichText(
+                            text: TextSpan(
+                              style: Theme.of(context).textTheme.bodyMedium,
+                              children: [
+                                const TextSpan(text: 'I agree to the '),
+                                WidgetSpan(
+                                  child: GestureDetector(
+                                    onTap: _showTermsOfService,
+                                    child: Text(
+                                      'Terms of Service',
+                                      style: TextStyle(
+                                        color: Theme.of(context).colorScheme.primary,
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: authState.isLoading ? null : _handleRegister,
                   child: authState.isLoading

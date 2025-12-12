@@ -88,6 +88,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     required String lastName,
     String? invitationId,
     String? language,
+    bool termsAccepted = false,
   }) async {
     state = state.copyWith(isLoading: true, error: null);
     
@@ -98,6 +99,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         firstName: firstName,
         lastName: lastName,
         language: language,
+        termsAccepted: termsAccepted,
       );
       
       if (response['success'] == true && response['user'] != null) {

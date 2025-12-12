@@ -183,6 +183,7 @@ static const String _baseUrl = 'https://your-app-runner-url.com/api'; // Product
 - Input validation and sanitization
 - CORS protection
 - Rate limiting and security headers
+- **Mandatory Terms of Service acceptance** with version tracking and consent timestamps
 
 ## 🤖 AI Counsellor Features
 
@@ -200,6 +201,7 @@ The AI counsellor (Dr. Sarah) provides:
 - email, firstName, lastName
 - partnerId, coupleId
 - Authentication and profile data
+- **termsAcceptedAt, termsAcceptedVersion** (Terms of Service consent tracking)
 
 ### Couples Table
 - coupleId (Primary Key)

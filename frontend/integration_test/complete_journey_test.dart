@@ -60,6 +60,7 @@ void main() {
           'firstName': 'Alice',
           'lastName': 'Smith',
           'language': 'en',
+          'termsAccepted': true,
         }),
       );
       
@@ -122,6 +123,7 @@ void main() {
           'firstName': 'Bob',
           'lastName': 'Jones',
           'language': 'en',
+          'termsAccepted': true,
         }),
       );
       

@@ -24,7 +24,9 @@ const tables = {
       { name: 'lastName', type: 'S', description: 'User last name' },
       { name: 'language', type: 'S', description: 'User preferred language (en, fr, es)' },
       { name: 'partnerId', type: 'S', description: 'Reference to partner user' },
-      { name: 'createdAt', type: 'S', description: 'ISO timestamp of creation' }
+      { name: 'createdAt', type: 'S', description: 'ISO timestamp of creation' },
+      { name: 'termsAcceptedAt', type: 'S', description: 'ISO timestamp when user accepted terms of service' },
+      { name: 'termsAcceptedVersion', type: 'S', description: 'Version of terms accepted (e.g., "1.0.0")' }
     ],
     globalSecondaryIndexes: [
       {
