@@ -111,11 +111,21 @@ class MigrationManager {
         });
       }
 
-      return {
+      const gsiDef = {
         IndexName: gsi.indexName,
         KeySchema: gsiKeySchema,
         Projection: { ProjectionType: gsi.projection }
       };
+
+      // Add provisioned throughput for DynamoDB Local (PROVISIONED mode)
+      if (this.billingMode === 'PROVISIONED') {
+        gsiDef.ProvisionedThroughput = {
+          ReadCapacityUnits: 5,
+          WriteCapacityUnits: 5
+        };
+      }
+
+      return gsiDef;
     });
 
     const params = {
@@ -125,6 +135,14 @@ class MigrationManager {
       BillingMode: this.billingMode,
       ...(globalSecondaryIndexes.length > 0 && { GlobalSecondaryIndexes: globalSecondaryIndexes })
     };
+
+    // Add provisioned throughput for PROVISIONED billing mode
+    if (this.billingMode === 'PROVISIONED') {
+      params.ProvisionedThroughput = {
+        ReadCapacityUnits: 5,
+        WriteCapacityUnits: 5
+      };
+    }
 
     try {
       const command = new CreateTableCommand(params);

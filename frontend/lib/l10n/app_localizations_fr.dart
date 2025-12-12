@@ -95,6 +95,60 @@ class AppLocalizationsFr extends AppLocalizations {
   String get invitePartner => 'Inviter Partenaire';
 
   @override
+  String get inviteYourPartner => 'Invitez votre partenaire';
+
+  @override
+  String get sendInvitation => 'Envoyer l\'invitation';
+
+  @override
+  String get invitePartnerDescription =>
+      'Invitez votre partenaire à vous rejoindre sur We Counsel. Il recevra un e-mail avec les instructions pour créer son compte et se connecter avec vous.';
+
+  @override
+  String get partnerEmailAddress => 'Adresse e-mail du partenaire';
+
+  @override
+  String get enterPartnerEmail =>
+      'Entrez l\'adresse e-mail de votre partenaire';
+
+  @override
+  String get pleaseEnterPartnerEmail =>
+      'Veuillez entrer l\'e-mail de votre partenaire';
+
+  @override
+  String get pleaseEnterValidEmail =>
+      'Veuillez entrer une adresse e-mail valide';
+
+  @override
+  String get cannotInviteYourself =>
+      'Vous ne pouvez pas vous inviter vous-même';
+
+  @override
+  String get personalMessageOptional => 'Message personnel (optionnel)';
+
+  @override
+  String get addPersonalMessage =>
+      'Ajoutez un message personnel à votre invitation...';
+
+  @override
+  String get invitationSent => 'Invitation envoyée !';
+
+  @override
+  String invitationSentMessage(String email) {
+    return 'Une invitation a été envoyée à $email. Il recevra un e-mail avec les instructions pour vous rejoindre sur We Counsel.';
+  }
+
+  @override
+  String get failedToSendInvitation => 'Échec de l\'envoi de l\'invitation';
+
+  @override
+  String get invitationSteps =>
+      '1. Votre partenaire recevra une invitation par e-mail\\n2. Il pourra cliquer sur le lien pour créer son compte\\n3. Une fois accepté, vous serez tous les deux connectés\\n4. Vous pourrez commencer à avoir des conversations avec l\'aide de l\'IA';
+
+  @override
+  String get ok => 'OK';
+
+  @override
   String get waitingForPartner => 'En attente de votre partenaire...';
 
   @override

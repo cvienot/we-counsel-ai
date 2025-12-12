@@ -20,6 +20,7 @@
     "db:validate": "node scripts/db.js validate",
     "db:fix": "node scripts/db.js fix",
     "db:export": "node scripts/db.js export",
+    "test:e2e": "./scripts/run-e2e-tests.sh",
     "dynamodb": "node scripts/start-dynamodb.js",
     "setup:db": "node scripts/setup-database.js",
     "seed:db": "node scripts/seed-database.js",

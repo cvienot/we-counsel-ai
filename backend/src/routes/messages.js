@@ -1,7 +1,8 @@
 const express = require('express');
-const { docClient, TABLES, GetCommand, PutCommand, QueryCommand, UpdateCommand } = require('../config/database');
+const { docClient, TABLES, PutCommand, QueryCommand, GetCommand, UpdateCommand } = require('../config/database');
 const { authenticateToken } = require('../middleware/authMiddleware');
-const { generateCounsellorResponse } = require('../services/aiService');
+const { aiService } = require('../services');
+const { generateCounsellorResponse } = aiService;
 const streamingService = require('../services/streamingService');
 const { randomUUID } = require('crypto');
 

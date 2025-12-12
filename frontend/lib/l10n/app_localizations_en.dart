@@ -95,6 +95,56 @@ class AppLocalizationsEn extends AppLocalizations {
   String get invitePartner => 'Invite Partner';
 
   @override
+  String get inviteYourPartner => 'Invite Your Partner';
+
+  @override
+  String get sendInvitation => 'Send Invitation';
+
+  @override
+  String get invitePartnerDescription =>
+      'Invite your partner to join you on We Counsel. They will receive an email with instructions to create their account and connect with you.';
+
+  @override
+  String get partnerEmailAddress => 'Partner\'s Email Address';
+
+  @override
+  String get enterPartnerEmail => 'Enter your partner\'s email address';
+
+  @override
+  String get pleaseEnterPartnerEmail => 'Please enter your partner\'s email';
+
+  @override
+  String get pleaseEnterValidEmail => 'Please enter a valid email address';
+
+  @override
+  String get cannotInviteYourself => 'You cannot invite yourself';
+
+  @override
+  String get personalMessageOptional => 'Personal Message (Optional)';
+
+  @override
+  String get addPersonalMessage =>
+      'Add a personal message to your invitation...';
+
+  @override
+  String get invitationSent => 'Invitation Sent!';
+
+  @override
+  String invitationSentMessage(String email) {
+    return 'An invitation has been sent to $email. They will receive an email with instructions to join you on We Counsel.';
+  }
+
+  @override
+  String get failedToSendInvitation => 'Failed to send invitation';
+
+  @override
+  String get invitationSteps =>
+      '1. Your partner will receive an email invitation\n2. They can click the link to create their account\n3. Once they accept, you\'ll both be connected\n4. You can start having conversations with AI guidance';
+
+  @override
+  String get ok => 'OK';
+
+  @override
   String get waitingForPartner => 'Waiting for your partner to join...';
 
   @override

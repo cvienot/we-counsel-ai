@@ -268,6 +268,96 @@ abstract class AppLocalizations {
   /// **'Invite Partner'**
   String get invitePartner;
 
+  /// Invite partner screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Invite Your Partner'**
+  String get inviteYourPartner;
+
+  /// Send invitation card title
+  ///
+  /// In en, this message translates to:
+  /// **'Send Invitation'**
+  String get sendInvitation;
+
+  /// Invite partner description text
+  ///
+  /// In en, this message translates to:
+  /// **'Invite your partner to join you on We Counsel. They will receive an email with instructions to create their account and connect with you.'**
+  String get invitePartnerDescription;
+
+  /// Partner email field label
+  ///
+  /// In en, this message translates to:
+  /// **'Partner\'s Email Address'**
+  String get partnerEmailAddress;
+
+  /// Partner email field hint
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your partner\'s email address'**
+  String get enterPartnerEmail;
+
+  /// Partner email validation error
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your partner\'s email'**
+  String get pleaseEnterPartnerEmail;
+
+  /// Email format validation error
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email address'**
+  String get pleaseEnterValidEmail;
+
+  /// Self-invite validation error
+  ///
+  /// In en, this message translates to:
+  /// **'You cannot invite yourself'**
+  String get cannotInviteYourself;
+
+  /// Personal message field label
+  ///
+  /// In en, this message translates to:
+  /// **'Personal Message (Optional)'**
+  String get personalMessageOptional;
+
+  /// Personal message field hint
+  ///
+  /// In en, this message translates to:
+  /// **'Add a personal message to your invitation...'**
+  String get addPersonalMessage;
+
+  /// Invitation sent dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Invitation Sent!'**
+  String get invitationSent;
+
+  /// Invitation sent success message
+  ///
+  /// In en, this message translates to:
+  /// **'An invitation has been sent to {email}. They will receive an email with instructions to join you on We Counsel.'**
+  String invitationSentMessage(String email);
+
+  /// Failed to send invitation error prefix
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to send invitation'**
+  String get failedToSendInvitation;
+
+  /// Invitation process steps
+  ///
+  /// In en, this message translates to:
+  /// **'1. Your partner will receive an email invitation\n2. They can click the link to create their account\n3. Once they accept, you\'ll both be connected\n4. You can start having conversations with AI guidance'**
+  String get invitationSteps;
+
+  /// OK button text
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get ok;
+
   /// Waiting for partner message
   ///
   /// In en, this message translates to:

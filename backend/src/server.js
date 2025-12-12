@@ -65,6 +65,12 @@ app.use('/api/conversations', conversationRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/streaming', streamingRoutes);
 
+// Test routes (only enabled in test mode)
+if (process.env.ENABLE_TEST_ENDPOINTS === 'true') {
+  const testRoutes = require('./routes/test');
+  app.use('/api/test', testRoutes);
+}
+
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({
@@ -229,7 +235,8 @@ streamingService.on('newMessage', async ({ conversationId, senderUserId, message
   try {
     // Get conversation details to find the partner
     const { docClient, TABLES, GetCommand, QueryCommand } = require('./config/database');
-    const emailService = require('./services/emailService');
+    const { emailService } = require('./services');
+    const { sendMessageNotification } = emailService;
     
     const params = {
       TableName: TABLES.CONVERSATIONS,
@@ -266,7 +273,7 @@ streamingService.on('newMessage', async ({ conversationId, senderUserId, message
           // Send email notification (only for user messages, not AI)
           if (message.senderType === 'user') {
             try {
-              await emailService.sendMessageNotification({
+              await sendMessageNotification({
                 to: user.email,
                 recipientName: user.firstName,
                 senderName: message.senderName,

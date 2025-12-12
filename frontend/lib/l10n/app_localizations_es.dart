@@ -95,6 +95,60 @@ class AppLocalizationsEs extends AppLocalizations {
   String get invitePartner => 'Invitar Pareja';
 
   @override
+  String get inviteYourPartner => 'Invita a tu pareja';
+
+  @override
+  String get sendInvitation => 'Enviar invitación';
+
+  @override
+  String get invitePartnerDescription =>
+      'Invita a tu pareja a unirse a ti en We Counsel. Recibirá un correo electrónico con instrucciones para crear su cuenta y conectarse contigo.';
+
+  @override
+  String get partnerEmailAddress =>
+      'Dirección de correo electrónico de la pareja';
+
+  @override
+  String get enterPartnerEmail =>
+      'Ingresa la dirección de correo electrónico de tu pareja';
+
+  @override
+  String get pleaseEnterPartnerEmail =>
+      'Por favor, ingresa el correo electrónico de tu pareja';
+
+  @override
+  String get pleaseEnterValidEmail =>
+      'Por favor, ingresa una dirección de correo electrónico válida';
+
+  @override
+  String get cannotInviteYourself => 'No puedes invitarte a ti mismo';
+
+  @override
+  String get personalMessageOptional => 'Mensaje personal (opcional)';
+
+  @override
+  String get addPersonalMessage =>
+      'Agrega un mensaje personal a tu invitación...';
+
+  @override
+  String get invitationSent => '¡Invitación enviada!';
+
+  @override
+  String invitationSentMessage(String email) {
+    return 'Se ha enviado una invitación a $email. Recibirá un correo electrónico con instrucciones para unirse a ti en We Counsel.';
+  }
+
+  @override
+  String get failedToSendInvitation => 'Error al enviar la invitación';
+
+  @override
+  String get invitationSteps =>
+      '1. Tu pareja recibirá una invitación por correo electrónico\\n2. Puede hacer clic en el enlace para crear su cuenta\\n3. Una vez que la acepte, ambos estarán conectados\\n4. Pueden comenzar a tener conversaciones con orientación de IA';
+
+  @override
+  String get ok => 'OK';
+
+  @override
   String get waitingForPartner => 'Esperando a su pareja...';
 
   @override

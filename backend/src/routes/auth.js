@@ -3,7 +3,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { randomUUID } = require('crypto');
 const { docClient, TABLES, QueryCommand, PutCommand, GetCommand } = require('../config/database');
-const { sendInvitationEmail } = require('../services/emailService');
+const { emailService } = require('../services');
+const { sendInvitationEmail, sendWelcomeEmail } = emailService;
 const { authenticateToken } = require('../middleware/authMiddleware');
 
 const router = express.Router();
@@ -84,8 +85,20 @@ router.post('/register', async (req, res) => {
     // Generate token
     const token = generateToken(userId);
 
+    // Send welcome email
+    try {
+      await sendWelcomeEmail({
+        to: email.toLowerCase(),
+        firstName,
+        language: language || 'en'
+      });
+    } catch (emailError) {
+      console.error('Failed to send welcome email:', emailError);
+      // Don't fail registration if email fails
+    }
+
     // Remove password from response
-    const { passwordHash: _, ...userResponse } = userData;
+    const { passwordHash: _, ...userResponse} = userData;
 
     res.status(201).json({
       success: true,

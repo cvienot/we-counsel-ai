@@ -175,5 +175,6 @@ module.exports = {
   DeleteCommand: require('@aws-sdk/lib-dynamodb').DeleteCommand,
   QueryCommand: require('@aws-sdk/lib-dynamodb').QueryCommand,
   ScanCommand: require('@aws-sdk/lib-dynamodb').ScanCommand,
+  TransactWriteCommand: require('@aws-sdk/lib-dynamodb').TransactWriteCommand,
 };
 

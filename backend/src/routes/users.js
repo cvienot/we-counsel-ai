@@ -1,5 +1,5 @@
 const express = require('express');
-const { docClient, TABLES, GetCommand, PutCommand, QueryCommand, UpdateCommand, ScanCommand } = require('../config/database');
+const { docClient, TABLES, GetCommand, PutCommand, QueryCommand, UpdateCommand, ScanCommand, TransactWriteCommand } = require('../config/database');
 const { authenticateToken } = require('../middleware/authMiddleware');
 const { randomUUID } = require('crypto');
 
@@ -286,7 +286,7 @@ router.post('/accept-invitation/:invitationId', authenticateToken, async (req, r
       TransactItems: transactItems
     };
 
-    await docClient.transactWrite(transactParams).promise();
+    await docClient.send(new TransactWriteCommand(transactParams));
 
     res.json({
       success: true,
