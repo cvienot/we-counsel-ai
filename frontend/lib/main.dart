@@ -146,6 +146,10 @@ class WeCounselApp extends ConsumerWidget {
         ),
         GoRoute(
           path: '/home',
+          builder: (context, state) => const HomeScreen(),
+        ),
+        GoRoute(
+          path: '/main-thread',
           builder: (context, state) => const MainThreadScreen(),
         ),
         GoRoute(
