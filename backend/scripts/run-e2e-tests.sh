@@ -180,7 +180,7 @@ cd "$FRONTEND_DIR"
 # Run integration tests on macOS desktop (officially supported by integration_test)
 flutter test integration_test/complete_journey_test.dart \
     -d macos \
-    --dart-define=API_URL=http://localhost:$API_PORT
+    --dart-define=API_BASE_URL=http://localhost:$API_PORT/api
 
 TEST_EXIT_CODE=$?
 

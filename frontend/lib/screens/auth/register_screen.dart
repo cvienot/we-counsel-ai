@@ -44,6 +44,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   Future<void> _handleRegister() async {
     if (_formKey.currentState!.validate()) {
       if (!_termsAccepted) {
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('You must accept the Terms of Service to create an account'),
@@ -80,7 +81,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
             );
           }
           
-          context.go('/home');
+          // Don't manually navigate - let the router redirect automatically
+          // based on the updated auth state (isAuthenticated: true)
+          // The router will see we're authenticated and redirect to /home
         }
       } catch (e) {
         if (mounted) {

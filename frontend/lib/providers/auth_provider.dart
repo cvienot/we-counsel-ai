@@ -102,16 +102,28 @@ class AuthNotifier extends StateNotifier<AuthState> {
         termsAccepted: termsAccepted,
       );
       
+      print('🔵 AUTH: Register response: ${response.toString()}');
+      print('🔵 AUTH: success=${response['success']}, user=${response['user'] != null}');
+      
       if (response['success'] == true && response['user'] != null) {
         final user = User.fromJson(response['user']);
+        print('🔵 AUTH: Setting auth state - isAuthenticated: true');
         state = state.copyWith(
           user: user,
           isLoading: false,
           isAuthenticated: true,
         );
+        print('🔵 AUTH: State updated - isAuth: ${state.isAuthenticated}');
         
         // Connect to realtime service after successful registration
-        await _realtimeService.connect();
+        try {
+          print('🔵 AUTH: Connecting to realtime service...');
+          await _realtimeService.connect();
+          print('🔵 AUTH: Realtime service connected');
+        } catch (e) {
+          print('🔵 AUTH: Realtime service connection failed: $e (non-critical)');
+          // Don't fail registration if realtime connection fails
+        }
         
         // If there's a pending invitation, accept it automatically
         if (invitationId != null) {

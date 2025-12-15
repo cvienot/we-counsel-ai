@@ -44,31 +44,54 @@ void main() {
       // ============================================
       print('\n📝 Step 1: User1 Registration via UI');
       
-      // Should be on login/register screen
+      // Should be on login screen after splash
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+      
+      // Navigate to register screen  
+      final signUpLink = find.text('Don\'t have an account? Sign up');
+      expect(signUpLink, findsOneWidget);
+      await tester.tap(signUpLink);
       await tester.pumpAndSettle();
       
-      // Look for registration flow - adapt based on your actual UI
-      // For now, we'll do a hybrid approach: test critical UI paths, use API for setup
+      print('   📝 Filling registration form...');
       
-      // Use API for user registration to keep test focused on core flows
-      final registerResponse = await http.post(
-        Uri.parse('$apiUrl/api/auth/register'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'email': user1Email,
-          'password': user1Password,
-          'firstName': 'Alice',
-          'lastName': 'Smith',
-          'language': 'en',
-          'termsAccepted': true,
-        }),
-      );
+      // Fill registration form by field order (First Name, Last Name, Email, Password, Confirm Password)
+      final allFields = find.byType(TextFormField);
+      await tester.enterText(allFields.at(0), 'Alice');        // First Name
+      await tester.enterText(allFields.at(1), 'Smith');        // Last Name  
+      await tester.enterText(allFields.at(2), user1Email);     // Email
+      await tester.enterText(allFields.at(3), user1Password);  // Password
+      await tester.enterText(allFields.at(4), user1Password);  // Confirm Password
       
-      expect(registerResponse.statusCode, 201, reason: 'Registration should succeed');
-      final registerData = jsonDecode(registerResponse.body);
-      final user1Token = registerData['token'];
+      // Accept terms
+      final termsCheckbox = find.byType(Checkbox);
+      await tester.tap(termsCheckbox);
+      await tester.pumpAndSettle();
       
-      print('   ✅ User1 registered');
+      // Submit
+      final createButton = find.widgetWithText(ElevatedButton, 'Create Account');
+      await tester.tap(createButton);
+      
+      // Wait for API call and navigation - pump repeatedly until navigation completes
+      print('   ⏳ Waiting for registration...');
+      bool navigationComplete = false;
+      for (int i = 0; i < 100 && !navigationComplete; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+        // Check if we've left registration screen
+        navigationComplete = find.text('Create Account').evaluate().isEmpty;
+      }
+      await tester.pumpAndSettle(const Duration(seconds: 5));
+      
+      // Wait for auth state to fully update and home screen to render
+      // Look for home screen elements
+      bool onHomeScreen = false;
+      for (int i = 0; i < 30 && !onHomeScreen; i++) {
+        await tester.pump(const Duration(milliseconds: 200));
+        onHomeScreen = find.text('Invite Your Partner').evaluate().isNotEmpty ||
+                       find.text('Main Thread').evaluate().isNotEmpty;
+      }
+      
+      print('   ✅ User1 registered via UI');
       
       // Verify welcome email was sent
       final welcomeEmail = await testHelper.waitForEmail(
@@ -76,26 +99,45 @@ void main() {
         type: 'welcome',
         timeout: const Duration(seconds: 5),
       );
-      expect(welcomeEmail, isNotNull, reason: 'Welcome email should be sent');
-      print('   ✅ Welcome email sent');
+      expect(welcomeEmail, isNotNull, reason: 'Welcome email should be sent to User1');
+      expect(welcomeEmail['to'], user1Email);
+      print('   ✅ Welcome email sent to $user1Email');
+      
+      // Get token for API operations (login to get token)
+      final loginResponse = await http.post(
+        Uri.parse('$apiUrl/api/auth/login'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': user1Email, 'password': user1Password}),
+      );
+      final user1Token = jsonDecode(loginResponse.body)['token'];
+      print('   ✅ Got user token for API calls');
       
       // ============================================
       // STEP 2: User1 sends partner invitation
       // ============================================
       print('\n📧 Step 2: User1 sends partner invitation');
       
+      // Send invitation via API (UI validated in Step 1)
       final inviteResponse = await http.post(
         Uri.parse('$apiUrl/api/auth/invite-partner'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $user1Token',
         },
-        body: jsonEncode({'email': user2Email}),
+        body: jsonEncode({
+          'email': user2Email,
+        }),
       );
       
-      expect(inviteResponse.statusCode, 201, reason: 'Invitation should be sent');
+      if (inviteResponse.statusCode != 201) {
+        print('   ❌ Invite failed: ${inviteResponse.statusCode} - ${inviteResponse.body}');
+      }
+      expect(inviteResponse.statusCode, 201, 
+        reason: 'Invitation should be sent successfully');
+      
       final inviteData = jsonDecode(inviteResponse.body);
       final invitationId = inviteData['invitation']['invitationId'];
+      
       print('   ✅ Invitation sent');
       
       // Verify invitation email was sent
@@ -134,6 +176,16 @@ void main() {
       final user2Token = user2Data['token'];
       
       print('   ✅ User2 registered');
+      
+      // Verify welcome email was sent to User2
+      final welcomeEmail2 = await testHelper.waitForEmail(
+        to: user2Email,
+        type: 'welcome',
+        timeout: const Duration(seconds: 5),
+      );
+      expect(welcomeEmail2, isNotNull, reason: 'Welcome email should be sent to User2');
+      expect(welcomeEmail2['to'], user2Email);
+      print('   ✅ Welcome email sent to $user2Email');
       
       // ============================================
       // STEP 4: User2 accepts invitation

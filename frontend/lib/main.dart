@@ -17,8 +17,12 @@ import 'screens/conversations/conversation_screen.dart';
 import 'screens/profile/profile_screen.dart';
 import 'screens/invite/invite_partner_screen.dart';
 import 'screens/settings/language_selection_screen.dart';
+import 'config/environment.dart';
 
 void main() {
+  // Print environment config for debugging
+  Environment.printConfig();
+  
   // Use path-based routing instead of hash-based routing
   setPathUrlStrategy();
   runApp(const ProviderScope(child: WeCounselApp()));
