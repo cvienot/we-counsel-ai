@@ -56,12 +56,12 @@ Context: ${context || 'Ongoing couples therapy session with both partners presen
     }));
 
     const stream = await openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-5.2',
       messages: [
         { role: 'system', content: systemPrompt },
         ...conversationHistory
       ],
-      max_tokens: 500,
+      max_completion_tokens: 500,
       temperature: 0.7,
       stream: true,
     });
@@ -93,7 +93,7 @@ const summarizeConversation = async ({ messages, conversationTitle }) => {
     ).join('\n');
 
     const response = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
+      model: 'gpt-5-mini',
       messages: [
         {
           role: 'system',
@@ -109,7 +109,7 @@ const summarizeConversation = async ({ messages, conversationTitle }) => {
           content: `Please summarize this conversation titled "${conversationTitle}":\n\n${messageText}`
         }
       ],
-      max_tokens: 300,
+      max_completion_tokens: 300,
       temperature: 0.5,
     });
 
