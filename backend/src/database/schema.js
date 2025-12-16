@@ -86,6 +86,14 @@ const tables = {
         },
         projection: 'ALL',
         description: 'Query invitations by inviter'
+      },
+      {
+        indexName: 'email-index',
+        keys: {
+          partitionKey: { name: 'email', type: 'S' }
+        },
+        projection: 'ALL',
+        description: 'Query invitations by email address'
       }
     ]
   },
