@@ -48,6 +48,71 @@ if (process.env.ENABLE_TEST_ENDPOINTS === 'true') {
     });
   });
 
+  // Connect two users as partners (for E2E testing)
+  router.post('/connect-partners', async (req, res) => {
+    const { user1Id, user2Id } = req.body;
+    
+    if (!user1Id || !user2Id) {
+      return res.status(400).json({
+        error: 'Missing user IDs',
+        message: 'user1Id and user2Id are required'
+      });
+    }
+
+    try {
+      const { docClient, TABLES, PutCommand, UpdateCommand, GetCommand } = require('../config/database');
+      const { randomUUID } = require('crypto');
+
+      // Create couple record
+      const coupleId = randomUUID();
+      const coupleData = {
+        coupleId,
+        user1Id,
+        user2Id,
+        status: 'active',
+        createdAt: new Date().toISOString()
+      };
+
+      await docClient.send(new PutCommand({
+        TableName: TABLES.COUPLES,
+        Item: coupleData
+      }));
+
+      // Update both users with partnerId and coupleId
+      await docClient.send(new UpdateCommand({
+        TableName: TABLES.USERS,
+        Key: { userId: user1Id },
+        UpdateExpression: 'SET partnerId = :partnerId, coupleId = :coupleId',
+        ExpressionAttributeValues: {
+          ':partnerId': user2Id,
+          ':coupleId': coupleId
+        }
+      }));
+
+      await docClient.send(new UpdateCommand({
+        TableName: TABLES.USERS,
+        Key: { userId: user2Id },
+        UpdateExpression: 'SET partnerId = :partnerId, coupleId = :coupleId',
+        ExpressionAttributeValues: {
+          ':partnerId': user1Id,
+          ':coupleId': coupleId
+        }
+      }));
+
+      res.json({
+        success: true,
+        message: 'Partners connected successfully',
+        coupleId
+      });
+    } catch (error) {
+      console.error('Error connecting partners:', error);
+      res.status(500).json({
+        error: 'Failed to connect partners',
+        message: error.message
+      });
+    }
+  });
+
   // Get test environment status
   router.get('/status', (req, res) => {
     res.json({

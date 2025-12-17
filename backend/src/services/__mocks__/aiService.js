@@ -69,6 +69,35 @@ function generateMockResponse(userMessage) {
   return "Thank you for sharing that. I'm here to support you and your partner. This is a safe space where we can explore your thoughts and feelings together. How does your partner feel about this?";
 }
 
+const summarizeConversation = async ({ messages, conversationTitle }) => {
+  // Generate a mock summary based on message content
+  const messageCount = messages.length;
+  const userMessages = messages.filter(m => m.senderType === 'user');
+  const topics = new Set();
+  
+  // Extract some keywords from messages
+  userMessages.forEach(msg => {
+    const content = msg.content.toLowerCase();
+    if (content.includes('problem') || content.includes('issue')) topics.add('challenges');
+    if (content.includes('feel') || content.includes('emotion')) topics.add('emotions');
+    if (content.includes('communication')) topics.add('communication');
+    if (content.includes('love') || content.includes('care')) topics.add('affection');
+  });
+  
+  const topicsList = Array.from(topics).join(', ') || 'relationship dynamics';
+  
+  const summary = `Session Summary for "${conversationTitle}":
+
+The couple engaged in ${messageCount} exchanges discussing ${topicsList}. Both partners participated actively in the conversation, sharing their perspectives and feelings. Key themes included understanding each other's needs and working on their relationship together. The session showed progress in opening up communication channels.
+
+Areas for continued focus: Further exploration of underlying needs, practicing active listening, and building emotional connection.`;
+
+  console.log('🤖 MOCK AI Summary generated:', summary.substring(0, 100) + '...');
+  
+  return summary;
+};
+
 module.exports = {
-  generateCounsellorResponse
+  generateCounsellorResponse,
+  summarizeConversation
 };

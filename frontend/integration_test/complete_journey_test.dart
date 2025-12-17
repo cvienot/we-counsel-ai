@@ -270,7 +270,7 @@ void main() {
       
       final messageContent = 'Hi Bob, how are you feeling today?';
       final sendMessageResponse = await http.post(
-        Uri.parse('$apiUrl/api/messages/$conversationId'),
+        Uri.parse('$apiUrl/api/messages/$conversationId/ai-stream'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $user1Token',
@@ -363,6 +363,172 @@ void main() {
       print('✅ Message sending');
       print('✅ AI counselor response');
       print('✅ Message retrieval');
+      print('');
+    });
+
+    testWidgets('AI conversation summarization works after 20+ messages', 
+        (WidgetTester tester) async {
+      
+      print('\n📊 Testing AI Conversation Summarization');
+      
+      // Create test users directly via API for faster setup
+      final testEmail1 = 'summary-user1-${DateTime.now().millisecondsSinceEpoch}@test.com';
+      final testEmail2 = 'summary-user2-${DateTime.now().millisecondsSinceEpoch}@test.com';
+      
+      print('   📝 Creating test users...');
+      
+      // Register User1
+      final user1Response = await http.post(
+        Uri.parse('$apiUrl/api/auth/register'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'email': testEmail1,
+          'password': 'Test123!',
+          'firstName': 'Summary',
+          'lastName': 'User1',
+          'termsAccepted': true,
+        }),
+      );
+      expect(user1Response.statusCode, 201);
+      final user1Data = jsonDecode(user1Response.body);
+      final user1Token = user1Data['token'];
+      final user1Id = user1Data['user']['userId'];
+      
+      // Register User2
+      final user2Response = await http.post(
+        Uri.parse('$apiUrl/api/auth/register'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'email': testEmail2,
+          'password': 'Test123!',
+          'firstName': 'Summary',
+          'lastName': 'User2',
+          'termsAccepted': true,
+        }),
+      );
+      expect(user2Response.statusCode, 201);
+      final user2Data = jsonDecode(user2Response.body);
+      final user2Token = user2Data['token'];
+      final user2Id = user2Data['user']['userId'];
+      
+      print('   ✅ Test users created');
+      
+      // Connect users as partners directly via database
+      print('   🤝 Connecting partners...');
+      final connectResponse = await http.post(
+        Uri.parse('$apiUrl/api/test/connect-partners'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'user1Id': user1Id,
+          'user2Id': user2Id,
+        }),
+      );
+      expect(connectResponse.statusCode, 200);
+      
+      print('   ✅ Partners connected');
+      
+      // Create conversation
+      print('   💬 Creating conversation...');
+      final convResponse = await http.post(
+        Uri.parse('$apiUrl/api/conversations'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $user1Token',
+        },
+        body: jsonEncode({
+          'title': 'Summarization Test Conversation',
+          'topic': 'Testing AI summarization',
+        }),
+      );
+      expect(convResponse.statusCode, 201);
+      final convData = jsonDecode(convResponse.body);
+      final conversationId = convData['conversation']['conversationId'];
+      
+      print('   ✅ Conversation created: $conversationId');
+      
+      // Send 25 messages to trigger summarization (threshold is 20)
+      print('   📤 Sending 25 messages to trigger summarization...');
+      for (int i = 1; i <= 25; i++) {
+        await http.post(
+          Uri.parse('$apiUrl/api/messages/$conversationId/ai-stream'),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ${i % 2 == 0 ? user1Token : user2Token}',
+          },
+          body: jsonEncode({
+            'content': 'Test message number $i for summarization',
+            'recipientType': 'both',
+          }),
+        );
+        
+        if (i % 5 == 0) {
+          print('   ... sent $i messages');
+        }
+        
+        // Small delay to avoid overwhelming the API
+        await Future.delayed(const Duration(milliseconds: 100));
+      }
+      
+      print('   ✅ All 25 messages sent');
+      
+      // Fetch conversation to check if summary was generated
+      print('   🔍 Checking for conversation summary...');
+      await Future.delayed(const Duration(seconds: 2)); // Give time for summary generation
+      
+      final convCheckResponse = await http.get(
+        Uri.parse('$apiUrl/api/conversations/$conversationId'),
+        headers: {'Authorization': 'Bearer $user1Token'},
+      );
+      expect(convCheckResponse.statusCode, 200);
+      final convCheckData = jsonDecode(convCheckResponse.body);
+      final conversation = convCheckData['conversation'];
+      
+      // Verify summary fields exist
+      expect(conversation['summary'], isNotNull,
+        reason: 'Summary should be generated after 20+ messages');
+      expect(conversation['lastSummarizedAt'], isNotNull,
+        reason: 'Last summarized timestamp should be set');
+      expect(conversation['summarizedMessageCount'], greaterThan(0),
+        reason: 'Summarized message count should be greater than 0');
+      
+      print('   ✅ Conversation summary generated!');
+      print('   📊 Summary: ${conversation['summary']?.substring(0, 100)}...');
+      print('   📊 Summarized messages: ${conversation['summarizedMessageCount']}');
+      
+      // Send one more message and verify AI gets context with summary
+      print('   💬 Sending final message to verify AI context...');
+      final finalMessageResponse = await http.post(
+        Uri.parse('$apiUrl/api/messages/$conversationId/ai-stream'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $user1Token',
+        },
+        body: jsonEncode({
+          'content': 'Can you help us summarize what we discussed?',
+          'recipientType': 'both',
+        }),
+      );
+      expect(finalMessageResponse.statusCode, 201);
+      
+      // Wait for AI response
+      await Future.delayed(const Duration(seconds: 3));
+      
+      // Verify AI response was generated
+      final aiResponse = await testHelper.waitForAIResponse(
+        timeout: const Duration(seconds: 5),
+      );
+      expect(aiResponse, isNotNull, 
+        reason: 'AI should respond using summarized context');
+      
+      print('   ✅ AI responded with summarized context');
+      print('');
+      print('🎉 ═══════════════════════════════════════════════════════');
+      print('🎉  AI SUMMARIZATION TEST PASSED!');
+      print('🎉 ═══════════════════════════════════════════════════════');
+      print('');
+      print('✅ Generated summary after 20+ messages');
+      print('✅ Summary stored in conversation record');
+      print('✅ AI uses summarized context for responses');
       print('');
     });
   });

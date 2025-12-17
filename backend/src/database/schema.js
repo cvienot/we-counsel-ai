@@ -113,6 +113,9 @@ const tables = {
       { name: 'isActive', type: 'BOOL', description: 'Whether conversation is active' },
       { name: 'lastMessageAt', type: 'S', description: 'ISO timestamp of last message' },
       { name: 'messageCount', type: 'N', description: 'Total number of messages' },
+      { name: 'summary', type: 'S', description: 'AI-generated summary of conversation history for context management' },
+      { name: 'lastSummarizedAt', type: 'S', description: 'ISO timestamp when summary was last updated' },
+      { name: 'summarizedMessageCount', type: 'N', description: 'Number of messages included in the summary' },
       { name: 'createdAt', type: 'S', description: 'ISO timestamp of creation' }
     ],
     globalSecondaryIndexes: [
