@@ -68,6 +68,32 @@ cleanup() {
 # Trap signals for cleanup
 trap cleanup EXIT INT TERM
 
+#############################################
+# 0. Pre-flight Check: Detect existing processes
+#############################################
+echo -e "${YELLOW}🔍 Pre-flight check: Detecting existing processes...${NC}\n"
+
+# Check for existing server.js processes
+EXISTING_SERVER=$(ps aux | grep "node.*src/server.js" | grep -v grep | awk '{print $2}')
+if [ ! -z "$EXISTING_SERVER" ]; then
+    echo -e "${RED}❌ ERROR: Existing API server process(es) detected!${NC}"
+    echo -e "${RED}   PID(s): $EXISTING_SERVER${NC}"
+    echo -e "${YELLOW}   These processes may interfere with E2E tests.${NC}"
+    echo -e "${YELLOW}   Please stop them manually or run: kill $EXISTING_SERVER${NC}\n"
+    exit 1
+fi
+
+# Check if ports are in use
+if lsof -Pi :$API_PORT -sTCP:LISTEN -t >/dev/null 2>&1; then
+    PORT_PID=$(lsof -Pi :$API_PORT -sTCP:LISTEN -t)
+    echo -e "${RED}❌ ERROR: Port $API_PORT is already in use!${NC}"
+    echo -e "${RED}   Process PID: $PORT_PID${NC}"
+    echo -e "${YELLOW}   Please stop the process or run: kill $PORT_PID${NC}\n"
+    exit 1
+fi
+
+echo -e "${GREEN}✅ Pre-flight check passed - no conflicting processes${NC}\n"
+
 echo -e "${BLUE}╔══════════════════════════════════════╗${NC}"
 echo -e "${BLUE}║       E2E Test Environment Setup     ║${NC}"
 echo -e "${BLUE}╚══════════════════════════════════════╝${NC}\n"
