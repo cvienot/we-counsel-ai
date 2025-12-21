@@ -71,14 +71,28 @@ void main() {
       // Submit
       final createButton = find.widgetWithText(ElevatedButton, 'Create Account');
       await tester.tap(createButton);
+      await tester.pumpAndSettle();
+      
+      // Plan selection screen should appear
+      print('   📋 Waiting for plan selection screen...');
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+      
+      // Select free plan (should be pre-selected) and continue
+      final continuePlanButton = find.text('Continue with Free');
+      if (continuePlanButton.evaluate().isNotEmpty) {
+        print('   ✅ Plan selection screen appeared');
+        await tester.tap(continuePlanButton);
+        await tester.pumpAndSettle();
+      }
       
       // Wait for API call and navigation - pump repeatedly until navigation completes
       print('   ⏳ Waiting for registration...');
       bool navigationComplete = false;
       for (int i = 0; i < 100 && !navigationComplete; i++) {
         await tester.pump(const Duration(milliseconds: 100));
-        // Check if we've left registration screen
-        navigationComplete = find.text('Create Account').evaluate().isEmpty;
+        // Check if we've left registration/plan selection screen
+        navigationComplete = find.text('Create Account').evaluate().isEmpty &&
+                             find.text('Continue with Free').evaluate().isEmpty;
       }
       await tester.pumpAndSettle(const Duration(seconds: 5));
       
@@ -377,7 +391,7 @@ void main() {
       
       print('   📝 Creating test users...');
       
-      // Register User1
+      // Register User1 with premium tier for unlimited AI messages
       final user1Response = await http.post(
         Uri.parse('$apiUrl/api/auth/register'),
         headers: {'Content-Type': 'application/json'},
@@ -387,6 +401,7 @@ void main() {
           'firstName': 'Summary',
           'lastName': 'User1',
           'termsAccepted': true,
+          'subscriptionTier': 'premium',
         }),
       );
       expect(user1Response.statusCode, 201);
@@ -394,7 +409,7 @@ void main() {
       final user1Token = user1Data['token'];
       final user1Id = user1Data['user']['userId'];
       
-      // Register User2
+      // Register User2 with premium tier for unlimited AI messages
       final user2Response = await http.post(
         Uri.parse('$apiUrl/api/auth/register'),
         headers: {'Content-Type': 'application/json'},
@@ -404,6 +419,7 @@ void main() {
           'firstName': 'Summary',
           'lastName': 'User2',
           'termsAccepted': true,
+          'subscriptionTier': 'premium',
         }),
       );
       expect(user2Response.statusCode, 201);
@@ -413,7 +429,7 @@ void main() {
       
       print('   ✅ Test users created');
       
-      // Connect users as partners directly via database
+      // Connect users as partners directly via database with premium tier
       print('   🤝 Connecting partners...');
       final connectResponse = await http.post(
         Uri.parse('$apiUrl/api/test/connect-partners'),
@@ -421,6 +437,7 @@ void main() {
         body: jsonEncode({
           'user1Id': user1Id,
           'user2Id': user2Id,
+          'subscriptionTier': 'premium',
         }),
       );
       expect(connectResponse.statusCode, 200);

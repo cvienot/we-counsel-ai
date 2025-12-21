@@ -73,6 +73,7 @@ router.post('/register', async (req, res) => {
     const userId = randomUUID();
     const currentTimestamp = new Date().toISOString();
     const userLanguage = language || 'en';
+    
     const userData = {
       userId,
       email: email.toLowerCase(),
@@ -85,6 +86,7 @@ router.post('/register', async (req, res) => {
       termsAcceptedAt: currentTimestamp,
       termsAcceptedVersion: `1.0.0-${userLanguage}` // Include language in version for tracking
       // Note: partnerId and coupleId are omitted (not set to null) for AWS SDK v3 compatibility
+      // Note: subscriptionTier is now on the couple, not the user
     };
 
     const params = {

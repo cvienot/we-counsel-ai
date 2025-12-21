@@ -65,12 +65,24 @@ if (process.env.ENABLE_TEST_ENDPOINTS === 'true') {
 
       // Create couple record
       const coupleId = randomUUID();
+      const currentTimestamp = new Date().toISOString();
+      const nextResetDate = new Date();
+      nextResetDate.setMonth(nextResetDate.getMonth() + 1, 1);
+      
+      const subscriptionTier = req.body.subscriptionTier || 'premium'; // Default to premium for tests
+      
       const coupleData = {
         coupleId,
         user1Id,
         user2Id,
         status: 'active',
-        createdAt: new Date().toISOString()
+        createdAt: currentTimestamp,
+        // Initialize subscription for the couple
+        subscriptionTier,
+        subscriptionStatus: 'active',
+        subscriptionStartDate: currentTimestamp,
+        aiMessagesUsed: 0,
+        aiMessagesResetDate: nextResetDate.toISOString()
       };
 
       await docClient.send(new PutCommand({

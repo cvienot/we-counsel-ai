@@ -89,6 +89,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     String? invitationId,
     String? language,
     bool termsAccepted = false,
+    String? subscriptionTier,
   }) async {
     state = state.copyWith(isLoading: true, error: null);
     
@@ -100,6 +101,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         lastName: lastName,
         language: language,
         termsAccepted: termsAccepted,
+        subscriptionTier: subscriptionTier,
       );
       
       print('🔵 AUTH: Register response: ${response.toString()}');

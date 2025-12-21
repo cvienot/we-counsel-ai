@@ -1,8 +1,10 @@
 const express = require('express');
 const { docClient, TABLES, PutCommand, QueryCommand, GetCommand, UpdateCommand } = require('../config/database');
 const { authenticateToken } = require('../middleware/authMiddleware');
+const { checkAIMessageLimit } = require('../middleware/subscriptionMiddleware');
 const { aiService } = require('../services');
 const { generateCounsellorResponse, summarizeConversation } = aiService;
+const subscriptionService = require('../services/subscriptionService');
 const streamingService = require('../services/streamingService');
 const { randomUUID } = require('crypto');
 
@@ -195,8 +197,8 @@ router.get('/:conversationId', authenticateToken, async (req, res) => {
 
 // @route   POST /api/messages/:conversationId/ai-stream
 // @desc    Send a message and get streaming AI response
-// @access  Private
-router.post('/:conversationId/ai-stream', authenticateToken, async (req, res) => {
+// @access  Private (requires subscription check for AI messages)
+router.post('/:conversationId/ai-stream', authenticateToken, checkAIMessageLimit, async (req, res) => {
   try {
     const { conversationId } = req.params;
     const { content, recipientType = 'both' } = req.body;
@@ -356,6 +358,9 @@ router.post('/:conversationId/ai-stream', authenticateToken, async (req, res) =>
               // Send completion notification
               streamingService.streamAIResponse(conversationId, aiMessageId, '', true);
               streamingService.sendMessageNotification(conversationId, 'ai-counsellor', aiResponse);
+              
+              // Increment AI message usage counter
+              await subscriptionService.incrementAIMessageUsage(req.user.userId);
             },
             onError: (error) => {
               console.error('AI streaming error:', error);

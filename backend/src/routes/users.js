@@ -228,12 +228,24 @@ router.post('/accept-invitation/:invitationId', authenticateToken, async (req, r
 
     // Create couple
     const coupleId = randomUUID();
+    const currentTimestamp = new Date().toISOString();
+    const nextResetDate = new Date();
+    nextResetDate.setMonth(nextResetDate.getMonth() + 1, 1); // First day of next month
+    
+    // Get the higher subscription tier from both users (if they selected during registration)
+    // For now, default to free tier when couple is created
     const coupleData = {
       coupleId,
       partner1Id: invitation.inviterId,
       partner2Id: userId,
-      createdAt: new Date().toISOString(),
-      isActive: true
+      createdAt: currentTimestamp,
+      isActive: true,
+      // Initialize subscription for the couple
+      subscriptionTier: 'free',
+      subscriptionStatus: 'active',
+      subscriptionStartDate: currentTimestamp,
+      aiMessagesUsed: 0,
+      aiMessagesResetDate: nextResetDate.toISOString()
     };
 
     // Start transaction to update all records

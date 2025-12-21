@@ -169,6 +169,7 @@ class ApiService {
     required String lastName,
     String? language,
     bool termsAccepted = false,
+    String? subscriptionTier,
   }) async {
     try {
       final response = await _dio.post('/auth/register', data: {
@@ -178,6 +179,7 @@ class ApiService {
         'lastName': lastName,
         if (language != null) 'language': language,
         'termsAccepted': termsAccepted,
+        if (subscriptionTier != null) 'subscriptionTier': subscriptionTier,
       });
       
       if (response.data['token'] != null) {

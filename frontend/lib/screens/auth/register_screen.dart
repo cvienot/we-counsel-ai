@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/language_provider.dart';
+import '../plan_selection_screen.dart';
 import 'terms_of_service_screen.dart';
 
 
@@ -54,6 +55,19 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         return;
       }
       
+      // Show plan selection
+      final selectedPlan = await Navigator.push<String>(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const PlanSelectionScreen(),
+        ),
+      );
+      
+      if (selectedPlan == null) {
+        // User canceled plan selection
+        return;
+      }
+      
       try {
         final pendingInvitation = ref.read(pendingInvitationProvider);
         final currentLanguage = ref.read(currentLocaleProvider).languageCode;
@@ -66,6 +80,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           invitationId: pendingInvitation,
           language: currentLanguage,
           termsAccepted: _termsAccepted,
+          subscriptionTier: selectedPlan,
         );
         
         if (mounted) {

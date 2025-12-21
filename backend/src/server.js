@@ -65,6 +65,10 @@ app.use('/api/conversations', conversationRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/streaming', streamingRoutes);
 
+// Subscription routes
+const subscriptionRoutes = require('./routes/subscriptions');
+app.use('/api/subscriptions', subscriptionRoutes);
+
 // Test routes (only enabled in test mode)
 if (process.env.ENABLE_TEST_ENDPOINTS === 'true') {
   const testRoutes = require('./routes/test');

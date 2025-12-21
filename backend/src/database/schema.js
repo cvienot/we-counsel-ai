@@ -59,7 +59,15 @@ const tables = {
       { name: 'user1Id', type: 'S', description: 'First user in couple' },
       { name: 'user2Id', type: 'S', description: 'Second user in couple' },
       { name: 'status', type: 'S', description: 'Couple status (active, inactive)' },
-      { name: 'createdAt', type: 'S', description: 'ISO timestamp of creation' }
+      { name: 'createdAt', type: 'S', description: 'ISO timestamp of creation' },
+      
+      // Subscription fields (couple-based)
+      { name: 'subscriptionTier', type: 'S', description: 'Subscription tier (free, essential, premium)' },
+      { name: 'subscriptionStatus', type: 'S', description: 'Subscription status (active, canceled, expired)' },
+      { name: 'subscriptionStartDate', type: 'S', description: 'ISO timestamp when subscription started' },
+      { name: 'subscriptionEndDate', type: 'S', description: 'ISO timestamp when subscription ends' },
+      { name: 'aiMessagesUsed', type: 'N', description: 'AI messages used by couple in current billing period' },
+      { name: 'aiMessagesResetDate', type: 'S', description: 'ISO timestamp when usage counter resets' }
     ],
     globalSecondaryIndexes: []
   },
@@ -164,6 +172,40 @@ const tables = {
         },
         projection: 'ALL',
         description: 'Query all messages sent by a user'
+      }
+    ]
+  },
+
+  subscriptions: {
+    tableName: 'we-counsel-subscriptions',
+    description: 'Subscription history and payment records',
+    primaryKey: {
+      partitionKey: { name: 'subscriptionId', type: 'S' }
+    },
+    attributes: [
+      { name: 'subscriptionId', type: 'S', description: 'Unique subscription record identifier (UUID)' },
+      { name: 'coupleId', type: 'S', description: 'Couple who owns the subscription' },
+      { name: 'tier', type: 'S', description: 'Subscription tier (free, essential, premium)' },
+      { name: 'status', type: 'S', description: 'Status (active, canceled, expired)' },
+      { name: 'billingPeriod', type: 'S', description: 'Billing period (monthly, annual)' },
+      { name: 'amount', type: 'N', description: 'Amount paid in cents' },
+      { name: 'currency', type: 'S', description: 'Currency code (USD, EUR)' },
+      { name: 'startDate', type: 'S', description: 'ISO timestamp when subscription started' },
+      { name: 'endDate', type: 'S', description: 'ISO timestamp when subscription ends' },
+      { name: 'canceledAt', type: 'S', description: 'ISO timestamp when subscription was canceled' },
+      { name: 'paymentProvider', type: 'S', description: 'Payment provider (stripe, paypal)' },
+      { name: 'paymentId', type: 'S', description: 'External payment ID from provider' },
+      { name: 'createdAt', type: 'S', description: 'ISO timestamp of creation' }
+    ],
+    globalSecondaryIndexes: [
+      {
+        indexName: 'coupleId-index',
+        keys: {
+          partitionKey: { name: 'coupleId', type: 'S' },
+          sortKey: { name: 'createdAt', type: 'S' }
+        },
+        projection: 'ALL',
+        description: 'Query subscription history by couple'
       }
     ]
   }
