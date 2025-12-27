@@ -128,11 +128,12 @@ class _LegacyTermsOfServiceScreen extends StatelessWidget {
               _buildSection(
                 context,
                 '2. Description of Service',
-                'We Counsel is a counselling application designed to facilitate communication between couples. The Service provides:\n\n'
+                'We Counsel is a relationship communication support application designed to facilitate communication between couples. The Service provides:\n\n'
                 '• Private conversation spaces for couples\n'
-                '• AI-assisted counselling support\n'
+                '• AI-assisted relationship coaching and communication support\n'
                 '• Secure messaging and communication tools\n'
-                '• Partner connection and invitation features',
+                '• Partner connection and invitation features\n\n'
+                '⚠️ THIS SERVICE IS NOT THERAPY: We Counsel provides communication support and educational guidance only. It is not a substitute for professional therapy, counseling, or mental health treatment.',
               ),
               _buildSection(
                 context,
@@ -182,14 +183,31 @@ class _LegacyTermsOfServiceScreen extends StatelessWidget {
               ),
               _buildSection(
                 context,
-                '7. AI Counselling Features',
-                '7.1 Nature of Service:\n'
-                '• The AI counselling feature provides automated support and suggestions\n'
-                '• AI-generated advice is not a substitute for professional mental health services\n'
-                '• We do not guarantee the accuracy or appropriateness of AI-generated content\n\n'
-                '7.2 Professional Help:\n'
-                '• If you are experiencing a mental health crisis, please contact emergency services or a qualified mental health professional\n'
-                '• The Service is designed to support communication, not replace professional therapy',
+                '7. AI Relationship Coaching Features',
+                '⚠️ IMPORTANT DISCLAIMERS:\n\n'
+                '7.1 Not Therapy or Mental Health Treatment:\n'
+                '• The AI relationship coach provides communication support and educational guidance ONLY\n'
+                '• This is NOT therapy, counseling, or mental health treatment\n'
+                '• The AI is not a licensed therapist, psychologist, or mental health professional\n'
+                '• AI-generated advice is for informational and educational purposes only\n\n'
+                '7.2 No Substitute for Professional Help:\n'
+                '• The Service is NOT a substitute for professional therapy or mental health services\n'
+                '• We strongly encourage seeking licensed professional help for:\n'
+                '  - Mental health concerns (depression, anxiety, trauma, etc.)\n'
+                '  - Relationship crises or serious conflicts\n'
+                '  - Abuse, violence, or safety concerns\n'
+                '  - Suicidal thoughts or self-harm\n\n'
+                '7.3 Crisis Situations:\n'
+                '• If you are in crisis or immediate danger, call emergency services (112/911)\n'
+                '• For mental health crises, contact a crisis hotline or emergency services\n'
+                '• The AI cannot provide crisis intervention\n\n'
+                '7.4 Accuracy and Reliability:\n'
+                '• We do not guarantee the accuracy, completeness, or appropriateness of AI responses\n'
+                '• AI responses may contain errors or inappropriate suggestions\n'
+                '• You use AI-generated content at your own risk\n\n'
+                '7.5 Professional Consultation:\n'
+                '• Always consult licensed professionals for serious relationship or mental health issues\n'
+                '• The Service is designed to support communication between partners, not replace professional guidance',
               ),
               _buildSection(
                 context,

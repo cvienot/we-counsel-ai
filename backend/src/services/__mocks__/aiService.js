@@ -50,11 +50,11 @@ function generateMockResponse(userMessage) {
   
   // Generate contextual mock responses
   if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
-    return "Hello! Thank you for reaching out. I'm here to help you and your partner navigate your relationship journey together. What would you like to discuss today?";
+    return "Hello! Thank you for reaching out. I'm Sarah, your AI relationship coach. I'm here to help you and your partner improve your communication. What would you like to discuss today?";
   }
   
   if (lowerMessage.includes('problem') || lowerMessage.includes('issue') || lowerMessage.includes('difficult')) {
-    return "Thank you for sharing that with me. It takes courage to acknowledge challenges in a relationship. Can you tell me more about what you're experiencing? Understanding the context will help me provide better guidance.";
+    return "Thank you for sharing that with me. It takes courage to acknowledge challenges in a relationship. Can you tell me more about what you're experiencing? Understanding the context will help me provide better communication guidance.";
   }
   
   if (lowerMessage.includes('communication')) {
@@ -62,11 +62,11 @@ function generateMockResponse(userMessage) {
   }
   
   if (lowerMessage.includes('thank')) {
-    return "You're welcome! I'm here to support both of you. Remember, working on your relationship is a journey, and you're taking positive steps by being here.";
+    return "You're welcome! I'm here to support your communication. Remember, working on your relationship is a journey, and you're taking positive steps by being here.";
   }
   
   // Default response
-  return "Thank you for sharing that. I'm here to support you and your partner. This is a safe space where we can explore your thoughts and feelings together. How does your partner feel about this?";
+  return "Thank you for sharing that. I'm here to support your communication as a couple. This is a safe space where we can explore your thoughts and feelings together. How does your partner feel about this?";
 }
 
 const summarizeConversation = async ({ messages, conversationTitle }) => {

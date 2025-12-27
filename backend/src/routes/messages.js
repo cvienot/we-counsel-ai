@@ -330,7 +330,7 @@ router.post('/:conversationId/ai-stream', authenticateToken, checkAIMessageLimit
                 messageId: aiMessageId,
                 conversationId,
                 senderId: 'ai-counsellor',
-                senderName: 'Dr. Sarah (AI Counsellor)',
+                senderName: 'Sarah (AI Relationship Coach)',
                 senderType: 'ai',
                 content: fullResponse,
                 recipientType: 'both',

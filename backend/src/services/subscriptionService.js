@@ -13,7 +13,7 @@ const SUBSCRIPTION_TIERS = {
     price: 0,
     aiMessagesPerMonth: 10,
     features: [
-      '10 AI counselor messages per month',
+      '10 AI relationship coach messages per month',
       'Unlimited partner messaging',
       'Basic conversation history (30 days)',
       'Email notifications'
@@ -24,7 +24,7 @@ const SUBSCRIPTION_TIERS = {
     price: 999, // $9.99 in cents
     aiMessagesPerMonth: 100,
     features: [
-      '100 AI counselor messages per month',
+      '100 AI relationship coach messages per month',
       'Unlimited partner messaging',
       'Full conversation history',
       'Conversation summaries',
@@ -36,7 +36,7 @@ const SUBSCRIPTION_TIERS = {
     price: 1999, // $19.99 in cents
     aiMessagesPerMonth: -1, // Unlimited
     features: [
-      'Unlimited AI counselor messages',
+      'Unlimited AI relationship coach messages',
       'Unlimited partner messaging',
       'Full conversation history',
       'Conversation summaries',

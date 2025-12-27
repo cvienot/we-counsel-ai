@@ -7,7 +7,24 @@ const openai = new OpenAI({
 // Streaming function for real-time AI responses
 const generateCounsellorResponse = async ({ messages, context, onChunk, onComplete, onError }) => {
   try {
-    const systemPrompt = `You are Dr. Sarah, an experienced couples therapist conducting an active therapy session. Both partners are present. Your job is to deeply understand their situation and help them work through it.
+    // Check for crisis keywords in the latest message
+    const lastMessage = messages[messages.length - 1];
+    const crisisDetected = detectCrisisKeywords(lastMessage.content);
+    
+    if (crisisDetected) {
+      const crisisResponse = getCrisisResponse();
+      await onChunk(crisisResponse);
+      await onComplete(crisisResponse);
+      return crisisResponse;
+    }
+
+    const systemPrompt = `You are Sarah, an AI relationship coach and communication facilitator. You help couples improve their communication and understanding. You are NOT a therapist or mental health professional.
+
+IMPORTANT DISCLAIMERS:
+- You provide relationship communication support and educational guidance only
+- You are not a substitute for professional therapy or mental health treatment
+- If you detect serious issues (abuse, mental health crisis, suicidal thoughts), you MUST immediately provide crisis resources
+- Always encourage professional help for serious relationship or mental health concerns
 
 CORE APPROACH - Always be curious and exploratory:
 When someone shares a situation, DON'T just acknowledge it - DIG DEEPER with questions like:
@@ -26,7 +43,7 @@ Your questioning style:
 
 When to explore vs. when to teach:
 - FIRST: Understand the situation fully through questions (at least 2-3 questions)
-- THEN: Offer insights, reframe, or teach a skill
+- THEN: Offer insights, reframe, or teach a communication skill
 - If the situation is unclear, keep asking questions - don't make assumptions
 - When you see a pattern, name it and ask if it resonates
 
@@ -47,8 +64,10 @@ Avoid:
 - Jumping to solutions before understanding the full picture
 - Long monologues - keep it conversational
 - Asking permission to discuss something - just discuss it
+- Providing therapy or clinical diagnosis
+- Handling crisis situations without providing professional resources
 
-Context: ${context || 'Ongoing couples therapy session with both partners present.'}`;
+Context: ${context || 'Ongoing relationship communication support session with both partners present.'}`;
 
     const conversationHistory = messages.map(msg => ({
       role: msg.senderType === 'ai' ? 'assistant' : 'user',
@@ -97,12 +116,12 @@ const summarizeConversation = async ({ messages, conversationTitle }) => {
       messages: [
         {
           role: 'system',
-          content: `You are a professional therapist creating a brief summary of a couples counselling session. Focus on:
+          content: `You are a relationship communication coach creating a brief summary of a couples conversation. Focus on:
           - Key topics discussed
-          - Main concerns raised by each partner
+          - Main communication patterns observed
           - Progress or insights gained
-          - Areas that may need future attention
-          Keep the summary professional, empathetic, and constructive.`
+          - Areas for continued focus
+          Keep the summary professional, empathetic, and constructive. Remember this is communication support, not therapy.`
         },
         {
           role: 'user',
@@ -121,7 +140,54 @@ const summarizeConversation = async ({ messages, conversationTitle }) => {
   }
 };
 
+/**
+ * Crisis Detection
+ * Detects keywords indicating potential crisis situations
+ */
+const CRISIS_KEYWORDS = [
+  // Suicide/self-harm
+  'suicide', 'suicidal', 'kill myself', 'end my life', 'want to die', 'better off dead',
+  'self harm', 'self-harm', 'cut myself', 'hurt myself',
+  // Abuse
+  'abuse', 'abusive', 'violent', 'violence', 'hitting', 'hit me', 'beats me',
+  'afraid of', 'scared of', 'threatening', 'threatens me',
+  // Severe mental health
+  'panic attack', 'cant breathe', "can't breathe", 'having a breakdown',
+];
+
+const detectCrisisKeywords = (message) => {
+  const lowerMessage = message.toLowerCase();
+  return CRISIS_KEYWORDS.some(keyword => lowerMessage.includes(keyword));
+};
+
+const getCrisisResponse = () => {
+  return `I notice you've mentioned something that suggests you may be in a crisis situation or need immediate professional support. 
+
+**🚨 This is important: I'm an AI relationship coach, not a mental health professional, and I cannot provide crisis intervention or therapy.**
+
+If you or your partner are in immediate danger, please:
+
+**Emergency Services:**
+• Call 112 (EU), 911 (US), or your local emergency number
+
+**Crisis Hotlines (24/7):**
+• International: https://findahelpline.com
+• US National Suicide Prevention: 988
+• US Domestic Violence: 1-800-799-7233
+• UK Samaritans: 116 123
+• EU Helplines: https://www.suicide.org/hotlines/international
+
+**I strongly encourage you to:**
+1. Speak with a licensed therapist or counselor who can provide professional support
+2. Contact a crisis hotline if you need immediate help
+3. Reach out to trusted friends, family, or healthcare providers
+
+I'm here to support your communication as a couple, but the situation you've described requires professional help. Would you like to discuss how to find appropriate professional support?`;
+};
+
 module.exports = {
   generateCounsellorResponse,
-  summarizeConversation
+  summarizeConversation,
+  detectCrisisKeywords,
+  getCrisisResponse
 };

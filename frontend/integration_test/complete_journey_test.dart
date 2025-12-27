@@ -63,9 +63,25 @@ void main() {
       await tester.enterText(allFields.at(3), user1Password);  // Password
       await tester.enterText(allFields.at(4), user1Password);  // Confirm Password
       
+      // Scroll to make terms checkbox visible (disclaimer banner may have pushed it down)
+      await tester.dragUntilVisible(
+        find.byType(Checkbox),
+        find.byType(SingleChildScrollView),
+        const Offset(0, -100),
+      );
+      await tester.pumpAndSettle();
+      
       // Accept terms
       final termsCheckbox = find.byType(Checkbox);
       await tester.tap(termsCheckbox);
+      await tester.pumpAndSettle();
+      
+      // Scroll to make submit button visible
+      await tester.dragUntilVisible(
+        find.widgetWithText(ElevatedButton, 'Create Account'),
+        find.byType(SingleChildScrollView),
+        const Offset(0, -100),
+      );
       await tester.pumpAndSettle();
       
       // Submit

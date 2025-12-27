@@ -16,7 +16,7 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
       'name': 'Free',
       'price': '€0',
       'period': '/forever',
-      'description': 'Try the AI counselor',
+      'description': 'Try the AI relationship coach',
       'features': [
         '10 AI messages per month',
         'Unlimited partner messaging',

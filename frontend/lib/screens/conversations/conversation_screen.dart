@@ -6,6 +6,7 @@ import '../../providers/auth_provider.dart';
 import '../../models/message.dart';
 import '../../services/realtime_service.dart';
 import '../../widgets/message_bubble.dart';
+import '../../widgets/disclaimer_banner.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
 
@@ -192,6 +193,13 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(messagesState.conversationTitle ?? 'Conversation'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.health_and_safety_outlined),
+            onPressed: () => CrisisAlertDialog.show(context),
+            tooltip: 'Crisis Resources',
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -221,8 +229,14 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                         ),
                       )
                     : messagesState.messages.isEmpty
-                        ? const Center(
-                            child: Text('Start the conversation by sending a message!'),
+                        ? Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const DisclaimerBanner(),
+                                const Text('Start the conversation by sending a message!'),
+                              ],
+                            ),
                           )
                         : ListView.builder(
                             controller: _scrollController,
