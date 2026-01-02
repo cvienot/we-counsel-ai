@@ -80,7 +80,7 @@ Context: ${context || 'Ongoing relationship communication support session with b
         { role: 'system', content: systemPrompt },
         ...conversationHistory
       ],
-      max_completion_tokens: 500,
+      max_completion_tokens: 2000,  // Increased from 500 to allow longer, detailed responses
       temperature: 0.7,
       stream: true,
     });
