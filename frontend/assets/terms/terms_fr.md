@@ -123,7 +123,7 @@ Votre utilisation continue du Service après les modifications constitue l'accep
 ## 14. Coordonnées
 
 Si vous avez des questions sur ces Conditions, veuillez nous contacter à :
-- E-mail : support@wecounsel.com
+- E-mail : support@we-connect-app.com
 
 ## 15. Divisibilité
 

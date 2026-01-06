@@ -148,7 +148,7 @@ DYNAMODB_ENDPOINT=http://localhost:8000
 
 # SES Configuration
 SES_REGION=us-east-1
-SES_FROM_EMAIL=noreply@wecounsel.app
+SES_FROM_EMAIL=noreply@we-connect-app.com
 
 # OpenAI Configuration
 OPENAI_API_KEY=your_openai_api_key
@@ -247,4 +247,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 🆘 Support
 
-For support, email support@wecounsel.app or create an issue in the repository.
+For support, email support@we-connect-app.com or create an issue in the repository.

@@ -123,7 +123,7 @@ Su uso continuado del Servicio después de los cambios constituye la aceptación
 ## 14. Información de contacto
 
 Si tiene preguntas sobre estos Términos, contáctenos en:
-- Correo electrónico: support@wecounsel.com
+- Correo electrónico: support@we-connect-app.com
 
 ## 15. Divisibilidad
 

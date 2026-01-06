@@ -265,7 +265,7 @@ class _LegacyTermsOfServiceScreen extends StatelessWidget {
                 context,
                 '14. Contact Information',
                 'If you have questions about these Terms, please contact us at:\n\n'
-                'Email: support@wecounsel.com',
+                'Email: support@we-connect-app.com',
               ),
               _buildSection(
                 context,

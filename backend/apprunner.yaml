@@ -19,9 +19,9 @@ run:
     - name: DYNAMODB_REGION
       value: eu-west-3
     - name: EMAIL_FROM
-      value: noreply@we-counsel.com
+      value: noreply@we-connect-app.com
     - name: FRONTEND_URL
-      value: https://app.we-counsel.com
+      value: https://app.we-connect-app.com
     
     # Sensitive secrets loaded from AWS Secrets Manager at runtime
     # JWT_SECRET and OPENAI_API_KEY are fetched by src/config/secrets.js

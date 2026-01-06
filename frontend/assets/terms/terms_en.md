@@ -123,7 +123,7 @@ Your continued use of the Service after changes constitutes acceptance of the mo
 ## 14. Contact Information
 
 If you have questions about these Terms, please contact us at:
-- Email: support@wecounsel.com
+- Email: support@we-connect-app.com
 
 ## 15. Severability
 

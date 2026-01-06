@@ -248,4 +248,4 @@ This implementation provides:
 
 For questions about Terms of Service implementation:
 - Technical: See code files listed above
-- Legal/Content: support@wecounsel.com
+- Legal/Content: support@we-connect-app.com
