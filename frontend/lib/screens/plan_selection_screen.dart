@@ -14,7 +14,41 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
   String selectedTier = 'free';
   String selectedBillingPeriod = 'monthly';
   bool _isProcessingPayment = false;
+  bool _isLoading = true;
+  String _currentTier = 'free';
   final PaymentService _paymentService = PaymentService(baseUrl: AppConfig.apiBaseUrl);
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCurrentSubscription();
+  }
+
+  Future<void> _loadCurrentSubscription() async {
+    try {
+      final response = await _paymentService.getSubscriptionUsage();
+      
+      if (response['success'] == true && response['usage'] != null) {
+        final usage = response['usage'];
+        final tier = usage['tier'] ?? 'free';
+        
+        setState(() {
+          _currentTier = tier;
+          selectedTier = tier;
+          _isLoading = false;
+        });
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      print('Error loading subscription: $e');
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   final List<Map<String, dynamic>> plans = [
     {
@@ -253,7 +287,7 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
                               ],
                             ),
                           ),
-                          if (plan['popular'] as bool)
+                          if (plan['popular'] as bool && plan['tier'] != _currentTier)
                             Positioned(
                               top: 12,
                               right: 12,
@@ -268,6 +302,29 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
                                 ),
                                 child: const Text(
                                   'POPULAR',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          if (plan['tier'] == _currentTier)
+                            Positioned(
+                              top: 12,
+                              right: 12,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.green,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: const Text(
+                                  'CURRENT PLAN',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 12,
@@ -393,7 +450,9 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: _isProcessingPayment ? null : _handleSubscribe,
+                        onPressed: (_isProcessingPayment || selectedTier == _currentTier) 
+                            ? null 
+                            : _handleSubscribe,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: plans.firstWhere(
                               (p) => p['tier'] == selectedTier)['color'],
@@ -401,6 +460,7 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
+                          disabledBackgroundColor: Colors.grey[300],
                         ),
                         child: _isProcessingPayment
                             ? const SizedBox(
@@ -412,13 +472,17 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
                                 ),
                               )
                             : Text(
-                                selectedTier == 'free'
-                                    ? 'Continue with Free'
-                                    : 'Start Free Trial',
-                                style: const TextStyle(
+                                selectedTier == _currentTier
+                                    ? 'Current Plan'
+                                    : (selectedTier == 'free'
+                                        ? 'Continue with Free'
+                                        : 'Start Free Trial'),
+                                style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                  color: selectedTier == _currentTier 
+                                      ? Colors.grey[600] 
+                                      : Colors.white,
                                 ),
                               ),
                       ),
