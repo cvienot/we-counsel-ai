@@ -201,9 +201,21 @@ echo -e "\n${BLUE}╔═══════════════════�
 echo -e "${BLUE}║          Running E2E Tests           ║${NC}"
 echo -e "${BLUE}╚══════════════════════════════════════╝${NC}\n"
 
-cd "$FRONTEND_DIR"
+# Run API tests first (fast)
+echo -e "${YELLOW}Running API tests...${NC}\n"
 
-# Run integration tests on macOS desktop (officially supported by integration_test)
+echo -e "${BLUE}Test 1: Subscription Quotas${NC}"
+node "$BACKEND_DIR/test-quota.js"
+QUOTA_EXIT_CODE=$?
+
+if [ $QUOTA_EXIT_CODE -ne 0 ]; then
+    echo -e "\n${RED}❌ Quota tests failed${NC}"
+    exit 1
+fi
+
+# Run UI integration test
+echo -e "\n${YELLOW}Running UI integration test...${NC}"
+cd "$FRONTEND_DIR"
 flutter test integration_test/complete_journey_test.dart \
     -d macos \
     --dart-define=API_BASE_URL=http://localhost:$API_PORT/api
