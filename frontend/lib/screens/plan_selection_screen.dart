@@ -15,7 +15,7 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
   String selectedBillingPeriod = 'monthly';
   bool _isProcessingPayment = false;
   bool _isLoading = true;
-  String _currentTier = 'free';
+  String? _currentTier; // Nullable to distinguish between "not loaded" and "free tier"
   final PaymentService _paymentService = PaymentService(baseUrl: AppConfig.apiBaseUrl);
 
   @override
@@ -43,7 +43,9 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
         });
       }
     } catch (e) {
-      print('Error loading subscription: $e');
+      // Handle case where user isn't authenticated yet (during registration flow)
+      // Don't set _currentTier so button stays enabled
+      print('Could not load subscription (might be during registration): $e');
       setState(() {
         _isLoading = false;
       });
@@ -287,7 +289,7 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
                               ],
                             ),
                           ),
-                          if (plan['popular'] as bool && plan['tier'] != _currentTier)
+                          if (plan['popular'] as bool && (_currentTier == null || plan['tier'] != _currentTier))
                             Positioned(
                               top: 12,
                               right: 12,
@@ -310,7 +312,7 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
                                 ),
                               ),
                             ),
-                          if (plan['tier'] == _currentTier)
+                          if (_currentTier != null && plan['tier'] == _currentTier)
                             Positioned(
                               top: 12,
                               right: 12,
@@ -450,7 +452,7 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: (_isProcessingPayment || selectedTier == _currentTier) 
+                        onPressed: (_isProcessingPayment || (_currentTier != null && selectedTier == _currentTier)) 
                             ? null 
                             : _handleSubscribe,
                         style: ElevatedButton.styleFrom(
@@ -472,7 +474,7 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
                                 ),
                               )
                             : Text(
-                                selectedTier == _currentTier
+                                _currentTier != null && selectedTier == _currentTier
                                     ? 'Current Plan'
                                     : (selectedTier == 'free'
                                         ? 'Continue with Free'
@@ -480,7 +482,7 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
-                                  color: selectedTier == _currentTier 
+                                  color: _currentTier != null && selectedTier == _currentTier 
                                       ? Colors.grey[600] 
                                       : Colors.white,
                                 ),
