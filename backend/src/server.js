@@ -45,7 +45,10 @@ app.use(cors({
 // Logging middleware
 app.use(morgan('combined'));
 
-// Body parsing middleware
+// Webhook route needs raw body - must come BEFORE express.json()
+app.use('/api/payments/webhook', express.raw({ type: 'application/json' }));
+
+// Body parsing middleware (applied to all routes except webhook)
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 

@@ -295,7 +295,7 @@ router.get('/invoices', authenticateToken, async (req, res) => {
 // @route   POST /api/payments/webhook
 // @desc    Handle Stripe webhook events
 // @access  Public (but verified via Stripe signature)
-router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+router.post('/webhook', async (req, res) => {
   const signature = req.headers['stripe-signature'];
 
   try {
@@ -321,9 +321,11 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
         console.log(`✅ Checkout completed for couple ${coupleId}: ${tier} (${billingPeriod})`);
 
         // Update subscription in database
-        const subscription = await stripeService.getSubscription(session.subscription);
+        const subscriptionResult = await stripeService.getSubscription(session.subscription);
         
-        if (subscription.success) {
+        if (subscriptionResult.success && subscriptionResult.subscription) {
+          const sub = subscriptionResult.subscription;
+          
           await docClient.send(new UpdateCommand({
             TableName: TABLES.COUPLES,
             Key: { coupleId },
@@ -333,14 +335,18 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
               ':status': 'active',
               ':subId': session.subscription,
               ':period': billingPeriod,
-              ':startDate': new Date(subscription.subscription.current_period_start * 1000).toISOString(),
-              ':endDate': new Date(subscription.subscription.current_period_end * 1000).toISOString(),
+              ':startDate': sub.current_period_start ? new Date(sub.current_period_start * 1000).toISOString() : new Date().toISOString(),
+              ':endDate': sub.current_period_end ? new Date(sub.current_period_end * 1000).toISOString() : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
               ':updatedAt': new Date().toISOString()
             }
           }));
 
           // Reset usage counters
           await subscriptionService.resetUsageCounters(coupleId);
+          
+          console.log(`✅ Subscription updated in database for couple ${coupleId}`);
+        } else {
+          console.error(`❌ Failed to get subscription details: ${subscriptionResult.error}`);
         }
         break;
       }

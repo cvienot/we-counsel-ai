@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../services/payment_service.dart';
 import '../../config/app_config.dart';
@@ -24,19 +25,70 @@ class _PaymentPortalScreenState extends ConsumerState<PaymentPortalScreen> {
   }
 
   Future<void> _loadSubscriptionData() async {
-    // For now, use default free tier data
-    // TODO: Add API call to fetch actual subscription
-    setState(() {
-      _subscriptionData = {
-        'tier': 'free',
-        'tierName': 'Free',
-        'status': 'active',
-        'aiLimit': 10,
-        'aiRemaining': 10,
-        'endDate': null,
-      };
-      _dataLoaded = true;
-    });
+    try {
+      final response = await _paymentService.getSubscriptionUsage();
+      
+      if (response['success'] == true && response['usage'] != null) {
+        final usage = response['usage'];
+        final tier = usage['tier'] ?? 'free';
+        
+        // Map tier to display name
+        String tierName;
+        int aiLimit;
+        switch (tier) {
+          case 'essential':
+            tierName = 'Essential';
+            aiLimit = 100;
+            break;
+          case 'premium':
+            tierName = 'Premium';
+            aiLimit = -1; // unlimited
+            break;
+          default:
+            tierName = 'Free';
+            aiLimit = 10;
+        }
+        
+        setState(() {
+          _subscriptionData = {
+            'tier': tier,
+            'tierName': tierName,
+            'status': 'active',
+            'aiLimit': aiLimit,
+            'aiUsed': usage['used'] ?? 0,
+            'aiRemaining': usage['remaining'] ?? aiLimit,
+          };
+          _dataLoaded = true;
+        });
+      } else {
+        // Fallback to free tier
+        setState(() {
+          _subscriptionData = {
+            'tier': 'free',
+            'tierName': 'Free',
+            'status': 'active',
+            'aiLimit': 10,
+            'aiUsed': 0,
+            'aiRemaining': 10,
+          };
+          _dataLoaded = true;
+        });
+      }
+    } catch (e) {
+      print('Error loading subscription data: $e');
+      // Fallback to free tier on error
+      setState(() {
+        _subscriptionData = {
+          'tier': 'free',
+          'tierName': 'Free',
+          'status': 'active',
+          'aiLimit': 10,
+          'aiUsed': 0,
+          'aiRemaining': 10,
+        };
+        _dataLoaded = true;
+      });
+    }
   }
 
   Future<void> _openCustomerPortal() async {
@@ -101,6 +153,7 @@ class _PaymentPortalScreenState extends ConsumerState<PaymentPortalScreen> {
     final tierName = _subscriptionData['tierName'] ?? 'Free';
     final status = _subscriptionData['status'] ?? 'active';
     final aiLimit = _subscriptionData['aiLimit'] ?? 10;
+    final aiUsed = _subscriptionData['aiUsed'] ?? 0;
     final aiRemaining = _subscriptionData['aiRemaining'] ?? 10;
 
     return Scaffold(
@@ -138,7 +191,9 @@ class _PaymentPortalScreenState extends ConsumerState<PaymentPortalScreen> {
                       ],
                     ),
                     const SizedBox(height: 16),
-                    Text('AI Messages: $aiRemaining / $aiLimit remaining'),
+                    Text(aiLimit == -1 
+                      ? 'AI Messages: Unlimited (used $aiUsed this month)'
+                      : 'AI Messages: $aiRemaining / $aiLimit remaining'),
                   ],
                 ),
               ),
@@ -167,7 +222,7 @@ class _PaymentPortalScreenState extends ConsumerState<PaymentPortalScreen> {
             // Change Plan Button
             OutlinedButton.icon(
               onPressed: () {
-                Navigator.pushNamed(context, '/plan-selection');
+                context.go('/plan-selection');
               },
               icon: const Icon(Icons.upgrade),
               label: Text(tier == 'free' ? 'Upgrade Plan' : 'Change Plan'),
@@ -182,7 +237,7 @@ class _PaymentPortalScreenState extends ConsumerState<PaymentPortalScreen> {
             if (tier != 'free')
               OutlinedButton.icon(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/billing-history');
+                  context.go('/billing-history');
                 },
                 icon: const Icon(Icons.receipt_long),
                 label: const Text('Billing History'),

@@ -147,4 +147,46 @@ class PaymentService {
       };
     }
   }
+
+  /// Get current subscription usage
+  Future<Map<String, dynamic>> getSubscriptionUsage() async {
+    try {
+      final token = await _getToken();
+      if (token == null) {
+        return {
+          'success': false,
+          'error': 'Not authenticated',
+        };
+      }
+
+      final response = await http.get(
+        Uri.parse('$baseUrl/api/subscriptions/usage'),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200 && data['success'] == true) {
+        return {
+          'success': true,
+          'usage': data['usage'],
+        };
+      } else {
+        return {
+          'success': false,
+          'error': data['error'] ?? 'Failed to get subscription usage',
+          'message': data['message'],
+        };
+      }
+    } catch (e) {
+      print('❌ Error getting subscription usage: $e');
+      return {
+        'success': false,
+        'error': 'Network error',
+        'message': e.toString(),
+      };
+    }
+  }
 }
