@@ -6,7 +6,7 @@
 // In-memory storage for test assertions
 global.mockAIStore = global.mockAIStore || [];
 
-const generateCounsellorResponse = async ({ messages, context, onChunk, onComplete, onError }) => {
+const generateCoachResponse = async ({ messages, context, onChunk, onComplete, onError }) => {
   try {
     // Generate deterministic mock response based on last message
     const lastMessage = messages[messages.length - 1];
@@ -98,6 +98,6 @@ Areas for continued focus: Further exploration of underlying needs, practicing a
 };
 
 module.exports = {
-  generateCounsellorResponse,
+  generateCoachResponse,
   summarizeConversation
 };

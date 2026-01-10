@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide walks you through deploying We Counsel AI to AWS using CloudFormation (Infrastructure as Code).
+This guide walks you through deploying We Coach to AWS using CloudFormation (Infrastructure as Code).
 
 **Deployment Order:**
 1. DynamoDB tables (database)

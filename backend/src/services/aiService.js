@@ -5,7 +5,7 @@ const openai = new OpenAI({
 });
 
 // Streaming function for real-time AI responses
-const generateCounsellorResponse = async ({ messages, context, onChunk, onComplete, onError }) => {
+const generateCoachResponse = async ({ messages, context, onChunk, onComplete, onError }) => {
   try {
     // Check for crisis keywords in the latest message
     const lastMessage = messages[messages.length - 1];
@@ -101,7 +101,7 @@ Context: ${context || 'Ongoing relationship communication support session with b
   } catch (error) {
     console.error('OpenAI Streaming API error:', error);
     onError(error);
-    throw new Error('Failed to generate counsellor response');
+    throw new Error('Failed to generate coach response');
   }
 };
 
@@ -178,7 +178,7 @@ If you or your partner are in immediate danger, please:
 • EU Helplines: https://www.suicide.org/hotlines/international
 
 **I strongly encourage you to:**
-1. Speak with a licensed therapist or counselor who can provide professional support
+1. Speak with a licensed therapist or coach who can provide professional support
 2. Contact a crisis hotline if you need immediate help
 3. Reach out to trusted friends, family, or healthcare providers
 
@@ -186,7 +186,7 @@ I'm here to support your communication as a couple, but the situation you've des
 };
 
 module.exports = {
-  generateCounsellorResponse,
+  generateCoachResponse,
   summarizeConversation,
   detectCrisisKeywords,
   getCrisisResponse

@@ -58,7 +58,7 @@ aws apprunner create-connection \
 ```bash
 1. Go to: https://github.com/settings/tokens
 2. Click "Generate new token (classic)"
-3. Name: "AWS Amplify - We Counsel"
+3. Name: "AWS Amplify - We Coach"
 4. Expiration: No expiration (or 90 days if preferred)
 5. Scopes: Select "repo" ✓
 6. Click "Generate token"

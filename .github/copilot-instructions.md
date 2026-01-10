@@ -1,11 +1,11 @@
 <!-- Use this file to provide workspace-specific custom instructions to Copilot. For more details, visit https://code.visualstudio.com/docs/copilot/copilot-customization#_use-a-githubcopilotinstructionsmd-file -->
 - [x] Verify that the copilot-instructions.md file in the .github directory is created.
 
-- [x] Clarify Project Requirements: Counselling app for couples with AWS App Runner backend (Node.js/Express, JWT, DynamoDB, SES) and Flutter frontend
+- [x] Clarify Project Requirements: Coaching app for couples with AWS App Runner backend (Node.js/Express, JWT, DynamoDB, SES) and Flutter frontend
 
 - [x] Scaffold the Project: Created backend API with Express.js and Flutter frontend app
 
-- [x] Customize the Project: Implemented complete counselling app with authentication, partner invitations, conversations, AI counsellor integration
+- [x] Customize the Project: Implemented complete coaching app with authentication, partner invitations, conversations, AI coach integration
 
 - [ ] Customize the Project
 	<!--

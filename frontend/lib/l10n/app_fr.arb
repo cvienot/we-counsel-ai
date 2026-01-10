@@ -1,6 +1,6 @@
 {
   "@@locale": "fr",
-  "appTitle": "We Counsel",
+  "appTitle": "We Coach",
   "appSubtitle": "Votre parcours relationnel ensemble",
   
   "login": "Connexion",
@@ -13,8 +13,8 @@
   "confirmPassword": "Confirmer le mot de passe",
   
   "welcomeTitle": "Bienvenue dans votre parcours ensemble",
-  "welcomeMessage": "Ceci est votre espace de conversation principal où vous et votre partenaire pouvez partager vos pensées, sentiments et recevoir des conseils de Dr. Sarah, votre conseillère IA.",
-  "shareThoughts": "Partagez ce qui vous préoccupe. Dr. Sarah est là pour vous aider à guider votre conversation.",
+  "welcomeMessage": "Ceci est votre espace de conversation principal où vous et votre partenaire pouvez partager vos pensées, sentiments et recevoir des conseils de Coach Sarah, votre coach IA.",
+  "shareThoughts": "Partagez ce qui vous préoccupe. Coach Sarah est là pour vous aider à guider votre conversation.",
   
   "conversations": "Conversations",
   "profile": "Profil",
@@ -36,7 +36,7 @@
   "invitePartner": "Inviter Partenaire",
   "inviteYourPartner": "Invitez votre partenaire",
   "sendInvitation": "Envoyer l'invitation",
-  "invitePartnerDescription": "Invitez votre partenaire à vous rejoindre sur We Counsel. Il recevra un e-mail avec les instructions pour créer son compte et se connecter avec vous.",
+  "invitePartnerDescription": "Invitez votre partenaire à vous rejoindre sur We Coach. Il recevra un e-mail avec les instructions pour créer son compte et se connecter avec vous.",
   "partnerEmailAddress": "Adresse e-mail du partenaire",
   "enterPartnerEmail": "Entrez l'adresse e-mail de votre partenaire",
   "pleaseEnterPartnerEmail": "Veuillez entrer l'e-mail de votre partenaire",
@@ -45,13 +45,13 @@
   "personalMessageOptional": "Message personnel (optionnel)",
   "addPersonalMessage": "Ajoutez un message personnel à votre invitation...",
   "invitationSent": "Invitation envoyée !",
-  "invitationSentMessage": "Une invitation a été envoyée à {email}. Il recevra un e-mail avec les instructions pour vous rejoindre sur We Counsel.",
+  "invitationSentMessage": "Une invitation a été envoyée à {email}. Il recevra un e-mail avec les instructions pour vous rejoindre sur We Coach.",
   "failedToSendInvitation": "Échec de l'envoi de l'invitation",
   "invitationSteps": "1. Votre partenaire recevra une invitation par e-mail\\n2. Il pourra cliquer sur le lien pour créer son compte\\n3. Une fois accepté, vous serez tous les deux connectés\\n4. Vous pourrez commencer à avoir des conversations avec l'aide de l'IA",
   "ok": "OK",
   "waitingForPartner": "En attente de votre partenaire...",
   "waitingForPartnerTitle": "En attente de votre partenaire",
-  "waitingRoomGreeting": "Bonjour {name} ! Votre parcours de conseil commencera une fois que votre partenaire vous rejoindra sur We Counsel.",
+  "waitingRoomGreeting": "Bonjour {name} ! Votre parcours de coaching commencera une fois que votre partenaire vous rejoindra sur We Coach.",
   "whatHappensNext": "Que se passe-t-il ensuite ?",
   "sendAnotherInvitation": "Envoyer une autre invitation",
   "invitePartnerMessage": "Partagez cette invitation avec votre partenaire pour commencer votre parcours de conseil ensemble.",
@@ -78,9 +78,9 @@
   "@aiCounsellor": {
     "description": "Étiquette du conseiller IA"
   },
-  "drSarahAiCounsellor": "Dr. Sarah (Conseiller IA)",
+  "drSarahAiCounsellor": "Coach Sarah (Coach IA)",
   "@drSarahAiCounsellor": {
-    "description": "Nom complet du Dr. Sarah conseiller IA"
+    "description": "Nom complet de Coach Sarah coach IA"
   },
   "startFirstConversationMessage": "Commencez votre première conversation avec votre partenaire et recevez des conseils de notre conseiller IA.",
   "@startFirstConversationMessage": {

@@ -1,14 +1,14 @@
-# We Counsel - Couples Counselling App
+# We Coach - Couples Coaching App
 
-We Counsel is a modern couples counselling application that combines the convenience of digital communication with AI-powered guidance to help couples strengthen their relationships.
+We Coach is a modern couples coaching application that combines the convenience of digital communication with AI-powered guidance to help couples strengthen their relationships.
 
 ## ✨ Features
 
 ### MVP Features
 - **User Authentication**: Secure login/signup with JWT tokens
 - **Partner Invitation**: Invite your partner via email to join you on the app
-- **Private Conversations**: Secure messaging between partners with AI counsellor participation
-- **AI Counsellor**: GPT-powered counsellor that can address both partners or individuals
+- **Private Conversations**: Secure messaging between partners with AI coach participation
+- **AI Coach**: GPT-powered coach that can address both partners or individuals
 - **Threaded Discussions**: Organized conversation threads for different topics
 
 ### Core Functionality
@@ -25,7 +25,7 @@ We Counsel is a modern couples counselling application that combines the conveni
 - **Authentication**: JWT-based authentication with secure token management
 - **Database**: DynamoDB for scalable NoSQL data storage
 - **Email Service**: AWS SES for invitation emails
-- **AI Integration**: OpenAI GPT-4 for counselling responses
+- **AI Integration**: OpenAI GPT-4 for coaching responses
 - **Deployment**: AWS App Runner for serverless container deployment
 
 ### Frontend (Flutter)
@@ -185,9 +185,9 @@ static const String _baseUrl = 'https://your-app-runner-url.com/api'; // Product
 - Rate limiting and security headers
 - **Mandatory Terms of Service acceptance** with version tracking and consent timestamps
 
-## 🤖 AI Counsellor Features
+## 🤖 AI Coach Features
 
-The AI counsellor (Dr. Sarah) provides:
+The AI coach (Coach Sarah) provides:
 - Relationship guidance and advice
 - Communication technique suggestions
 - Empathetic and non-judgmental responses

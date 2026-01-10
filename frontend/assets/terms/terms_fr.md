@@ -4,11 +4,11 @@
 
 ## 1. Acceptation des conditions
 
-En créant un compte et en utilisant We Counsel (« le Service »), vous acceptez d'être lié par ces Conditions d'utilisation. Si vous n'acceptez pas ces conditions, vous ne pouvez pas utiliser le Service.
+En créant un compte et en utilisant We Coach (« le Service »), vous acceptez d'être lié par ces Conditions d'utilisation. Si vous n'acceptez pas ces conditions, vous ne pouvez pas utiliser le Service.
 
-## 2. Description du service
+## 2. Description du Service
 
-We Counsel est une application de conseil conçue pour faciliter la communication entre les couples. Le Service fournit :
+We Coach est une application de conseil conçue pour faciliter la communication entre les couples. Le Service fournit :
 - Des espaces de conversation privés pour les couples
 - Un soutien de conseil assisté par IA
 - Des outils de messagerie et de communication sécurisés
@@ -51,7 +51,7 @@ Vous acceptez de ne pas :
 ## 6. Propriété intellectuelle
 
 ### 6.1 Contenu du service
-- Tout le contenu, les fonctionnalités et les fonctionnalités du Service sont la propriété de We Counsel
+- Tout le contenu, les fonctionnalités et les fonctionnalités du Service sont la propriété de We Coach
 - Vous ne pouvez pas copier, modifier, distribuer ou créer des œuvres dérivées sans autorisation
 
 ### 6.2 Contenu utilisateur
@@ -94,14 +94,14 @@ Vous acceptez de ne pas :
 
 ## 10. Indemnisation
 
-Vous acceptez d'indemniser et de dégager de toute responsabilité We Counsel et ses affiliés de toute réclamation, perte ou dommage découlant de :
+Vous acceptez d'indemniser et de dégager de toute responsabilité We Coach et ses affiliés de toute réclamation, perte ou dommage découlant de :
 - Votre utilisation du Service
 - Votre violation de ces Conditions
 - Votre violation des droits d'une autre partie
 
 ## 11. Droit applicable
 
-Ces Conditions seront régies et interprétées conformément aux lois de la juridiction dans laquelle We Counsel opère, sans égard aux dispositions relatives aux conflits de lois.
+Ces Conditions seront régies et interprétées conformément aux lois de la juridiction dans laquelle We Coach opère, sans égard aux dispositions relatives aux conflits de lois.
 
 ## 12. Résolution des différends
 
@@ -131,7 +131,7 @@ Si une disposition de ces Conditions est jugée inapplicable ou invalide, cette 
 
 ## 16. Accord complet
 
-Ces Conditions, ainsi que notre Politique de confidentialité, constituent l'intégralité de l'accord entre vous et We Counsel concernant le Service.
+Ces Conditions, ainsi que notre Politique de confidentialité, constituent l'intégralité de l'accord entre vous et We Coach concernant le Service.
 
 ---
 

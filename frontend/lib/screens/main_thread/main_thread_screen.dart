@@ -210,8 +210,8 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
   String _getLocalizedTitle(String title, AppLocalizations l10n) {
     // Check if it's the default English title from backend
     if (title == 'Main Conversation') {
-      // Changed to "We Counsel AI" instead of localized version
-      return 'We Counsel AI';
+      // Changed to "We Coach" instead of localized version
+      return 'We Coach';
     }
     return title;
   }

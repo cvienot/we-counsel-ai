@@ -53,7 +53,7 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/health', (req, res) => {
   res.status(200).json({
     status: 'OK',
-    message: 'We Counsel API is running',
+    message: 'We Coach API is running',
     timestamp: new Date().toISOString()
   });
 });
@@ -301,7 +301,7 @@ streamingService.on('newMessage', async ({ conversationId, senderUserId, message
 
     // Start server
     app.listen(PORT, () => {
-      console.log(`🚀 We Counsel API server running on port ${PORT}`);
+      console.log(`🚀 We Coach API server running on port ${PORT}`);
       console.log(`📊 Environment: ${process.env.NODE_ENV}`);
       console.log(`🔗 Health check: http://localhost:${PORT}/health`);
       console.log(`📡 Streaming service initialized`);

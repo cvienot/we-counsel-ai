@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "appTitle": "We Counsel",
+  "appTitle": "We Coach",
   "@appTitle": {
     "description": "The application title"
   },
@@ -46,11 +46,11 @@
   "@welcomeTitle": {
     "description": "Welcome message title"
   },
-  "welcomeMessage": "This is your main conversation space where you and your partner can share thoughts, feelings, and receive guidance from Dr. Sarah, your AI counsellor.",
+  "welcomeMessage": "This is your main conversation space where you and your partner can share thoughts, feelings, and receive guidance from Coach Sarah, your AI coach.",
   "@welcomeMessage": {
     "description": "Welcome message description"
   },
-  "shareThoughts": "Share what's on your mind. Dr. Sarah is here to help guide your conversation.",
+  "shareThoughts": "Share what's on your mind. Coach Sarah is here to help guide your conversation.",
   "@shareThoughts": {
     "description": "Placeholder message when no messages"
   },
@@ -252,7 +252,7 @@
   "@waitingForPartnerTitle": {
     "description": "Waiting room title"
   },
-  "waitingRoomGreeting": "Hi {name}! Your counselling journey will begin once your partner joins you on We Counsel.",
+  "waitingRoomGreeting": "Hi {name}! Your coaching journey will begin once your partner joins you on We Coach.",
   "@waitingRoomGreeting": {
     "description": "Waiting room greeting message",
     "placeholders": {
@@ -332,9 +332,9 @@
   "@aiCounsellor": {
     "description": "AI Counsellor label"
   },
-  "drSarahAiCounsellor": "Dr. Sarah (AI Counsellor)",
+  "drSarahAiCounsellor": "Coach Sarah (AI Coach)",
   "@drSarahAiCounsellor": {
-    "description": "Dr. Sarah AI Counsellor full name"
+    "description": "Coach Sarah AI Coach full name"
   },
   "startFirstConversationMessage": "Start your first conversation with your partner and get guidance from our AI counsellor.",
   "@startFirstConversationMessage": {

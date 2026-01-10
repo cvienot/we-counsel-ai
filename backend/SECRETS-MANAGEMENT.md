@@ -104,7 +104,7 @@ const { loadSecrets, validateSecrets } = require('./config/secrets');
     
     // Start server
     app.listen(PORT, () => {
-      console.log(`🚀 We Counsel API server running on port ${PORT}`);
+      console.log(`🚀 We Coach API server running on port ${PORT}`);
     });
   } catch (error) {
     console.error('Failed to start server:', error);
@@ -303,7 +303,7 @@ env:
 
 ## Recommendation
 
-For **We Counsel AI**:
+For **We Coach**:
 - **Development**: Use `.env` file (free, simple)
 - **Production**: Use **Secrets Manager** ($2-3/month, secure, professional)
 

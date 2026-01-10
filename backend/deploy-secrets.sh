@@ -8,7 +8,7 @@ REGION="eu-west-3"
 STACK_NAME="we-counsel-secrets"
 
 echo "===================================="
-echo "We Counsel AI - Secrets Deployment"
+echo "We Coach - Secrets Deployment"
 echo "===================================="
 echo ""
 

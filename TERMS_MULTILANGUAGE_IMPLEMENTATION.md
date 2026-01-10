@@ -1,7 +1,7 @@
 # Multi-Language Terms of Service Implementation
 
 ## Overview
-This document describes the implementation of multi-language Terms of Service for the We Counsel application, supporting English, French, and Spanish.
+This document describes the implementation of multi-language Terms of Service for the We Coach application, supporting English, French, and Spanish.
 
 ## Date Implemented
 December 12, 2025

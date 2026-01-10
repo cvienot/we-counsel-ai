@@ -1,7 +1,7 @@
-# We Counsel AI - Deployment Summary
+# We Coach - Deployment Summary
 
 ## Overview
-Complete deployment infrastructure for a couples counselling app with AWS backend and multi-platform Flutter frontend.
+Complete deployment infrastructure for a couples coaching app with AWS backend and multi-platform Flutter frontend.
 
 ## Architecture
 
@@ -32,7 +32,7 @@ Complete deployment infrastructure for a couples counselling app with AWS backen
 │                                                         │
 │  ┌──────────────────┐       ┌──────────────────┐      │
 │  │  AWS SES         │       │  OpenAI API      │      │
-│  │  Email Service   │       │  AI Counselor    │      │
+│  │  Email Service   │       │  AI Coach        │      │
 │  └──────────────────┘       └──────────────────┘      │
 └─────────────────────────────────────────────────────────┘
 
@@ -51,7 +51,7 @@ Complete deployment infrastructure for a couples counselling app with AWS backen
 - **Region**: eu-west-3
 - **Features**:
   - JWT authentication
-  - OpenAI integration for AI counselor
+  - OpenAI integration for AI coach
   - Real-time messaging with SSE
   - Partner invitation system
   - DynamoDB for data persistence
@@ -69,7 +69,7 @@ Complete deployment infrastructure for a couples counselling app with AWS backen
   - Real-time updates
   - Secure authentication
   - Partner connection
-  - AI counselor chat
+  - AI coach chat
 
 **Deploy**: `cd frontend && ./deploy-amplify.sh`
 
@@ -358,7 +358,7 @@ aws amplify list-apps --region eu-west-3           # List Amplify apps
 - [ ] Can register new account
 - [ ] Can log in
 - [ ] Can send messages
-- [ ] AI counselor responds
+- [ ] AI coach responds
 - [ ] Partner invitation works
 - [ ] Email notifications work
 - [ ] Real-time updates work
@@ -366,4 +366,4 @@ aws amplify list-apps --region eu-west-3           # List Amplify apps
 
 ## Deployment Complete! 🎉
 
-You now have a production-ready, scalable, multi-platform couples counselling app running on AWS with CI/CD pipelines and proper security.
+You now have a production-ready, scalable, multi-platform couples coaching app running on AWS with CI/CD pipelines and proper security.

@@ -1,7 +1,7 @@
 # Frontend Deployment Guide
 
 ## Overview
-This guide covers deploying the We Counsel Flutter web app to AWS Amplify Hosting with support for future iOS and Android app deployments.
+This guide covers deploying the We Coach Flutter web app to AWS Amplify Hosting with support for future iOS and Android app deployments.
 
 ## Prerequisites
 
@@ -64,7 +64,7 @@ This builds the web app locally. Useful for:
 
 1. Go to: https://github.com/settings/tokens
 2. Click **"Generate new token (classic)"**
-3. Name: `AWS Amplify - We Counsel`
+3. Name: `AWS Amplify - We Coach`
 4. Scopes: Select `repo` (full control of private repositories)
 5. Click **"Generate token"**
 6. **Copy the token** (you won't see it again!)

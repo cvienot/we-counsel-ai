@@ -4,13 +4,13 @@
 
 ## 1. Acceptance of Terms
 
-By creating an account and using We Counsel ("the Service"), you agree to be bound by these Terms of Service. If you do not agree to these terms, you may not use the Service.
+By creating an account and using We Coach ("the Service"), you agree to be bound by these Terms of Service. If you do not agree to these terms, you may not use the Service.
 
 ## 2. Description of Service
 
-We Counsel is a counselling application designed to facilitate communication between couples. The Service provides:
+We Coach is a coaching application designed to facilitate communication between couples. The Service provides:
 - Private conversation spaces for couples
-- AI-assisted counselling support
+- AI-assisted coaching support
 - Secure messaging and communication tools
 - Partner connection and invitation features
 
@@ -51,7 +51,7 @@ You agree not to:
 ## 6. Intellectual Property
 
 ### 6.1 Service Content
-- All content, features, and functionality of the Service are owned by We Counsel
+- All content, features, and functionality of the Service are owned by We Coach
 - You may not copy, modify, distribute, or create derivative works without permission
 
 ### 6.2 User Content
@@ -59,10 +59,10 @@ You agree not to:
 - You grant us a license to use, store, and display your content to provide the Service
 - You represent that you have the right to share all content you post
 
-## 7. AI Counselling Features
+## 7. AI Coaching Features
 
 ### 7.1 Nature of Service
-- The AI counselling feature provides automated support and suggestions
+- The AI coaching feature provides automated support and suggestions
 - AI-generated advice is not a substitute for professional mental health services
 - We do not guarantee the accuracy or appropriateness of AI-generated content
 
@@ -94,14 +94,14 @@ You agree not to:
 
 ## 10. Indemnification
 
-You agree to indemnify and hold harmless We Counsel and its affiliates from any claims, losses, or damages arising from:
+You agree to indemnify and hold harmless We Coach and its affiliates from any claims, losses, or damages arising from:
 - Your use of the Service
 - Your violation of these Terms
 - Your violation of any rights of another party
 
 ## 11. Governing Law
 
-These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which We Counsel operates, without regard to conflict of law provisions.
+These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which We Coach operates, without regard to conflict of law provisions.
 
 ## 12. Dispute Resolution
 
@@ -131,7 +131,7 @@ If any provision of these Terms is found to be unenforceable or invalid, that pr
 
 ## 16. Entire Agreement
 
-These Terms, together with our Privacy Policy, constitute the entire agreement between you and We Counsel regarding the Service.
+These Terms, together with our Privacy Policy, constitute the entire agreement between you and We Coach regarding the Service.
 
 ---
 

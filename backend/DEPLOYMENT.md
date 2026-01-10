@@ -1,4 +1,4 @@
-# AWS Deployment Guide for We Counsel AI
+# AWS Deployment Guide for We Coach
 
 ## Prerequisites
 - AWS CLI installed and configured

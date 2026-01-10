@@ -53,7 +53,7 @@ class _InvitationScreenState extends ConsumerState<InvitationScreen> {
               ),
               const SizedBox(height: 16),
               Text(
-                'Your partner has invited you to join We Counsel. Please sign in or create an account to get started.',
+                'Your partner has invited you to join We Coach. Please sign in or create an account to get started.',
                 style: Theme.of(context).textTheme.bodyLarge,
                 textAlign: TextAlign.center,
               ),

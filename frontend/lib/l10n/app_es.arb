@@ -1,6 +1,6 @@
 {
   "@@locale": "es",
-  "appTitle": "We Counsel",
+  "appTitle": "We Coach",
   "appSubtitle": "Su viaje de relación juntos",
   
   "login": "Iniciar Sesión",
@@ -36,7 +36,7 @@
   "invitePartner": "Invitar Pareja",
   "inviteYourPartner": "Invita a tu pareja",
   "sendInvitation": "Enviar invitación",
-  "invitePartnerDescription": "Invita a tu pareja a unirse a ti en We Counsel. Recibirá un correo electrónico con instrucciones para crear su cuenta y conectarse contigo.",
+  "invitePartnerDescription": "Invita a tu pareja a unirse a ti en We Coach. Recibirá un correo electrónico con instrucciones para crear su cuenta y conectarse contigo.",
   "partnerEmailAddress": "Dirección de correo electrónico de la pareja",
   "enterPartnerEmail": "Ingresa la dirección de correo electrónico de tu pareja",
   "pleaseEnterPartnerEmail": "Por favor, ingresa el correo electrónico de tu pareja",
@@ -51,7 +51,7 @@
   "ok": "OK",
   "waitingForPartner": "Esperando a su pareja...",
   "waitingForPartnerTitle": "Esperando a su pareja",
-  "waitingRoomGreeting": "¡Hola {name}! Su viaje de consejería comenzará una vez que su pareja se una a usted en We Counsel.",
+  "waitingRoomGreeting": "¡Hola {name}! Su viaje de coaching comenzará una vez que su pareja se una a usted en We Coach.",
   "whatHappensNext": "¿Qué sucede después?",
   "sendAnotherInvitation": "Enviar otra invitación",
   "invitePartnerMessage": "Comparta esta invitación con su pareja para comenzar su viaje de consejería juntos.",
@@ -78,7 +78,7 @@
   "@aiCounsellor": {
     "description": "Etiqueta del consejero IA"
   },
-  "drSarahAiCounsellor": "Dra. Sarah (Consejero IA)",
+  "drSarahAiCounsellor": "Coach Sarah (Coach IA)",
   "@drSarahAiCounsellor": {
     "description": "Nombre completo de la Dra. Sarah consejero IA"
   },

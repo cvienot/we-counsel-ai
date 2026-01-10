@@ -37,7 +37,7 @@ class WeCounselApp extends ConsumerWidget {
     final currentLocale = ref.watch(currentLocaleProvider);
 
     return MaterialApp.router(
-      title: 'We Counsel',
+      title: 'We Coach',
       locale: currentLocale,
       localizationsDelegates: const [
         AppLocalizations.delegate,
@@ -224,7 +224,7 @@ class SplashScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 24),
             Text(
-              AppLocalizations.of(context)?.appTitle ?? 'We Counsel',
+              AppLocalizations.of(context)?.appTitle ?? 'We Coach',
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,

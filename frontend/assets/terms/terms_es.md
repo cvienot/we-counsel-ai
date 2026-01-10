@@ -4,11 +4,11 @@
 
 ## 1. Aceptación de los términos
 
-Al crear una cuenta y utilizar We Counsel ("el Servicio"), usted acepta estar sujeto a estos Términos de Servicio. Si no está de acuerdo con estos términos, no puede utilizar el Servicio.
+Al crear una cuenta y utilizar We Coach ("el Servicio"), usted acepta estar sujeto a estos Términos de Servicio. Si no está de acuerdo con estos términos, no puede utilizar el Servicio.
 
-## 2. Descripción del servicio
+## 2. Descripción del Servicio
 
-We Counsel es una aplicación de asesoramiento diseñada para facilitar la comunicación entre parejas. El Servicio proporciona:
+We Coach es una aplicación de asesoramiento diseñada para facilitar la comunicación entre parejas. El Servicio proporciona:
 - Espacios de conversación privados para parejas
 - Soporte de asesoramiento asistido por IA
 - Herramientas de mensajería y comunicación seguras
@@ -51,7 +51,7 @@ Usted acepta no:
 ## 6. Propiedad intelectual
 
 ### 6.1 Contenido del servicio
-- Todo el contenido, características y funcionalidad del Servicio son propiedad de We Counsel
+- Todo el contenido, características y funcionalidad del Servicio son propiedad de We Coach
 - No puede copiar, modificar, distribuir o crear obras derivadas sin permiso
 
 ### 6.2 Contenido del usuario
@@ -94,14 +94,14 @@ Usted acepta no:
 
 ## 10. Indemnización
 
-Usted acepta indemnizar y eximir de responsabilidad a We Counsel y sus afiliados de cualquier reclamo, pérdida o daño que surja de:
+Usted acepta indemnizar y eximir de responsabilidad a We Coach y sus afiliados de cualquier reclamo, pérdida o daño que surja de:
 - Su uso del Servicio
 - Su violación de estos Términos
 - Su violación de los derechos de otra parte
 
 ## 11. Ley aplicable
 
-Estos Términos se regirán e interpretarán de acuerdo con las leyes de la jurisdicción en la que opera We Counsel, sin tener en cuenta las disposiciones sobre conflictos de leyes.
+Estos Términos se regirán e interpretarán de acuerdo con las leyes de la jurisdicción en la que opera We Coach, sin tener en cuenta las disposiciones sobre conflictos de leyes.
 
 ## 12. Resolución de disputas
 
@@ -131,7 +131,7 @@ Si alguna disposición de estos Términos se considera inaplicable o inválida, 
 
 ## 16. Acuerdo completo
 
-Estos Términos, junto con nuestra Política de Privacidad, constituyen el acuerdo completo entre usted y We Counsel con respecto al Servicio.
+Estos Términos, junto con nuestra Política de Privacidad, constituyen el acuerdo completo entre usted y We Coach con respecto al Servicio.
 
 ---
 

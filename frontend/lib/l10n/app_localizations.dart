@@ -103,7 +103,7 @@ abstract class AppLocalizations {
   /// The application title
   ///
   /// In en, this message translates to:
-  /// **'We Counsel'**
+  /// **'We Coach'**
   String get appTitle;
 
   /// The application subtitle
@@ -169,13 +169,13 @@ abstract class AppLocalizations {
   /// Welcome message description
   ///
   /// In en, this message translates to:
-  /// **'This is your main conversation space where you and your partner can share thoughts, feelings, and receive guidance from Dr. Sarah, your AI counsellor.'**
+  /// **'This is your main conversation space where you and your partner can share thoughts, feelings, and receive guidance from Coach Sarah, your AI coach.'**
   String get welcomeMessage;
 
   /// Placeholder message when no messages
   ///
   /// In en, this message translates to:
-  /// **'Share what\'s on your mind. Dr. Sarah is here to help guide your conversation.'**
+  /// **'Share what\'s on your mind. Coach Sarah is here to help guide your conversation.'**
   String get shareThoughts;
 
   /// Conversations screen title
@@ -373,7 +373,7 @@ abstract class AppLocalizations {
   /// Waiting room greeting message
   ///
   /// In en, this message translates to:
-  /// **'Hi {name}! Your counselling journey will begin once your partner joins you on We Counsel.'**
+  /// **'Hi {name}! Your coaching journey will begin once your partner joins you on We Coach.'**
   String waitingRoomGreeting(String name);
 
   /// What happens next section title
@@ -478,10 +478,10 @@ abstract class AppLocalizations {
   /// **'AI Counsellor'**
   String get aiCounsellor;
 
-  /// Dr. Sarah AI Counsellor full name
+  /// Coach Sarah AI Coach full name
   ///
   /// In en, this message translates to:
-  /// **'Dr. Sarah (AI Counsellor)'**
+  /// **'Coach Sarah (AI Coach)'**
   String get drSarahAiCounsellor;
 
   /// Message encouraging users to start their first conversation

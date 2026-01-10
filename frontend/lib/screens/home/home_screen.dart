@@ -27,7 +27,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('We Counsel'),
+        title: const Text('We Coach'),
         actions: [
           PopupMenuButton(
             itemBuilder: (context) => [

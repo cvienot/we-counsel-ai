@@ -23,7 +23,7 @@ class WeCounselApp extends ConsumerWidget {
     final router = _createRouter(ref);
 
     return MaterialApp.router(
-      title: 'We Counsel',
+      title: 'We Coach',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xFF6B73FF),

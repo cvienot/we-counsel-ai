@@ -253,7 +253,7 @@ const sendMessageNotification = async ({ to, recipientName, senderName, messageP
             <body>
               <div class="container">
                 <div class="header">
-                  <h1>We Counsel</h1>
+                  <h1>We Coach</h1>
                 </div>
                 <div class="content">
                   <h2>${t.heading(senderName)}</h2>

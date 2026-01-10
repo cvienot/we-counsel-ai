@@ -1,4 +1,4 @@
-# We Counsel - Development Setup Guide
+# We Coach - Development Setup Guide
 
 ## Quick Start
 
@@ -82,7 +82,7 @@ The app now includes real-time features:
 
 ### Real-time Features
 
-1. **AI Response Streaming** - See AI counsellor responses type in real-time
+1. **AI Response Streaming** - See AI coach responses type in real-time
 2. **Typing Indicators** - See when your partner is typing
 3. **Live Message Delivery** - Messages appear instantly without page refresh
 

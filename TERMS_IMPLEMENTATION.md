@@ -1,7 +1,7 @@
 # Terms of Service Implementation Summary
 
 ## Overview
-This document summarizes the implementation of mandatory Terms of Service acceptance during user registration for the We Counsel application.
+This document summarizes the implementation of mandatory Terms of Service acceptance during user registration for the We Coach application.
 
 ## Date Implemented
 December 12, 2025
@@ -18,7 +18,7 @@ Created comprehensive Terms of Service document covering:
 - Privacy and data protection
 - User conduct guidelines
 - Intellectual property rights
-- AI counselling disclaimers
+- AI coaching disclaimers
 - Service modifications and termination
 - Liability limitations
 - Dispute resolution

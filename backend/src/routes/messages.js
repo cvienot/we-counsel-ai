@@ -3,7 +3,7 @@ const { docClient, TABLES, PutCommand, QueryCommand, GetCommand, UpdateCommand }
 const { authenticateToken } = require('../middleware/authMiddleware');
 const { checkAIMessageLimit } = require('../middleware/subscriptionMiddleware');
 const { aiService } = require('../services');
-const { generateCounsellorResponse, summarizeConversation } = aiService;
+const { generateCoachResponse, summarizeConversation } = aiService;
 const subscriptionService = require('../services/subscriptionService');
 const streamingService = require('../services/streamingService');
 const { randomUUID } = require('crypto');
@@ -283,7 +283,7 @@ router.post('/:conversationId/ai-stream', authenticateToken, checkAIMessageLimit
     });
 
     // Generate streaming AI response if appropriate
-    if (recipientType === 'both' || recipientType === 'counsellor') {
+    if (recipientType === 'both' || recipientType === 'coach') {
       try {
         // Get recent messages for context
         const recentMessagesParams = {
@@ -317,7 +317,7 @@ router.post('/:conversationId/ai-stream', authenticateToken, checkAIMessageLimit
 
         // Stream AI response with proper error handling
         try {
-          await generateCounsellorResponse({
+          await generateCoachResponse({
             messages: [...contextMessages, messageData],
             context: contextString,
             onChunk: async (chunk) => {
@@ -329,8 +329,8 @@ router.post('/:conversationId/ai-stream', authenticateToken, checkAIMessageLimit
               const aiResponse = {
                 messageId: aiMessageId,
                 conversationId,
-                senderId: 'ai-counsellor',
-                senderName: 'Sarah (AI Relationship Coach)',
+                senderId: 'ai-coach',
+                senderName: 'Coach Sarah (AI Relationship Coach)',
                 senderType: 'ai',
                 content: fullResponse,
                 recipientType: 'both',
@@ -357,7 +357,7 @@ router.post('/:conversationId/ai-stream', authenticateToken, checkAIMessageLimit
 
               // Send completion notification
               streamingService.streamAIResponse(conversationId, aiMessageId, '', true);
-              streamingService.sendMessageNotification(conversationId, 'ai-counsellor', aiResponse);
+              streamingService.sendMessageNotification(conversationId, 'ai-coach', aiResponse);
               
               // Increment AI message usage counter
               await subscriptionService.incrementAIMessageUsage(req.user.userId);
@@ -376,7 +376,7 @@ router.post('/:conversationId/ai-stream', authenticateToken, checkAIMessageLimit
             messageId: aiMessageId,
             conversationId,
             senderId: 'ai-counsellor',
-            senderName: 'Dr. Sarah (AI Counsellor)',
+            senderName: 'Coach Sarah (AI Relationship Coach)',
             senderType: 'ai',
             content: '❌ I apologize, but I\'m currently unable to respond due to technical issues. Your conversation is still being saved, and I\'ll be back online soon.',
             recipientType: 'both',

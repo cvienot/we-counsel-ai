@@ -12,7 +12,7 @@ REPOSITORY="cvienot/we-counsel-ai"
 BRANCH="main"
 
 echo "========================================="
-echo "We Counsel AI - Frontend Deployment"
+echo "We Coach - Frontend Deployment"
 echo "AWS Amplify Hosting Setup"
 echo "========================================="
 echo ""

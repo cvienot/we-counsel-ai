@@ -1,4 +1,4 @@
-# We Counsel - Frontend
+# We Coach - Frontend
 
 Flutter multi-platform app for couples counselling with AI guidance.
 

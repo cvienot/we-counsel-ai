@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'We Counsel';
+  String get appTitle => 'We Coach';
 
   @override
   String get appSubtitle => 'Your relationship journey together';
@@ -43,11 +43,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get welcomeMessage =>
-      'This is your main conversation space where you and your partner can share thoughts, feelings, and receive guidance from Dr. Sarah, your AI counsellor.';
+      'This is your main conversation space where you and your partner can share thoughts, feelings, and receive guidance from Coach Sarah, your AI coach.';
 
   @override
   String get shareThoughts =>
-      'Share what\'s on your mind. Dr. Sarah is here to help guide your conversation.';
+      'Share what\'s on your mind. Coach Sarah is here to help guide your conversation.';
 
   @override
   String get conversations => 'Conversations';
@@ -152,7 +152,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String waitingRoomGreeting(String name) {
-    return 'Hi $name! Your counselling journey will begin once your partner joins you on We Counsel.';
+    return 'Hi $name! Your coaching journey will begin once your partner joins you on We Coach.';
   }
 
   @override
@@ -209,7 +209,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiCounsellor => 'AI Counsellor';
 
   @override
-  String get drSarahAiCounsellor => 'Dr. Sarah (AI Counsellor)';
+  String get drSarahAiCounsellor => 'Coach Sarah (AI Coach)';
 
   @override
   String get startFirstConversationMessage =>

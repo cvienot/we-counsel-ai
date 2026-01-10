@@ -9,7 +9,7 @@ class AppLocalizationsFr extends AppLocalizations {
   AppLocalizationsFr([String locale = 'fr']) : super(locale);
 
   @override
-  String get appTitle => 'We Counsel';
+  String get appTitle => 'We Coach';
 
   @override
   String get appSubtitle => 'Votre parcours relationnel ensemble';
@@ -43,11 +43,11 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get welcomeMessage =>
-      'Ceci est votre espace de conversation principal où vous et votre partenaire pouvez partager vos pensées, sentiments et recevoir des conseils de Dr. Sarah, votre conseillère IA.';
+      'Ceci est votre espace de conversation principal où vous et votre partenaire pouvez partager vos pensées, sentiments et recevoir des conseils de Coach Sarah, votre coach IA.';
 
   @override
   String get shareThoughts =>
-      'Partagez ce qui vous préoccupe. Dr. Sarah est là pour vous aider à guider votre conversation.';
+      'Partagez ce qui vous préoccupe. Coach Sarah est là pour vous aider à guider votre conversation.';
 
   @override
   String get conversations => 'Conversations';
@@ -102,7 +102,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get invitePartnerDescription =>
-      'Invitez votre partenaire à vous rejoindre sur We Counsel. Il recevra un e-mail avec les instructions pour créer son compte et se connecter avec vous.';
+      'Invitez votre partenaire à vous rejoindre sur We Coach. Il recevra un e-mail avec les instructions pour créer son compte et se connecter avec vous.';
 
   @override
   String get partnerEmailAddress => 'Adresse e-mail du partenaire';
@@ -135,7 +135,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String invitationSentMessage(String email) {
-    return 'Une invitation a été envoyée à $email. Il recevra un e-mail avec les instructions pour vous rejoindre sur We Counsel.';
+    return 'Une invitation a été envoyée à $email. Il recevra un e-mail avec les instructions pour vous rejoindre sur We Coach.';
   }
 
   @override
@@ -156,7 +156,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String waitingRoomGreeting(String name) {
-    return 'Bonjour $name ! Votre parcours de conseil commencera une fois que votre partenaire vous rejoindra sur We Counsel.';
+    return 'Bonjour $name ! Votre parcours de coaching commencera une fois que votre partenaire vous rejoindra sur We Coach.';
   }
 
   @override
@@ -213,7 +213,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get aiCounsellor => 'Conseiller IA';
 
   @override
-  String get drSarahAiCounsellor => 'Dr. Sarah (Conseiller IA)';
+  String get drSarahAiCounsellor => 'Coach Sarah (Coach IA)';
 
   @override
   String get startFirstConversationMessage =>

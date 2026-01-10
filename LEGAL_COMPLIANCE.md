@@ -36,11 +36,11 @@ When crisis keywords detected, AI immediately responds with:
 - To "relationship communication coach creating summary of couples conversation"
 
 ### 2. Backend - Message Routes (`backend/src/routes/messages.js`)
-- AI sender name: `Dr. Sarah (AI Counsellor)` → `Sarah (AI Relationship Coach)`
+- AI sender name: `Dr. Sarah (AI Coach)` → `Sarah (AI Relationship Coach)`
 
 ### 3. Backend - Subscription Service (`backend/src/services/subscriptionService.js`)
 - Feature descriptions:
-  - `AI counselor messages` → `AI relationship coach messages`
+  - `AI coach messages` → `AI relationship coach messages`
   - Updated for all 3 tiers (free, essential, premium)
 
 ### 4. Backend - Mock AI Service (`backend/src/services/__mocks__/aiService.js`)
@@ -48,20 +48,20 @@ When crisis keywords detected, AI immediately responds with:
 - Maintains consistency with real AI service for testing
 
 ### 5. Frontend - Plan Selection (`frontend/lib/screens/plan_selection_screen.dart`)
-- Description: `Try the AI counselor` → `Try the AI relationship coach`
+- Description: `Try the AI coach` → `Try the AI relationship coach`
 
 ### 6. Frontend - Terms of Service (`frontend/lib/screens/auth/terms_of_service_screen.dart`)
 
 #### Section 2 Updated - Description of Service
 Added prominent warning:
 ```
-⚠️ THIS SERVICE IS NOT THERAPY: We Counsel provides communication 
+⚠️ THIS SERVICE IS NOT THERAPY: We Coach provides communication 
 support and educational guidance only. It is not a substitute for 
 professional therapy, counseling, or mental health treatment.
 ```
 
 #### Section 7 Completely Rewritten - AI Features
-**New title**: "AI Relationship Coaching Features" (was "AI Counselling Features")
+**New title**: "AI Relationship Coaching Features" (was "AI Coaching Features")
 
 **Added 5 comprehensive disclaimer subsections**:
 

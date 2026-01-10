@@ -16,7 +16,7 @@ class Constants {
   }
   
   // App Configuration
-  static const String appName = 'We Counsel';
+  static const String appName = 'We Coach';
   static const String appVersion = '1.0.0';
   
   // Storage Keys

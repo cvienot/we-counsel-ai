@@ -19,7 +19,7 @@ log() {
 
 print_banner() {
     log $PURPLE "╔══════════════════════════════════════════════════════════════╗"
-    log $PURPLE "║                    WE COUNSEL DEV SETUP                      ║"
+    log $PURPLE "║                    WE COACH DEV SETUP                        ║"
     log $PURPLE "╚══════════════════════════════════════════════════════════════╝"
     echo ""
 }

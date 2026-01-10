@@ -123,17 +123,17 @@ class _LegacyTermsOfServiceScreen extends StatelessWidget {
               _buildSection(
                 context,
                 '1. Acceptance of Terms',
-                'By creating an account and using We Counsel ("the Service"), you agree to be bound by these Terms of Service. If you do not agree to these terms, you may not use the Service.',
+                'By creating an account and using We Coach ("the Service"), you agree to be bound by these Terms of Service. If you do not agree to these terms, you may not use the Service.',
               ),
               _buildSection(
                 context,
                 '2. Description of Service',
-                'We Counsel is a relationship communication support application designed to facilitate communication between couples. The Service provides:\n\n'
+                'We Coach is a relationship communication support application designed to facilitate communication between couples. The Service provides:\n\n'
                 '• Private conversation spaces for couples\n'
                 '• AI-assisted relationship coaching and communication support\n'
                 '• Secure messaging and communication tools\n'
                 '• Partner connection and invitation features\n\n'
-                '⚠️ THIS SERVICE IS NOT THERAPY: We Counsel provides communication support and educational guidance only. It is not a substitute for professional therapy, counseling, or mental health treatment.',
+                '⚠️ THIS SERVICE IS NOT THERAPY: We Coach provides communication support and educational guidance only. It is not a substitute for professional therapy, counseling, or mental health treatment.',
               ),
               _buildSection(
                 context,
@@ -174,7 +174,7 @@ class _LegacyTermsOfServiceScreen extends StatelessWidget {
                 context,
                 '6. Intellectual Property',
                 '6.1 Service Content:\n'
-                '• All content, features, and functionality of the Service are owned by We Counsel\n'
+                '• All content, features, and functionality of the Service are owned by We Coach\n'
                 '• You may not copy, modify, distribute, or create derivative works without permission\n\n'
                 '6.2 User Content:\n'
                 '• You retain ownership of any content you create through the Service\n'
@@ -234,7 +234,7 @@ class _LegacyTermsOfServiceScreen extends StatelessWidget {
               _buildSection(
                 context,
                 '10. Indemnification',
-                'You agree to indemnify and hold harmless We Counsel and its affiliates from any claims, losses, or damages arising from:\n\n'
+                'You agree to indemnify and hold harmless We Coach and its affiliates from any claims, losses, or damages arising from:\n\n'
                 '• Your use of the Service\n'
                 '• Your violation of these Terms\n'
                 '• Your violation of any rights of another party',
@@ -242,7 +242,7 @@ class _LegacyTermsOfServiceScreen extends StatelessWidget {
               _buildSection(
                 context,
                 '11. Governing Law',
-                'These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which We Counsel operates, without regard to conflict of law provisions.',
+                'These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which We Coach operates, without regard to conflict of law provisions.',
               ),
               _buildSection(
                 context,
@@ -275,7 +275,7 @@ class _LegacyTermsOfServiceScreen extends StatelessWidget {
               _buildSection(
                 context,
                 '16. Entire Agreement',
-                'These Terms, together with our Privacy Policy, constitute the entire agreement between you and We Counsel regarding the Service.',
+                'These Terms, together with our Privacy Policy, constitute the entire agreement between you and We Coach regarding the Service.',
               ),
               const SizedBox(height: 24),
               Container(

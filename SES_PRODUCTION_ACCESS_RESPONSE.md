@@ -6,9 +6,9 @@
 
 ## Application Overview
 
-**Application Name**: We Counsel AI  
+**Application Name**: We Coach  
 **Website URL**: https://main.d3ct6eeeltgvfr.amplifyapp.com  
-**Purpose**: Couples counselling platform facilitating communication between partners through AI-assisted conversations
+**Purpose**: Couples coaching platform facilitating communication between partners through AI-assisted conversations
 
 ---
 
@@ -32,17 +32,17 @@
 **Frequency**: Once per couple relationship  
 **Example Content**:
 ```
-Subject: [Partner Name] has invited you to We Counsel AI
+Subject: [Partner Name] has invited you to We Coach
 
 Hi [Recipient Name],
 
-[Partner Name] has invited you to join them on We Counsel AI, a private platform 
+[Partner Name] has invited you to join them on We Coach, a private platform 
 for couples to improve their communication through AI-assisted conversations.
 
 Click here to accept the invitation and create your account:
 [Invitation Link - expires in 7 days]
 
-We Counsel AI provides a safe, private space for couples to:
+We Coach provides a safe, private space for couples to:
 - Have structured conversations about important topics
 - Get AI-powered insights to improve communication
 - Track relationship progress over time
@@ -50,7 +50,7 @@ We Counsel AI provides a safe, private space for couples to:
 If you didn't expect this invitation, you can safely ignore this email.
 
 Best regards,
-We Counsel AI Team
+We Coach Team
 ```
 
 ### 2. New Message Notification
@@ -76,11 +76,11 @@ Unsubscribe from notifications: [Unsubscribe Link]
 **Frequency**: Once per user account  
 **Example Content**:
 ```
-Subject: Verify your We Counsel AI account
+Subject: Verify your We Coach account
 
 Hi [User Name],
 
-Welcome to We Counsel AI! Please verify your email address to complete your registration.
+Welcome to We Coach! Please verify your email address to complete your registration.
 
 Verify your email: [Verification Link - expires in 24 hours]
 
@@ -92,11 +92,11 @@ If you didn't create this account, you can safely ignore this email.
 **Frequency**: On-demand (rate-limited to prevent abuse)  
 **Example Content**:
 ```
-Subject: Reset your We Counsel AI password
+Subject: Reset your We Coach password
 
 Hi [User Name],
 
-You requested a password reset for your We Counsel AI account.
+You requested a password reset for your We Coach account.
 
 Reset your password: [Reset Link - expires in 1 hour]
 
@@ -201,11 +201,11 @@ async function handleBounce(bounceNotification) {
 ```
 Email Footer:
 ---
-You're receiving this because you have an active We Counsel AI account.
+You're receiving this because you have an active We Coach account.
 Manage your notification preferences: [Settings Link]
 Unsubscribe from notifications: [One-Click Unsubscribe]
 
-We Counsel AI | Privacy Policy | Support
+We Coach | Privacy Policy | Support
 ```
 
 ---
@@ -299,7 +299,7 @@ We Counsel AI | Privacy Policy | Support
 
 ## Summary
 
-We Counsel AI is a legitimate couples counselling platform sending only transactional emails to opted-in users. We have:
+We Coach is a legitimate couples coaching platform sending only transactional emails to opted-in users. We have:
 
 ✅ Clear use case (couples communication platform)  
 ✅ Defined email types (invitations, notifications, account management)  
@@ -323,4 +323,4 @@ Thank you for reviewing our request.
 
 Best regards,
 Camille Vienot
-We Counsel AI
+We Coach
