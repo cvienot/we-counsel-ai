@@ -285,6 +285,39 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 ),
               ),
             ),
+
+            const SizedBox(height: 16),
+
+            // Subscription & Billing Card
+            Card(
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: const Icon(Icons.payment),
+                    title: const Text('Payment Portal'),
+                    subtitle: const Text('Manage subscription and billing'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => context.push('/payment-portal'),
+                  ),
+                  const Divider(height: 1),
+                  ListTile(
+                    leading: const Icon(Icons.receipt_long),
+                    title: const Text('Billing History'),
+                    subtitle: const Text('View invoices and payments'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => context.push('/billing-history'),
+                  ),
+                  const Divider(height: 1),
+                  ListTile(
+                    leading: const Icon(Icons.upgrade),
+                    title: const Text('Change Plan'),
+                    subtitle: const Text('Upgrade or change subscription'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => context.push('/plan-selection'),
+                  ),
+                ],
+              ),
+            ),
             
             const SizedBox(height: 32),
             

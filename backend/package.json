@@ -51,6 +51,7 @@
     "morgan": "^1.10.1",
     "nodemailer": "^7.0.6",
     "openai": "^5.23.1",
+    "stripe": "^20.1.2",
     "uuid": "^13.0.0"
   },
   "devDependencies": {

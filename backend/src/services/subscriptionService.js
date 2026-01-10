@@ -358,6 +358,33 @@ const cancelSubscription = async (userId) => {
   }
 };
 
+/**
+ * Reset usage counters for couple
+ */
+const resetUsageCounters = async (coupleId) => {
+  try {
+    const now = new Date();
+    const nextResetDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+
+    await docClient.send(new UpdateCommand({
+      TableName: TABLES.COUPLES,
+      Key: { coupleId },
+      UpdateExpression: 'SET aiMessagesUsed = :zero, aiMessagesResetDate = :resetDate',
+      ExpressionAttributeValues: {
+        ':zero': 0,
+        ':resetDate': nextResetDate.toISOString()
+      }
+    }));
+
+    console.log(`✅ Usage counters reset for couple ${coupleId}`);
+    return { success: true };
+
+  } catch (error) {
+    console.error('Error resetting usage counters:', error);
+    throw error;
+  }
+};
+
 module.exports = {
   SUBSCRIPTION_TIERS,
   getTierConfig,
@@ -365,5 +392,6 @@ module.exports = {
   incrementAIMessageUsage,
   updateSubscription,
   getSubscriptionHistory,
-  cancelSubscription
+  cancelSubscription,
+  resetUsageCounters
 };

@@ -17,6 +17,10 @@ import 'screens/conversations/conversation_screen.dart';
 import 'screens/profile/profile_screen.dart';
 import 'screens/invite/invite_partner_screen.dart';
 import 'screens/settings/language_selection_screen.dart';
+import 'screens/plan_selection_screen.dart';
+import 'screens/settings/payment_portal_screen.dart';
+import 'screens/settings/billing_history_screen.dart';
+import 'screens/settings/payment_success_screen.dart';
 import 'config/environment.dart';
 
 void main() {
@@ -182,6 +186,22 @@ class WeCounselApp extends ConsumerWidget {
         GoRoute(
           path: '/language',
           builder: (context, state) => const LanguageSelectionScreen(),
+        ),
+        GoRoute(
+          path: '/plan-selection',
+          builder: (context, state) => const PlanSelectionScreen(),
+        ),
+        GoRoute(
+          path: '/payment-portal',
+          builder: (context, state) => const PaymentPortalScreen(),
+        ),
+        GoRoute(
+          path: '/billing-history',
+          builder: (context, state) => const BillingHistoryScreen(),
+        ),
+        GoRoute(
+          path: '/payment/success',
+          builder: (context, state) => const PaymentSuccessScreen(),
         ),
       ],
     );

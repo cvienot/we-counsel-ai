@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../services/payment_service.dart';
+import '../config/app_config.dart';
 
 class PlanSelectionScreen extends StatefulWidget {
   const PlanSelectionScreen({super.key});
@@ -9,6 +12,9 @@ class PlanSelectionScreen extends StatefulWidget {
 
 class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
   String selectedTier = 'free';
+  String selectedBillingPeriod = 'monthly';
+  bool _isProcessingPayment = false;
+  final PaymentService _paymentService = PaymentService(baseUrl: AppConfig.apiBaseUrl);
 
   final List<Map<String, dynamic>> plans = [
     {
@@ -293,7 +299,86 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
                 top: false,
                 child: Column(
                   children: [
-                    if (selectedTier != 'free')
+                    if (selectedTier != 'free') ...[
+                      // Billing period toggle
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selectedBillingPeriod = 'monthly';
+                                  });
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                  decoration: BoxDecoration(
+                                    color: selectedBillingPeriod == 'monthly'
+                                        ? Colors.white
+                                        : Colors.transparent,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Text(
+                                    'Monthly',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontWeight: selectedBillingPeriod == 'monthly'
+                                          ? FontWeight.bold
+                                          : FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selectedBillingPeriod = 'annual';
+                                  });
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                  decoration: BoxDecoration(
+                                    color: selectedBillingPeriod == 'annual'
+                                        ? Colors.white
+                                        : Colors.transparent,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        'Annual',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontWeight: selectedBillingPeriod == 'annual'
+                                              ? FontWeight.bold
+                                              : FontWeight.normal,
+                                        ),
+                                      ),
+                                      const Text(
+                                        'Save 20%',
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          color: Colors.green,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 12),
                         child: Text(
@@ -304,12 +389,11 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
                           ),
                         ),
                       ),
+                    ],
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context, selectedTier);
-                        },
+                        onPressed: _isProcessingPayment ? null : _handleSubscribe,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: plans.firstWhere(
                               (p) => p['tier'] == selectedTier)['color'],
@@ -318,16 +402,25 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        child: Text(
-                          selectedTier == 'free'
-                              ? 'Continue with Free'
-                              : 'Start Free Trial',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
+                        child: _isProcessingPayment
+                            ? const SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                ),
+                              )
+                            : Text(
+                                selectedTier == 'free'
+                                    ? 'Continue with Free'
+                                    : 'Start Free Trial',
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
                       ),
                     ),
                   ],
@@ -338,6 +431,67 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _handleSubscribe() async {
+    if (selectedTier == 'free') {
+      Navigator.pop(context, selectedTier);
+      return;
+    }
+
+    setState(() => _isProcessingPayment = true);
+
+    try {
+      final result = await _paymentService.createCheckoutSession(
+        tier: selectedTier,
+        billingPeriod: selectedBillingPeriod,
+      );
+
+      if (result['success'] == true) {
+        final url = result['url'];
+        if (url != null) {
+          final uri = Uri.parse(url);
+          if (await canLaunchUrl(uri)) {
+            await launchUrl(uri, mode: LaunchMode.externalApplication);
+            // Close this screen as payment is handled in browser
+            if (mounted) {
+              Navigator.pop(context);
+            }
+          } else {
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Could not open payment page'),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+          }
+        }
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(result['message'] ?? 'Failed to start checkout'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isProcessingPayment = false);
+      }
+    }
   }
 
   IconData _getPlanIcon(String tier) {
