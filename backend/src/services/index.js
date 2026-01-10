@@ -21,7 +21,17 @@ function loadAIService() {
   return require('./aiService');
 }
 
+function loadStripeService() {
+  if (process.env.MOCK_STRIPE === 'true') {
+    console.log('💳 Loading MOCK Stripe service');
+    return require('./__mocks__/stripeService');
+  }
+  console.log('💳 Loading REAL Stripe service');
+  return require('./stripeService');
+}
+
 module.exports = {
   emailService: loadEmailService(),
-  aiService: loadAIService()
+  aiService: loadAIService(),
+  stripeService: loadStripeService()
 };

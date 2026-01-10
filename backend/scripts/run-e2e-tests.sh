@@ -147,6 +147,7 @@ echo -e "\n${YELLOW}🚀 Step 3: Starting API on port $API_PORT with mocks enabl
 export PORT=$API_PORT
 export MOCK_EMAIL=true
 export MOCK_AI=true
+export MOCK_STRIPE=true
 export ENABLE_TEST_ENDPOINTS=true
 export NODE_ENV=test
 export JWT_SECRET="test-secret-$(date +%s)"

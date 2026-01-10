@@ -41,6 +41,12 @@ if (process.env.ENABLE_TEST_ENDPOINTS === 'true') {
   router.post('/reset', (req, res) => {
     global.mockEmailStore = [];
     global.mockAIStore = [];
+    global.mockStripeStore = {
+      checkoutSessions: [],
+      portalSessions: [],
+      subscriptions: {},
+      invoices: {}
+    };
     
     res.json({
       success: true,
@@ -132,14 +138,73 @@ if (process.env.ENABLE_TEST_ENDPOINTS === 'true') {
       environment: {
         mockEmail: process.env.MOCK_EMAIL === 'true',
         mockAI: process.env.MOCK_AI === 'true',
+        mockStripe: process.env.MOCK_STRIPE === 'true',
         dynamodbEndpoint: process.env.DYNAMODB_ENDPOINT || 'AWS',
         nodeEnv: process.env.NODE_ENV
       },
       stores: {
         emailCount: (global.mockEmailStore || []).length,
-        aiResponseCount: (global.mockAIStore || []).length
+        aiResponseCount: (global.mockAIStore || []).length,
+        stripeCheckoutCount: (global.mockStripeStore?.checkoutSessions || []).length,
+        stripePortalCount: (global.mockStripeStore?.portalSessions || []).length
       }
     });
+  });
+
+  // Simulate successful subscription upgrade (for testing payment flow without webhooks)
+  router.post('/simulate-subscription-upgrade', async (req, res) => {
+    const { userId, tier, billingPeriod = 'monthly' } = req.body;
+    
+    if (!userId || !tier) {
+      return res.status(400).json({
+        error: 'Missing parameters',
+        message: 'userId and tier are required'
+      });
+    }
+
+    try {
+      const { docClient, TABLES, GetCommand, UpdateCommand } = require('../config/database');
+      
+      // Get user to find couple
+      const userResult = await docClient.send(new GetCommand({
+        TableName: TABLES.USERS,
+        Key: { userId }
+      }));
+      
+      if (!userResult.Item || !userResult.Item.coupleId) {
+        return res.status(404).json({
+          error: 'User not found or not in a couple'
+        });
+      }
+      
+      const coupleId = userResult.Item.coupleId;
+      
+      // Update couple subscription
+      const updateResult = await docClient.send(new UpdateCommand({
+        TableName: TABLES.COUPLES,
+        Key: { coupleId },
+        UpdateExpression: 'SET subscriptionTier = :tier, subscriptionStatus = :status, billingPeriod = :billingPeriod, aiMessagesUsed = :zero',
+        ExpressionAttributeValues: {
+          ':tier': tier,
+          ':status': 'active',
+          ':billingPeriod': billingPeriod,
+          ':zero': 0
+        },
+        ReturnValues: 'ALL_NEW'
+      }));
+      
+      res.json({
+        success: true,
+        message: 'Subscription upgraded successfully',
+        couple: updateResult.Attributes
+      });
+    } catch (error) {
+      console.error('Error simulating subscription upgrade:', error);
+      res.status(500).json({
+        error: 'Failed to upgrade subscription',
+        message: error.message
+      });
+    }
   });
 
   console.log('✅ Test endpoints enabled at /api/test/*');

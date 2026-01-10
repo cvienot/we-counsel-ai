@@ -103,7 +103,14 @@ const canSendAIMessage = async (userId) => {
     
     // Premium has unlimited messages
     if (tierConfig.aiMessagesPerMonth === -1) {
-      return { allowed: true, tier, remaining: 'unlimited', coupleId: couple.coupleId };
+      return { 
+        allowed: true, 
+        tier, 
+        used: couple.aiMessagesUsed || 0,
+        limit: -1,
+        remaining: 'unlimited', 
+        coupleId: couple.coupleId 
+      };
     }
 
     // Check if we need to reset the counter (new month)

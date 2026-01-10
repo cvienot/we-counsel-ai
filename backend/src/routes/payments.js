@@ -6,7 +6,7 @@
 const express = require('express');
 const router = express.Router();
 const { authenticateToken } = require('../middleware/authMiddleware');
-const stripeService = require('../services/stripeService');
+const { stripeService } = require('../services');
 const subscriptionService = require('../services/subscriptionService');
 const { docClient, TABLES, GetCommand, UpdateCommand } = require('../config/database');
 
