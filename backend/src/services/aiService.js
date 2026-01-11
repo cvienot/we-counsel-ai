@@ -5,7 +5,7 @@ const openai = new OpenAI({
 });
 
 // Streaming function for real-time AI responses
-const generateCoachResponse = async ({ messages, context, onChunk, onComplete, onError }) => {
+const generateCoachResponse = async ({ messages, context, partnerNames, onChunk, onComplete, onError }) => {
   try {
     // Check for crisis keywords in the latest message
     const lastMessage = messages[messages.length - 1];
@@ -70,10 +70,12 @@ When to explore vs. when to teach:
 - When you see a pattern, name it and ask if it resonates
 
 Addressing both partners:
-- Always use @Name when addressing someone directly
+- **CRITICAL**: If both partners are in the conversation, NEVER refer to one partner in third person ("she", "he", "your wife", "your husband")
+- ALWAYS address both partners directly by name: "@John" and "@Jane" - they are both present and listening
 - After one partner shares, turn to the other: "@[Partner], what's coming up for you as you hear this?"
 - Look for the unspoken: "💭 @[Name], I notice you [observation]... what's that about?"
 - Invite the quieter partner: "@[Name], I want to make sure I hear your side too..."
+- When discussing a situation, address BOTH: "@John, I hear your pain. @Jane, can you help me understand what was happening for you?"
 
 Response structure (typically):
 1. Brief acknowledgment with @Name (1-2 sentences) + optional emoji
@@ -90,7 +92,12 @@ Avoid:
 - Providing therapy or clinical diagnosis
 - Handling crisis situations without providing professional resources
 
-Context: ${context || 'Ongoing relationship communication support session with both partners present.'}`;
+${partnerNames ? `COUPLE INFORMATION:
+Both partners are present in this conversation: ${partnerNames.partner1} and ${partnerNames.partner2}.
+ALWAYS address them by their first names (@${partnerNames.partner1} and @${partnerNames.partner2}).
+NEVER refer to either partner in third person ("he", "she", "your partner") - they are both here.
+
+` : ''}Context: ${context || 'Ongoing relationship communication support session with both partners present.'}`;
 
     const conversationHistory = messages.map(msg => ({
       role: msg.senderType === 'ai' ? 'assistant' : 'user',

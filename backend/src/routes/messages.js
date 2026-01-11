@@ -312,6 +312,44 @@ router.post('/:conversationId/ai-stream', authenticateToken, checkAIMessageLimit
 
         const contextString = `${contextPrefix}Conversation: ${conversation.title}${conversation.topic ? `, Topic: ${conversation.topic}` : ''}`;
 
+        // Fetch both partner names from the couple
+        let partnerNames = null;
+        try {
+          const coupleParams = {
+            TableName: TABLES.COUPLES,
+            Key: { coupleId: req.user.coupleId }
+          };
+          const coupleResult = await docClient.send(new GetCommand(coupleParams));
+          
+          if (coupleResult.Item) {
+            const couple = coupleResult.Item;
+            // Get both users
+            const user1Params = {
+              TableName: TABLES.USERS,
+              Key: { userId: couple.user1Id }
+            };
+            const user2Params = {
+              TableName: TABLES.USERS,
+              Key: { userId: couple.user2Id }
+            };
+            
+            const [user1Result, user2Result] = await Promise.all([
+              docClient.send(new GetCommand(user1Params)),
+              docClient.send(new GetCommand(user2Params))
+            ]);
+            
+            if (user1Result.Item && user2Result.Item) {
+              partnerNames = {
+                partner1: user1Result.Item.firstName || 'Partner 1',
+                partner2: user2Result.Item.firstName || 'Partner 2'
+              };
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching partner names:', error);
+          // Continue without names if fetch fails
+        }
+
         const aiMessageId = randomUUID();
         let aiResponseContent = '';
 
@@ -320,6 +358,7 @@ router.post('/:conversationId/ai-stream', authenticateToken, checkAIMessageLimit
           await generateCoachResponse({
             messages: [...contextMessages, messageData],
             context: contextString,
+            partnerNames,
             onChunk: async (chunk) => {
               aiResponseContent += chunk;
               await streamingService.streamAIResponse(conversationId, aiMessageId, chunk, false);

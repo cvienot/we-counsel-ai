@@ -56,9 +56,16 @@ const resetDatabase = async () => {
     console.log('⏳ Waiting for tables to be deleted...');
     await new Promise(resolve => setTimeout(resolve, 2000));
 
-    // Recreate tables
-    const { createTables } = require('../src/config/database');
-    await createTables();
+    // Recreate tables using migration manager
+    const MigrationManager = require('../src/database/migration-manager');
+    const config = {
+      region: process.env.DYNAMODB_REGION || 'eu-west-3',
+      ...(process.env.DYNAMODB_ENDPOINT && { endpoint: process.env.DYNAMODB_ENDPOINT }),
+      billingMode: process.env.DYNAMODB_ENDPOINT ? 'PROVISIONED' : 'PAY_PER_REQUEST'
+    };
+    
+    const manager = new MigrationManager(config);
+    await manager.createAllTables();
     
     console.log('✅ Database reset completed successfully!');
     process.exit(0);
