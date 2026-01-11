@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/message.dart';
 import '../l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 class MessageBubble extends StatelessWidget {
   final Message message;
@@ -55,14 +56,40 @@ class MessageBubble extends StatelessWidget {
                 if (!alignRight)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 4),
-                    child: Text(
-                      _getLocalizedSenderName(context),
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: isAI
-                            ? theme.colorScheme.secondary
-                            : theme.colorScheme.onSurface.withOpacity(0.7),
-                      ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          _getLocalizedSenderName(context),
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: isAI
+                                ? theme.colorScheme.secondary
+                                : theme.colorScheme.onSurface.withOpacity(0.7),
+                          ),
+                        ),
+                        if (isAI) ...[
+                          const SizedBox(width: 6),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 6,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              color: theme.colorScheme.secondary.withOpacity(0.15),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              'AI Coach',
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                                color: theme.colorScheme.secondary,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
                   ),
                 Container(
@@ -83,15 +110,39 @@ class MessageBubble extends StatelessWidget {
                           ? const Radius.circular(4)
                           : const Radius.circular(18),
                     ),
+                    // Add subtle border for AI messages
+                    border: isAI
+                        ? Border.all(
+                            color: theme.colorScheme.secondary.withOpacity(0.2),
+                            width: 1,
+                          )
+                        : null,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        message.content,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: _getTextColor(context),
+                      MarkdownBody(
+                        data: message.content,
+                        styleSheet: MarkdownStyleSheet(
+                          p: theme.textTheme.bodyMedium?.copyWith(
+                            color: _getTextColor(context),
+                            height: 1.5,
+                          ),
+                          strong: theme.textTheme.bodyMedium?.copyWith(
+                            color: _getTextColor(context),
+                            fontWeight: FontWeight.bold,
+                            height: 1.5,
+                          ),
+                          em: theme.textTheme.bodyMedium?.copyWith(
+                            color: _getTextColor(context),
+                            fontStyle: FontStyle.italic,
+                            height: 1.5,
+                          ),
+                          listBullet: theme.textTheme.bodyMedium?.copyWith(
+                            color: _getTextColor(context),
+                          ),
                         ),
+                        shrinkWrap: true,
                       ),
                       const SizedBox(height: 4),
                       Text(
@@ -123,15 +174,14 @@ class MessageBubble extends StatelessWidget {
     final theme = Theme.of(context);
 
     return CircleAvatar(
-      radius: 16,
+      radius: 18, // Slightly larger for better visibility
       backgroundColor: isAI
           ? theme.colorScheme.secondary
           : theme.colorScheme.primary,
       child: isAI
-          ? const Icon(
-              Icons.psychology,
-              size: 16,
-              color: Colors.white,
+          ? const Text(
+              '💙', // Heart emoji for AI counselor
+              style: TextStyle(fontSize: 18),
             )
           : Text(
               message.senderName.isNotEmpty
@@ -139,7 +189,7 @@ class MessageBubble extends StatelessWidget {
                   : '?',
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 12,
+                fontSize: 14,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -152,7 +202,8 @@ class MessageBubble extends StatelessWidget {
     final alignRight = isCurrentUser && !isAI;
 
     if (isAI) {
-      return theme.colorScheme.secondary.withOpacity(0.1);
+      // Softer, more inviting color for AI messages
+      return theme.colorScheme.secondary.withOpacity(0.08);
     } else if (alignRight) {
       return theme.colorScheme.primary;
     } else {
