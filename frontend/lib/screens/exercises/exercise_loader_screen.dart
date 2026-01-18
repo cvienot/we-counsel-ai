@@ -54,19 +54,20 @@ class _ExerciseLoaderScreenState extends ConsumerState<ExerciseLoaderScreen> {
       );
 
       // Start the exercise session
-      final session = await _exerciseService.startExercise(
+      final result = await _exerciseService.startExercise(
         token: token,
         conversationId: widget.conversationId,
         exerciseId: widget.exerciseId,
       );
 
       print('📝 Exercise loaded:');
-      print('  Session: $session');
-      print('  Exercise: $exercise');
+      print('  Result: $result');
+      print('  Session: ${result['session']}');
+      print('  Exercise: ${result['exercise']}');
 
       setState(() {
         _exercise = exercise;
-        _session = session;
+        _session = result['session'];  // Extract session from result
         _isLoading = false;
       });
     } catch (e) {

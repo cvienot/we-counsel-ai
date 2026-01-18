@@ -57,9 +57,13 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
       final token = await ApiService().getToken();
       if (token == null || token.isEmpty) throw Exception('Not authenticated');
 
+      print('📝 Submitting response:');
+      print('  Session: $_currentSession');
+      print('  SessionId: ${_currentSession['sessionId']}');
+
       final result = await _exerciseService.progressExercise(
         token: token,
-        sessionId: _currentSession['sessionId'],
+        sessionId: _currentSession['sessionId'] as String,
         response: _responseController.text.trim(),
       );
 
