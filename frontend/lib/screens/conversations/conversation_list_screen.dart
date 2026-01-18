@@ -5,6 +5,7 @@ import '../../l10n/app_localizations.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/conversation_provider.dart';
 import '../../models/conversation.dart';
+import '../../utils/snackbar_utils.dart';
 import 'package:intl/intl.dart';
 
 class ConversationListScreen extends ConsumerStatefulWidget {
@@ -37,18 +38,11 @@ class _ConversationListScreenState extends ConsumerState<ConversationListScreen>
         );
         
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Conversation created successfully')),
-          );
+          showSuccessSnackBar(context, 'Conversation created successfully');
         }
       } catch (e) {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Failed to create conversation: ${e.toString()}'),
-              backgroundColor: Colors.red,
-            ),
-          );
+          showErrorSnackBar(context, 'Failed to create conversation: ${e.toString()}');
         }
       }
     }

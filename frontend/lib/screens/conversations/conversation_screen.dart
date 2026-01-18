@@ -8,6 +8,7 @@ import '../../models/message.dart';
 import '../../services/realtime_service.dart';
 import '../../widgets/message_bubble.dart';
 import '../../widgets/disclaimer_banner.dart';
+import '../../utils/snackbar_utils.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
 
@@ -146,12 +147,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
       });
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to send message: ${e.toString()}'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        showErrorSnackBar(context, 'Failed to send message: ${e.toString()}');
       }
     }
   }

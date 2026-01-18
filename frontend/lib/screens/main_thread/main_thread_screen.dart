@@ -6,6 +6,7 @@ import '../../providers/conversation_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../widgets/message_bubble.dart';
 import '../../services/realtime_service.dart';
+import '../../utils/snackbar_utils.dart';
 import 'dart:async';
 
 class MainThreadScreen extends ConsumerStatefulWidget {
@@ -197,12 +198,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
       });
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to send message: ${e.toString()}'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        showErrorSnackBar(context, 'Failed to send message: ${e.toString()}');
       }
     }
   }

@@ -126,6 +126,7 @@ class MessageBubble extends StatelessWidget {
                     children: [
                       MarkdownBody(
                         data: _getCleanContent(),
+                        selectable: true,
                         styleSheet: MarkdownStyleSheet(
                           p: theme.textTheme.bodyMedium?.copyWith(
                             color: _getTextColor(context),

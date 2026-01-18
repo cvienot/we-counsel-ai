@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../services/exercise_service.dart';
 import '../../services/api_service.dart';
 import '../../providers/auth_provider.dart';
+import '../../utils/snackbar_utils.dart';
 
 class ExerciseScreen extends ConsumerStatefulWidget {
   final String conversationId;
@@ -46,9 +47,7 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
 
   Future<void> _submitResponse() async {
     if (_responseController.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a response')),
-      );
+      showErrorSnackBar(context, 'Please enter a response');
       return;
     }
 
@@ -83,9 +82,7 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
     } catch (error) {
       setState(() => _isLoading = false);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $error')),
-        );
+        showErrorSnackBar(context, 'Error: $error');
       }
     }
   }
@@ -109,9 +106,7 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
     } catch (error) {
       setState(() => _isLoading = false);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error loading summary: $error')),
-        );
+        showErrorSnackBar(context, 'Error loading summary: $error');
       }
     }
   }

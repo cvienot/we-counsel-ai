@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../services/payment_service.dart';
 import '../config/app_config.dart';
+import '../utils/snackbar_utils.dart';
 
 class PlanSelectionScreen extends StatefulWidget {
   const PlanSelectionScreen({super.key});
@@ -525,33 +526,18 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
             }
           } else {
             if (mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Could not open payment page'),
-                  backgroundColor: Colors.red,
-                ),
-              );
+              showErrorSnackBar(context, 'Could not open payment page');
             }
           }
         }
       } else {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(result['message'] ?? 'Failed to start checkout'),
-              backgroundColor: Colors.red,
-            ),
-          );
+          showErrorSnackBar(context, result['message'] ?? 'Failed to start checkout');
         }
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        showErrorSnackBar(context, 'Error: $e');
       }
     } finally {
       if (mounted) {
