@@ -1,0 +1,120 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import '../../services/exercise_service.dart';
+import '../../services/api_service.dart';
+import '../../providers/auth_provider.dart';
+import 'exercise_screen.dart';
+
+class ExerciseLoaderScreen extends ConsumerStatefulWidget {
+  final String conversationId;
+  final String exerciseId;
+
+  const ExerciseLoaderScreen({
+    super.key,
+    required this.conversationId,
+    required this.exerciseId,
+  });
+
+  @override
+  ConsumerState<ExerciseLoaderScreen> createState() => _ExerciseLoaderScreenState();
+}
+
+class _ExerciseLoaderScreenState extends ConsumerState<ExerciseLoaderScreen> {
+  final ExerciseService _exerciseService = ExerciseService();
+  bool _isLoading = true;
+  String? _error;
+  Map<String, dynamic>? _session;
+  Map<String, dynamic>? _exercise;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadExercise();
+  }
+
+  Future<void> _loadExercise() async {
+    try {
+      final authState = ref.read(authProvider);
+      final token = await ApiService().getToken();
+      
+      if (token == null || token.isEmpty) {
+        setState(() {
+          _error = 'Not authenticated';
+          _isLoading = false;
+        });
+        return;
+      }
+
+      // Get exercise details
+      final exercises = await _exerciseService.getExercises(token);
+      final exercise = exercises.firstWhere(
+        (e) => e['exerciseId'] == widget.exerciseId,
+        orElse: () => throw Exception('Exercise not found'),
+      );
+
+      // Start the exercise session
+      final session = await _exerciseService.startExercise(
+        token: token,
+        conversationId: widget.conversationId,
+        exerciseId: widget.exerciseId,
+      );
+
+      print('📝 Exercise loaded:');
+      print('  Session: $session');
+      print('  Exercise: $exercise');
+
+      setState(() {
+        _exercise = exercise;
+        _session = session;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _error = e.toString();
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    if (_error != null) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('Error')),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error_outline, size: 64, color: Colors.red),
+              const SizedBox(height: 16),
+              Text(_error!, style: const TextStyle(color: Colors.red)),
+              const SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: () => context.pop(),
+                child: const Text('Go Back'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return ExerciseScreen(
+      conversationId: widget.conversationId,
+      session: _session!,
+      exercise: _exercise!,
+      onComplete: () {
+        context.pop();
+      },
+    );
+  }
+}

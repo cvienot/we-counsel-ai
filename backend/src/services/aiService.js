@@ -20,6 +20,30 @@ const generateCoachResponse = async ({ messages, context, partnerNames, onChunk,
 
     const systemPrompt = `You are Sarah, an AI relationship coach and communication facilitator. You help couples improve their communication and understanding. You are NOT a therapist or mental health professional.
 
+**⚠️ MANDATORY RULE - EXERCISE SUGGESTIONS (READ THIS FIRST):**
+
+When you detect any of these patterns after 3+ messages:
+- Partners saying "you don't listen" / "I'm not heard" / "dismissed"
+- Repeating the same argument / stuck in a cycle / going in circles
+- Raised voices / defensiveness / talking over each other
+- One person "always at fault" / no accountability
+
+You MUST suggest an exercise using this EXACT format (place it at the END of your response):
+
+[EXERCISE:active-listening] @Name and @Name, you're stuck in a pattern where neither feels heard. Let's try the **Active Listening Practice** - I'll guide you through it step-by-step. Takes 15 minutes. Want to give it a shot?
+
+DO NOT write exercises like this:
+❌ "Try this: 1. Partner A says... 2. Partner B reflects..."
+❌ "One small reset: @Name says one sentence..."
+❌ "🎯 Here's what to try..."
+
+Instead USE the [EXERCISE:id] marker which launches an interactive session.
+
+Available exercises:
+- [EXERCISE:active-listening] - for "not listening" / "dismissed" / interrupting
+- [EXERCISE:appreciation-share] - for rebuilding positivity
+- [EXERCISE:conflict-deescalation] - for heated arguments
+
 YOUR ROLE & CONFIDENCE:
 - You are VALUABLE and CAPABLE of helping couples navigate difficult conversations, conflicts, and relationship challenges
 - Provide active coaching, teach communication skills, and help couples understand each other better
@@ -39,13 +63,13 @@ RESPONSE FORMAT & STYLE:
   💡 for insights or "aha" moments
   🤔 for questions or inviting thought
   ✨ for encouragement or positive reframing
-  🎯 for actionable suggestions
+  🎯 for actionable suggestions (NOT for step-by-step exercises - use [EXERCISE:id] instead)
 - Structure your responses in 2-4 short paragraphs (3-4 sentences max per paragraph)
 - Add a blank line between paragraphs for easy scanning
 - Keep responses concise and conversational - avoid long monologues
 - End with an open, specific question to continue the dialogue
 - Use Markdown formatting for emphasis: **bold** for key terms, *italic* for emotional nuance
-- Use numbered lists (1. 2. 3.) for actionable steps
+- FORBIDDEN: Writing numbered step-by-step instructions (use [EXERCISE:id] instead)
 
 EXAMPLE RESPONSE FORMAT:
 "💭 @Alice, I notice frustration in your words about feeling unheard when you share your day.
@@ -131,6 +155,15 @@ NEVER refer to either partner in third person ("he", "she", "your partner") - th
       }
     }
 
+    // Fallback: If AI didn't suggest exercise but should have, inject it
+    const shouldSuggestExercise = detectExerciseOpportunity(messages, fullResponse);
+    if (shouldSuggestExercise && !fullResponse.includes('[EXERCISE:')) {
+      console.log('⚠️ AI missed exercise opportunity - injecting Active Listening suggestion');
+      const exerciseSuggestion = '\n\n[EXERCISE:active-listening] I notice you\'re both struggling to feel heard. Let\'s try the **Active Listening Practice** - I can guide you through it step-by-step. Takes about 15 minutes. Interested?';
+      fullResponse += exerciseSuggestion;
+      await onChunk(exerciseSuggestion);
+    }
+
     onComplete(fullResponse);
     return fullResponse;
 
@@ -139,6 +172,29 @@ NEVER refer to either partner in third person ("he", "she", "your partner") - th
     onError(error);
     throw new Error('Failed to generate coach response');
   }
+};
+
+// Helper function to detect if exercise should be suggested
+const detectExerciseOpportunity = (messages, aiResponse) => {
+  // Only suggest after 5+ messages
+  if (messages.length < 5) return false;
+  
+  // Check for key patterns in recent messages (last 5)
+  const recentMessages = messages.slice(-5);
+  const allText = recentMessages.map(m => m.content.toLowerCase()).join(' ');
+  
+  const triggers = [
+    'not listening', "don't listen", 'not heard', "don't hear",
+    'dismissed', 'dismissing', 'same argument', 'same fight',
+    'going in circles', 'stuck in', 'repeating', 'cycle',
+    'raised voice', 'raising voice', 'defensive', 'talking over',
+    'never at fault', 'always at fault', 'accountability'
+  ];
+  
+  const triggerCount = triggers.filter(trigger => allText.includes(trigger)).length;
+  
+  // Suggest exercise if 3+ triggers found
+  return triggerCount >= 3;
 };
 
 const summarizeConversation = async ({ messages, conversationTitle }) => {

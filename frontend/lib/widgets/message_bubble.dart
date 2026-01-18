@@ -3,15 +3,18 @@ import '../models/message.dart';
 import '../l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'exercise_suggestion_card.dart';
 
 class MessageBubble extends StatelessWidget {
   final Message message;
   final bool isCurrentUser;
+  final Function(String exerciseId)? onExerciseSuggestion;
 
   const MessageBubble({
     super.key,
     required this.message,
     required this.isCurrentUser,
+    this.onExerciseSuggestion,
   });
 
   String _getLocalizedSenderName(BuildContext context) {
@@ -122,7 +125,7 @@ class MessageBubble extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       MarkdownBody(
-                        data: message.content,
+                        data: _getCleanContent(),
                         styleSheet: MarkdownStyleSheet(
                           p: theme.textTheme.bodyMedium?.copyWith(
                             color: _getTextColor(context),
@@ -144,6 +147,17 @@ class MessageBubble extends StatelessWidget {
                         ),
                         shrinkWrap: true,
                       ),
+                      if (_getExerciseSuggestion() != null) ...[
+                        ExerciseSuggestionCard(
+                          exerciseId: _getExerciseSuggestion()!.exerciseId,
+                          exerciseName: _getExerciseSuggestion()!.exerciseName,
+                          onStart: () {
+                            if (onExerciseSuggestion != null) {
+                              onExerciseSuggestion!(_getExerciseSuggestion()!.exerciseId);
+                            }
+                          },
+                        ),
+                      ],
                       const SizedBox(height: 4),
                       Text(
                         DateFormat('HH:mm').format(
@@ -221,5 +235,22 @@ class MessageBubble extends StatelessWidget {
     } else {
       return theme.colorScheme.onSurface;
     }
+  }
+
+  /// Get exercise suggestion if present in message
+  ExerciseSuggestion? _getExerciseSuggestion() {
+    final isAI = message.senderType == MessageSenderType.ai;
+    if (!isAI) return null;
+    
+    return ExerciseSuggestionCard.parseFromMessage(message.content);
+  }
+
+  /// Get message content with exercise marker removed
+  String _getCleanContent() {
+    final suggestion = _getExerciseSuggestion();
+    if (suggestion != null) {
+      return suggestion.cleanContent;
+    }
+    return message.content;
   }
 }

@@ -117,6 +117,8 @@ const tables = {
       { name: 'coupleId', type: 'S', description: 'Couple this conversation belongs to' },
       { name: 'title', type: 'S', description: 'Conversation title' },
       { name: 'topic', type: 'S', description: 'Conversation topic/theme' },
+      { name: 'conversationType', type: 'S', description: 'Type of conversation (main, exercise)' },
+      { name: 'exerciseId', type: 'S', description: 'Reference to exercise if this is an exercise conversation' },
       { name: 'isMainThread', type: 'BOOL', description: 'Whether this is the main conversation' },
       { name: 'isActive', type: 'BOOL', description: 'Whether conversation is active' },
       { name: 'lastMessageAt', type: 'S', description: 'ISO timestamp of last message' },
@@ -206,6 +208,74 @@ const tables = {
         },
         projection: 'ALL',
         description: 'Query subscription history by couple'
+      }
+    ]
+  },
+
+  exercises: {
+    tableName: 'we-counsel-exercises',
+    description: 'Exercise templates and definitions',
+    primaryKey: {
+      partitionKey: { name: 'exerciseId', type: 'S' }
+    },
+    attributes: [
+      { name: 'exerciseId', type: 'S', description: 'Unique exercise identifier (UUID)' },
+      { name: 'name', type: 'S', description: 'Exercise name' },
+      { name: 'description', type: 'S', description: 'Exercise description' },
+      { name: 'category', type: 'S', description: 'Exercise category (communication, conflict, appreciation, etc.)' },
+      { name: 'duration', type: 'N', description: 'Estimated duration in minutes' },
+      { name: 'steps', type: 'S', description: 'JSON array of exercise steps' },
+      { name: 'isActive', type: 'BOOL', description: 'Whether exercise is available' },
+      { name: 'createdAt', type: 'S', description: 'ISO timestamp of creation' }
+    ],
+    globalSecondaryIndexes: [
+      {
+        indexName: 'category-index',
+        keys: {
+          partitionKey: { name: 'category', type: 'S' }
+        },
+        projection: 'ALL',
+        description: 'Query exercises by category'
+      }
+    ]
+  },
+
+  exerciseSessions: {
+    tableName: 'we-counsel-exercise-sessions',
+    description: 'Active and completed exercise sessions',
+    primaryKey: {
+      partitionKey: { name: 'sessionId', type: 'S' }
+    },
+    attributes: [
+      { name: 'sessionId', type: 'S', description: 'Unique session identifier (UUID)' },
+      { name: 'coupleId', type: 'S', description: 'Couple performing the exercise' },
+      { name: 'conversationId', type: 'S', description: 'Conversation where exercise is happening' },
+      { name: 'exerciseId', type: 'S', description: 'Exercise being performed' },
+      { name: 'status', type: 'S', description: 'Session status (active, completed, abandoned)' },
+      { name: 'currentStep', type: 'N', description: 'Current step number' },
+      { name: 'progress', type: 'S', description: 'JSON object tracking progress and responses' },
+      { name: 'summary', type: 'S', description: 'AI-generated summary after completion' },
+      { name: 'startedAt', type: 'S', description: 'ISO timestamp when started' },
+      { name: 'completedAt', type: 'S', description: 'ISO timestamp when completed' },
+      { name: 'createdAt', type: 'S', description: 'ISO timestamp of creation' }
+    ],
+    globalSecondaryIndexes: [
+      {
+        indexName: 'coupleId-index',
+        keys: {
+          partitionKey: { name: 'coupleId', type: 'S' },
+          sortKey: { name: 'createdAt', type: 'S' }
+        },
+        projection: 'ALL',
+        description: 'Query exercise sessions by couple'
+      },
+      {
+        indexName: 'conversationId-index',
+        keys: {
+          partitionKey: { name: 'conversationId', type: 'S' }
+        },
+        projection: 'ALL',
+        description: 'Query sessions by conversation'
       }
     ]
   }

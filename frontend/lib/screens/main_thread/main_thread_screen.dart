@@ -466,9 +466,17 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                               // Show regular messages first
                               if (index < messagesState.messages.length) {
                                 final message = messagesState.messages[index];
+                                final mainThread = ref.read(mainThreadProvider).mainThread;
                                 return MessageBubble(
                                   message: message,
                                   isCurrentUser: message.senderId == currentUser?.userId,
+                                  onExerciseSuggestion: mainThread != null ? (exerciseId) {
+                                    // Navigate to exercise screen
+                                    context.push('/exercise', extra: {
+                                      'conversationId': mainThread.conversationId,
+                                      'exerciseId': exerciseId,
+                                    });
+                                  } : null,
                                 );
                               }
                               

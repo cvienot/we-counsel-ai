@@ -33,7 +33,10 @@ const TABLES = {
   COUPLES: 'we-counsel-couples', 
   CONVERSATIONS: 'we-counsel-conversations',
   MESSAGES: 'we-counsel-messages',
-  INVITATIONS: 'we-counsel-invitations'
+  INVITATIONS: 'we-counsel-invitations',
+  SUBSCRIPTIONS: 'we-counsel-subscriptions',
+  EXERCISES: 'we-counsel-exercises',
+  EXERCISE_SESSIONS: 'we-counsel-exercise-sessions'
 };
 
 // Create tables if they don't exist (for development)

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/conversation_provider.dart';
 import '../../providers/auth_provider.dart';
@@ -249,6 +250,13 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                                 return MessageBubble(
                                   message: message,
                                   isCurrentUser: message.senderId == currentUser?.userId,
+                                  onExerciseSuggestion: (exerciseId) {
+                                    // Navigate to exercise screen
+                                    context.push('/exercise', extra: {
+                                      'conversationId': widget.conversationId,
+                                      'exerciseId': exerciseId,
+                                    });
+                                  },
                                 );
                               }
                               

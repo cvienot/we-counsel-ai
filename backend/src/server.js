@@ -76,6 +76,10 @@ app.use('/api/subscriptions', subscriptionRoutes);
 const paymentRoutes = require('./routes/payments');
 app.use('/api/payments', paymentRoutes);
 
+// Exercise routes
+const exerciseRoutes = require('./routes/exercises');
+app.use('/api/exercises', exerciseRoutes);
+
 // Test routes (only enabled in test mode)
 if (process.env.ENABLE_TEST_ENDPOINTS === 'true') {
   const testRoutes = require('./routes/test');
