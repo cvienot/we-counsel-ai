@@ -29,6 +29,7 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
   
   late Map<String, dynamic> _currentSession;
   late Map<String, dynamic> _currentExercise;
+  late Map<String, dynamic> _currentStepData; // Personalized current step
   bool _isLoading = false;
   String? _summary;
 
@@ -37,12 +38,33 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
     super.initState();
     _currentSession = widget.session;
     _currentExercise = widget.exercise;
+    // Get the personalized current step from the exercise
+    print('📝 ExerciseScreen init:');
+    print('  Session: ${widget.session}');
+    print('  Exercise: ${widget.exercise}');
+    print('  CurrentStep in exercise: ${widget.exercise['currentStep']}');
+    
+    _currentStepData = (widget.exercise['currentStep'] as Map<String, dynamic>?) ?? {};
   }
 
   @override
   void dispose() {
     _responseController.dispose();
     super.dispose();
+  }
+
+  bool _isCurrentUsersTurn(String prompt) {
+    final authState = ref.read(authProvider);
+    final currentUserName = '${authState.user?.firstName} ${authState.user?.lastName}'.trim();
+    
+    // Check if the prompt contains the current user's name
+    // Prompts are like "Alex, what would you like to share?"
+    if (currentUserName.isNotEmpty && prompt.contains(currentUserName)) {
+      return true;
+    }
+    
+    // If we can't determine, allow input (default to permissive)
+    return true;
   }
 
   Future<void> _submitResponse() async {
@@ -80,6 +102,7 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
         // Move to next step
         setState(() {
           _currentSession = result['session'];
+          _currentStepData = result['nextStep']; // Update with personalized step
           _isLoading = false;
         });
       }
@@ -199,9 +222,24 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
     final totalSteps = (_currentExercise['steps'] as List).length;
     final progress = stepNumber / totalSteps;
     
-    // Get the current step data (steps are 1-indexed)
-    final currentStepData = (_currentExercise['steps'] as List)[stepNumber - 1];
+    // Use the personalized current step data
+    print('📝 Building exercise view:');
+    print('  Step number: $stepNumber');
+    print('  Current step data: $_currentStepData');
+    
+    final currentStepData = _currentStepData;
+    
+    // Fallback to template if personalized step is missing
+    if (currentStepData.isEmpty || currentStepData['instruction'] == null) {
+      print('⚠️ Using fallback template step');
+      final templateStepData = (_currentExercise['steps'] as List)[stepNumber - 1];
+      return _buildStepView(stepNumber, totalSteps, progress, templateStepData);
+    }
 
+    return _buildStepView(stepNumber, totalSteps, progress, currentStepData);
+  }
+  
+  Widget _buildStepView(int stepNumber, int totalSteps, double progress, Map<String, dynamic> currentStepData) {
     return Column(
       children: [
         // Progress indicator
@@ -307,12 +345,41 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
                 ),
                 const SizedBox(height: 16),
 
+                // Check if it's current user's turn
+                if (!_isCurrentUsersTurn(currentStepData['prompt']))
+                  Card(
+                    color: Colors.orange.shade50,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        children: [
+                          Icon(Icons.hourglass_empty, color: Colors.orange.shade700),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Text(
+                              'Waiting for your partner to respond...',
+                              style: TextStyle(
+                                color: Colors.orange.shade900,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                if (!_isCurrentUsersTurn(currentStepData['prompt']))
+                  const SizedBox(height: 16),
+
                 // Response input
                 TextField(
                   controller: _responseController,
                   maxLines: 5,
+                  enabled: _isCurrentUsersTurn(currentStepData['prompt']) && !_isLoading,
                   decoration: InputDecoration(
-                    hintText: 'Type your response here...',
+                    hintText: _isCurrentUsersTurn(currentStepData['prompt']) 
+                      ? 'Type your response here...'
+                      : 'Waiting for your partner...',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -323,7 +390,7 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
 
                 // Submit button
                 ElevatedButton(
-                  onPressed: _isLoading ? null : _submitResponse,
+                  onPressed: (_isLoading || !_isCurrentUsersTurn(currentStepData['prompt'])) ? null : _submitResponse,
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),

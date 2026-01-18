@@ -61,6 +61,8 @@ router.post('/start', authenticateToken, async (req, res) => {
         Key: { coupleId: req.user.coupleId }
       }));
 
+      console.log('📝 Starting exercise - Couple result:', coupleResult.Item);
+
       if (coupleResult.Item) {
         const [user1Result, user2Result] = await Promise.all([
           docClient.send(new GetCommand({
@@ -73,16 +75,22 @@ router.post('/start', authenticateToken, async (req, res) => {
           }))
         ]);
 
+        console.log('📝 User1:', user1Result.Item);
+        console.log('📝 User2:', user2Result.Item);
+
         if (user1Result.Item && user2Result.Item) {
           partnerNames = {
             partner1: user1Result.Item.firstName || 'Partner 1',
             partner2: user2Result.Item.firstName || 'Partner 2'
           };
+          console.log('📝 Partner names:', partnerNames);
         }
       }
     } catch (error) {
       console.error('Error fetching partner names:', error);
     }
+
+    console.log('📝 Final partner names being sent:', partnerNames);
 
     // Start the exercise
     const result = await exerciseService.startExercise({

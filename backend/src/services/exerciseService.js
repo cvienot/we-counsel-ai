@@ -170,6 +170,10 @@ const startExercise = async ({ coupleId, conversationId, exerciseId, partnerName
 
   // Personalize first step with partner names
   const firstStep = { ...template.steps[0] };
+  console.log('📝 Personalizing first step');
+  console.log('  Partner names:', partnerNames);
+  console.log('  Before replacement:', firstStep);
+  
   if (partnerNames) {
     firstStep.instruction = firstStep.instruction
       .replace(/@{partner1}/g, partnerNames.partner1)
@@ -181,6 +185,8 @@ const startExercise = async ({ coupleId, conversationId, exerciseId, partnerName
       .replace(/@{partner1}/g, partnerNames.partner1)
       .replace(/@{partner2}/g, partnerNames.partner2);
   }
+  
+  console.log('  After replacement:', firstStep);
 
   return {
     session,

@@ -66,7 +66,7 @@ class _ExerciseLoaderScreenState extends ConsumerState<ExerciseLoaderScreen> {
       print('  Exercise: ${result['exercise']}');
 
       setState(() {
-        _exercise = exercise;
+        _exercise = result['exercise'];  // Use personalized exercise from result
         _session = result['session'];  // Extract session from result
         _isLoading = false;
       });
