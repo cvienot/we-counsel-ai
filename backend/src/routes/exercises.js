@@ -92,7 +92,41 @@ router.post('/start', authenticateToken, async (req, res) => {
 
     console.log('📝 Final partner names being sent:', partnerNames);
 
-    // Start the exercise
+    // Check if there's an active session for this conversation and exercise
+    const existingSession = await exerciseService.getActiveSession({ conversationId });
+    
+    if (existingSession && existingSession.exerciseId === exerciseId) {
+      // Resume existing session
+      console.log('📝 Resuming existing session:', existingSession.sessionId);
+      
+      // Get the current step with personalized names
+      const template = exerciseService.getExerciseTemplate(exerciseId);
+      const currentStepNumber = existingSession.currentStep;
+      const currentStep = { ...template.steps[currentStepNumber - 1] };
+      
+      if (partnerNames) {
+        currentStep.instruction = currentStep.instruction
+          .replace(/@{partner1}/g, partnerNames.partner1)
+          .replace(/@{partner2}/g, partnerNames.partner2);
+        currentStep.guidance = currentStep.guidance
+          .replace(/@{partner1}/g, partnerNames.partner1)
+          .replace(/@{partner2}/g, partnerNames.partner2);
+        currentStep.prompt = currentStep.prompt
+          .replace(/@{partner1}/g, partnerNames.partner1)
+          .replace(/@{partner2}/g, partnerNames.partner2);
+      }
+      
+      return res.json({
+        success: true,
+        session: existingSession,
+        exercise: {
+          ...template,
+          currentStep
+        }
+      });
+    }
+
+    // Start a new exercise
     const result = await exerciseService.startExercise({
       coupleId: req.user.coupleId,
       conversationId,

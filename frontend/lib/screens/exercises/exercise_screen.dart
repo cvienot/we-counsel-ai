@@ -55,16 +55,25 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
 
   bool _isCurrentUsersTurn(String prompt) {
     final authState = ref.read(authProvider);
-    final currentUserName = '${authState.user?.firstName} ${authState.user?.lastName}'.trim();
+    final currentUserFirstName = authState.user?.firstName ?? '';
     
-    // Check if the prompt contains the current user's name
-    // Prompts are like "Alex, what would you like to share?"
-    if (currentUserName.isNotEmpty && prompt.contains(currentUserName)) {
-      return true;
+    if (currentUserFirstName.isEmpty) {
+      // Can't determine - deny by default for safety
+      return false;
     }
     
-    // If we can't determine, allow input (default to permissive)
-    return true;
+    // Check if the prompt starts with the current user's first name followed by a comma
+    // Prompts are like "Alex, what would you like to share?"
+    // This ensures we match the person being asked, not just mentioned
+    final startsWithUserName = prompt.startsWith('$currentUserFirstName,') || 
+                                prompt.startsWith('$currentUserFirstName ');
+    
+    print('🔒 Turn check:');
+    print('  Current user: $currentUserFirstName');
+    print('  Prompt: $prompt');
+    print('  Is their turn: $startsWithUserName');
+    
+    return startsWithUserName;
   }
 
   Future<void> _submitResponse() async {

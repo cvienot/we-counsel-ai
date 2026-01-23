@@ -316,6 +316,7 @@ const getActiveSession = async ({ conversationId }) => {
 
 module.exports = {
   EXERCISE_TEMPLATES,
+  getExerciseTemplate: (exerciseId) => EXERCISE_TEMPLATES[exerciseId],
   startExercise,
   progressExercise,
   getExercises,
