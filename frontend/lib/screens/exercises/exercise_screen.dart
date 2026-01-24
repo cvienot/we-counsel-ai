@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../services/exercise_service.dart';
@@ -345,6 +346,36 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
                 ),
                 const SizedBox(height: 24),
 
+                // Previous responses (conversation history)
+                if (_hasPreviousResponses()) ...[
+                  Card(
+                    color: Colors.grey.shade100,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(Icons.history, color: Colors.grey),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Conversation So Far',
+                                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          ..._buildPreviousResponses(),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                ],
+
                 // Prompt
                 Text(
                   currentStepData['prompt'],
@@ -419,6 +450,102 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
         ),
       ],
     );
+  }
+
+  bool _hasPreviousResponses() {
+    final progressRaw = _currentSession['progress'];
+    if (progressRaw == null) return false;
+    
+    // Parse progress if it's a string
+    final Map<String, dynamic> progress;
+    if (progressRaw is String) {
+      try {
+        progress = jsonDecode(progressRaw) as Map<String, dynamic>;
+      } catch (e) {
+        print('❌ Failed to parse progress: $e');
+        return false;
+      }
+    } else {
+      progress = progressRaw as Map<String, dynamic>;
+    }
+    
+    final steps = progress['steps'] as List?;
+    if (steps == null) return false;
+    
+    // Check if any previous steps have responses
+    final currentStepNum = (_currentSession['currentStep'] as int?) ?? 1;
+    return steps.any((step) {
+      final stepNum = step['stepNumber'] as int;
+      final response = step['response'] as String?;
+      return stepNum < currentStepNum && response != null && response.isNotEmpty;
+    });
+  }
+
+  List<Widget> _buildPreviousResponses() {
+    final progressRaw = _currentSession['progress'];
+    if (progressRaw == null) return [];
+    
+    // Parse progress if it's a string
+    final Map<String, dynamic> progress;
+    if (progressRaw is String) {
+      try {
+        progress = jsonDecode(progressRaw) as Map<String, dynamic>;
+      } catch (e) {
+        print('❌ Failed to parse progress: $e');
+        return [];
+      }
+    } else {
+      progress = progressRaw as Map<String, dynamic>;
+    }
+    
+    final steps = progress['steps'] as List?;
+    if (steps == null) return [];
+    
+    final currentStepNum = (_currentSession['currentStep'] as int?) ?? 1;
+    final exerciseSteps = _currentExercise['steps'] as List;
+    
+    final widgets = <Widget>[];
+    
+    for (var i = 0; i < currentStepNum - 1; i++) {
+      final stepData = steps[i];
+      final response = stepData['response'] as String?;
+      
+      if (response != null && response.isNotEmpty) {
+        final templateStep = exerciseSteps[i] as Map<String, dynamic>;
+        final prompt = templateStep['prompt'] as String;
+        
+        widgets.add(
+          Container(
+            margin: const EdgeInsets.only(bottom: 12),
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: Colors.grey.shade300),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Step ${i + 1}: $prompt',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Colors.grey.shade600,
+                        fontWeight: FontWeight.w500,
+                      ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  response,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+    }
+    
+    return widgets;
   }
 
   @override
