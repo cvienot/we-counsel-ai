@@ -77,6 +77,21 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
     return startsWithUserName;
   }
 
+  String _extractPartnerName(String prompt, {required bool isFirst}) {
+    // Extract partner names from a personalized prompt
+    // Example: "Alex, what would you like to share with Emma?"
+    // Returns: partner1=Alex, partner2=Emma
+    
+    final regex = RegExp(r'^(\w+),.*\s(\w+)\?');
+    final match = regex.firstMatch(prompt);
+    
+    if (match != null && match.groupCount >= 2) {
+      return isFirst ? match.group(1)! : match.group(2)!;
+    }
+    
+    return '';
+  }
+
   Future<void> _submitResponse() async {
     if (_responseController.text.trim().isEmpty) {
       showErrorSnackBar(context, 'Please enter a response');
@@ -504,6 +519,11 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
     final currentStepNum = (_currentSession['currentStep'] as int?) ?? 1;
     final exerciseSteps = _currentExercise['steps'] as List;
     
+    // Get partner names from the exercise (they're embedded in the currentStep)
+    final currentStepPrompt = _currentStepData['prompt'] as String? ?? '';
+    final partner1 = _extractPartnerName(currentStepPrompt, isFirst: true);
+    final partner2 = _extractPartnerName(currentStepPrompt, isFirst: false);
+    
     final widgets = <Widget>[];
     
     for (var i = 0; i < currentStepNum - 1; i++) {
@@ -512,7 +532,14 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
       
       if (response != null && response.isNotEmpty) {
         final templateStep = exerciseSteps[i] as Map<String, dynamic>;
-        final prompt = templateStep['prompt'] as String;
+        var prompt = templateStep['prompt'] as String;
+        
+        // Replace partner placeholders with actual names
+        if (partner1.isNotEmpty && partner2.isNotEmpty) {
+          prompt = prompt
+              .replaceAll('@{partner1}', partner1)
+              .replaceAll('@{partner2}', partner2);
+        }
         
         widgets.add(
           Container(
