@@ -115,4 +115,22 @@ class ExerciseService {
       throw Exception('Failed to get active session');
     }
   }
+
+  // Get exercise history for the couple
+  Future<List<Map<String, dynamic>>> getExerciseHistory(String token) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/api/exercises/history'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return List<Map<String, dynamic>>.from(data['sessions']);
+    } else {
+      throw Exception('Failed to load exercise history');
+    }
+  }
 }

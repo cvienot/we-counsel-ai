@@ -287,6 +287,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               child: Column(
                 children: [
                   ListTile(
+                    leading: const Icon(Icons.fitness_center),
+                    title: const Text('Exercise History'),
+                    subtitle: const Text('View past exercises and summaries'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => context.push('/exercise-history'),
+                  ),
+                  const Divider(height: 1),
+                  ListTile(
                     leading: const Icon(Icons.payment),
                     title: const Text('Payment Portal'),
                     subtitle: const Text('Manage subscription and billing'),

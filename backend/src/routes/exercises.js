@@ -1,6 +1,7 @@
 const express = require('express');
 const { authenticateToken } = require('../middleware/authMiddleware');
-const { docClient, TABLES, GetCommand, UpdateCommand } = require('../config/database');
+const { docClient, TABLES, GetCommand, UpdateCommand, PutCommand, QueryCommand } = require('../config/database');
+const { randomUUID } = require('crypto');
 const exerciseService = require('../services/exerciseService');
 const { generateCoachResponse } = require('../services/aiService');
 const streamingService = require('../services/streamingService');
@@ -315,7 +316,7 @@ Keep it positive, specific, and actionable.`;
       onError: (error) => { console.error('Summary generation error:', error); }
     });
 
-    // Save summary
+    // Save summary to session
     await docClient.send(new UpdateCommand({
       TableName: TABLES.EXERCISE_SESSIONS,
       Key: { sessionId },
@@ -324,6 +325,30 @@ Keep it positive, specific, and actionable.`;
         ':summary': summary
       }
     }));
+
+    // Post summary as a message in the conversation
+    if (session.conversationId) {
+      try {
+        const messageId = randomUUID();
+        await docClient.send(new PutCommand({
+          TableName: TABLES.MESSAGES,
+          Item: {
+            messageId,
+            conversationId: session.conversationId,
+            senderId: 'ai-coach',
+            senderName: 'AI Coach',
+            senderType: 'ai',
+            content: `📝 **Exercise Completed: ${template.name}**\n\n${summary}`,
+            recipientType: 'both',
+            timestamp: Date.now(),
+            createdAt: new Date().toISOString()
+          }
+        }));
+        console.log('✅ Exercise summary posted to conversation:', session.conversationId);
+      } catch (msgError) {
+        console.error('Error posting summary to conversation:', msgError);
+      }
+    }
 
     res.json({
       success: true,
@@ -335,6 +360,48 @@ Keep it positive, specific, and actionable.`;
       error: 'Server error',
       message: 'Failed to generate summary'
     });
+  }
+});
+
+/**
+ * Get exercise history for the couple
+ */
+router.get('/history', authenticateToken, async (req, res) => {
+  try {
+    const coupleId = req.user.coupleId;
+    if (!coupleId) {
+      return res.status(400).json({ error: 'No couple linked' });
+    }
+
+    const result = await docClient.send(new QueryCommand({
+      TableName: TABLES.EXERCISE_SESSIONS,
+      IndexName: 'coupleId-index',
+      KeyConditionExpression: 'coupleId = :coupleId',
+      ExpressionAttributeValues: {
+        ':coupleId': coupleId
+      },
+      ScanIndexForward: false // Most recent first
+    }));
+
+    const sessions = (result.Items || []).map(session => {
+      const template = exerciseService.EXERCISE_TEMPLATES[session.exerciseId];
+      return {
+        sessionId: session.sessionId,
+        exerciseId: session.exerciseId,
+        exerciseName: template?.name || session.exerciseId,
+        status: session.status,
+        currentStep: session.currentStep,
+        totalSteps: template?.steps?.length || 0,
+        summary: session.summary || null,
+        startedAt: session.startedAt || session.createdAt,
+        completedAt: session.completedAt || null
+      };
+    });
+
+    res.json({ success: true, sessions });
+  } catch (error) {
+    console.error('Get exercise history error:', error);
+    res.status(500).json({ error: 'Server error', message: 'Failed to get exercise history' });
   }
 });
 

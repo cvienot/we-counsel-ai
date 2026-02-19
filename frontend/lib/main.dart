@@ -22,6 +22,7 @@ import 'screens/settings/payment_portal_screen.dart';
 import 'screens/settings/billing_history_screen.dart';
 import 'screens/settings/payment_success_screen.dart';
 import 'screens/exercises/exercise_loader_screen.dart';
+import 'screens/exercises/exercise_history_screen.dart';
 import 'config/environment.dart';
 
 void main() {
@@ -203,6 +204,10 @@ class WeCounselApp extends ConsumerWidget {
         GoRoute(
           path: '/payment/success',
           builder: (context, state) => const PaymentSuccessScreen(),
+        ),
+        GoRoute(
+          path: '/exercise-history',
+          builder: (context, state) => const ExerciseHistoryScreen(),
         ),
         GoRoute(
           path: '/exercise',
