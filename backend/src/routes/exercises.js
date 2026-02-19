@@ -1,8 +1,9 @@
 const express = require('express');
 const { authenticateToken } = require('../middleware/authMiddleware');
-const { docClient, TABLES, GetCommand } = require('../config/database');
+const { docClient, TABLES, GetCommand, UpdateCommand } = require('../config/database');
 const exerciseService = require('../services/exerciseService');
 const { generateCoachResponse } = require('../services/aiService');
+const streamingService = require('../services/streamingService');
 
 const router = express.Router();
 
@@ -214,6 +215,28 @@ router.post('/:sessionId/progress', authenticateToken, async (req, res) => {
       partnerNames
     });
 
+    // Notify partner via SSE that the exercise has progressed
+    try {
+      const coupleResult2 = await docClient.send(new GetCommand({
+        TableName: TABLES.COUPLES,
+        Key: { coupleId: req.user.coupleId }
+      }));
+      if (coupleResult2.Item) {
+        const partnerId = coupleResult2.Item.user1Id === req.user.userId
+          ? coupleResult2.Item.user2Id
+          : coupleResult2.Item.user1Id;
+        streamingService.sendToUser(partnerId, {
+          type: 'exerciseProgress',
+          sessionId,
+          currentStep: result.session.currentStep,
+          completed: result.completed,
+          timestamp: Date.now()
+        });
+      }
+    } catch (notifyError) {
+      console.error('Error notifying partner of exercise progress:', notifyError);
+    }
+
     res.json({
       success: true,
       completed: result.completed,
@@ -344,9 +367,32 @@ router.get('/active/:conversationId', authenticateToken, async (req, res) => {
       });
     }
 
-    // Get current step details
+    // Get current step details with personalized partner names
     const template = exerciseService.EXERCISE_TEMPLATES[session.exerciseId];
-    const currentStep = template.steps[session.currentStep - 1];
+    const currentStep = { ...template.steps[session.currentStep - 1] };
+
+    // Personalize partner names
+    try {
+      const coupleResult = await docClient.send(new GetCommand({
+        TableName: TABLES.COUPLES,
+        Key: { coupleId: conversationResult.Item.coupleId }
+      }));
+      if (coupleResult.Item) {
+        const [user1Result, user2Result] = await Promise.all([
+          docClient.send(new GetCommand({ TableName: TABLES.USERS, Key: { userId: coupleResult.Item.user1Id } })),
+          docClient.send(new GetCommand({ TableName: TABLES.USERS, Key: { userId: coupleResult.Item.user2Id } }))
+        ]);
+        if (user1Result.Item && user2Result.Item) {
+          const p1 = user1Result.Item.firstName || 'Partner 1';
+          const p2 = user2Result.Item.firstName || 'Partner 2';
+          currentStep.instruction = currentStep.instruction.replace(/@{partner1}/g, p1).replace(/@{partner2}/g, p2);
+          currentStep.guidance = currentStep.guidance.replace(/@{partner1}/g, p1).replace(/@{partner2}/g, p2);
+          currentStep.prompt = currentStep.prompt.replace(/@{partner1}/g, p1).replace(/@{partner2}/g, p2);
+        }
+      }
+    } catch (err) {
+      console.error('Error personalizing active session step:', err);
+    }
 
     res.json({
       success: true,

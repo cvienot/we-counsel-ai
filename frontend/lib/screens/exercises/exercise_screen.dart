@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,6 +34,7 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
   late Map<String, dynamic> _currentStepData; // Personalized current step
   bool _isLoading = false;
   String? _summary;
+  Timer? _pollTimer;
 
   @override
   void initState() {
@@ -46,12 +48,67 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
     print('  CurrentStep in exercise: ${widget.exercise['currentStep']}');
     
     _currentStepData = (widget.exercise['currentStep'] as Map<String, dynamic>?) ?? {};
+    _startPollingIfWaiting();
   }
 
   @override
   void dispose() {
+    _pollTimer?.cancel();
     _responseController.dispose();
     super.dispose();
+  }
+
+  void _startPollingIfWaiting() {
+    _pollTimer?.cancel();
+    
+    final prompt = _currentStepData['prompt'] as String? ?? '';
+    if (prompt.isNotEmpty && !_isCurrentUsersTurn(prompt)) {
+      // Not our turn - poll every 5 seconds for updates
+      print('⏳ Starting poll - waiting for partner...');
+      _pollTimer = Timer.periodic(const Duration(seconds: 5), (_) => _pollSession());
+    }
+  }
+
+  Future<void> _pollSession() async {
+    try {
+      final token = await ApiService().getToken();
+      if (token == null || token.isEmpty) return;
+
+      final result = await _exerciseService.getActiveSession(
+        token: token,
+        conversationId: widget.conversationId,
+      );
+
+      if (result == null || !mounted) return;
+
+      final serverStep = result['currentStep'] as int? ?? 1;
+      final localStep = _currentSession['currentStep'] as int? ?? 1;
+      final serverStatus = result['status'] as String? ?? 'active';
+
+      if (serverStep != localStep || serverStatus != _currentSession['status']) {
+        print('🔄 Session updated! Step $localStep → $serverStep');
+        
+        // Fetch full session data with personalized step
+        final fullData = await _exerciseService.startExercise(
+          token: token,
+          conversationId: widget.conversationId,
+          exerciseId: result['exerciseId'] as String,
+        );
+        
+        if (!mounted) return;
+        
+        setState(() {
+          _currentSession = fullData['session'];
+          _currentExercise = fullData['exercise'];
+          _currentStepData = (fullData['exercise']['currentStep'] as Map<String, dynamic>?) ?? {};
+        });
+        
+        // Re-evaluate polling
+        _startPollingIfWaiting();
+      }
+    } catch (e) {
+      print('⚠️ Poll error: $e');
+    }
   }
 
   bool _isCurrentUsersTurn(String prompt) {
@@ -117,7 +174,8 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
       _responseController.clear();
 
       if (result['completed'] == true) {
-        // Exercise completed - get summary
+        // Exercise completed - stop polling, get summary
+        _pollTimer?.cancel();
         setState(() {
           _currentSession = result['session'];
           _isLoading = false;
@@ -130,6 +188,8 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
           _currentStepData = result['nextStep']; // Update with personalized step
           _isLoading = false;
         });
+        // Re-evaluate polling (it's now partner's turn)
+        _startPollingIfWaiting();
       }
     } catch (error) {
       setState(() => _isLoading = false);
