@@ -79,15 +79,38 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
         conversationId: widget.conversationId,
       );
 
-      if (result == null || !mounted) return;
+      if (!mounted) return;
+
+      // No active session means exercise was completed by partner
+      if (result == null) {
+        print('🔄 Exercise completed by partner!');
+        _pollTimer?.cancel();
+        
+        // Update session status to completed and load summary
+        setState(() {
+          _currentSession['status'] = 'completed';
+        });
+        await _loadSummary();
+        return;
+      }
 
       final serverStep = result['currentStep'] as int? ?? 1;
       final localStep = _currentSession['currentStep'] as int? ?? 1;
       final serverStatus = result['status'] as String? ?? 'active';
 
       if (serverStep != localStep || serverStatus != _currentSession['status']) {
-        print('🔄 Session updated! Step $localStep → $serverStep');
+        print('🔄 Session updated! Step $localStep → $serverStep, status: $serverStatus');
         
+        if (serverStatus == 'completed') {
+          // Partner completed the exercise
+          _pollTimer?.cancel();
+          setState(() {
+            _currentSession = result;
+          });
+          await _loadSummary();
+          return;
+        }
+
         // Fetch full session data with personalized step
         final fullData = await _exerciseService.startExercise(
           token: token,

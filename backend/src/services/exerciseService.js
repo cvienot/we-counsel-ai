@@ -293,10 +293,11 @@ const getExercises = async () => {
 };
 
 /**
- * Get active exercise session for a conversation
+ * Get active or recently completed exercise session for a conversation
  */
 const getActiveSession = async ({ conversationId }) => {
-  const result = await docClient.send(new QueryCommand({
+  // First try active sessions
+  const activeResult = await docClient.send(new QueryCommand({
     TableName: TABLES.EXERCISE_SESSIONS,
     IndexName: 'conversationId-index',
     KeyConditionExpression: 'conversationId = :conversationId',
@@ -311,7 +312,28 @@ const getActiveSession = async ({ conversationId }) => {
     Limit: 1
   }));
 
-  return result.Items?.[0] || null;
+  if (activeResult.Items?.length > 0) {
+    return activeResult.Items[0];
+  }
+
+  // If no active session, return the most recently completed one
+  const completedResult = await docClient.send(new QueryCommand({
+    TableName: TABLES.EXERCISE_SESSIONS,
+    IndexName: 'conversationId-index',
+    KeyConditionExpression: 'conversationId = :conversationId',
+    FilterExpression: '#status = :status',
+    ExpressionAttributeNames: {
+      '#status': 'status'
+    },
+    ExpressionAttributeValues: {
+      ':conversationId': conversationId,
+      ':status': 'completed'
+    },
+    ScanIndexForward: false,
+    Limit: 1
+  }));
+
+  return completedResult.Items?.[0] || null;
 };
 
 module.exports = {

@@ -316,38 +316,50 @@ Keep it positive, specific, and actionable.`;
       onError: (error) => { console.error('Summary generation error:', error); }
     });
 
-    // Save summary to session
-    await docClient.send(new UpdateCommand({
-      TableName: TABLES.EXERCISE_SESSIONS,
-      Key: { sessionId },
-      UpdateExpression: 'SET summary = :summary',
-      ExpressionAttributeValues: {
-        ':summary': summary
-      }
-    }));
+    // Conditional write: only save if no summary exists yet (race-safe)
+    try {
+      await docClient.send(new UpdateCommand({
+        TableName: TABLES.EXERCISE_SESSIONS,
+        Key: { sessionId },
+        UpdateExpression: 'SET summary = :summary',
+        ConditionExpression: 'attribute_not_exists(summary)',
+        ExpressionAttributeValues: {
+          ':summary': summary
+        }
+      }));
 
-    // Post summary as a message in the conversation
-    if (session.conversationId) {
-      try {
+      // We won the race — post the conversation message
+      if (session.conversationId) {
         const messageId = randomUUID();
+        const messageData = {
+          messageId,
+          conversationId: session.conversationId,
+          senderId: 'ai-coach',
+          senderName: 'AI Coach',
+          senderType: 'ai',
+          content: `📝 **Exercise Completed: ${template.name}**\n\n${summary}`,
+          recipientType: 'both',
+          timestamp: Date.now(),
+          createdAt: new Date().toISOString()
+        };
         await docClient.send(new PutCommand({
           TableName: TABLES.MESSAGES,
-          Item: {
-            messageId,
-            conversationId: session.conversationId,
-            senderId: 'ai-coach',
-            senderName: 'AI Coach',
-            senderType: 'ai',
-            content: `📝 **Exercise Completed: ${template.name}**\n\n${summary}`,
-            recipientType: 'both',
-            timestamp: Date.now(),
-            createdAt: new Date().toISOString()
-          }
+          Item: messageData
         }));
+        streamingService.sendMessageNotification(session.conversationId, 'ai-coach', messageData);
         console.log('✅ Exercise summary posted to conversation:', session.conversationId);
-      } catch (msgError) {
-        console.error('Error posting summary to conversation:', msgError);
       }
+    } catch (condError) {
+      if (condError.name === 'ConditionalCheckFailedException') {
+        // Another request already saved a summary — use that one instead
+        console.log('ℹ️ Summary already saved by another request, returning existing');
+        const existing = await docClient.send(new GetCommand({
+          TableName: TABLES.EXERCISE_SESSIONS,
+          Key: { sessionId }
+        }));
+        return res.json({ success: true, summary: existing.Item.summary });
+      }
+      throw condError;
     }
 
     res.json({
