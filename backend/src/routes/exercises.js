@@ -97,7 +97,7 @@ router.post('/start', authenticateToken, async (req, res) => {
     // Check if there's an active session for this conversation and exercise
     const existingSession = await exerciseService.getActiveSession({ conversationId });
     
-    if (existingSession && existingSession.exerciseId === exerciseId) {
+    if (existingSession && existingSession.exerciseId === exerciseId && existingSession.status === 'active') {
       // Resume existing session
       console.log('📝 Resuming existing session:', existingSession.sessionId);
       
