@@ -410,6 +410,9 @@ void main() {
       // ============================================
       print('\n💬 Step 10: User2 retrieves messages');
       
+      // Small delay to let the async AI response be stored in DynamoDB
+      await Future.delayed(const Duration(seconds: 2));
+      
       final messagesResponse = await http.get(
         Uri.parse('$apiUrl/api/messages/$conversationId'),
         headers: {'Authorization': 'Bearer $user2Token'},
@@ -834,6 +837,404 @@ void main() {
       print('✅ Subscription upgraded to premium');
       print('✅ Subscription change reflected in API');
       print('✅ Quota changed from 10 to unlimited');
+      print('');
+    });
+
+    testWidgets('Guided exercise: two partners complete an exercise together',
+        (WidgetTester tester) async {
+
+      print('\n🧘 Testing Guided Exercise Flow');
+
+      final ts = DateTime.now().millisecondsSinceEpoch;
+      final email1 = 'ex-user1-$ts@test.com';
+      final email2 = 'ex-user2-$ts@test.com';
+      const password = 'Test123!';
+
+      // ============================================
+      // STEP 1: Create two users via API
+      // ============================================
+      print('\n📝 Step 1: Creating test users');
+
+      final u1Res = await http.post(
+        Uri.parse('$apiUrl/api/auth/register'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'email': email1,
+          'password': password,
+          'firstName': 'Alex',
+          'lastName': 'TestEx',
+          'termsAccepted': true,
+          'subscriptionTier': 'premium',
+        }),
+      );
+      expect(u1Res.statusCode, 201);
+      final u1Data = jsonDecode(u1Res.body);
+      final u1Token = u1Data['token'];
+      final u1Id = u1Data['user']['userId'];
+
+      final u2Res = await http.post(
+        Uri.parse('$apiUrl/api/auth/register'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'email': email2,
+          'password': password,
+          'firstName': 'Emma',
+          'lastName': 'TestEx',
+          'termsAccepted': true,
+          'subscriptionTier': 'premium',
+        }),
+      );
+      expect(u2Res.statusCode, 201);
+      final u2Data = jsonDecode(u2Res.body);
+      final u2Token = u2Data['token'];
+      final u2Id = u2Data['user']['userId'];
+
+      print('   ✅ Users created: Alex ($u1Id) & Emma ($u2Id)');
+
+      // ============================================
+      // STEP 2: Connect partners
+      // ============================================
+      print('\n🤝 Step 2: Connecting partners');
+
+      final connectRes = await http.post(
+        Uri.parse('$apiUrl/api/test/connect-partners'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'user1Id': u1Id,
+          'user2Id': u2Id,
+          'subscriptionTier': 'premium',
+        }),
+      );
+      expect(connectRes.statusCode, 200);
+      print('   ✅ Partners connected');
+
+      // ============================================
+      // STEP 3: Create a conversation
+      // ============================================
+      print('\n💬 Step 3: Creating conversation');
+
+      final convRes = await http.post(
+        Uri.parse('$apiUrl/api/conversations'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $u1Token',
+        },
+        body: jsonEncode({'title': 'Exercise Test Conversation'}),
+      );
+      expect(convRes.statusCode, 201);
+      final convData = jsonDecode(convRes.body);
+      final conversationId = convData['conversation']['conversationId'];
+      print('   ✅ Conversation created: $conversationId');
+
+      // ============================================
+      // STEP 4: List available exercises
+      // ============================================
+      print('\n📋 Step 4: Listing available exercises');
+
+      final listRes = await http.get(
+        Uri.parse('$apiUrl/api/exercises'),
+        headers: {'Authorization': 'Bearer $u1Token'},
+      );
+      expect(listRes.statusCode, 200);
+      final listData = jsonDecode(listRes.body);
+      final exercises = listData['exercises'] as List;
+      expect(exercises.length, greaterThanOrEqualTo(3),
+          reason: 'Should have at least 3 exercise templates');
+
+      final exerciseIds = exercises.map((e) => e['exerciseId']).toList();
+      expect(exerciseIds, contains('appreciation-share'));
+      expect(exerciseIds, contains('active-listening'));
+      expect(exerciseIds, contains('conflict-deescalation'));
+
+      print('   ✅ Found ${exercises.length} exercises: $exerciseIds');
+
+      // ============================================
+      // STEP 5: Start "Appreciation Share" exercise (4 steps)
+      // ============================================
+      print('\n🚀 Step 5: Starting Appreciation Share exercise');
+
+      final startRes = await http.post(
+        Uri.parse('$apiUrl/api/exercises/start'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $u1Token',
+        },
+        body: jsonEncode({
+          'conversationId': conversationId,
+          'exerciseId': 'appreciation-share',
+        }),
+      );
+      expect(startRes.statusCode, 200);
+      final startData = jsonDecode(startRes.body);
+      expect(startData['success'], true);
+
+      final session = startData['session'];
+      final sessionId = session['sessionId'];
+      final exercise = startData['exercise'];
+      final firstStep = exercise['currentStep'];
+
+      expect(session['status'], 'active');
+      expect(session['currentStep'], 1);
+      expect(firstStep['prompt'], contains('Alex'),
+          reason: 'First step prompt should contain partner1 name (Alex)');
+      expect(firstStep['prompt'], contains('Emma'),
+          reason: 'First step prompt should contain partner2 name (Emma)');
+
+      print('   ✅ Exercise started – session $sessionId');
+      print('   📌 Step 1 prompt: ${firstStep['prompt']}');
+
+      // ============================================
+      // STEP 6: Verify active session endpoint
+      // ============================================
+      print('\n🔍 Step 6: Verifying active session endpoint');
+
+      final activeRes = await http.get(
+        Uri.parse('$apiUrl/api/exercises/active/$conversationId'),
+        headers: {'Authorization': 'Bearer $u1Token'},
+      );
+      expect(activeRes.statusCode, 200);
+      final activeData = jsonDecode(activeRes.body);
+      expect(activeData['session'], isNotNull,
+          reason: 'Active session should exist');
+      expect(activeData['session']['sessionId'], sessionId);
+      expect(activeData['session']['status'], 'active');
+
+      print('   ✅ Active session confirmed');
+
+      // ============================================
+      // STEP 7: Walk through all 4 steps
+      // ============================================
+      print('\n🎯 Step 7: Progressing through all 4 steps');
+
+      // Appreciation Share has 4 steps:
+      //   Step 1: Alex shares appreciation for Emma  → partner1 responds
+      //   Step 2: Emma receives & reacts              → partner2 responds
+      //   Step 3: Emma shares appreciation for Alex  → partner2 responds
+      //   Step 4: Alex receives & reacts              → partner1 responds
+
+      final stepResponses = [
+        {
+          'token': u1Token,
+          'response': 'I really appreciate how Emma always makes time to listen to me after a long day.',
+          'who': 'Alex (partner1)',
+        },
+        {
+          'token': u2Token,
+          'response': 'That means a lot to me. It feels good to know you value our evenings together.',
+          'who': 'Emma (partner2)',
+        },
+        {
+          'token': u2Token,
+          'response': 'I appreciate how Alex always surprises me with little notes and remembers the small things.',
+          'who': 'Emma (partner2)',
+        },
+        {
+          'token': u1Token,
+          'response': 'Thank you, that makes me feel seen and appreciated.',
+          'who': 'Alex (partner1)',
+        },
+      ];
+
+      for (int i = 0; i < stepResponses.length; i++) {
+        final step = stepResponses[i];
+        final stepNum = i + 1;
+        final isLast = stepNum == stepResponses.length;
+
+        print('   📝 Step $stepNum (${step['who']}): Submitting response...');
+
+        final progressRes = await http.post(
+          Uri.parse('$apiUrl/api/exercises/$sessionId/progress'),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ${step['token']}',
+          },
+          body: jsonEncode({'response': step['response']}),
+        );
+        expect(progressRes.statusCode, 200,
+            reason: 'Step $stepNum progress should succeed');
+        final progressData = jsonDecode(progressRes.body);
+        expect(progressData['success'], true);
+
+        if (isLast) {
+          expect(progressData['completed'], true,
+              reason: 'Last step should mark exercise as completed');
+          expect(progressData['session']['status'], 'completed');
+          print('   ✅ Step $stepNum completed – exercise finished!');
+        } else {
+          expect(progressData['completed'], false);
+          expect(progressData['nextStep'], isNotNull,
+              reason: 'Non-last steps should return nextStep');
+          // Verify next step is personalized with names
+          final nextPrompt = progressData['nextStep']['prompt'] as String;
+          final mentionsAlex = nextPrompt.contains('Alex');
+          final mentionsEmma = nextPrompt.contains('Emma');
+          expect(mentionsAlex || mentionsEmma, isTrue,
+              reason: 'Next step prompt should be personalized with partner names');
+          print('   ✅ Step $stepNum done → next: "${nextPrompt.substring(0, nextPrompt.length.clamp(0, 60))}..."');
+        }
+      }
+
+      // ============================================
+      // STEP 8: Get exercise summary
+      // ============================================
+      print('\n📊 Step 8: Getting exercise summary');
+
+      // Give AI a moment to generate
+      await Future.delayed(const Duration(seconds: 2));
+
+      final summaryRes = await http.get(
+        Uri.parse('$apiUrl/api/exercises/$sessionId/summary'),
+        headers: {'Authorization': 'Bearer $u1Token'},
+      );
+      expect(summaryRes.statusCode, 200);
+      final summaryData = jsonDecode(summaryRes.body);
+      expect(summaryData['success'], true);
+      expect(summaryData['summary'], isNotNull);
+      expect((summaryData['summary'] as String).length, greaterThan(50),
+          reason: 'Summary should be a meaningful paragraph');
+
+      print('   ✅ Summary generated (${(summaryData['summary'] as String).length} chars)');
+      print('   📄 ${(summaryData['summary'] as String).substring(0, 120)}...');
+
+      // ============================================
+      // STEP 9: Verify summary was posted as a conversation message
+      // ============================================
+      print('\n💬 Step 9: Verifying summary message in conversation');
+
+      final msgsRes = await http.get(
+        Uri.parse('$apiUrl/api/messages/$conversationId'),
+        headers: {'Authorization': 'Bearer $u1Token'},
+      );
+      expect(msgsRes.statusCode, 200);
+      final msgsData = jsonDecode(msgsRes.body);
+      final messages = (msgsData['messages'] ?? msgsData) as List;
+
+      final summaryMessage = messages.where((m) =>
+          m['senderType'] == 'ai' &&
+          (m['content'] as String).contains('Exercise Completed'));
+      expect(summaryMessage.isNotEmpty, isTrue,
+          reason: 'Exercise summary should be posted as an AI message in the conversation');
+
+      print('   ✅ Summary message found in conversation');
+
+      // ============================================
+      // STEP 10: Verify exercise history
+      // ============================================
+      print('\n📜 Step 10: Verifying exercise history');
+
+      final histRes = await http.get(
+        Uri.parse('$apiUrl/api/exercises/history'),
+        headers: {'Authorization': 'Bearer $u1Token'},
+      );
+      expect(histRes.statusCode, 200);
+      final histData = jsonDecode(histRes.body);
+      final sessions = histData['sessions'] as List;
+
+      final ourSession = sessions.firstWhere(
+        (s) => s['sessionId'] == sessionId,
+        orElse: () => throw Exception('Completed session not in history'),
+      );
+      expect(ourSession['status'], 'completed');
+      expect(ourSession['exerciseName'], 'Appreciation Share');
+      expect(ourSession['summary'], isNotNull);
+
+      print('   ✅ Session found in history (status: ${ourSession['status']})');
+
+      // ============================================
+      // STEP 11: Partner2 can also see history & summary
+      // ============================================
+      print('\n👀 Step 11: Partner2 can access history & summary');
+
+      final hist2Res = await http.get(
+        Uri.parse('$apiUrl/api/exercises/history'),
+        headers: {'Authorization': 'Bearer $u2Token'},
+      );
+      expect(hist2Res.statusCode, 200);
+      final hist2Data = jsonDecode(hist2Res.body);
+      final sessions2 = hist2Data['sessions'] as List;
+      final partner2Session = sessions2.firstWhere(
+        (s) => s['sessionId'] == sessionId,
+        orElse: () => throw Exception('Partner2 cannot see completed session'),
+      );
+      expect(partner2Session['status'], 'completed');
+
+      final summary2Res = await http.get(
+        Uri.parse('$apiUrl/api/exercises/$sessionId/summary'),
+        headers: {'Authorization': 'Bearer $u2Token'},
+      );
+      expect(summary2Res.statusCode, 200);
+      final summary2Data = jsonDecode(summary2Res.body);
+      expect(summary2Data['summary'], isNotNull);
+
+      print('   ✅ Partner2 can see history and summary');
+
+      // ============================================
+      // STEP 12: Starting a new exercise after completing one
+      // ============================================
+      print('\n🔄 Step 12: Starting a new exercise after completion');
+
+      final newStartRes = await http.post(
+        Uri.parse('$apiUrl/api/exercises/start'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $u1Token',
+        },
+        body: jsonEncode({
+          'conversationId': conversationId,
+          'exerciseId': 'active-listening',
+        }),
+      );
+      expect(newStartRes.statusCode, 200);
+      final newStartData = jsonDecode(newStartRes.body);
+      expect(newStartData['success'], true);
+      expect(newStartData['session']['sessionId'], isNot(equals(sessionId)),
+          reason: 'New exercise should have a different session ID');
+      expect(newStartData['session']['status'], 'active');
+      expect(newStartData['session']['exerciseId'], 'active-listening');
+
+      print('   ✅ New exercise started successfully (session: ${newStartData['session']['sessionId']})');
+
+      // ============================================
+      // STEP 13: Session resume – re-starting same exercise returns existing active session
+      // ============================================
+      print('\n🔁 Step 13: Verifying session resume');
+
+      final newSessionId = newStartData['session']['sessionId'];
+      final resumeRes = await http.post(
+        Uri.parse('$apiUrl/api/exercises/start'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $u2Token',
+        },
+        body: jsonEncode({
+          'conversationId': conversationId,
+          'exerciseId': 'active-listening',
+        }),
+      );
+      expect(resumeRes.statusCode, 200);
+      final resumeData = jsonDecode(resumeRes.body);
+      expect(resumeData['session']['sessionId'], newSessionId,
+          reason: 'Starting the same exercise should resume the active session');
+
+      print('   ✅ Session resumed correctly (same sessionId)');
+
+      // ============================================
+      // TEST COMPLETE
+      // ============================================
+      print('');
+      print('🎉 ═══════════════════════════════════════════════════════');
+      print('🎉  GUIDED EXERCISE TEST PASSED!');
+      print('🎉 ═══════════════════════════════════════════════════════');
+      print('');
+      print('✅ List available exercises (3 templates)');
+      print('✅ Start exercise with personalized partner names');
+      print('✅ Active session detection');
+      print('✅ Turn-based step progression (4 steps)');
+      print('✅ Exercise completion & AI summary generation');
+      print('✅ Summary posted as conversation message');
+      print('✅ Exercise history for both partners');
+      print('✅ Start new exercise after completion');
+      print('✅ Session resume for active exercises');
       print('');
     });
   });

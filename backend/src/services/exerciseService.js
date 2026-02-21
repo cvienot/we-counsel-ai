@@ -297,6 +297,9 @@ const getExercises = async () => {
  */
 const getActiveSession = async ({ conversationId }) => {
   // First try active sessions
+  // Note: Do NOT use Limit with FilterExpression – DynamoDB applies Limit
+  // before filtering, so a Limit of 1 may scan a non-active item and return
+  // zero results even when an active session exists.
   const activeResult = await docClient.send(new QueryCommand({
     TableName: TABLES.EXERCISE_SESSIONS,
     IndexName: 'conversationId-index',
@@ -308,8 +311,7 @@ const getActiveSession = async ({ conversationId }) => {
     ExpressionAttributeValues: {
       ':conversationId': conversationId,
       ':status': 'active'
-    },
-    Limit: 1
+    }
   }));
 
   if (activeResult.Items?.length > 0) {
