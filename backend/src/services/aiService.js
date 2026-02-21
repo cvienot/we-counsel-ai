@@ -5,7 +5,7 @@ const openai = new OpenAI({
 });
 
 // Streaming function for real-time AI responses
-const generateCoachResponse = async ({ messages, context, partnerNames, onChunk, onComplete, onError }) => {
+const generateCoachResponse = async ({ messages, context, partnerNames, recentExercises, onChunk, onComplete, onError }) => {
   try {
     // Check for crisis keywords in the latest message
     const lastMessage = messages[messages.length - 1];
@@ -18,19 +18,25 @@ const generateCoachResponse = async ({ messages, context, partnerNames, onChunk,
       return crisisResponse;
     }
 
+    // Build exercise history context for the prompt
+    let exerciseHistoryBlock = '';
+    if (recentExercises && recentExercises.length > 0) {
+      const exerciseList = recentExercises.map(e => `- ${e.exerciseName} (${e.exerciseId}) — ${e.status}, ${e.completedAt || e.startedAt}`).join('\n');
+      exerciseHistoryBlock = `\n\n**RECENTLY COMPLETED EXERCISES (DO NOT suggest these again soon):**\n${exerciseList}\nWait at least 5-6 conversation exchanges before suggesting another exercise after the last one. Vary the exercises — pick a DIFFERENT one from what was done recently.`;
+    }
+
     const systemPrompt = `You are Sarah, an AI relationship coach and communication facilitator. You help couples improve their communication and understanding. You are NOT a therapist or mental health professional.
 
-**⚠️ MANDATORY RULE - EXERCISE SUGGESTIONS (READ THIS FIRST):**
+**⚠️ EXERCISE SUGGESTIONS — RULES:**
 
-When you detect any of these patterns after 3+ messages:
-- Partners saying "you don't listen" / "I'm not heard" / "dismissed"
-- Repeating the same argument / stuck in a cycle / going in circles
-- Raised voices / defensiveness / talking over each other
-- One person "always at fault" / no accountability
+1. **FREQUENCY**: Do NOT suggest an exercise in every response. Wait for a clear need. After a completed exercise, allow at least 5-6 natural conversation exchanges before even considering another one. The couple needs time to practice what they learned.
+2. **VARIETY**: NEVER suggest the same exercise twice in a row. If the couple just did Active Listening, suggest Appreciation Share or Conflict De-escalation next time.
+3. **TIMING**: Only suggest when you detect a genuine, persistent pattern (after 5+ messages showing the pattern), NOT at the first sign of a communication issue.
+4. **ORGANIC**: Suggestions should feel natural, not formulaic. Explore the issue first through questions before jumping to an exercise.
 
-You MUST suggest an exercise using this EXACT format (place it at the END of your response):
+When you DO decide to suggest an exercise, use this EXACT format (at the END of your response):
 
-[EXERCISE:active-listening] @Name and @Name, you're stuck in a pattern where neither feels heard. Let's try the **Active Listening Practice** - I'll guide you through it step-by-step. Takes 15 minutes. Want to give it a shot?
+[EXERCISE:exercise-id] Brief, personalized reason why this exercise would help right now.
 
 DO NOT write exercises like this:
 ❌ "Try this: 1. Partner A says... 2. Partner B reflects..."
@@ -39,10 +45,10 @@ DO NOT write exercises like this:
 
 Instead USE the [EXERCISE:id] marker which launches an interactive session.
 
-Available exercises:
-- [EXERCISE:active-listening] - for "not listening" / "dismissed" / interrupting
-- [EXERCISE:appreciation-share] - for rebuilding positivity
-- [EXERCISE:conflict-deescalation] - for heated arguments
+Available exercises (choose the BEST fit, not always the first one):
+- [EXERCISE:active-listening] - when partners are consistently not hearing each other, interrupting, or feeling dismissed over multiple exchanges
+- [EXERCISE:appreciation-share] - when the conversation is overly negative, partners have lost sight of positives, or need to rebuild connection
+- [EXERCISE:conflict-deescalation] - when emotions are running very high, voices are raised, or the argument is escalating dangerously${exerciseHistoryBlock}
 
 YOUR ROLE & CONFIDENCE:
 - You are VALUABLE and CAPABLE of helping couples navigate difficult conversations, conflicts, and relationship challenges
@@ -156,10 +162,11 @@ NEVER refer to either partner in third person ("he", "she", "your partner") - th
     }
 
     // Fallback: If AI didn't suggest exercise but should have, inject it
-    const shouldSuggestExercise = detectExerciseOpportunity(messages, fullResponse);
+    const shouldSuggestExercise = detectExerciseOpportunity(messages, fullResponse, recentExercises);
     if (shouldSuggestExercise && !fullResponse.includes('[EXERCISE:')) {
-      console.log('⚠️ AI missed exercise opportunity - injecting Active Listening suggestion');
-      const exerciseSuggestion = '\n\n[EXERCISE:active-listening] I notice you\'re both struggling to feel heard. Let\'s try the **Active Listening Practice** - I can guide you through it step-by-step. Takes about 15 minutes. Interested?';
+      const exerciseToSuggest = pickBestExercise(messages, recentExercises);
+      console.log(`⚠️ AI missed exercise opportunity - injecting ${exerciseToSuggest.id} suggestion`);
+      const exerciseSuggestion = `\n\n[EXERCISE:${exerciseToSuggest.id}] ${exerciseToSuggest.suggestion}`;
       fullResponse += exerciseSuggestion;
       await onChunk(exerciseSuggestion);
     }
@@ -175,12 +182,24 @@ NEVER refer to either partner in third person ("he", "she", "your partner") - th
 };
 
 // Helper function to detect if exercise should be suggested
-const detectExerciseOpportunity = (messages, aiResponse) => {
-  // Only suggest after 5+ messages
-  if (messages.length < 5) return false;
+const detectExerciseOpportunity = (messages, aiResponse, recentExercises) => {
+  // Only suggest after 8+ messages (give conversation time to develop)
+  if (messages.length < 8) return false;
   
-  // Check for key patterns in recent messages (last 5)
-  const recentMessages = messages.slice(-5);
+  // Don't suggest if an exercise was completed recently (within last 6 messages)
+  if (recentExercises && recentExercises.length > 0) {
+    const lastExercise = recentExercises[0]; // Most recent
+    if (lastExercise.completedAt) {
+      // Count how many user messages since the exercise summary was posted
+      const userMessagesSinceExercise = messages.filter(
+        m => m.senderType !== 'ai' && m.timestamp > new Date(lastExercise.completedAt).getTime()
+      ).length;
+      if (userMessagesSinceExercise < 6) return false;
+    }
+  }
+  
+  // Check for key patterns in recent messages (last 6)
+  const recentMessages = messages.slice(-6);
   const allText = recentMessages.map(m => m.content.toLowerCase()).join(' ');
   
   const triggers = [
@@ -193,8 +212,56 @@ const detectExerciseOpportunity = (messages, aiResponse) => {
   
   const triggerCount = triggers.filter(trigger => allText.includes(trigger)).length;
   
-  // Suggest exercise if 3+ triggers found
-  return triggerCount >= 3;
+  // Suggest exercise if 4+ triggers found (raised threshold)
+  return triggerCount >= 4;
+};
+
+// Pick the best exercise to suggest, avoiding recently completed ones
+const pickBestExercise = (messages, recentExercises) => {
+  const exercises = [
+    {
+      id: 'active-listening',
+      suggestion: "I notice you're both struggling to feel heard. Let's try the **Active Listening Practice** — I can guide you through it step-by-step. Takes about 15 minutes. Interested?",
+      triggers: ['not listening', "don't listen", 'not heard', "don't hear", 'dismissed', 'interrupting', 'talking over']
+    },
+    {
+      id: 'appreciation-share',
+      suggestion: "It sounds like things have been tense. Sometimes reconnecting with what you value in each other can shift the dynamic. Want to try the **Appreciation Share**? It's a quick guided exercise.",
+      triggers: ['negative', 'nothing right', 'always wrong', 'never happy', 'lost', 'disconnect']
+    },
+    {
+      id: 'conflict-deescalation',
+      suggestion: "This conversation is getting heated. Let me guide you through a **Conflict De-escalation** exercise — it'll help you both slow down and understand what's really going on underneath. Shall we?",
+      triggers: ['raised voice', 'angry', 'furious', 'screaming', 'yelling', 'defensive', 'same fight', 'same argument']
+    }
+  ];
+  
+  // Get IDs of recently completed exercises
+  const recentIds = (recentExercises || []).slice(0, 2).map(e => e.exerciseId);
+  
+  // Score each exercise based on message content, excluding recent ones
+  const recentText = messages.slice(-6).map(m => m.content.toLowerCase()).join(' ');
+  
+  let bestExercise = null;
+  let bestScore = -1;
+  
+  for (const exercise of exercises) {
+    // Penalize recently done exercises heavily
+    const recentPenalty = recentIds.includes(exercise.id) ? -10 : 0;
+    const score = exercise.triggers.filter(t => recentText.includes(t)).length + recentPenalty;
+    
+    if (score > bestScore) {
+      bestScore = score;
+      bestExercise = exercise;
+    }
+  }
+  
+  // If all are penalized, pick whichever wasn't done most recently
+  if (!bestExercise || bestScore < 0) {
+    bestExercise = exercises.find(e => !recentIds.includes(e.id)) || exercises[1]; // Default to appreciation-share
+  }
+  
+  return bestExercise;
 };
 
 const summarizeConversation = async ({ messages, conversationTitle }) => {

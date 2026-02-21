@@ -6,6 +6,7 @@ const { aiService } = require('../services');
 const { generateCoachResponse, summarizeConversation } = aiService;
 const subscriptionService = require('../services/subscriptionService');
 const streamingService = require('../services/streamingService');
+const exerciseService = require('../services/exerciseService');
 const { randomUUID } = require('crypto');
 
 const router = express.Router();
@@ -353,12 +354,42 @@ router.post('/:conversationId/ai-stream', authenticateToken, checkAIMessageLimit
         const aiMessageId = randomUUID();
         let aiResponseContent = '';
 
+        // Fetch recent exercise history for the couple
+        let recentExercises = [];
+        try {
+          if (req.user.coupleId) {
+            const exerciseResult = await docClient.send(new QueryCommand({
+              TableName: TABLES.EXERCISE_SESSIONS,
+              IndexName: 'coupleId-index',
+              KeyConditionExpression: 'coupleId = :coupleId',
+              ExpressionAttributeValues: {
+                ':coupleId': req.user.coupleId
+              },
+              ScanIndexForward: false,
+              Limit: 3
+            }));
+            recentExercises = (exerciseResult.Items || []).map(s => {
+              const template = exerciseService.EXERCISE_TEMPLATES[s.exerciseId];
+              return {
+                exerciseId: s.exerciseId,
+                exerciseName: template?.name || s.exerciseId,
+                status: s.status,
+                startedAt: s.startedAt || s.createdAt,
+                completedAt: s.completedAt || null
+              };
+            });
+          }
+        } catch (err) {
+          console.error('Error fetching exercise history for AI context:', err);
+        }
+
         // Stream AI response with proper error handling
         try {
           await generateCoachResponse({
             messages: [...contextMessages, messageData],
             context: contextString,
             partnerNames,
+            recentExercises,
             onChunk: async (chunk) => {
               aiResponseContent += chunk;
               await streamingService.streamAIResponse(conversationId, aiMessageId, chunk, false);
