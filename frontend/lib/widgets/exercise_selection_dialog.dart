@@ -85,6 +85,12 @@ class _ExerciseSelectionDialogState extends ConsumerState<ExerciseSelectionDialo
         return Icons.favorite;
       case 'conflict':
         return Icons.healing;
+      case 'connection':
+        return Icons.people;
+      case 'empathy':
+        return Icons.swap_horiz;
+      case 'repair':
+        return Icons.handshake;
       default:
         return Icons.psychology;
     }
@@ -98,6 +104,12 @@ class _ExerciseSelectionDialogState extends ConsumerState<ExerciseSelectionDialo
         return Colors.pink;
       case 'conflict':
         return Colors.orange;
+      case 'connection':
+        return Colors.teal;
+      case 'empathy':
+        return Colors.deepPurple;
+      case 'repair':
+        return Colors.indigo;
       default:
         return Colors.purple;
     }

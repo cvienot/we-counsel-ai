@@ -130,6 +130,304 @@ const EXERCISE_TEMPLATES = {
         prompt: 'What specific need does each of you have right now?'
       }
     ]
+  },
+
+  'emotional-checkin': {
+    exerciseId: 'emotional-checkin',
+    name: 'Emotional Check-in',
+    description: 'Share how you\'re really feeling right now — not about the relationship, just you',
+    category: 'connection',
+    duration: 10,
+    steps: [
+      {
+        stepNumber: 1,
+        instruction: '@{partner1}, take a moment and check in with yourself. How are you feeling right now?',
+        guidance: 'This isn\'t about the relationship — it\'s about YOU. Tired? Anxious? Excited? Overwhelmed? Be honest.',
+        prompt: '@{partner1}, how are you really feeling today? (not "fine" — what\'s actually going on inside?)'
+      },
+      {
+        stepNumber: 2,
+        instruction: '@{partner2}, just listen and reflect back what you heard. No fixing, no advice.',
+        guidance: 'Show your partner they\'re heard. "It sounds like you\'re feeling..." is perfect.',
+        prompt: '@{partner2}, what did you hear? How is @{partner1} feeling?'
+      },
+      {
+        stepNumber: 3,
+        instruction: '@{partner2}, your turn. How are you really feeling today?',
+        guidance: 'Same thing — be honest about where you are emotionally right now.',
+        prompt: '@{partner2}, how are you really feeling today?'
+      },
+      {
+        stepNumber: 4,
+        instruction: '@{partner1}, reflect back what you heard from @{partner2}.',
+        guidance: 'Mirror their feelings without trying to fix anything.',
+        prompt: '@{partner1}, what did you hear? How is @{partner2} feeling?'
+      }
+    ]
+  },
+
+  'empathy-swap': {
+    exerciseId: 'empathy-swap',
+    name: 'Empathy Swap',
+    description: 'Try to see a recent situation through your partner\'s eyes',
+    category: 'empathy',
+    duration: 15,
+    steps: [
+      {
+        stepNumber: 1,
+        instruction: 'Think of a recent disagreement or tense moment between you two.',
+        guidance: 'Pick something recent but not too raw — you need some emotional distance to do this well.',
+        prompt: '@{partner1}, briefly describe the situation you\'re thinking of. What happened?'
+      },
+      {
+        stepNumber: 2,
+        instruction: '@{partner1}, try to describe what YOU think @{partner2} was feeling and thinking during that moment.',
+        guidance: 'Start with "I think you felt..." or "I imagine you were thinking..." Be genuinely curious, not sarcastic.',
+        prompt: '@{partner1}, what do you think @{partner2} was feeling and why?'
+      },
+      {
+        stepNumber: 3,
+        instruction: '@{partner2}, how accurate was that? Correct or add to what @{partner1} said.',
+        guidance: 'Acknowledge what they got right first, then gently clarify what they missed.',
+        prompt: '@{partner2}, what did @{partner1} get right? What did they miss?'
+      },
+      {
+        stepNumber: 4,
+        instruction: '@{partner2}, now YOU describe what you think @{partner1} was feeling during that same moment.',
+        guidance: 'Try to truly step into their shoes. What was driving their behavior?',
+        prompt: '@{partner2}, what do you think @{partner1} was feeling and why?'
+      },
+      {
+        stepNumber: 5,
+        instruction: '@{partner1}, how accurate was that? Share what they got right and what they missed.',
+        guidance: 'Start with appreciation for the effort, then clarify.',
+        prompt: '@{partner1}, what did @{partner2} get right? What did they miss?'
+      },
+      {
+        stepNumber: 6,
+        instruction: 'Together: What surprised you about how your partner saw the situation?',
+        guidance: 'This is the breakthrough moment — often we discover our partner\'s experience was completely different from what we assumed.',
+        prompt: 'What was the biggest surprise or insight from seeing through each other\'s eyes?'
+      }
+    ]
+  },
+
+  'repair-conversation': {
+    exerciseId: 'repair-conversation',
+    name: 'Repair Conversation',
+    description: 'Reconnect after a conflict with structured accountability and care',
+    category: 'repair',
+    duration: 15,
+    steps: [
+      {
+        stepNumber: 1,
+        instruction: '@{partner1}, acknowledge what happened without blame. Just describe the event factually.',
+        guidance: 'Stick to facts: "Yesterday when we were discussing X, things got heated." No "you always" or "you never."',
+        prompt: '@{partner1}, what happened? (just the facts, no blame)'
+      },
+      {
+        stepNumber: 2,
+        instruction: '@{partner1}, share how YOU felt during and after the conflict using "I" statements.',
+        guidance: '"I felt hurt when..." not "You made me feel..." Own your emotions.',
+        prompt: '@{partner1}, how did you feel during and after? (use "I felt...")'
+      },
+      {
+        stepNumber: 3,
+        instruction: '@{partner2}, share your own feelings about what happened, also using "I" statements.',
+        guidance: 'Don\'t respond to what they said — share YOUR experience independently.',
+        prompt: '@{partner2}, how did you feel during and after? (use "I felt...")'
+      },
+      {
+        stepNumber: 4,
+        instruction: 'Each of you: Take responsibility for YOUR part. What could you have done differently?',
+        guidance: 'This isn\'t about who was "more wrong." Even a small acknowledgment matters: "I could have paused before reacting."',
+        prompt: '@{partner1}, what\'s one thing you could have done differently?'
+      },
+      {
+        stepNumber: 5,
+        instruction: '@{partner2}, what\'s one thing you could have done differently?',
+        guidance: 'Match your partner\'s vulnerability. This is mutual accountability.',
+        prompt: '@{partner2}, what\'s one thing you could have done differently?'
+      },
+      {
+        stepNumber: 6,
+        instruction: 'Together: What do each of you need to move forward?',
+        guidance: 'Be specific: "I need reassurance that..." or "I need us to agree that next time we\'ll..."',
+        prompt: 'What does each of you need from the other to feel reconnected?'
+      }
+    ]
+  },
+
+  'needs-and-boundaries': {
+    exerciseId: 'needs-and-boundaries',
+    name: 'Needs & Boundaries',
+    description: 'Express one unmet need and one boundary clearly and lovingly',
+    category: 'communication',
+    duration: 15,
+    steps: [
+      {
+        stepNumber: 1,
+        instruction: '@{partner1}, share one need that isn\'t being fully met in the relationship right now.',
+        guidance: 'Frame it positively: "I need more quality time" rather than "You never spend time with me." Be specific.',
+        prompt: '@{partner1}, what is one need you have that isn\'t being fully met?'
+      },
+      {
+        stepNumber: 2,
+        instruction: '@{partner2}, reflect back what you heard without defending or explaining.',
+        guidance: 'Just mirror: "I hear that you need..." Show you understand before responding.',
+        prompt: '@{partner2}, what did you hear @{partner1} needs?'
+      },
+      {
+        stepNumber: 3,
+        instruction: '@{partner1}, share one boundary that\'s important to you.',
+        guidance: 'A boundary is about YOUR limits, not controlling the other: "I need you to not bring up X during arguments" or "I need alone time after work before talking about heavy topics."',
+        prompt: '@{partner1}, what is one boundary you need respected?'
+      },
+      {
+        stepNumber: 4,
+        instruction: '@{partner2}, now share YOUR unmet need.',
+        guidance: 'Same approach — positive framing, specific, about what you need (not what they\'re doing wrong).',
+        prompt: '@{partner2}, what is one need you have that isn\'t being fully met?'
+      },
+      {
+        stepNumber: 5,
+        instruction: '@{partner1}, reflect back what you heard.',
+        guidance: 'Mirror their need without judgment.',
+        prompt: '@{partner1}, what did you hear @{partner2} needs?'
+      },
+      {
+        stepNumber: 6,
+        instruction: '@{partner2}, share one boundary that\'s important to you.',
+        guidance: 'Be clear and kind. Boundaries are healthy and necessary.',
+        prompt: '@{partner2}, what is one boundary you need respected?'
+      }
+    ]
+  },
+
+  'rose-thorn-bud': {
+    exerciseId: 'rose-thorn-bud',
+    name: 'Rose, Thorn & Bud',
+    description: 'Share a highlight, a challenge, and something you\'re looking forward to',
+    category: 'connection',
+    duration: 10,
+    steps: [
+      {
+        stepNumber: 1,
+        instruction: '@{partner1}, share your ROSE 🌹 — something good that happened recently.',
+        guidance: 'It can be big or small. "I had a great lunch with a friend" counts just as much as a promotion.',
+        prompt: '@{partner1}, what\'s your rose? (a recent highlight or positive moment)'
+      },
+      {
+        stepNumber: 2,
+        instruction: '@{partner1}, share your THORN 🥀 — something that was difficult or challenging.',
+        guidance: 'Be honest about what\'s weighing on you. This isn\'t about blame — just what\'s been hard.',
+        prompt: '@{partner1}, what\'s your thorn? (a recent challenge or difficulty)'
+      },
+      {
+        stepNumber: 3,
+        instruction: '@{partner1}, share your BUD 🌱 — something you\'re looking forward to.',
+        guidance: 'An upcoming event, a goal, even a small pleasure you\'re anticipating.',
+        prompt: '@{partner1}, what\'s your bud? (something you\'re looking forward to)'
+      },
+      {
+        stepNumber: 4,
+        instruction: '@{partner2}, share your ROSE 🌹 — a recent highlight.',
+        guidance: 'Your turn to share something positive from your week.',
+        prompt: '@{partner2}, what\'s your rose?'
+      },
+      {
+        stepNumber: 5,
+        instruction: '@{partner2}, share your THORN 🥀 — something difficult.',
+        guidance: 'What\'s been weighing on you recently?',
+        prompt: '@{partner2}, what\'s your thorn?'
+      },
+      {
+        stepNumber: 6,
+        instruction: '@{partner2}, share your BUD 🌱 — something you\'re looking forward to.',
+        guidance: 'End on a hopeful note — what\'s ahead that excites you?',
+        prompt: '@{partner2}, what\'s your bud?'
+      }
+    ]
+  },
+
+  'dream-sharing': {
+    exerciseId: 'dream-sharing',
+    name: 'Dream Sharing',
+    description: 'Share a personal dream or goal while your partner listens with curiosity',
+    category: 'connection',
+    duration: 15,
+    steps: [
+      {
+        stepNumber: 1,
+        instruction: '@{partner1}, share a personal dream, goal, or aspiration — big or small.',
+        guidance: 'This could be a career goal, a travel dream, something you want to learn, or a way you want to grow. No dream is too silly.',
+        prompt: '@{partner1}, what is a dream or goal you have for yourself?'
+      },
+      {
+        stepNumber: 2,
+        instruction: '@{partner2}, your ONLY job: ask curious, supportive questions. No fixing, no "but how would we..."',
+        guidance: 'Ask things like: "What excites you most about that?" or "When did you first start dreaming about this?" — pure curiosity.',
+        prompt: '@{partner2}, what curious questions do you have about @{partner1}\'s dream?'
+      },
+      {
+        stepNumber: 3,
+        instruction: '@{partner1}, answer their questions and share what it would mean to you to achieve this dream.',
+        guidance: 'Let yourself get excited. This is a safe space to dream big.',
+        prompt: '@{partner1}, what would it mean to you to make this dream happen?'
+      },
+      {
+        stepNumber: 4,
+        instruction: '@{partner2}, now share YOUR dream or goal.',
+        guidance: 'Same rules — share openly. Your partner will be curious, not critical.',
+        prompt: '@{partner2}, what is a dream or goal you have for yourself?'
+      },
+      {
+        stepNumber: 5,
+        instruction: '@{partner1}, ask curious, supportive questions about @{partner2}\'s dream.',
+        guidance: 'Be genuinely interested. Ask "tell me more" questions.',
+        prompt: '@{partner1}, what curious questions do you have about @{partner2}\'s dream?'
+      },
+      {
+        stepNumber: 6,
+        instruction: '@{partner2}, share what it would mean to you.',
+        guidance: 'Let yourself be vulnerable about what this dream represents for you.',
+        prompt: '@{partner2}, what would it mean to you to make this dream happen?'
+      }
+    ]
+  },
+
+  'gratitude-letter': {
+    exerciseId: 'gratitude-letter',
+    name: 'Gratitude Letter',
+    description: 'Write a short gratitude message to your partner about a specific moment',
+    category: 'appreciation',
+    duration: 10,
+    steps: [
+      {
+        stepNumber: 1,
+        instruction: '@{partner1}, think of a specific moment recently when @{partner2} made you feel loved, supported, or happy.',
+        guidance: 'Pick ONE specific moment, not a general quality. "Last Tuesday when you brought me coffee because you noticed I was stressed" is perfect.',
+        prompt: '@{partner1}, write a short gratitude message to @{partner2} about a specific moment. (3-4 sentences)'
+      },
+      {
+        stepNumber: 2,
+        instruction: '@{partner2}, receive this message. How does it feel to read it?',
+        guidance: 'Don\'t deflect with "oh it was nothing." Let yourself feel appreciated.',
+        prompt: '@{partner2}, how does it feel to receive this gratitude?'
+      },
+      {
+        stepNumber: 3,
+        instruction: '@{partner2}, write YOUR gratitude message to @{partner1} about a specific moment.',
+        guidance: 'Same approach — specific, recent, heartfelt. What moment made you grateful for your partner?',
+        prompt: '@{partner2}, write a short gratitude message to @{partner1} about a specific moment. (3-4 sentences)'
+      },
+      {
+        stepNumber: 4,
+        instruction: '@{partner1}, receive this message. Let it land.',
+        guidance: 'Notice what you feel. These moments matter more than we realize.',
+        prompt: '@{partner1}, how does it feel to receive this gratitude?'
+      }
+    ]
   }
 };
 

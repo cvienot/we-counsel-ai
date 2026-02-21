@@ -45,10 +45,25 @@ DO NOT write exercises like this:
 
 Instead USE the [EXERCISE:id] marker which launches an interactive session.
 
-Available exercises (choose the BEST fit, not always the first one):
-- [EXERCISE:active-listening] - when partners are consistently not hearing each other, interrupting, or feeling dismissed over multiple exchanges
-- [EXERCISE:appreciation-share] - when the conversation is overly negative, partners have lost sight of positives, or need to rebuild connection
-- [EXERCISE:conflict-deescalation] - when emotions are running very high, voices are raised, or the argument is escalating dangerously${exerciseHistoryBlock}
+Available exercises (you have 10 options — choose the BEST fit for the situation, not always the same one):
+
+**Communication & Listening:**
+- [EXERCISE:active-listening] - when partners are consistently not hearing each other, interrupting, or feeling dismissed
+- [EXERCISE:needs-and-boundaries] - when partners struggle to express what they need or set healthy limits
+
+**Conflict & Repair:**
+- [EXERCISE:conflict-deescalation] - when emotions are running very high, the argument is escalating
+- [EXERCISE:repair-conversation] - AFTER a fight, when the couple needs to reconnect and take accountability
+
+**Empathy & Understanding:**
+- [EXERCISE:empathy-swap] - when partners can't see each other's perspective or keep saying "you don't understand"
+- [EXERCISE:emotional-checkin] - when partners seem disconnected or haven't checked in on each other's emotional state
+
+**Positivity & Connection:**
+- [EXERCISE:appreciation-share] - when the conversation is overly negative, partners need to rebuild warmth
+- [EXERCISE:gratitude-letter] - when partners take each other for granted or need a moment of genuine tenderness
+- [EXERCISE:rose-thorn-bud] - for a light weekly check-in to stay connected (good for maintenance)
+- [EXERCISE:dream-sharing] - when partners feel like roommates, need to reconnect as a team with shared vision${exerciseHistoryBlock}
 
 YOUR ROLE & CONFIDENCE:
 - You are VALUABLE and CAPABLE of helping couples navigate difficult conversations, conflicts, and relationship challenges
@@ -227,17 +242,52 @@ const pickBestExercise = (messages, recentExercises) => {
     {
       id: 'appreciation-share',
       suggestion: "It sounds like things have been tense. Sometimes reconnecting with what you value in each other can shift the dynamic. Want to try the **Appreciation Share**? It's a quick guided exercise.",
-      triggers: ['negative', 'nothing right', 'always wrong', 'never happy', 'lost', 'disconnect']
+      triggers: ['negative', 'nothing right', 'always wrong', 'never happy', 'lost']
     },
     {
       id: 'conflict-deescalation',
       suggestion: "This conversation is getting heated. Let me guide you through a **Conflict De-escalation** exercise — it'll help you both slow down and understand what's really going on underneath. Shall we?",
-      triggers: ['raised voice', 'angry', 'furious', 'screaming', 'yelling', 'defensive', 'same fight', 'same argument']
+      triggers: ['raised voice', 'angry', 'furious', 'screaming', 'yelling', 'defensive']
+    },
+    {
+      id: 'emotional-checkin',
+      suggestion: "It feels like you've both been going through a lot. How about a quick **Emotional Check-in**? You'll each share how you're really feeling — just 10 minutes.",
+      triggers: ['stressed', 'overwhelmed', 'exhausted', 'tired', 'distant', 'disconnected', 'checked out']
+    },
+    {
+      id: 'empathy-swap',
+      suggestion: "It seems like you're seeing this situation very differently. Want to try an **Empathy Swap**? You'll each try to describe the other's perspective — it's eye-opening.",
+      triggers: ["don't understand", 'not getting it', 'perspective', 'point of view', 'see my side', "don't get it", 'misunderstand']
+    },
+    {
+      id: 'repair-conversation',
+      suggestion: "It sounds like there was a tough moment between you recently. Want to try a **Repair Conversation**? It's a structured way to reconnect after conflict — no blame, just understanding.",
+      triggers: ['after the fight', 'last argument', 'still upset', 'apologize', 'sorry', 'make up', 'move past', 'get over it']
+    },
+    {
+      id: 'needs-and-boundaries',
+      suggestion: "I hear unmet needs coming up in this conversation. Want to try the **Needs & Boundaries** exercise? You'll each express one need and one boundary clearly — it takes 15 minutes.",
+      triggers: ['boundary', 'boundaries', 'need from you', 'need you to', 'respect my', 'space', 'limit']
+    },
+    {
+      id: 'rose-thorn-bud',
+      suggestion: "How about a quick **Rose, Thorn & Bud** check-in? You'll each share a highlight, a challenge, and something you're looking forward to. Great way to stay connected — just 10 minutes.",
+      triggers: ['catch up', 'been busy', 'haven\'t talked', 'week been', 'how\'s your', 'what\'s new']
+    },
+    {
+      id: 'dream-sharing',
+      suggestion: "I'd love for you two to reconnect on a deeper level. Want to try **Dream Sharing**? You'll each share a personal dream while the other just listens with curiosity. Really powerful.",
+      triggers: ['roommates', 'routine', 'spark', 'boring', 'just going through', 'lost ourselves', 'future', 'dream']
+    },
+    {
+      id: 'gratitude-letter',
+      suggestion: "Sometimes the simplest things are the most powerful. Want to try writing each other a quick **Gratitude Letter**? You'll each write 3-4 sentences about a specific moment you're grateful for.",
+      triggers: ['taken for granted', 'unappreciated', 'notice', 'effort', 'thankful', 'grateful']
     }
   ];
   
   // Get IDs of recently completed exercises
-  const recentIds = (recentExercises || []).slice(0, 2).map(e => e.exerciseId);
+  const recentIds = (recentExercises || []).slice(0, 3).map(e => e.exerciseId);
   
   // Score each exercise based on message content, excluding recent ones
   const recentText = messages.slice(-6).map(m => m.content.toLowerCase()).join(' ');
@@ -258,7 +308,7 @@ const pickBestExercise = (messages, recentExercises) => {
   
   // If all are penalized, pick whichever wasn't done most recently
   if (!bestExercise || bestScore < 0) {
-    bestExercise = exercises.find(e => !recentIds.includes(e.id)) || exercises[1]; // Default to appreciation-share
+    bestExercise = exercises.find(e => !recentIds.includes(e.id)) || exercises[3]; // Default to emotional-checkin
   }
   
   return bestExercise;

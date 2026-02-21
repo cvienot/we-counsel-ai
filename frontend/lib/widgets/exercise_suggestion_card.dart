@@ -26,6 +26,13 @@ class ExerciseSuggestionCard extends StatelessWidget {
         'active-listening': 'Active Listening Practice',
         'appreciation-share': 'Appreciation Share',
         'conflict-deescalation': 'Conflict De-escalation',
+        'emotional-checkin': 'Emotional Check-in',
+        'empathy-swap': 'Empathy Swap',
+        'repair-conversation': 'Repair Conversation',
+        'needs-and-boundaries': 'Needs & Boundaries',
+        'rose-thorn-bud': 'Rose, Thorn & Bud',
+        'dream-sharing': 'Dream Sharing',
+        'gratitude-letter': 'Gratitude Letter',
       };
       
       final exerciseName = exerciseNames[exerciseId] ?? exerciseId;
@@ -48,6 +55,20 @@ class ExerciseSuggestionCard extends StatelessWidget {
         return Icons.favorite;
       case 'conflict-deescalation':
         return Icons.healing;
+      case 'emotional-checkin':
+        return Icons.mood;
+      case 'empathy-swap':
+        return Icons.swap_horiz;
+      case 'repair-conversation':
+        return Icons.handshake;
+      case 'needs-and-boundaries':
+        return Icons.shield_outlined;
+      case 'rose-thorn-bud':
+        return Icons.local_florist;
+      case 'dream-sharing':
+        return Icons.auto_awesome;
+      case 'gratitude-letter':
+        return Icons.mail_outline;
       default:
         return Icons.fitness_center;
     }
@@ -61,6 +82,20 @@ class ExerciseSuggestionCard extends StatelessWidget {
         return Colors.pink;
       case 'conflict-deescalation':
         return Colors.orange;
+      case 'emotional-checkin':
+        return Colors.teal;
+      case 'empathy-swap':
+        return Colors.deepPurple;
+      case 'repair-conversation':
+        return Colors.indigo;
+      case 'needs-and-boundaries':
+        return Colors.amber.shade700;
+      case 'rose-thorn-bud':
+        return Colors.green;
+      case 'dream-sharing':
+        return Colors.purple;
+      case 'gratitude-letter':
+        return Colors.red.shade400;
       default:
         return Theme.of(context).colorScheme.primary;
     }
