@@ -7,6 +7,54 @@ import 'dart:convert';
 
 import 'e2e_test_helper.dart';
 
+/// Helper: pump frames until [finder] finds at least one widget, or timeout.
+/// Returns true if found, false on timeout.
+/// Uses pump() instead of pumpAndSettle() to avoid hanging on persistent
+/// async operations (SSE streams, timers, etc.).
+Future<bool> pumpUntilFound(
+  WidgetTester tester,
+  Finder finder, {
+  Duration timeout = const Duration(seconds: 10),
+  Duration pumpInterval = const Duration(milliseconds: 200),
+}) async {
+  final end = DateTime.now().add(timeout);
+  while (DateTime.now().isBefore(end)) {
+    await tester.pump(pumpInterval);
+    if (finder.evaluate().isNotEmpty) return true;
+  }
+  return false;
+}
+
+/// Helper: pump frames until [finder] finds zero widgets, or timeout.
+Future<bool> pumpUntilGone(
+  WidgetTester tester,
+  Finder finder, {
+  Duration timeout = const Duration(seconds: 10),
+  Duration pumpInterval = const Duration(milliseconds: 200),
+}) async {
+  final end = DateTime.now().add(timeout);
+  while (DateTime.now().isBefore(end)) {
+    await tester.pump(pumpInterval);
+    if (finder.evaluate().isEmpty) return true;
+  }
+  return false;
+}
+
+/// Helper: settle the UI but with a hard timeout so we never block forever.
+/// After login/register the app opens an SSE stream that keeps the event loop
+/// busy, causing the default pumpAndSettle to hang.  We work around this by
+/// pumping in a loop with a ceiling.
+Future<void> settleWithTimeout(
+  WidgetTester tester, {
+  Duration timeout = const Duration(seconds: 5),
+  Duration pumpInterval = const Duration(milliseconds: 100),
+}) async {
+  final end = DateTime.now().add(timeout);
+  while (DateTime.now().isBefore(end)) {
+    await tester.pump(pumpInterval);
+  }
+}
+
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   
@@ -27,7 +75,10 @@ void main() {
       
       // Launch the app
       app.main();
-      await tester.pumpAndSettle();
+      
+      // Use pump loop instead of pumpAndSettle – the app has async auth init
+      // that may never fully "settle" if background timers/SSE are involved.
+      await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
       
       // Test data
       final user1Email = 'user1-${DateTime.now().millisecondsSinceEpoch}@test.com';
@@ -44,14 +95,19 @@ void main() {
       // ============================================
       print('\n📝 Step 1: User1 Registration via UI');
       
-      // Should be on login screen after splash
-      await tester.pumpAndSettle(const Duration(seconds: 2));
+      // Wait for the login screen to appear (splash → login redirect)
+      final foundLogin = await pumpUntilFound(
+        tester,
+        find.text('Don\'t have an account? Sign up'),
+        timeout: const Duration(seconds: 10),
+      );
+      expect(foundLogin, isTrue, reason: 'Login screen should appear after splash');
       
       // Navigate to register screen  
       final signUpLink = find.text('Don\'t have an account? Sign up');
       expect(signUpLink, findsOneWidget);
       await tester.tap(signUpLink);
-      await tester.pumpAndSettle();
+      await settleWithTimeout(tester, timeout: const Duration(seconds: 2));
       
       print('   📝 Filling registration form...');
       
@@ -69,12 +125,12 @@ void main() {
         find.byType(SingleChildScrollView),
         const Offset(0, -100),
       );
-      await tester.pumpAndSettle();
+      await settleWithTimeout(tester, timeout: const Duration(seconds: 1));
       
       // Accept terms
       final termsCheckbox = find.byType(Checkbox);
       await tester.tap(termsCheckbox);
-      await tester.pumpAndSettle();
+      await settleWithTimeout(tester, timeout: const Duration(seconds: 1));
       
       // Scroll to make submit button visible
       await tester.dragUntilVisible(
@@ -82,43 +138,48 @@ void main() {
         find.byType(SingleChildScrollView),
         const Offset(0, -100),
       );
-      await tester.pumpAndSettle();
+      await settleWithTimeout(tester, timeout: const Duration(seconds: 1));
       
-      // Submit
+      // Submit – this opens PlanSelectionScreen via Navigator.push
       final createButton = find.widgetWithText(ElevatedButton, 'Create Account');
       await tester.tap(createButton);
-      await tester.pumpAndSettle();
       
-      // Plan selection screen should appear
+      // Wait for plan selection screen to appear
+      // PlanSelectionScreen calls _loadCurrentSubscription which may take a moment
       print('   📋 Waiting for plan selection screen...');
-      await tester.pumpAndSettle(const Duration(seconds: 2));
+      final foundPlan = await pumpUntilFound(
+        tester,
+        find.text('Continue with Free'),
+        timeout: const Duration(seconds: 10),
+      );
       
-      // Select free plan (should be pre-selected) and continue
-      final continuePlanButton = find.text('Continue with Free');
-      if (continuePlanButton.evaluate().isNotEmpty) {
+      if (foundPlan) {
         print('   ✅ Plan selection screen appeared');
-        await tester.tap(continuePlanButton);
-        await tester.pumpAndSettle();
+        await tester.tap(find.text('Continue with Free'));
+        // After tapping "Continue with Free", the plan screen pops with 'free',
+        // then register_screen calls the API. The registration triggers an SSE
+        // connection which means pumpAndSettle will hang. Use pump loop instead.
+        await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
       }
       
-      // Wait for API call and navigation - pump repeatedly until navigation completes
-      print('   ⏳ Waiting for registration...');
-      bool navigationComplete = false;
-      for (int i = 0; i < 100 && !navigationComplete; i++) {
-        await tester.pump(const Duration(milliseconds: 100));
-        // Check if we've left registration/plan selection screen
-        navigationComplete = find.text('Create Account').evaluate().isEmpty &&
-                             find.text('Continue with Free').evaluate().isEmpty;
-      }
-      await tester.pumpAndSettle(const Duration(seconds: 5));
+      // Wait for the registration API call to complete and auth state to update.
+      // The router will redirect to /home once isAuthenticated becomes true.
+      // NOTE: pumpAndSettle() would hang here because the SSE stream is open.
+      print('   ⏳ Waiting for registration & navigation...');
+      final onHomeScreen = await pumpUntilFound(
+        tester,
+        find.textContaining('Welcome'),
+        timeout: const Duration(seconds: 15),
+      );
       
-      // Wait for auth state to fully update and home screen to render
-      // Look for home screen elements
-      bool onHomeScreen = false;
-      for (int i = 0; i < 30 && !onHomeScreen; i++) {
-        await tester.pump(const Duration(milliseconds: 200));
-        onHomeScreen = find.text('Invite Your Partner').evaluate().isNotEmpty ||
-                       find.text('Main Thread').evaluate().isNotEmpty;
+      // Fallback: check for other home screen indicators
+      if (!onHomeScreen) {
+        final altHome = await pumpUntilFound(
+          tester,
+          find.text('We Coach'),
+          timeout: const Duration(seconds: 5),
+        );
+        expect(altHome, isTrue, reason: 'Should navigate to home screen after registration');
       }
       
       print('   ✅ User1 registered via UI');
@@ -570,7 +631,7 @@ void main() {
       
       // Launch the app
       app.main();
-      await tester.pumpAndSettle();
+      await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
       
       // Test data
       final userEmail = 'plan-test-${DateTime.now().millisecondsSinceEpoch}@test.com';
@@ -583,13 +644,18 @@ void main() {
       // ============================================
       print('\n📝 Step 1: Register user with free plan');
       
-      await tester.pumpAndSettle(const Duration(seconds: 2));
+      // Wait for login screen
+      await pumpUntilFound(
+        tester,
+        find.text('Don\'t have an account? Sign up'),
+        timeout: const Duration(seconds: 10),
+      );
       
       // Navigate to register screen  
       final signUpLink = find.text('Don\'t have an account? Sign up');
       expect(signUpLink, findsOneWidget);
       await tester.tap(signUpLink);
-      await tester.pumpAndSettle();
+      await settleWithTimeout(tester, timeout: const Duration(seconds: 2));
       
       // Fill registration form
       final allFields = find.byType(TextFormField);
@@ -605,11 +671,11 @@ void main() {
         find.byType(SingleChildScrollView),
         const Offset(0, -100),
       );
-      await tester.pumpAndSettle();
+      await settleWithTimeout(tester, timeout: const Duration(seconds: 1));
       
       // Accept terms
       await tester.tap(find.byType(Checkbox));
-      await tester.pumpAndSettle();
+      await settleWithTimeout(tester, timeout: const Duration(seconds: 1));
       
       // Scroll to submit button
       await tester.dragUntilVisible(
@@ -617,28 +683,30 @@ void main() {
         find.byType(SingleChildScrollView),
         const Offset(0, -100),
       );
-      await tester.pumpAndSettle();
+      await settleWithTimeout(tester, timeout: const Duration(seconds: 1));
       
       // Submit registration
       await tester.tap(find.widgetWithText(ElevatedButton, 'Create Account'));
-      await tester.pumpAndSettle();
       
       // Select free plan
       print('   📋 Selecting free plan...');
-      await tester.pumpAndSettle(const Duration(seconds: 2));
-      
-      final continuePlanButton = find.text('Continue with Free');
-      expect(continuePlanButton, findsOneWidget, reason: 'Free plan button should be visible');
-      await tester.tap(continuePlanButton);
-      await tester.pumpAndSettle();
+      final foundPlan = await pumpUntilFound(
+        tester,
+        find.text('Continue with Free'),
+        timeout: const Duration(seconds: 10),
+      );
+      expect(foundPlan, isTrue, reason: 'Free plan button should be visible');
+      await tester.tap(find.text('Continue with Free'));
+      await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
       
       // Wait for navigation to complete
       print('   ⏳ Waiting for registration...');
-      for (int i = 0; i < 100; i++) {
-        await tester.pump(const Duration(milliseconds: 100));
-        if (find.text('Create Account').evaluate().isEmpty) break;
-      }
-      await tester.pumpAndSettle(const Duration(seconds: 5));
+      await pumpUntilGone(
+        tester,
+        find.text('Create Account'),
+        timeout: const Duration(seconds: 15),
+      );
+      await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
       
       print('   ✅ User registered with free plan');
       
@@ -677,13 +745,13 @@ void main() {
       final profileIcon = find.byIcon(Icons.person);
       if (profileIcon.evaluate().isNotEmpty) {
         await tester.tap(profileIcon);
-        await tester.pumpAndSettle();
+        await settleWithTimeout(tester, timeout: const Duration(seconds: 2));
         
         // Find upgrade/subscription button
         final upgradeButton = find.text('Manage Subscription');
         if (upgradeButton.evaluate().isNotEmpty) {
           await tester.tap(upgradeButton);
-          await tester.pumpAndSettle();
+          await settleWithTimeout(tester, timeout: const Duration(seconds: 2));
         }
       }
       
