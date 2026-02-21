@@ -94,9 +94,10 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
         return;
       }
 
-      final serverStep = result['currentStep'] as int? ?? 1;
+      final session = result['session'] as Map<String, dynamic>;
+      final serverStep = session['currentStep'] as int? ?? 1;
       final localStep = _currentSession['currentStep'] as int? ?? 1;
-      final serverStatus = result['status'] as String? ?? 'active';
+      final serverStatus = session['status'] as String? ?? 'active';
 
       if (serverStep != localStep || serverStatus != _currentSession['status']) {
         print('🔄 Session updated! Step $localStep → $serverStep, status: $serverStatus');
@@ -105,25 +106,23 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
           // Partner completed the exercise
           _pollTimer?.cancel();
           setState(() {
-            _currentSession = result;
+            _currentSession = session;
           });
           await _loadSummary();
           return;
         }
 
-        // Fetch full session data with personalized step
-        final fullData = await _exerciseService.startExercise(
-          token: token,
-          conversationId: widget.conversationId,
-          exerciseId: result['exerciseId'] as String,
-        );
+        // Use the exercise data from active session response
+        final exercise = result['exercise'] as Map<String, dynamic>?;
         
         if (!mounted) return;
         
         setState(() {
-          _currentSession = fullData['session'];
-          _currentExercise = fullData['exercise'];
-          _currentStepData = (fullData['exercise']['currentStep'] as Map<String, dynamic>?) ?? {};
+          _currentSession = session;
+          if (exercise != null) {
+            _currentExercise = exercise;
+            _currentStepData = (exercise['currentStep'] as Map<String, dynamic>?) ?? {};
+          }
         });
         
         // Re-evaluate polling

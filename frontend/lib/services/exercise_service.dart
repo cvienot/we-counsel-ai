@@ -96,6 +96,7 @@ class ExerciseService {
   }
 
   // Get active exercise session for conversation
+  // Returns full response: { session: {...}, exercise: {...} } or null if no active session
   Future<Map<String, dynamic>?> getActiveSession({
     required String token,
     required String conversationId,
@@ -110,7 +111,8 @@ class ExerciseService {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      return data['session'];
+      if (data['session'] == null) return null;
+      return data; // { session, exercise }
     } else {
       throw Exception('Failed to get active session');
     }

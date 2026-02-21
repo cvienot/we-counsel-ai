@@ -343,5 +343,38 @@
   "partnerInvitationMessage": "Once your partner accepts the invitation and creates their account, you'll both have access to your main conversation thread where you can start sharing and receiving guidance from our AI counsellor.",
   "@partnerInvitationMessage": {
     "description": "Message explaining what happens after partner accepts invitation"
+  },
+  "exerciseStepProgress": "Step {current}/{total}",
+  "@exerciseStepProgress": {
+    "description": "Exercise step progress indicator",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "exerciseYourTurn": "Your turn!",
+  "@exerciseYourTurn": {
+    "description": "Indicator that it is the current user turn in the exercise"
+  },
+  "exerciseWaitingFor": "Waiting for {partnerName}...",
+  "@exerciseWaitingFor": {
+    "description": "Indicator that the exercise is waiting for partner",
+    "placeholders": {
+      "partnerName": {
+        "type": "String"
+      }
+    }
+  },
+  "exerciseJoin": "Join",
+  "@exerciseJoin": {
+    "description": "Button to join an active exercise"
+  },
+  "exerciseView": "View",
+  "@exerciseView": {
+    "description": "Button to view an active exercise while waiting"
   }
 }

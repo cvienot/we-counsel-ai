@@ -218,4 +218,23 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get partnerInvitationMessage =>
       'Once your partner accepts the invitation and creates their account, you\'ll both have access to your main conversation thread where you can start sharing and receiving guidance from our AI counsellor.';
+
+  @override
+  String exerciseStepProgress(int current, int total) {
+    return 'Step $current/$total';
+  }
+
+  @override
+  String get exerciseYourTurn => 'Your turn!';
+
+  @override
+  String exerciseWaitingFor(String partnerName) {
+    return 'Waiting for $partnerName...';
+  }
+
+  @override
+  String get exerciseJoin => 'Join';
+
+  @override
+  String get exerciseView => 'View';
 }

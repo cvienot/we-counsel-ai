@@ -5,6 +5,9 @@ import '../../l10n/app_localizations.dart';
 import '../../providers/conversation_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../widgets/message_bubble.dart';
+import '../../widgets/active_exercise_banner.dart';
+import '../../services/exercise_service.dart';
+import '../../services/api_service.dart';
 import '../../services/realtime_service.dart';
 import '../../utils/snackbar_utils.dart';
 import 'dart:async';
@@ -20,12 +23,20 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
   final _messageController = TextEditingController();
   final _scrollController = ScrollController();
   final _realtimeService = RealtimeService();
+  final _exerciseService = ExerciseService();
   
   StreamSubscription<Map<String, dynamic>>? _typingSubscription;
   Timer? _typingTimer;
   Timer? _typingHeartbeat;
+  Timer? _exercisePollTimer;
   Set<String> _typingUsers = {};
   bool _isTyping = false;
+
+  // Active exercise state
+  Map<String, dynamic>? _activeExerciseSession;
+  Map<String, dynamic>? _activeExerciseData;
+  bool _isCurrentUsersTurnForExercise = false;
+  String? _exerciseWaitingForName;
 
   @override
   void initState() {
@@ -78,6 +89,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
     _typingSubscription?.cancel();
     _typingTimer?.cancel();
     _typingHeartbeat?.cancel();
+    _exercisePollTimer?.cancel();
     _messageController.dispose();
     _scrollController.dispose();
     
@@ -160,6 +172,91 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
       await ref.read(messagesProvider(mainThread.conversationId).notifier).loadMessages();
       // Scroll to bottom after messages are loaded
       _scrollToBottom();
+      // Check for active exercise
+      _checkActiveExercise(mainThread.conversationId);
+      // Poll for exercise changes every 15 seconds
+      _startExercisePolling(mainThread.conversationId);
+    }
+  }
+
+  void _startExercisePolling(String conversationId) {
+    _exercisePollTimer?.cancel();
+    _exercisePollTimer = Timer.periodic(const Duration(seconds: 15), (_) {
+      _checkActiveExercise(conversationId);
+    });
+  }
+
+  Future<void> _checkActiveExercise(String conversationId) async {
+    try {
+      final token = await ApiService().getToken();
+      if (token == null || token.isEmpty) return;
+
+      final result = await _exerciseService.getActiveSession(
+        token: token,
+        conversationId: conversationId,
+      );
+
+      if (!mounted) return;
+
+      if (result == null) {
+        // No active exercise
+        if (_activeExerciseSession != null) {
+          setState(() {
+            _activeExerciseSession = null;
+            _activeExerciseData = null;
+            _isCurrentUsersTurnForExercise = false;
+            _exerciseWaitingForName = null;
+          });
+        }
+        return;
+      }
+
+      final session = result['session'] as Map<String, dynamic>;
+      final exercise = result['exercise'] as Map<String, dynamic>?;
+      final status = session['status'] as String? ?? '';
+
+      if (status != 'active') {
+        // Session is not active (completed/abandoned)
+        if (_activeExerciseSession != null) {
+          setState(() {
+            _activeExerciseSession = null;
+            _activeExerciseData = null;
+            _isCurrentUsersTurnForExercise = false;
+            _exerciseWaitingForName = null;
+          });
+        }
+        return;
+      }
+
+      // Determine whose turn it is
+      final currentStep = exercise?['currentStep'] as Map<String, dynamic>?;
+      final prompt = currentStep?['prompt'] as String? ?? '';
+      final authState = ref.read(authProvider);
+      final currentUserFirstName = authState.user?.firstName ?? '';
+
+      final isMyTurn = prompt.isNotEmpty &&
+          currentUserFirstName.isNotEmpty &&
+          (prompt.startsWith('$currentUserFirstName,') ||
+              prompt.startsWith('$currentUserFirstName '));
+
+      // Extract the other partner's name from the prompt
+      String? waitingForName;
+      if (!isMyTurn && prompt.isNotEmpty) {
+        // The prompt starts with the partner's name
+        final commaIdx = prompt.indexOf(',');
+        final spaceIdx = prompt.indexOf(' ');
+        final nameEnd = commaIdx > 0 ? commaIdx : (spaceIdx > 0 ? spaceIdx : prompt.length);
+        waitingForName = prompt.substring(0, nameEnd);
+      }
+
+      setState(() {
+        _activeExerciseSession = session;
+        _activeExerciseData = exercise;
+        _isCurrentUsersTurnForExercise = isMyTurn;
+        _exerciseWaitingForName = waitingForName;
+      });
+    } catch (e) {
+      debugPrint('⚠️ Error checking active exercise: $e');
     }
   }
 
@@ -406,6 +503,26 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
               ],
             ),
           ),
+
+          // Active exercise banner
+          if (_activeExerciseSession != null)
+            ActiveExerciseBanner(
+              exerciseName: _activeExerciseData?['name'] as String? ?? 'Exercise',
+              currentStep: _activeExerciseSession!['currentStep'] as int? ?? 1,
+              totalSteps: (_activeExerciseData?['steps'] as List?)?.length ?? 1,
+              isCurrentUsersTurn: _isCurrentUsersTurnForExercise,
+              waitingForName: _exerciseWaitingForName,
+              onJoin: () {
+                context.push('/exercise', extra: {
+                  'conversationId': mainThread.conversationId,
+                  'exerciseId': _activeExerciseSession!['exerciseId'] as String,
+                }).then((_) {
+                  // Refresh exercise state and messages when returning
+                  _checkActiveExercise(mainThread.conversationId);
+                  ref.read(messagesProvider(mainThread.conversationId).notifier).loadMessages();
+                });
+              },
+            ),
 
           // Messages list
           Expanded(

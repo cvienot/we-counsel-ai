@@ -222,4 +222,23 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get partnerInvitationMessage =>
       'Una vez que su pareja acepte la invitación y cree su cuenta, ambos tendrán acceso a su hilo de conversación principal donde pueden comenzar a compartir y recibir orientación de nuestro consejero IA.';
+
+  @override
+  String exerciseStepProgress(int current, int total) {
+    return 'Step $current/$total';
+  }
+
+  @override
+  String get exerciseYourTurn => 'Your turn!';
+
+  @override
+  String exerciseWaitingFor(String partnerName) {
+    return 'Waiting for $partnerName...';
+  }
+
+  @override
+  String get exerciseJoin => 'Join';
+
+  @override
+  String get exerciseView => 'View';
 }

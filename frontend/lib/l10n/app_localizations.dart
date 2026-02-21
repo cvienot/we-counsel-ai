@@ -495,6 +495,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Once your partner accepts the invitation and creates their account, you\'ll both have access to your main conversation thread where you can start sharing and receiving guidance from our AI counsellor.'**
   String get partnerInvitationMessage;
+
+  /// Exercise step progress indicator
+  ///
+  /// In en, this message translates to:
+  /// **'Step {current}/{total}'**
+  String exerciseStepProgress(int current, int total);
+
+  /// Indicator that it is the current user turn in the exercise
+  ///
+  /// In en, this message translates to:
+  /// **'Your turn!'**
+  String get exerciseYourTurn;
+
+  /// Indicator that the exercise is waiting for partner
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for {partnerName}...'**
+  String exerciseWaitingFor(String partnerName);
+
+  /// Button to join an active exercise
+  ///
+  /// In en, this message translates to:
+  /// **'Join'**
+  String get exerciseJoin;
+
+  /// Button to view an active exercise while waiting
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get exerciseView;
 }
 
 class _AppLocalizationsDelegate

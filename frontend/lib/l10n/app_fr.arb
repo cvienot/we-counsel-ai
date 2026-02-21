@@ -89,5 +89,38 @@
   "partnerInvitationMessage": "Une fois que votre partenaire accepte l'invitation et crée son compte, vous aurez tous les deux accès à votre fil de conversation principal où vous pourrez commencer à partager et recevoir des conseils de notre conseiller IA.",
   "@partnerInvitationMessage": {
     "description": "Message expliquant ce qui se passe après que le partenaire accepte l'invitation"
+  },
+  "exerciseStepProgress": "Étape {current}/{total}",
+  "@exerciseStepProgress": {
+    "description": "Indicateur de progression de l'exercice",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "exerciseYourTurn": "À vous !",
+  "@exerciseYourTurn": {
+    "description": "Indicateur que c'est au tour de l'utilisateur dans l'exercice"
+  },
+  "exerciseWaitingFor": "En attente de {partnerName}...",
+  "@exerciseWaitingFor": {
+    "description": "Indicateur que l'exercice attend le partenaire",
+    "placeholders": {
+      "partnerName": {
+        "type": "String"
+      }
+    }
+  },
+  "exerciseJoin": "Rejoindre",
+  "@exerciseJoin": {
+    "description": "Bouton pour rejoindre un exercice actif"
+  },
+  "exerciseView": "Voir",
+  "@exerciseView": {
+    "description": "Bouton pour voir un exercice actif en attente"
   }
 }
