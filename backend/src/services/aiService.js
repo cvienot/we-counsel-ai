@@ -217,12 +217,30 @@ const detectExerciseOpportunity = (messages, aiResponse, recentExercises) => {
   const recentMessages = messages.slice(-6);
   const allText = recentMessages.map(m => m.content.toLowerCase()).join(' ');
   
+  // Triggers covering ALL exercise categories
   const triggers = [
+    // Communication & listening
     'not listening', "don't listen", 'not heard', "don't hear",
-    'dismissed', 'dismissing', 'same argument', 'same fight',
-    'going in circles', 'stuck in', 'repeating', 'cycle',
-    'raised voice', 'raising voice', 'defensive', 'talking over',
-    'never at fault', 'always at fault', 'accountability'
+    'dismissed', 'dismissing', 'talking over', 'interrupting',
+    // Conflict & repetition
+    'same argument', 'same fight', 'going in circles', 'stuck in',
+    'repeating', 'cycle', 'raised voice', 'defensive',
+    'never at fault', 'always at fault', 'accountability',
+    // Emotional disconnect
+    'stressed', 'overwhelmed', 'exhausted', 'tired', 'distant',
+    'disconnected', 'checked out', 'going through the motions',
+    // Empathy gaps
+    "don't understand", 'not getting it', 'see my side',
+    "don't get it", 'misunderstand',
+    // Repair & reconnection
+    'still upset', 'after the fight', 'last argument',
+    'apologize', 'make up', 'move past',
+    // Needs & boundaries
+    'boundary', 'boundaries', 'need from you', 'need you to',
+    'respect my', 'space',
+    // Connection & positivity
+    'roommates', 'routine', 'spark', 'boring', "haven't talked",
+    'lost ourselves', 'taken for granted', 'unappreciated'
   ];
   
   const triggerCount = triggers.filter(trigger => allText.includes(trigger)).length;
