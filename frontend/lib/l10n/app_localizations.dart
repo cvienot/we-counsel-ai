@@ -283,7 +283,7 @@ abstract class AppLocalizations {
   /// Invite partner description text
   ///
   /// In en, this message translates to:
-  /// **'Invite your partner to join you on We Counsel. They will receive an email with instructions to create their account and connect with you.'**
+  /// **'Invite your partner to join you on We Connect. They will receive an email with instructions to create their account and connect with you.'**
   String get invitePartnerDescription;
 
   /// Partner email field label
@@ -337,7 +337,7 @@ abstract class AppLocalizations {
   /// Invitation sent success message
   ///
   /// In en, this message translates to:
-  /// **'An invitation has been sent to {email}. They will receive an email with instructions to join you on We Counsel.'**
+  /// **'An invitation has been sent to {email}. They will receive an email with instructions to join you on We Connect.'**
   String invitationSentMessage(String email);
 
   /// Failed to send invitation error prefix

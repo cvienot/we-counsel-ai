@@ -45,7 +45,7 @@
   "personalMessageOptional": "Mensaje personal (opcional)",
   "addPersonalMessage": "Agrega un mensaje personal a tu invitación...",
   "invitationSent": "¡Invitación enviada!",
-  "invitationSentMessage": "Se ha enviado una invitación a {email}. Recibirá un correo electrónico con instrucciones para unirse a ti en We Counsel.",
+  "invitationSentMessage": "Se ha enviado una invitación a {email}. Recibirá un correo electrónico con instrucciones para unirse a ti en We Connect.",
   "failedToSendInvitation": "Error al enviar la invitación",
   "invitationSteps": "1. Tu pareja recibirá una invitación por correo electrónico\\n2. Puede hacer clic en el enlace para crear su cuenta\\n3. Una vez que la acepte, ambos estarán conectados\\n4. Pueden comenzar a tener conversaciones con orientación de IA",
   "ok": "OK",

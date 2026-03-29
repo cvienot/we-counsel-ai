@@ -135,7 +135,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String invitationSentMessage(String email) {
-    return 'Se ha enviado una invitación a $email. Recibirá un correo electrónico con instrucciones para unirse a ti en We Counsel.';
+    return 'Se ha enviado una invitación a $email. Recibirá un correo electrónico con instrucciones para unirse a ti en We Connect.';
   }
 
   @override

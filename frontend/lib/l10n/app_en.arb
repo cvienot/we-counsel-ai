@@ -126,7 +126,7 @@
   "@sendInvitation": {
     "description": "Send invitation card title"
   },
-  "invitePartnerDescription": "Invite your partner to join you on We Counsel. They will receive an email with instructions to create their account and connect with you.",
+  "invitePartnerDescription": "Invite your partner to join you on We Connect. They will receive an email with instructions to create their account and connect with you.",
   "@invitePartnerDescription": {
     "description": "Invite partner description text"
   },
@@ -162,7 +162,7 @@
   "@invitationSent": {
     "description": "Invitation sent dialog title"
   },
-  "invitationSentMessage": "An invitation has been sent to {email}. They will receive an email with instructions to join you on We Counsel.",
+  "invitationSentMessage": "An invitation has been sent to {email}. They will receive an email with instructions to join you on We Connect.",
   "@invitationSentMessage": {
     "description": "Invitation sent success message",
     "placeholders": {
@@ -191,7 +191,7 @@
   "@sendInvitation": {
     "description": "Send invitation card title"
   },
-  "invitePartnerDescription": "Invite your partner to join you on We Counsel. They will receive an email with instructions to create their account and connect with you.",
+  "invitePartnerDescription": "Invite your partner to join you on We Connect. They will receive an email with instructions to create their account and connect with you.",
   "@invitePartnerDescription": {
     "description": "Invite partner description text"
   },
@@ -227,7 +227,7 @@
   "@invitationSent": {
     "description": "Invitation sent dialog title"
   },
-  "invitationSentMessage": "An invitation has been sent to {email}. They will receive an email with instructions to join you on We Counsel.",
+  "invitationSentMessage": "An invitation has been sent to {email}. They will receive an email with instructions to join you on We Connect.",
   "@invitationSentMessage": {
     "description": "Invitation sent success message",
     "placeholders": {

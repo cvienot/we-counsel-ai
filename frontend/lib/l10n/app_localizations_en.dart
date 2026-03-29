@@ -102,7 +102,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get invitePartnerDescription =>
-      'Invite your partner to join you on We Counsel. They will receive an email with instructions to create their account and connect with you.';
+      'Invite your partner to join you on We Connect. They will receive an email with instructions to create their account and connect with you.';
 
   @override
   String get partnerEmailAddress => 'Partner\'s Email Address';
@@ -131,7 +131,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String invitationSentMessage(String email) {
-    return 'An invitation has been sent to $email. They will receive an email with instructions to join you on We Counsel.';
+    return 'An invitation has been sent to $email. They will receive an email with instructions to join you on We Connect.';
   }
 
   @override

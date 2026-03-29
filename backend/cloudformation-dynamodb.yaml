@@ -1,5 +1,10 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'DynamoDB tables for We Counsel AI application'
+Description: 'DynamoDB tables for We Connect application'
+
+# NOTE: This template manages 5 core tables via CloudFormation.
+# Additional tables (subscriptions, exercises, exercise-sessions) were created
+# via setup-database.js and exist in AWS but are not CF-managed.
+# The complete schema (all 8 tables) is defined in src/database/schema.js.
 
 Resources:
   UsersTable:
