@@ -376,5 +376,98 @@
   "exerciseView": "View",
   "@exerciseView": {
     "description": "Button to view an active exercise while waiting"
+  },
+
+  "progressDashboard": "Progress Dashboard",
+  "@progressDashboard": {
+    "description": "Progress dashboard screen title"
+  },
+  "relationshipHealth": "Relationship Health",
+  "@relationshipHealth": {
+    "description": "Relationship health score label"
+  },
+  "healthGreat": "Great",
+  "@healthGreat": {
+    "description": "Health score label for high scores"
+  },
+  "healthGood": "Good",
+  "@healthGood": {
+    "description": "Health score label for medium scores"
+  },
+  "healthGettingStarted": "Getting Started",
+  "@healthGettingStarted": {
+    "description": "Health score label for low scores"
+  },
+  "healthScoreDescription": "Based on your conversations, exercises, and engagement",
+  "@healthScoreDescription": {
+    "description": "Description of how health score is calculated"
+  },
+  "activityStreak": "Activity Streak",
+  "@activityStreak": {
+    "description": "Activity streak card title"
+  },
+  "days": "days",
+  "@days": {
+    "description": "Days unit label"
+  },
+  "best": "Best",
+  "@best": {
+    "description": "Best streak label"
+  },
+  "totalDaysActive": "Total",
+  "@totalDaysActive": {
+    "description": "Total active days label"
+  },
+  "weeklyActivity": "Weekly Activity",
+  "@weeklyActivity": {
+    "description": "Weekly activity section title"
+  },
+  "noActivityYet": "No activity yet this week",
+  "@noActivityYet": {
+    "description": "Empty state for weekly activity"
+  },
+  "exerciseProgress": "Exercise Progress",
+  "@exerciseProgress": {
+    "description": "Exercise progress section title"
+  },
+  "messages": "Messages",
+  "@messages": {
+    "description": "Messages stat label"
+  },
+  "exercisesCompleted": "Exercises",
+  "@exercisesCompleted": {
+    "description": "Exercises completed stat label"
+  },
+  "aiSessions": "AI Sessions",
+  "@aiSessions": {
+    "description": "AI sessions stat label"
+  },
+  "completionRate": "Completion Rate",
+  "@completionRate": {
+    "description": "Exercise completion rate label"
+  },
+  "completed": "Completed",
+  "@completed": {
+    "description": "Completed count label"
+  },
+  "totalStarted": "Started",
+  "@totalStarted": {
+    "description": "Total started exercises label"
+  },
+  "thisMonth": "This Month",
+  "@thisMonth": {
+    "description": "This month label"
+  },
+  "byCategory": "By Category",
+  "@byCategory": {
+    "description": "By category section label"
+  },
+  "viewProgress": "View Progress",
+  "@viewProgress": {
+    "description": "View progress button label"
+  },
+  "trackYourJourney": "Track your relationship journey and growth",
+  "@trackYourJourney": {
+    "description": "Progress dashboard card subtitle"
   }
 }

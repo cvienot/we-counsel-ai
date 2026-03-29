@@ -122,5 +122,29 @@
   "exerciseView": "Voir",
   "@exerciseView": {
     "description": "Bouton pour voir un exercice actif en attente"
-  }
+  },
+
+  "progressDashboard": "Tableau de Progression",
+  "relationshipHealth": "Santé Relationnelle",
+  "healthGreat": "Excellent",
+  "healthGood": "Bien",
+  "healthGettingStarted": "Premiers Pas",
+  "healthScoreDescription": "Basé sur vos conversations, exercices et engagement",
+  "activityStreak": "Série d'Activité",
+  "days": "jours",
+  "best": "Record",
+  "totalDaysActive": "Total",
+  "weeklyActivity": "Activité Hebdomadaire",
+  "noActivityYet": "Pas encore d'activité cette semaine",
+  "exerciseProgress": "Progrès des Exercices",
+  "messages": "Messages",
+  "exercisesCompleted": "Exercices",
+  "aiSessions": "Sessions IA",
+  "completionRate": "Taux de Complétion",
+  "completed": "Terminés",
+  "totalStarted": "Commencés",
+  "thisMonth": "Ce Mois",
+  "byCategory": "Par Catégorie",
+  "viewProgress": "Voir la Progression",
+  "trackYourJourney": "Suivez votre parcours relationnel et votre croissance"
 }

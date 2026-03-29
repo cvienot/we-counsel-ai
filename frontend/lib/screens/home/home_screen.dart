@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../providers/auth_provider.dart';
+import '../../l10n/app_localizations.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -115,8 +116,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 16),
-              _QuickActionCard(
-                icon: Icons.forum,
+              _QuickActionCard(                icon: Icons.insights,
+                title: AppLocalizations.of(context)?.viewProgress ?? 'View Progress',
+                subtitle: AppLocalizations.of(context)?.trackYourJourney ?? 'Track your relationship journey and growth',
+                onTap: () => context.push('/progress'),
+              ),
+              const SizedBox(height: 16),
+              _QuickActionCard(                icon: Icons.forum,
                 title: 'Main Thread',
                 subtitle: 'Continue your main conversation with your partner',
                 onTap: () => context.push('/main-thread'),

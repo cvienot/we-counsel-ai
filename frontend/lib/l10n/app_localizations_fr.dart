@@ -241,4 +241,75 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get exerciseView => 'Voir';
+
+  @override
+  String get progressDashboard => 'Tableau de Progression';
+
+  @override
+  String get relationshipHealth => 'Santé Relationnelle';
+
+  @override
+  String get healthGreat => 'Excellent';
+
+  @override
+  String get healthGood => 'Bien';
+
+  @override
+  String get healthGettingStarted => 'Premiers Pas';
+
+  @override
+  String get healthScoreDescription =>
+      'Basé sur vos conversations, exercices et engagement';
+
+  @override
+  String get activityStreak => 'Série d\'Activité';
+
+  @override
+  String get days => 'jours';
+
+  @override
+  String get best => 'Record';
+
+  @override
+  String get totalDaysActive => 'Total';
+
+  @override
+  String get weeklyActivity => 'Activité Hebdomadaire';
+
+  @override
+  String get noActivityYet => 'Pas encore d\'activité cette semaine';
+
+  @override
+  String get exerciseProgress => 'Progrès des Exercices';
+
+  @override
+  String get messages => 'Messages';
+
+  @override
+  String get exercisesCompleted => 'Exercices';
+
+  @override
+  String get aiSessions => 'Sessions IA';
+
+  @override
+  String get completionRate => 'Taux de Complétion';
+
+  @override
+  String get completed => 'Terminés';
+
+  @override
+  String get totalStarted => 'Commencés';
+
+  @override
+  String get thisMonth => 'Ce Mois';
+
+  @override
+  String get byCategory => 'Par Catégorie';
+
+  @override
+  String get viewProgress => 'Voir la Progression';
+
+  @override
+  String get trackYourJourney =>
+      'Suivez votre parcours relationnel et votre croissance';
 }

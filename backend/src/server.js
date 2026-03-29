@@ -80,6 +80,10 @@ app.use('/api/payments', paymentRoutes);
 const exerciseRoutes = require('./routes/exercises');
 app.use('/api/exercises', exerciseRoutes);
 
+// Progress dashboard routes
+const progressRoutes = require('./routes/progress');
+app.use('/api/progress', progressRoutes);
+
 // Test routes (only enabled in test mode)
 if (process.env.ENABLE_TEST_ENDPOINTS === 'true') {
   const testRoutes = require('./routes/test');

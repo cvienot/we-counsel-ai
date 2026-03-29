@@ -525,6 +525,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'View'**
   String get exerciseView;
+
+  /// Progress dashboard screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Progress Dashboard'**
+  String get progressDashboard;
+
+  /// Relationship health score label
+  ///
+  /// In en, this message translates to:
+  /// **'Relationship Health'**
+  String get relationshipHealth;
+
+  /// Health score label for high scores
+  ///
+  /// In en, this message translates to:
+  /// **'Great'**
+  String get healthGreat;
+
+  /// Health score label for medium scores
+  ///
+  /// In en, this message translates to:
+  /// **'Good'**
+  String get healthGood;
+
+  /// Health score label for low scores
+  ///
+  /// In en, this message translates to:
+  /// **'Getting Started'**
+  String get healthGettingStarted;
+
+  /// Description of how health score is calculated
+  ///
+  /// In en, this message translates to:
+  /// **'Based on your conversations, exercises, and engagement'**
+  String get healthScoreDescription;
+
+  /// Activity streak card title
+  ///
+  /// In en, this message translates to:
+  /// **'Activity Streak'**
+  String get activityStreak;
+
+  /// Days unit label
+  ///
+  /// In en, this message translates to:
+  /// **'days'**
+  String get days;
+
+  /// Best streak label
+  ///
+  /// In en, this message translates to:
+  /// **'Best'**
+  String get best;
+
+  /// Total active days label
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get totalDaysActive;
+
+  /// Weekly activity section title
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly Activity'**
+  String get weeklyActivity;
+
+  /// Empty state for weekly activity
+  ///
+  /// In en, this message translates to:
+  /// **'No activity yet this week'**
+  String get noActivityYet;
+
+  /// Exercise progress section title
+  ///
+  /// In en, this message translates to:
+  /// **'Exercise Progress'**
+  String get exerciseProgress;
+
+  /// Messages stat label
+  ///
+  /// In en, this message translates to:
+  /// **'Messages'**
+  String get messages;
+
+  /// Exercises completed stat label
+  ///
+  /// In en, this message translates to:
+  /// **'Exercises'**
+  String get exercisesCompleted;
+
+  /// AI sessions stat label
+  ///
+  /// In en, this message translates to:
+  /// **'AI Sessions'**
+  String get aiSessions;
+
+  /// Exercise completion rate label
+  ///
+  /// In en, this message translates to:
+  /// **'Completion Rate'**
+  String get completionRate;
+
+  /// Completed count label
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get completed;
+
+  /// Total started exercises label
+  ///
+  /// In en, this message translates to:
+  /// **'Started'**
+  String get totalStarted;
+
+  /// This month label
+  ///
+  /// In en, this message translates to:
+  /// **'This Month'**
+  String get thisMonth;
+
+  /// By category section label
+  ///
+  /// In en, this message translates to:
+  /// **'By Category'**
+  String get byCategory;
+
+  /// View progress button label
+  ///
+  /// In en, this message translates to:
+  /// **'View Progress'**
+  String get viewProgress;
+
+  /// Progress dashboard card subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Track your relationship journey and growth'**
+  String get trackYourJourney;
 }
 
 class _AppLocalizationsDelegate

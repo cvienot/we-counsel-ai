@@ -89,5 +89,29 @@
   "partnerInvitationMessage": "Una vez que su pareja acepte la invitación y cree su cuenta, ambos tendrán acceso a su hilo de conversación principal donde pueden comenzar a compartir y recibir orientación de nuestro consejero IA.",
   "@partnerInvitationMessage": {
     "description": "Mensaje que explica qué sucede después de que la pareja acepta la invitación"
-  }
+  },
+
+  "progressDashboard": "Panel de Progreso",
+  "relationshipHealth": "Salud de la Relación",
+  "healthGreat": "Excelente",
+  "healthGood": "Bien",
+  "healthGettingStarted": "Comenzando",
+  "healthScoreDescription": "Basado en sus conversaciones, ejercicios y participación",
+  "activityStreak": "Racha de Actividad",
+  "days": "días",
+  "best": "Mejor",
+  "totalDaysActive": "Total",
+  "weeklyActivity": "Actividad Semanal",
+  "noActivityYet": "Sin actividad esta semana aún",
+  "exerciseProgress": "Progreso de Ejercicios",
+  "messages": "Mensajes",
+  "exercisesCompleted": "Ejercicios",
+  "aiSessions": "Sesiones IA",
+  "completionRate": "Tasa de Completación",
+  "completed": "Completados",
+  "totalStarted": "Iniciados",
+  "thisMonth": "Este Mes",
+  "byCategory": "Por Categoría",
+  "viewProgress": "Ver Progreso",
+  "trackYourJourney": "Siga su viaje de relación y crecimiento"
 }
