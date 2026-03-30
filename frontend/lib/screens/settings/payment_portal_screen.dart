@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../services/payment_service.dart';
-import '../../config/app_config.dart';
+import '../../config/environment.dart';
 
 class PaymentPortalScreen extends ConsumerStatefulWidget {
   const PaymentPortalScreen({super.key});
@@ -13,7 +13,7 @@ class PaymentPortalScreen extends ConsumerStatefulWidget {
 }
 
 class _PaymentPortalScreenState extends ConsumerState<PaymentPortalScreen> {
-  final PaymentService _paymentService = PaymentService(baseUrl: AppConfig.apiBaseUrl);
+  final PaymentService _paymentService = PaymentService(baseUrl: Environment.apiBaseUrl);
   bool _isLoading = false;
   Map<String, dynamic> _subscriptionData = {};
   bool _dataLoaded = false;

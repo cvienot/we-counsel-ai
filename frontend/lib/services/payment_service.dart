@@ -27,7 +27,7 @@ class PaymentService {
       }
 
       final response = await http.post(
-        Uri.parse('$baseUrl/api/payments/create-checkout-session'),
+        Uri.parse('$baseUrl/payments/create-checkout-session'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -75,7 +75,7 @@ class PaymentService {
       }
 
       final response = await http.post(
-        Uri.parse('$baseUrl/api/payments/create-portal-session'),
+        Uri.parse('$baseUrl/payments/create-portal-session'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -118,7 +118,7 @@ class PaymentService {
       }
 
       final response = await http.get(
-        Uri.parse('$baseUrl/api/payments/invoices?limit=$limit'),
+        Uri.parse('$baseUrl/payments/invoices?limit=$limit'),
         headers: {
           'Authorization': 'Bearer $token',
         },
@@ -160,7 +160,7 @@ class PaymentService {
       }
 
       final response = await http.get(
-        Uri.parse('$baseUrl/api/subscriptions/usage'),
+        Uri.parse('$baseUrl/subscriptions/usage'),
         headers: {
           'Authorization': 'Bearer $token',
         },

@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../config/app_config.dart';
+import '../config/environment.dart';
 
 class ProgressService {
-  final String baseUrl = AppConfig.apiBaseUrl;
+  final String baseUrl = Environment.apiBaseUrl;
 
   /// Get full progress dashboard data
   Future<Map<String, dynamic>> getDashboard(String token) async {
     final response = await http.get(
-      Uri.parse('$baseUrl/api/progress/dashboard'),
+      Uri.parse('$baseUrl/progress/dashboard'),
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
@@ -25,7 +25,7 @@ class ProgressService {
   /// Get exercise statistics only
   Future<Map<String, dynamic>> getExerciseStats(String token) async {
     final response = await http.get(
-      Uri.parse('$baseUrl/api/progress/exercises'),
+      Uri.parse('$baseUrl/progress/exercises'),
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ class ProgressService {
   /// Get weekly activity data
   Future<Map<String, dynamic>> getActivityData(String token) async {
     final response = await http.get(
-      Uri.parse('$baseUrl/api/progress/activity'),
+      Uri.parse('$baseUrl/progress/activity'),
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',

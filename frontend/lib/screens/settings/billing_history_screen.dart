@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../services/payment_service.dart';
-import '../../config/app_config.dart';
+import '../../config/environment.dart';
 
 class BillingHistoryScreen extends StatefulWidget {
   const BillingHistoryScreen({super.key});
@@ -11,7 +11,7 @@ class BillingHistoryScreen extends StatefulWidget {
 }
 
 class _BillingHistoryScreenState extends State<BillingHistoryScreen> {
-  final PaymentService _paymentService = PaymentService(baseUrl: AppConfig.apiBaseUrl);
+  final PaymentService _paymentService = PaymentService(baseUrl: Environment.apiBaseUrl);
   List<dynamic> _invoices = [];
   bool _isLoading = true;
   String? _error;

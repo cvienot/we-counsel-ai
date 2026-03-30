@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../services/payment_service.dart';
-import '../config/app_config.dart';
+import '../config/environment.dart';
 import '../utils/snackbar_utils.dart';
 
 class PlanSelectionScreen extends StatefulWidget {
@@ -17,7 +17,7 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
   bool _isProcessingPayment = false;
   bool _isLoading = true;
   String? _currentTier; // Nullable to distinguish between "not loaded" and "free tier"
-  final PaymentService _paymentService = PaymentService(baseUrl: AppConfig.apiBaseUrl);
+  final PaymentService _paymentService = PaymentService(baseUrl: Environment.apiBaseUrl);
 
   @override
   void initState() {

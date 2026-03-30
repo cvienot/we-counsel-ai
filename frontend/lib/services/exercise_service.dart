@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../config/app_config.dart';
+import '../config/environment.dart';
 
 class ExerciseService {
-  final String baseUrl = AppConfig.apiBaseUrl;
+  final String baseUrl = Environment.apiBaseUrl;
 
   // Get available exercises
   Future<List<Map<String, dynamic>>> getExercises(String token) async {
     final response = await http.get(
-      Uri.parse('$baseUrl/api/exercises'),
+      Uri.parse('$baseUrl/exercises'),
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
@@ -30,7 +30,7 @@ class ExerciseService {
     required String exerciseId,
   }) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/api/exercises/start'),
+      Uri.parse('$baseUrl/exercises/start'),
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ class ExerciseService {
     required String response,
   }) async {
     final httpResponse = await http.post(
-      Uri.parse('$baseUrl/api/exercises/$sessionId/progress'),
+      Uri.parse('$baseUrl/exercises/$sessionId/progress'),
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ class ExerciseService {
     required String sessionId,
   }) async {
     final response = await http.get(
-      Uri.parse('$baseUrl/api/exercises/$sessionId/summary'),
+      Uri.parse('$baseUrl/exercises/$sessionId/summary'),
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
@@ -102,7 +102,7 @@ class ExerciseService {
     required String conversationId,
   }) async {
     final response = await http.get(
-      Uri.parse('$baseUrl/api/exercises/active/$conversationId'),
+      Uri.parse('$baseUrl/exercises/active/$conversationId'),
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
@@ -121,7 +121,7 @@ class ExerciseService {
   // Get exercise history for the couple
   Future<List<Map<String, dynamic>>> getExerciseHistory(String token) async {
     final response = await http.get(
-      Uri.parse('$baseUrl/api/exercises/history'),
+      Uri.parse('$baseUrl/exercises/history'),
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
