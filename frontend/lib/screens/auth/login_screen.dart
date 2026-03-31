@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../providers/auth_provider.dart';
 import '../../l10n/app_localizations.dart';
+import '../../widgets/ctrl_enter_submit.dart';
 
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -74,11 +75,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+          child: CtrlEnterSubmit(
+            onSubmit: _handleLogin,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Icon(
                   Icons.favorite,
@@ -148,6 +151,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
               ],
             ),
+          ),
           ),
         ),
       ),

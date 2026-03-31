@@ -8,6 +8,7 @@ import '../../models/message.dart';
 import '../../services/realtime_service.dart';
 import '../../widgets/message_bubble.dart';
 import '../../widgets/disclaimer_banner.dart';
+import '../../widgets/ctrl_enter_submit.dart';
 import '../../utils/snackbar_utils.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
@@ -28,6 +29,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
   final _messageController = TextEditingController();
   final _scrollController = ScrollController();
   final _realtimeService = RealtimeService();
+  late final FocusNode _messageFocusNode;
   
   StreamSubscription<Map<String, dynamic>>? _typingSubscription;
   Timer? _typingTimer;
@@ -37,6 +39,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
   @override
   void initState() {
     super.initState();
+    _messageFocusNode = CtrlEnterSubmit.createFocusNode(_sendMessage);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await ref.read(messagesProvider(widget.conversationId).notifier).loadMessages();
       _scrollToBottom();
@@ -77,6 +80,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
     _typingSubscription?.cancel();
     _typingTimer?.cancel();
     _messageController.dispose();
+    _messageFocusNode.dispose();
     _scrollController.dispose();
     
     // Stop typing when leaving the screen
@@ -334,6 +338,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                 Expanded(
                   child: TextField(
                     controller: _messageController,
+                    focusNode: _messageFocusNode,
                     decoration: InputDecoration(
                       hintText: AppLocalizations.of(context)!.typeMessage,
                       border: OutlineInputBorder(

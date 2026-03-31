@@ -7,6 +7,7 @@ import '../../services/api_service.dart';
 import '../../providers/auth_provider.dart';
 import '../../utils/snackbar_utils.dart';
 import '../../l10n/app_localizations.dart';
+import '../../widgets/ctrl_enter_submit.dart';
 
 class ExerciseScreen extends ConsumerStatefulWidget {
   final String conversationId;
@@ -29,6 +30,7 @@ class ExerciseScreen extends ConsumerStatefulWidget {
 class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
   final ExerciseService _exerciseService = ExerciseService();
   final TextEditingController _responseController = TextEditingController();
+  late final FocusNode _responseFocusNode;
   
   late Map<String, dynamic> _currentSession;
   late Map<String, dynamic> _currentExercise;
@@ -40,6 +42,7 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
   @override
   void initState() {
     super.initState();
+    _responseFocusNode = CtrlEnterSubmit.createFocusNode(_submitResponse);
     _currentSession = widget.session;
     _currentExercise = widget.exercise;
     // Get the personalized current step from the exercise
@@ -55,6 +58,7 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
   @override
   void dispose() {
     _pollTimer?.cancel();
+    _responseFocusNode.dispose();
     _responseController.dispose();
     super.dispose();
   }
@@ -515,6 +519,7 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
                 // Response input
                 TextField(
                   controller: _responseController,
+                  focusNode: _responseFocusNode,
                   maxLines: 5,
                   enabled: _isCurrentUsersTurn(currentStepData['prompt']) && !_isLoading,
                   decoration: InputDecoration(

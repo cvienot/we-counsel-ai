@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/language_provider.dart';
 import '../../l10n/app_localizations.dart';
+import '../../widgets/ctrl_enter_submit.dart';
 import '../plan_selection_screen.dart';
 import 'terms_of_service_screen.dart';
 
@@ -128,10 +129,12 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+          child: CtrlEnterSubmit(
+            onSubmit: _handleRegister,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Icon(
                   Icons.favorite,
@@ -331,6 +334,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 ),
               ],
             ),
+          ),
           ),
         ),
       ),

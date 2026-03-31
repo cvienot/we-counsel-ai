@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../providers/auth_provider.dart';
 import '../../l10n/app_localizations.dart';
+import '../../widgets/ctrl_enter_submit.dart';
 
 
 class InvitePartnerScreen extends ConsumerStatefulWidget {
@@ -117,10 +118,12 @@ class _InvitePartnerScreenState extends ConsumerState<InvitePartnerScreen> {
             const SizedBox(height: 24),
             
             // Form
-            Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            CtrlEnterSubmit(
+              onSubmit: _sendInvitation,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     l10n.partnerEmailAddress,
@@ -183,6 +186,7 @@ class _InvitePartnerScreenState extends ConsumerState<InvitePartnerScreen> {
                   ),
                 ],
               ),
+            ),
             ),
             
             const SizedBox(height: 24),

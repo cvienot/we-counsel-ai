@@ -10,6 +10,7 @@ import '../../services/exercise_service.dart';
 import '../../services/api_service.dart';
 import '../../services/realtime_service.dart';
 import '../../utils/snackbar_utils.dart';
+import '../../widgets/ctrl_enter_submit.dart';
 import 'dart:async';
 
 class MainThreadScreen extends ConsumerStatefulWidget {
@@ -23,6 +24,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
   final _messageController = TextEditingController();
   final _scrollController = ScrollController();
   final _realtimeService = RealtimeService();
+  late final FocusNode _messageFocusNode;
   final _exerciseService = ExerciseService();
   
   StreamSubscription<Map<String, dynamic>>? _typingSubscription;
@@ -42,6 +44,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
   void initState() {
     super.initState();
     debugPrint('🏠 MainThreadScreen initState called');
+    _messageFocusNode = CtrlEnterSubmit.createFocusNode(_sendMessage);
     
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadMainThread();
@@ -91,6 +94,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
     _typingHeartbeat?.cancel();
     _exercisePollTimer?.cancel();
     _messageController.dispose();
+    _messageFocusNode.dispose();
     _scrollController.dispose();
     
     // Stop typing when leaving the screen
@@ -670,6 +674,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                 Expanded(
                   child: TextField(
                     controller: _messageController,
+                    focusNode: _messageFocusNode,
                     decoration: InputDecoration(
                       hintText: l10n.typeMessage,
                       border: OutlineInputBorder(
