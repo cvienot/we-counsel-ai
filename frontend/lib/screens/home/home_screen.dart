@@ -43,6 +43,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
               ),
               PopupMenuItem(
+                onTap: () => context.push('/language'),
+                child: const Row(
+                  children: [
+                    Icon(Icons.language),
+                    SizedBox(width: 8),
+                    Text('Language'),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
                 onTap: () async {
                   await ref.read(authProvider.notifier).logout();
                   if (context.mounted) {
