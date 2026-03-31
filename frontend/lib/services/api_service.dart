@@ -221,6 +221,32 @@ class ApiService {
     }
   }
 
+  Future<Map<String, dynamic>> forgotPassword({required String email}) async {
+    try {
+      final response = await _dio.post('/auth/forgot-password', data: {
+        'email': email,
+      });
+      return response.data;
+    } on DioException catch (e) {
+      throw Exception(_extractErrorMessage(e));
+    }
+  }
+
+  Future<Map<String, dynamic>> resetPassword({
+    required String token,
+    required String newPassword,
+  }) async {
+    try {
+      final response = await _dio.post('/auth/reset-password', data: {
+        'token': token,
+        'newPassword': newPassword,
+      });
+      return response.data;
+    } on DioException catch (e) {
+      throw Exception(_extractErrorMessage(e));
+    }
+  }
+
   Future<Map<String, dynamic>> invitePartner({
     required String email,
     String? message,

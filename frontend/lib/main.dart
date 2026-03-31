@@ -10,6 +10,8 @@ import 'providers/language_provider.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/auth/register_screen.dart';
 import 'screens/auth/invitation_screen.dart';
+import 'screens/auth/forgot_password_screen.dart';
+import 'screens/auth/reset_password_screen.dart';
 import 'screens/home/home_screen.dart';
 import 'screens/main_thread/main_thread_screen.dart';
 import 'screens/conversations/conversation_list_screen.dart';
@@ -104,12 +106,14 @@ class WeCounselApp extends ConsumerWidget {
         final isLoginRoute = location == '/login';
         final isRegisterRoute = location == '/register';
         final isInvitationRoute = location.startsWith('/invitation/');
+        final isForgotPasswordRoute = location == '/forgot-password';
+        final isResetPasswordRoute = location.startsWith('/reset-password/');
         final isSplashRoute = location == '/splash';
 
         print('🔀 ROUTER: Redirect check - location: $location, isAuth: ${authState.isAuthenticated}, isLoading: ${authState.isLoading}');
 
-        // Allow invitation routes without authentication
-        if (isInvitationRoute) {
+        // Allow invitation and password reset routes without authentication
+        if (isInvitationRoute || isForgotPasswordRoute || isResetPasswordRoute) {
           print('🔀 ROUTER: Allowing invitation route');
           return null;
         }
@@ -121,7 +125,7 @@ class WeCounselApp extends ConsumerWidget {
         }
 
         // If done loading and not authenticated, go to login (unless already there)
-        if (!authState.isLoading && !authState.isAuthenticated && !isLoginRoute && !isRegisterRoute) {
+        if (!authState.isLoading && !authState.isAuthenticated && !isLoginRoute && !isRegisterRoute && !isForgotPasswordRoute && !isResetPasswordRoute) {
           print('🔀 ROUTER: Not authenticated, redirect to /login');
           return '/login';
         }
@@ -153,6 +157,17 @@ class WeCounselApp extends ConsumerWidget {
           builder: (context, state) {
             final invitationId = state.pathParameters['id']!;
             return InvitationScreen(invitationId: invitationId);
+          },
+        ),
+        GoRoute(
+          path: '/forgot-password',
+          builder: (context, state) => const ForgotPasswordScreen(),
+        ),
+        GoRoute(
+          path: '/reset-password/:token',
+          builder: (context, state) {
+            final token = state.pathParameters['token']!;
+            return ResetPasswordScreen(token: token);
           },
         ),
         GoRoute(

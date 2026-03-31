@@ -902,4 +902,51 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get aiCoach => 'Coach IA';
+
+  @override
+  String get forgotPassword => 'Mot de passe oublié ?';
+
+  @override
+  String get forgotPasswordTitle => 'Réinitialiser le mot de passe';
+
+  @override
+  String get forgotPasswordDescription =>
+      'Entrez votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.';
+
+  @override
+  String get sendResetLink => 'Envoyer le lien';
+
+  @override
+  String get resetLinkSent =>
+      'Si un compte avec cet e-mail existe, un lien de réinitialisation a été envoyé.';
+
+  @override
+  String get backToLogin => 'Retour à la connexion';
+
+  @override
+  String get resetPasswordTitle => 'Nouveau mot de passe';
+
+  @override
+  String get newPassword => 'Nouveau mot de passe';
+
+  @override
+  String get confirmNewPassword => 'Confirmer le nouveau mot de passe';
+
+  @override
+  String get resetPassword => 'Réinitialiser le mot de passe';
+
+  @override
+  String get passwordResetSuccess =>
+      'Le mot de passe a été réinitialisé avec succès. Vous pouvez maintenant vous connecter.';
+
+  @override
+  String get invalidResetLink =>
+      'Ce lien de réinitialisation est invalide ou a expiré.';
+
+  @override
+  String get pleaseEnterNewPassword =>
+      'Veuillez entrer un nouveau mot de passe';
+
+  @override
+  String get checkYourEmail => 'Vérifiez votre e-mail';
 }

@@ -2,9 +2,9 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { randomUUID } = require('crypto');
-const { docClient, TABLES, QueryCommand, PutCommand, GetCommand } = require('../config/database');
+const { docClient, TABLES, QueryCommand, PutCommand, GetCommand, UpdateCommand } = require('../config/database');
 const { emailService } = require('../services');
-const { sendInvitationEmail, sendWelcomeEmail } = emailService;
+const { sendInvitationEmail, sendWelcomeEmail, sendPasswordResetEmail } = emailService;
 const { authenticateToken } = require('../middleware/authMiddleware');
 
 const router = express.Router();
@@ -405,6 +405,148 @@ router.get('/me', authenticateToken, async (req, res) => {
     res.status(500).json({
       error: 'Server error',
       message: 'Failed to get current user'
+    });
+  }
+});
+
+// @route   POST /api/auth/forgot-password
+// @desc    Request a password reset email
+// @access  Public
+router.post('/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        error: 'Validation error',
+        message: 'Please provide an email address'
+      });
+    }
+
+    // Look up user by email
+    const userQuery = await docClient.send(new QueryCommand({
+      TableName: TABLES.USERS,
+      IndexName: 'email-index',
+      KeyConditionExpression: 'email = :email',
+      ExpressionAttributeValues: { ':email': email.toLowerCase().trim() }
+    }));
+
+    // Always return success to prevent email enumeration
+    if (!userQuery.Items || userQuery.Items.length === 0) {
+      return res.json({
+        success: true,
+        message: 'If an account with that email exists, a password reset link has been sent'
+      });
+    }
+
+    const user = userQuery.Items[0];
+    const resetToken = randomUUID();
+    const resetTokenExpiry = new Date(Date.now() + 60 * 60 * 1000).toISOString(); // 1 hour
+
+    // Store token on user record
+    await docClient.send(new UpdateCommand({
+      TableName: TABLES.USERS,
+      Key: { userId: user.userId },
+      UpdateExpression: 'SET passwordResetToken = :token, resetTokenExpiry = :expiry',
+      ExpressionAttributeValues: {
+        ':token': resetToken,
+        ':expiry': resetTokenExpiry
+      }
+    }));
+
+    // Send reset email
+    try {
+      await sendPasswordResetEmail({
+        to: user.email,
+        resetToken,
+        language: user.language || 'en'
+      });
+    } catch (emailError) {
+      console.error('Failed to send password reset email:', emailError);
+    }
+
+    res.json({
+      success: true,
+      message: 'If an account with that email exists, a password reset link has been sent'
+    });
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    res.status(500).json({
+      error: 'Server error',
+      message: 'Failed to process password reset request'
+    });
+  }
+});
+
+// @route   POST /api/auth/reset-password
+// @desc    Reset password using token
+// @access  Public
+router.post('/reset-password', async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+
+    if (!token || !newPassword) {
+      return res.status(400).json({
+        error: 'Validation error',
+        message: 'Please provide token and new password'
+      });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({
+        error: 'Validation error',
+        message: 'Password must be at least 6 characters long'
+      });
+    }
+
+    // Find user with this reset token
+    // Scan is acceptable here since this is a rare operation
+    const { ScanCommand } = require('@aws-sdk/lib-dynamodb');
+    const scanResult = await docClient.send(new ScanCommand({
+      TableName: TABLES.USERS,
+      FilterExpression: 'passwordResetToken = :token',
+      ExpressionAttributeValues: { ':token': token }
+    }));
+
+    if (!scanResult.Items || scanResult.Items.length === 0) {
+      return res.status(400).json({
+        error: 'Invalid token',
+        message: 'This password reset link is invalid or has expired'
+      });
+    }
+
+    const user = scanResult.Items[0];
+
+    // Check token expiry
+    if (new Date(user.resetTokenExpiry) < new Date()) {
+      return res.status(400).json({
+        error: 'Token expired',
+        message: 'This password reset link has expired. Please request a new one'
+      });
+    }
+
+    // Hash new password and update user
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    await docClient.send(new UpdateCommand({
+      TableName: TABLES.USERS,
+      Key: { userId: user.userId },
+      UpdateExpression: 'SET password = :password REMOVE passwordResetToken, resetTokenExpiry',
+      ExpressionAttributeValues: {
+        ':password': hashedPassword
+      }
+    }));
+
+    res.json({
+      success: true,
+      message: 'Password has been reset successfully'
+    });
+  } catch (error) {
+    console.error('Reset password error:', error);
+    res.status(500).json({
+      error: 'Server error',
+      message: 'Failed to reset password'
     });
   }
 });

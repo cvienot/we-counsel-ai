@@ -361,5 +361,19 @@
       "name": { "type": "String" }
     }
   },
-  "aiCoach": "AI Coach"
+  "aiCoach": "AI Coach",
+  "forgotPassword": "Forgot password?",
+  "forgotPasswordTitle": "Reset Password",
+  "forgotPasswordDescription": "Enter your email address and we'll send you a link to reset your password.",
+  "sendResetLink": "Send Reset Link",
+  "resetLinkSent": "If an account with that email exists, a password reset link has been sent.",
+  "backToLogin": "Back to Login",
+  "resetPasswordTitle": "Set New Password",
+  "newPassword": "New Password",
+  "confirmNewPassword": "Confirm New Password",
+  "resetPassword": "Reset Password",
+  "passwordResetSuccess": "Password has been reset successfully. You can now sign in.",
+  "invalidResetLink": "This password reset link is invalid or has expired.",
+  "pleaseEnterNewPassword": "Please enter a new password",
+  "checkYourEmail": "Check your email"
 }

@@ -893,4 +893,51 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get aiCoach => 'Coach IA';
+
+  @override
+  String get forgotPassword => '¿Olvidaste tu contraseña?';
+
+  @override
+  String get forgotPasswordTitle => 'Restablecer contraseña';
+
+  @override
+  String get forgotPasswordDescription =>
+      'Ingresa tu dirección de correo electrónico y te enviaremos un enlace para restablecer tu contraseña.';
+
+  @override
+  String get sendResetLink => 'Enviar enlace';
+
+  @override
+  String get resetLinkSent =>
+      'Si existe una cuenta con ese correo, se ha enviado un enlace de restablecimiento.';
+
+  @override
+  String get backToLogin => 'Volver al inicio de sesión';
+
+  @override
+  String get resetPasswordTitle => 'Nueva contraseña';
+
+  @override
+  String get newPassword => 'Nueva contraseña';
+
+  @override
+  String get confirmNewPassword => 'Confirmar nueva contraseña';
+
+  @override
+  String get resetPassword => 'Restablecer contraseña';
+
+  @override
+  String get passwordResetSuccess =>
+      'La contraseña se ha restablecido correctamente. Ya puedes iniciar sesión.';
+
+  @override
+  String get invalidResetLink =>
+      'Este enlace de restablecimiento es inválido o ha expirado.';
+
+  @override
+  String get pleaseEnterNewPassword =>
+      'Por favor, ingresa una nueva contraseña';
+
+  @override
+  String get checkYourEmail => 'Revisa tu correo';
 }

@@ -43,6 +43,19 @@ const emailTranslations = {
 3. Let our AI counsellor guide you through meaningful discussions`,
       plainClosing: 'Remember, We Connect is here to support you both on your journey together.'
     },
+    passwordReset: {
+      subject: 'Reset your We Connect password',
+      heading: 'Password Reset Request',
+      body: 'We received a request to reset your password. Click the button below to create a new password.',
+      button: 'Reset Password',
+      expiry: 'This link will expire in 1 hour.',
+      ignore: "If you didn't request this, you can safely ignore this email.",
+      footer: 'We Connect - Strengthening relationships through guided communication',
+      plainBody: 'We received a request to reset your We Connect password.',
+      plainLink: 'Reset your password:',
+      plainExpiry: 'This link will expire in 1 hour.',
+      plainIgnore: "If you didn't request this, you can safely ignore this email."
+    },
     messageNotification: {
       subject: (senderName) => `${senderName} sent you a message on We Connect`,
       heading: (senderName) => `New message from ${senderName}`,
@@ -98,6 +111,19 @@ const emailTranslations = {
 3. Laissez notre conseiller IA vous guider dans des discussions significatives`,
       plainClosing: 'N\'oubliez pas, We Connect est là pour vous soutenir tous les deux dans votre cheminement.'
     },
+    passwordReset: {
+      subject: 'Réinitialisez votre mot de passe We Connect',
+      heading: 'Demande de réinitialisation de mot de passe',
+      body: 'Nous avons reçu une demande de réinitialisation de votre mot de passe. Cliquez sur le bouton ci-dessous pour créer un nouveau mot de passe.',
+      button: 'Réinitialiser le mot de passe',
+      expiry: 'Ce lien expirera dans 1 heure.',
+      ignore: 'Si vous n\'avez pas fait cette demande, vous pouvez ignorer cet e-mail en toute sécurité.',
+      footer: 'We Connect - Renforcer les relations par une communication guidée',
+      plainBody: 'Nous avons reçu une demande de réinitialisation de votre mot de passe We Connect.',
+      plainLink: 'Réinitialisez votre mot de passe :',
+      plainExpiry: 'Ce lien expirera dans 1 heure.',
+      plainIgnore: 'Si vous n\'avez pas fait cette demande, vous pouvez ignorer cet e-mail en toute sécurité.'
+    },
     messageNotification: {
       subject: (senderName) => `${senderName} vous a envoyé un message sur We Connect`,
       heading: (senderName) => `Nouveau message de ${senderName}`,
@@ -152,6 +178,19 @@ const emailTranslations = {
 2. Comienza tu primera conversación juntos
 3. Deja que nuestro consejero de IA te guíe en discusiones significativas`,
       plainClosing: 'Recuerda, We Connect está aquí para apoyarlos a ambos en su camino juntos.'
+    },
+    passwordReset: {
+      subject: 'Restablece tu contraseña de We Connect',
+      heading: 'Solicitud de restablecimiento de contraseña',
+      body: 'Recibimos una solicitud para restablecer tu contraseña. Haz clic en el botón de abajo para crear una nueva contraseña.',
+      button: 'Restablecer contraseña',
+      expiry: 'Este enlace expirará en 1 hora.',
+      ignore: 'Si no solicitaste esto, puedes ignorar este correo de forma segura.',
+      footer: 'We Connect - Fortaleciendo relaciones a través de la comunicación guiada',
+      plainBody: 'Recibimos una solicitud para restablecer tu contraseña de We Connect.',
+      plainLink: 'Restablece tu contraseña:',
+      plainExpiry: 'Este enlace expirará en 1 hora.',
+      plainIgnore: 'Si no solicitaste esto, puedes ignorar este correo de forma segura.'
     },
     messageNotification: {
       subject: (senderName) => `${senderName} te ha enviado un mensaje en We Connect`,

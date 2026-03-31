@@ -304,8 +304,104 @@ const sendMessageNotification = async ({ to, recipientName, senderName, messageP
   }
 };
 
+const sendPasswordResetEmail = async ({ to, resetToken, language = 'en' }) => {
+  const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+  
+  const lang = emailTranslations[language] || emailTranslations.en;
+  const t = lang.passwordReset;
+  
+  const params = {
+    Source: process.env.EMAIL_FROM,
+    Destination: {
+      ToAddresses: [to]
+    },
+    Message: {
+      Subject: {
+        Data: t.subject,
+        Charset: 'UTF-8'
+      },
+      Body: {
+        Html: {
+          Data: `
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <meta charset="utf-8">
+              <title>${t.subject}</title>
+              <style>
+                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                .header { text-align: center; padding: 20px 0; }
+                .content { padding: 20px; background: #f9f9f9; border-radius: 8px; }
+                .button { 
+                  display: inline-block; 
+                  background: #007bff; 
+                  color: white; 
+                  padding: 12px 24px; 
+                  text-decoration: none; 
+                  border-radius: 4px; 
+                  margin: 20px 0; 
+                }
+                .footer { text-align: center; padding: 20px 0; font-size: 12px; color: #666; }
+              </style>
+            </head>
+            <body>
+              <div class="container">
+                <div class="header">
+                  <h1>We Connect</h1>
+                </div>
+                <div class="content">
+                  <h2>${t.heading}</h2>
+                  <p>${t.body}</p>
+                  <div style="text-align: center;">
+                    <a href="${resetUrl}" class="button">${t.button}</a>
+                  </div>
+                  <p><small>${t.expiry}</small></p>
+                  <p><small>${t.ignore}</small></p>
+                </div>
+                <div class="footer">
+                  <p>${t.footer}</p>
+                </div>
+              </div>
+            </body>
+            </html>
+          `,
+          Charset: 'UTF-8'
+        },
+        Text: {
+          Data: `
+            ${t.subject}
+
+            ${t.plainBody}
+
+            ${t.plainLink} ${resetUrl}
+
+            ${t.plainExpiry}
+
+            ${t.plainIgnore}
+
+            ${t.footer}
+          `,
+          Charset: 'UTF-8'
+        }
+      }
+    }
+  };
+
+  try {
+    const command = new SendEmailCommand(params);
+    const result = await sesClient.send(command);
+    console.log('Password reset email sent:', result.MessageId);
+    return result;
+  } catch (error) {
+    console.error('Error sending password reset email:', error);
+    throw error;
+  }
+};
+
 module.exports = {
   sendInvitationEmail,
   sendWelcomeEmail,
-  sendMessageNotification
+  sendMessageNotification,
+  sendPasswordResetEmail
 };

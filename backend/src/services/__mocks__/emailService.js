@@ -60,8 +60,25 @@ const sendMessageNotification = async ({ to, recipientName, senderName, messageP
   return { MessageId: email.messageId };
 };
 
+const sendPasswordResetEmail = async ({ to, resetToken, language = 'en' }) => {
+  const email = {
+    type: 'passwordReset',
+    to,
+    resetToken,
+    language,
+    sentAt: new Date().toISOString(),
+    messageId: `mock-password-reset-${Date.now()}-${Math.random()}`
+  };
+  
+  global.mockEmailStore.push(email);
+  console.log('📧 MOCK EMAIL (Password Reset):', { to });
+  
+  return { MessageId: email.messageId };
+};
+
 module.exports = {
   sendInvitationEmail,
   sendWelcomeEmail,
-  sendMessageNotification
+  sendMessageNotification,
+  sendPasswordResetEmail
 };

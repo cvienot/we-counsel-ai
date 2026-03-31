@@ -884,4 +884,50 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiCoach => 'AI Coach';
+
+  @override
+  String get forgotPassword => 'Forgot password?';
+
+  @override
+  String get forgotPasswordTitle => 'Reset Password';
+
+  @override
+  String get forgotPasswordDescription =>
+      'Enter your email address and we\'ll send you a link to reset your password.';
+
+  @override
+  String get sendResetLink => 'Send Reset Link';
+
+  @override
+  String get resetLinkSent =>
+      'If an account with that email exists, a password reset link has been sent.';
+
+  @override
+  String get backToLogin => 'Back to Login';
+
+  @override
+  String get resetPasswordTitle => 'Set New Password';
+
+  @override
+  String get newPassword => 'New Password';
+
+  @override
+  String get confirmNewPassword => 'Confirm New Password';
+
+  @override
+  String get resetPassword => 'Reset Password';
+
+  @override
+  String get passwordResetSuccess =>
+      'Password has been reset successfully. You can now sign in.';
+
+  @override
+  String get invalidResetLink =>
+      'This password reset link is invalid or has expired.';
+
+  @override
+  String get pleaseEnterNewPassword => 'Please enter a new password';
+
+  @override
+  String get checkYourEmail => 'Check your email';
 }

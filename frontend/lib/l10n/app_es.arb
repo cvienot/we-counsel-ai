@@ -336,5 +336,19 @@
       "name": { "type": "String" }
     }
   },
-  "aiCoach": "Coach IA"
+  "aiCoach": "Coach IA",
+  "forgotPassword": "¿Olvidaste tu contraseña?",
+  "forgotPasswordTitle": "Restablecer contraseña",
+  "forgotPasswordDescription": "Ingresa tu dirección de correo electrónico y te enviaremos un enlace para restablecer tu contraseña.",
+  "sendResetLink": "Enviar enlace",
+  "resetLinkSent": "Si existe una cuenta con ese correo, se ha enviado un enlace de restablecimiento.",
+  "backToLogin": "Volver al inicio de sesión",
+  "resetPasswordTitle": "Nueva contraseña",
+  "newPassword": "Nueva contraseña",
+  "confirmNewPassword": "Confirmar nueva contraseña",
+  "resetPassword": "Restablecer contraseña",
+  "passwordResetSuccess": "La contraseña se ha restablecido correctamente. Ya puedes iniciar sesión.",
+  "invalidResetLink": "Este enlace de restablecimiento es inválido o ha expirado.",
+  "pleaseEnterNewPassword": "Por favor, ingresa una nueva contraseña",
+  "checkYourEmail": "Revisa tu correo"
 }

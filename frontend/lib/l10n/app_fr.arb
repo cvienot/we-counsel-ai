@@ -336,5 +336,19 @@
       "name": { "type": "String" }
     }
   },
-  "aiCoach": "Coach IA"
+  "aiCoach": "Coach IA",
+  "forgotPassword": "Mot de passe oublié ?",
+  "forgotPasswordTitle": "Réinitialiser le mot de passe",
+  "forgotPasswordDescription": "Entrez votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
+  "sendResetLink": "Envoyer le lien",
+  "resetLinkSent": "Si un compte avec cet e-mail existe, un lien de réinitialisation a été envoyé.",
+  "backToLogin": "Retour à la connexion",
+  "resetPasswordTitle": "Nouveau mot de passe",
+  "newPassword": "Nouveau mot de passe",
+  "confirmNewPassword": "Confirmer le nouveau mot de passe",
+  "resetPassword": "Réinitialiser le mot de passe",
+  "passwordResetSuccess": "Le mot de passe a été réinitialisé avec succès. Vous pouvez maintenant vous connecter.",
+  "invalidResetLink": "Ce lien de réinitialisation est invalide ou a expiré.",
+  "pleaseEnterNewPassword": "Veuillez entrer un nouveau mot de passe",
+  "checkYourEmail": "Vérifiez votre e-mail"
 }
