@@ -1,10 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'DynamoDB tables for We Connect application'
-
-# NOTE: This template manages 5 core tables via CloudFormation.
-# Additional tables (subscriptions, exercises, exercise-sessions) were created
-# via setup-database.js and exist in AWS but are not CF-managed.
-# The complete schema (all 8 tables) is defined in src/database/schema.js.
+Description: 'DynamoDB tables for We Connect application - all 8 tables matching src/database/schema.js'
 
 Resources:
   UsersTable:
@@ -17,6 +12,8 @@ Resources:
           AttributeType: S
         - AttributeName: email
           AttributeType: S
+        - AttributeName: coupleId
+          AttributeType: S
       KeySchema:
         - AttributeName: userId
           KeyType: HASH
@@ -27,57 +24,9 @@ Resources:
               KeyType: HASH
           Projection:
             ProjectionType: ALL
-
-  ConversationsTable:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      TableName: we-counsel-conversations
-      BillingMode: PAY_PER_REQUEST
-      AttributeDefinitions:
-        - AttributeName: conversationId
-          AttributeType: S
-        - AttributeName: coupleId
-          AttributeType: S
-      KeySchema:
-        - AttributeName: conversationId
-          KeyType: HASH
-      GlobalSecondaryIndexes:
-        - IndexName: coupleId-index
+        - IndexName: couple-index
           KeySchema:
             - AttributeName: coupleId
-              KeyType: HASH
-          Projection:
-            ProjectionType: ALL
-
-  MessagesTable:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      TableName: we-counsel-messages
-      BillingMode: PAY_PER_REQUEST
-      AttributeDefinitions:
-        - AttributeName: messageId
-          AttributeType: S
-        - AttributeName: conversationId
-          AttributeType: S
-        - AttributeName: timestamp
-          AttributeType: N
-        - AttributeName: userId
-          AttributeType: S
-      KeySchema:
-        - AttributeName: messageId
-          KeyType: HASH
-      GlobalSecondaryIndexes:
-        - IndexName: conversationId-timestamp-index
-          KeySchema:
-            - AttributeName: conversationId
-              KeyType: HASH
-            - AttributeName: timestamp
-              KeyType: RANGE
-          Projection:
-            ProjectionType: ALL
-        - IndexName: userId-index
-          KeySchema:
-            - AttributeName: userId
               KeyType: HASH
           Projection:
             ProjectionType: ALL
@@ -102,15 +51,156 @@ Resources:
       AttributeDefinitions:
         - AttributeName: invitationId
           AttributeType: S
+        - AttributeName: inviterId
+          AttributeType: S
         - AttributeName: email
           AttributeType: S
       KeySchema:
         - AttributeName: invitationId
           KeyType: HASH
       GlobalSecondaryIndexes:
+        - IndexName: inviter-index
+          KeySchema:
+            - AttributeName: inviterId
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
         - IndexName: email-index
           KeySchema:
             - AttributeName: email
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+
+  ConversationsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: we-counsel-conversations
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: conversationId
+          AttributeType: S
+        - AttributeName: coupleId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: conversationId
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: couple-index
+          KeySchema:
+            - AttributeName: coupleId
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+
+  MessagesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: we-counsel-messages
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: messageId
+          AttributeType: S
+        - AttributeName: conversationId
+          AttributeType: S
+        - AttributeName: timestamp
+          AttributeType: 'N'
+        - AttributeName: senderId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: messageId
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: conversationId-timestamp-index
+          KeySchema:
+            - AttributeName: conversationId
+              KeyType: HASH
+            - AttributeName: timestamp
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+        - IndexName: userId-index
+          KeySchema:
+            - AttributeName: senderId
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+
+  SubscriptionsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: we-counsel-subscriptions
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: subscriptionId
+          AttributeType: S
+        - AttributeName: coupleId
+          AttributeType: S
+        - AttributeName: createdAt
+          AttributeType: S
+      KeySchema:
+        - AttributeName: subscriptionId
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: coupleId-index
+          KeySchema:
+            - AttributeName: coupleId
+              KeyType: HASH
+            - AttributeName: createdAt
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+
+  ExercisesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: we-counsel-exercises
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: exerciseId
+          AttributeType: S
+        - AttributeName: category
+          AttributeType: S
+      KeySchema:
+        - AttributeName: exerciseId
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: category-index
+          KeySchema:
+            - AttributeName: category
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+
+  ExerciseSessionsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: we-counsel-exercise-sessions
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: sessionId
+          AttributeType: S
+        - AttributeName: coupleId
+          AttributeType: S
+        - AttributeName: createdAt
+          AttributeType: S
+        - AttributeName: conversationId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: sessionId
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: coupleId-index
+          KeySchema:
+            - AttributeName: coupleId
+              KeyType: HASH
+            - AttributeName: createdAt
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+        - IndexName: conversationId-index
+          KeySchema:
+            - AttributeName: conversationId
               KeyType: HASH
           Projection:
             ProjectionType: ALL
@@ -122,11 +212,47 @@ Outputs:
     Export:
       Name: WeCounsel-UsersTable
 
+  CouplesTableName:
+    Description: Name of the Couples table
+    Value: !Ref CouplesTable
+    Export:
+      Name: WeCounsel-CouplesTable
+
+  InvitationsTableName:
+    Description: Name of the Invitations table
+    Value: !Ref InvitationsTable
+    Export:
+      Name: WeCounsel-InvitationsTable
+
   ConversationsTableName:
     Description: Name of the Conversations table
     Value: !Ref ConversationsTable
     Export:
       Name: WeCounsel-ConversationsTable
+
+  MessagesTableName:
+    Description: Name of the Messages table
+    Value: !Ref MessagesTable
+    Export:
+      Name: WeCounsel-MessagesTable
+
+  SubscriptionsTableName:
+    Description: Name of the Subscriptions table
+    Value: !Ref SubscriptionsTable
+    Export:
+      Name: WeCounsel-SubscriptionsTable
+
+  ExercisesTableName:
+    Description: Name of the Exercises table
+    Value: !Ref ExercisesTable
+    Export:
+      Name: WeCounsel-ExercisesTable
+
+  ExerciseSessionsTableName:
+    Description: Name of the Exercise Sessions table
+    Value: !Ref ExerciseSessionsTable
+    Export:
+      Name: WeCounsel-ExerciseSessionsTable
 
   MessagesTableName:
     Description: Name of the Messages table
