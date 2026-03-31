@@ -109,7 +109,59 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const SizedBox(height: 24),
             
             // Quick actions
-            if (!hasPartner) ...[
+            if (!hasPartner && user?.pendingInvitationEmail != null) ...[
+              // Pending invitation state
+              Card(
+                color: Colors.orange.shade50,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.orange.shade100,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.hourglass_top,
+                          color: Colors.orange.shade700,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              l10n.pendingInvitationTitle,
+                              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                color: Colors.orange.shade900,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              l10n.pendingInvitationMessage(user!.pendingInvitationEmail!),
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: Colors.orange.shade800,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              _QuickActionCard(
+                icon: Icons.refresh,
+                title: l10n.resendInvitation,
+                subtitle: l10n.sendInvitationSubtitle,
+                onTap: () => context.push('/invite'),
+              ),
+            ] else if (!hasPartner) ...[
               Text(
                 l10n.getStarted,
                 style: Theme.of(context).textTheme.titleLarge,

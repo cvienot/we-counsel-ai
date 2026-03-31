@@ -337,6 +337,17 @@ class AppLocalizationsFr extends AppLocalizations {
       'Invitez votre partenaire pour commencer votre parcours de conseil ensemble';
 
   @override
+  String get pendingInvitationTitle => 'Invitation en attente';
+
+  @override
+  String pendingInvitationMessage(String email) {
+    return 'Vous avez envoyé une invitation à $email. Nous attendons qu\'il/elle accepte.';
+  }
+
+  @override
+  String get resendInvitation => 'Renvoyer l\'invitation';
+
+  @override
   String get sendInvitationSubtitle =>
       'Envoyez une invitation pour commencer le coaching ensemble';
 

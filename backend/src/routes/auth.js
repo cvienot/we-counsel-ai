@@ -367,6 +367,33 @@ router.get('/me', authenticateToken, async (req, res) => {
         const { passwordHash: _, ...partnerInfo } = partnerResult.Item;
         userResponse.partner = partnerInfo;
       }
+    } else {
+      // Check for pending invitation sent by this user
+      const pendingInvitationParams = {
+        TableName: TABLES.INVITATIONS,
+        IndexName: 'inviterId-index',
+        KeyConditionExpression: 'inviterId = :inviterId',
+        FilterExpression: '#status = :status',
+        ExpressionAttributeValues: {
+          ':inviterId': req.user.userId,
+          ':status': 'pending'
+        },
+        ExpressionAttributeNames: {
+          '#status': 'status'
+        }
+      };
+      
+      const pendingResult = await docClient.send(new QueryCommand(pendingInvitationParams));
+      if (pendingResult.Items && pendingResult.Items.length > 0) {
+        const latestInvitation = pendingResult.Items.sort((a, b) => 
+          new Date(b.createdAt) - new Date(a.createdAt)
+        )[0];
+        userResponse.pendingInvitation = {
+          email: latestInvitation.email,
+          createdAt: latestInvitation.createdAt,
+          invitationId: latestInvitation.invitationId
+        };
+      }
     }
     
     res.json({

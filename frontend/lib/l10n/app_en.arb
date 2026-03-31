@@ -142,6 +142,14 @@
     }
   },
   "invitePartnerPrompt": "Invite your partner to start your counselling journey together",
+  "pendingInvitationTitle": "Invitation Pending",
+  "pendingInvitationMessage": "You've sent an invitation to {email}. We're waiting for them to accept.",
+  "@pendingInvitationMessage": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "resendInvitation": "Resend Invitation",
   "sendInvitationSubtitle": "Send an invitation to start counselling together",
   "getStarted": "Get Started",
   "mainThread": "Main Thread",

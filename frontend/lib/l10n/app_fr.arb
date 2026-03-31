@@ -121,7 +121,12 @@
 
   "welcomeBack": "Bienvenue, {name} !",
   "connectedWith": "Vous êtes connecté(e) avec {name}",
-  "invitePartnerPrompt": "Invitez votre partenaire pour commencer votre parcours de conseil ensemble",  "sendInvitationSubtitle": "Envoyez une invitation pour commencer le coaching ensemble",  "getStarted": "Commencer",
+  "invitePartnerPrompt": "Invitez votre partenaire pour commencer votre parcours de conseil ensemble",
+  "pendingInvitationTitle": "Invitation en attente",
+  "pendingInvitationMessage": "Vous avez envoyé une invitation à {email}. Nous attendons qu'il/elle accepte.",
+  "resendInvitation": "Renvoyer l'invitation",
+  "sendInvitationSubtitle": "Envoyez une invitation pour commencer le coaching ensemble",
+  "getStarted": "Commencer",
   "mainThread": "Fil Principal",
   "continueMainConversation": "Continuez votre conversation principale avec votre partenaire",
   "viewAllConversations": "Voir tous vos fils de conversation",

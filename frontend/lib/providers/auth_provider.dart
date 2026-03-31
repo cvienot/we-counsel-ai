@@ -264,6 +264,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
         message: message,
       );
       
+      // Refresh user data to get pendingInvitation info
+      await getCurrentUser();
+      
       state = state.copyWith(isLoading: false);
     } catch (e) {
       state = state.copyWith(

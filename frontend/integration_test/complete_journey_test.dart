@@ -242,6 +242,18 @@ void main() {
       expect(inviteEmail['invitationId'], invitationId);
       print('   ✅ Invitation email sent to $user2Email');
       
+      // Verify pending invitation shows in user data
+      final meAfterInvite = await http.get(
+        Uri.parse('$apiUrl/api/auth/me'),
+        headers: {'Authorization': 'Bearer $user1Token'},
+      );
+      expect(meAfterInvite.statusCode, 200);
+      final meData = jsonDecode(meAfterInvite.body);
+      expect(meData['user']['pendingInvitation'], isNotNull,
+        reason: 'User should have pendingInvitation after sending invite');
+      expect(meData['user']['pendingInvitation']['email'], user2Email.toLowerCase());
+      print('   ✅ Pending invitation reflected in /me endpoint');
+      
       // ============================================
       // STEP 3: User2 registers  
       // ============================================

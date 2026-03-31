@@ -700,6 +700,24 @@ abstract class AppLocalizations {
   /// **'Invite your partner to start your counselling journey together'**
   String get invitePartnerPrompt;
 
+  /// No description provided for @pendingInvitationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Invitation Pending'**
+  String get pendingInvitationTitle;
+
+  /// No description provided for @pendingInvitationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve sent an invitation to {email}. We\'re waiting for them to accept.'**
+  String pendingInvitationMessage(String email);
+
+  /// No description provided for @resendInvitation.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend Invitation'**
+  String get resendInvitation;
+
   /// No description provided for @sendInvitationSubtitle.
   ///
   /// In en, this message translates to:

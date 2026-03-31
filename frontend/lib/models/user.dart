@@ -9,6 +9,7 @@ class User {
   final DateTime createdAt;
   final DateTime? updatedAt;
   final User? partner;
+  final String? pendingInvitationEmail;
 
   User({
     required this.userId,
@@ -21,6 +22,7 @@ class User {
     required this.createdAt,
     this.updatedAt,
     this.partner,
+    this.pendingInvitationEmail,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -35,6 +37,7 @@ class User {
       createdAt: DateTime.parse(json['createdAt'] ?? DateTime.now().toIso8601String()),
       updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
       partner: json['partner'] != null ? User.fromJson(json['partner']) : null,
+      pendingInvitationEmail: json['pendingInvitation'] != null ? json['pendingInvitation']['email'] : null,
     );
   }
 
@@ -50,6 +53,7 @@ class User {
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),
       'partner': partner?.toJson(),
+      'pendingInvitationEmail': pendingInvitationEmail,
     };
   }
 
@@ -68,6 +72,7 @@ class User {
     DateTime? createdAt,
     DateTime? updatedAt,
     User? partner,
+    String? pendingInvitationEmail,
   }) {
     return User(
       userId: userId ?? this.userId,
@@ -80,6 +85,7 @@ class User {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       partner: partner ?? this.partner,
+      pendingInvitationEmail: pendingInvitationEmail ?? this.pendingInvitationEmail,
     );
   }
 }
