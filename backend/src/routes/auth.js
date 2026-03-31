@@ -371,7 +371,7 @@ router.get('/me', authenticateToken, async (req, res) => {
       // Check for pending invitation sent by this user
       const pendingInvitationParams = {
         TableName: TABLES.INVITATIONS,
-        IndexName: 'inviterId-index',
+        IndexName: 'inviter-index',
         KeyConditionExpression: 'inviterId = :inviterId',
         FilterExpression: '#status = :status',
         ExpressionAttributeValues: {
