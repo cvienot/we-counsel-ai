@@ -201,6 +201,14 @@ router.post('/accept-invitation/:invitationId', authenticateToken, async (req, r
       });
     }
 
+    // Prevent inviter from accepting their own invitation
+    if (invitation.inviterId === userId) {
+      return res.status(400).json({
+        error: 'Invalid action',
+        message: 'You cannot accept your own invitation'
+      });
+    }
+
     // Get inviter
     const inviterParams = {
       TableName: TABLES.USERS,
