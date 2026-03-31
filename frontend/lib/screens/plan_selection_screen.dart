@@ -527,18 +527,18 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
             }
           } else {
             if (mounted) {
-              showErrorSnackBar(context, 'Could not open payment page');
+              showErrorSnackBar(context, AppLocalizations.of(context)!.errorOpeningPaymentPage);
             }
           }
         }
       } else {
         if (mounted) {
-          showErrorSnackBar(context, result['message'] ?? 'Failed to start checkout');
+          showErrorSnackBar(context, AppLocalizations.of(context)!.errorStartingCheckout);
         }
       }
     } catch (e) {
       if (mounted) {
-        showErrorSnackBar(context, 'Error: $e');
+        showErrorSnackBar(context, AppLocalizations.of(context)!.errorGeneric);
       }
     } finally {
       if (mounted) {

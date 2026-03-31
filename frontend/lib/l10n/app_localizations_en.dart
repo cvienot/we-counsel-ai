@@ -930,4 +930,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get checkYourEmail => 'Check your email';
+
+  @override
+  String get errorSendingMessage => 'Failed to send message. Please try again.';
+
+  @override
+  String get errorLoadingMessages => 'Failed to load messages.';
+
+  @override
+  String get errorGeneric => 'Something went wrong. Please try again.';
+
+  @override
+  String get errorOpeningPaymentPage => 'Could not open payment page.';
+
+  @override
+  String get errorStartingCheckout =>
+      'Failed to start checkout. Please try again.';
+
+  @override
+  String get errorLoadingSummary => 'Failed to load summary.';
+
+  @override
+  String get errorSubmittingResponse =>
+      'Failed to submit response. Please try again.';
 }

@@ -375,5 +375,12 @@
   "passwordResetSuccess": "Password has been reset successfully. You can now sign in.",
   "invalidResetLink": "This password reset link is invalid or has expired.",
   "pleaseEnterNewPassword": "Please enter a new password",
-  "checkYourEmail": "Check your email"
+  "checkYourEmail": "Check your email",
+  "errorSendingMessage": "Failed to send message. Please try again.",
+  "errorLoadingMessages": "Failed to load messages.",
+  "errorGeneric": "Something went wrong. Please try again.",
+  "errorOpeningPaymentPage": "Could not open payment page.",
+  "errorStartingCheckout": "Failed to start checkout. Please try again.",
+  "errorLoadingSummary": "Failed to load summary.",
+  "errorSubmittingResponse": "Failed to submit response. Please try again."
 }

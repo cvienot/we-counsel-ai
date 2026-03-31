@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../providers/auth_provider.dart';
 import '../../l10n/app_localizations.dart';
 import '../../widgets/ctrl_enter_submit.dart';
+import '../../utils/snackbar_utils.dart';
 
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -42,12 +43,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           ref.read(pendingInvitationProvider.notifier).state = null;
           
           if (pendingInvitation != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(l10n.loginJoinedPartner),
-                backgroundColor: Colors.green,
-              ),
-            );
+            showSuccessSnackBar(context, l10n.loginJoinedPartner);
           }
           
           context.go('/home');
@@ -55,12 +51,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       } catch (e) {
         if (mounted) {
           final l10n = AppLocalizations.of(context)!;
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('${l10n.loginFailed}: ${e.toString()}'),
-              backgroundColor: Colors.red,
-            ),
-          );
+          showErrorSnackBar(context, l10n.loginFailed);
         }
       }
     }

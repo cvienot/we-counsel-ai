@@ -5,6 +5,7 @@ import '../../services/exercise_service.dart';
 import '../../services/api_service.dart';
 import '../../providers/auth_provider.dart';
 import '../../l10n/app_localizations.dart';
+import '../../utils/snackbar_utils.dart';
 import 'exercise_screen.dart';
 
 class ExerciseLoaderScreen extends ConsumerStatefulWidget {
@@ -73,7 +74,7 @@ class _ExerciseLoaderScreenState extends ConsumerState<ExerciseLoaderScreen> {
       });
     } catch (e) {
       setState(() {
-        _error = e.toString();
+        _error = cleanErrorMessage(e);
         _isLoading = false;
       });
     }

@@ -151,7 +151,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
       });
     } catch (e) {
       if (mounted) {
-        showErrorSnackBar(context, 'Failed to send message: ${e.toString()}');
+        showErrorSnackBar(context, AppLocalizations.of(context)!.errorSendingMessage);
       }
     }
   }
@@ -214,7 +214,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'Error: ${messagesState.error}',
+                              AppLocalizations.of(context)!.errorLoadingMessages,
                               textAlign: TextAlign.center,
                             ),
                             const SizedBox(height: 16),

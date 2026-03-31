@@ -1821,6 +1821,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Check your email'**
   String get checkYourEmail;
+
+  /// No description provided for @errorSendingMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to send message. Please try again.'**
+  String get errorSendingMessage;
+
+  /// No description provided for @errorLoadingMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load messages.'**
+  String get errorLoadingMessages;
+
+  /// No description provided for @errorGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get errorGeneric;
+
+  /// No description provided for @errorOpeningPaymentPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open payment page.'**
+  String get errorOpeningPaymentPage;
+
+  /// No description provided for @errorStartingCheckout.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to start checkout. Please try again.'**
+  String get errorStartingCheckout;
+
+  /// No description provided for @errorLoadingSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load summary.'**
+  String get errorLoadingSummary;
+
+  /// No description provided for @errorSubmittingResponse.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to submit response. Please try again.'**
+  String get errorSubmittingResponse;
 }
 
 class _AppLocalizationsDelegate

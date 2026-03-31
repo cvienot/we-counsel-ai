@@ -299,7 +299,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
       });
     } catch (e) {
       if (mounted) {
-        showErrorSnackBar(context, '${AppLocalizations.of(context)!.failedToSend}: ${e.toString()}');
+        showErrorSnackBar(context, AppLocalizations.of(context)!.errorSendingMessage);
       }
     }
   }
@@ -538,7 +538,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'Error: ${messagesState.error}',
+                              AppLocalizations.of(context)!.errorLoadingMessages,
                               textAlign: TextAlign.center,
                             ),
                             const SizedBox(height: 16),

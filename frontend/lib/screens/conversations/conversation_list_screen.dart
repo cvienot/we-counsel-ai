@@ -43,7 +43,7 @@ class _ConversationListScreenState extends ConsumerState<ConversationListScreen>
         }
       } catch (e) {
         if (mounted) {
-          showErrorSnackBar(context, '${l10n.failedToCreateConversation}: ${e.toString()}');
+          showErrorSnackBar(context, l10n.failedToCreateConversation);
         }
       }
     }
@@ -76,7 +76,7 @@ class _ConversationListScreenState extends ConsumerState<ConversationListScreen>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Error: ${conversationsState.error}',
+                            l10n.errorLoadingMessages,
                             textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 16),

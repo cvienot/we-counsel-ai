@@ -350,5 +350,12 @@
   "passwordResetSuccess": "La contraseña se ha restablecido correctamente. Ya puedes iniciar sesión.",
   "invalidResetLink": "Este enlace de restablecimiento es inválido o ha expirado.",
   "pleaseEnterNewPassword": "Por favor, ingresa una nueva contraseña",
-  "checkYourEmail": "Revisa tu correo"
+  "checkYourEmail": "Revisa tu correo",
+  "errorSendingMessage": "No se pudo enviar el mensaje. Inténtalo de nuevo.",
+  "errorLoadingMessages": "No se pudieron cargar los mensajes.",
+  "errorGeneric": "Algo salió mal. Inténtalo de nuevo.",
+  "errorOpeningPaymentPage": "No se pudo abrir la página de pago.",
+  "errorStartingCheckout": "No se pudo iniciar el pago. Inténtalo de nuevo.",
+  "errorLoadingSummary": "No se pudo cargar el resumen.",
+  "errorSubmittingResponse": "No se pudo enviar la respuesta. Inténtalo de nuevo."
 }

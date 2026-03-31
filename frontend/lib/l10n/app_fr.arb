@@ -350,5 +350,12 @@
   "passwordResetSuccess": "Le mot de passe a été réinitialisé avec succès. Vous pouvez maintenant vous connecter.",
   "invalidResetLink": "Ce lien de réinitialisation est invalide ou a expiré.",
   "pleaseEnterNewPassword": "Veuillez entrer un nouveau mot de passe",
-  "checkYourEmail": "Vérifiez votre e-mail"
+  "checkYourEmail": "Vérifiez votre e-mail",
+  "errorSendingMessage": "Impossible d'envoyer le message. Veuillez réessayer.",
+  "errorLoadingMessages": "Impossible de charger les messages.",
+  "errorGeneric": "Une erreur est survenue. Veuillez réessayer.",
+  "errorOpeningPaymentPage": "Impossible d'ouvrir la page de paiement.",
+  "errorStartingCheckout": "Impossible de démarrer le paiement. Veuillez réessayer.",
+  "errorLoadingSummary": "Impossible de charger le résumé.",
+  "errorSubmittingResponse": "Impossible d'envoyer la réponse. Veuillez réessayer."
 }

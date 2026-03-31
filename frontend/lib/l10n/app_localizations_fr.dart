@@ -949,4 +949,29 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get checkYourEmail => 'Vérifiez votre e-mail';
+
+  @override
+  String get errorSendingMessage =>
+      'Impossible d\'envoyer le message. Veuillez réessayer.';
+
+  @override
+  String get errorLoadingMessages => 'Impossible de charger les messages.';
+
+  @override
+  String get errorGeneric => 'Une erreur est survenue. Veuillez réessayer.';
+
+  @override
+  String get errorOpeningPaymentPage =>
+      'Impossible d\'ouvrir la page de paiement.';
+
+  @override
+  String get errorStartingCheckout =>
+      'Impossible de démarrer le paiement. Veuillez réessayer.';
+
+  @override
+  String get errorLoadingSummary => 'Impossible de charger le résumé.';
+
+  @override
+  String get errorSubmittingResponse =>
+      'Impossible d\'envoyer la réponse. Veuillez réessayer.';
 }

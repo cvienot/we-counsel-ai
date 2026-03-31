@@ -5,6 +5,7 @@ import '../../providers/auth_provider.dart';
 import '../../providers/language_provider.dart';
 import '../../l10n/app_localizations.dart';
 import '../../widgets/ctrl_enter_submit.dart';
+import '../../utils/snackbar_utils.dart';
 import '../plan_selection_screen.dart';
 import 'terms_of_service_screen.dart';
 
@@ -48,12 +49,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     if (_formKey.currentState!.validate()) {
       if (!_termsAccepted) {
         final l10n = AppLocalizations.of(context)!;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(l10n.mustAcceptTerms),
-            backgroundColor: Colors.red,
-          ),
-        );
+        showErrorSnackBar(context, l10n.mustAcceptTerms);
         return;
       }
       
@@ -91,12 +87,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           
           if (pendingInvitation != null) {
             final l10n = AppLocalizations.of(context)!;
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(l10n.accountCreatedJoinedPartner),
-                backgroundColor: Colors.green,
-              ),
-            );
+            showSuccessSnackBar(context, l10n.accountCreatedJoinedPartner);
           }
           
           // Don't manually navigate - let the router redirect automatically
@@ -106,12 +97,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       } catch (e) {
         if (mounted) {
           final l10n = AppLocalizations.of(context)!;
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('${l10n.registrationFailed}: ${e.toString()}'),
-              backgroundColor: Colors.red,
-            ),
-          );
+          showErrorSnackBar(context, l10n.registrationFailed);
         }
       }
     }

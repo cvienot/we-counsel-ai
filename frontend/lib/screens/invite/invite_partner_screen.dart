@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../providers/auth_provider.dart';
 import '../../l10n/app_localizations.dart';
 import '../../widgets/ctrl_enter_submit.dart';
+import '../../utils/snackbar_utils.dart';
 
 
 class InvitePartnerScreen extends ConsumerStatefulWidget {
@@ -59,12 +60,7 @@ class _InvitePartnerScreenState extends ConsumerState<InvitePartnerScreen> {
       } catch (e) {
         if (mounted) {
           final l10n = AppLocalizations.of(context)!;
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('${l10n.failedToSendInvitation}: ${e.toString()}'),
-              backgroundColor: Colors.red,
-            ),
-          );
+          showErrorSnackBar(context, l10n.failedToSendInvitation);
         }
       }
     }

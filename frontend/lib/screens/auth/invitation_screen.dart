@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../providers/auth_provider.dart';
 import '../../l10n/app_localizations.dart';
+import '../../utils/snackbar_utils.dart';
 
 class InvitationScreen extends ConsumerStatefulWidget {
   final String invitationId;
@@ -124,23 +125,13 @@ class _InvitationScreenState extends ConsumerState<InvitationScreen> {
         // Clear the pending invitation
         ref.read(pendingInvitationProvider.notifier).state = null;
         
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(l10n.successfullyJoinedPartner),
-            backgroundColor: Colors.green,
-          ),
-        );
+        showSuccessSnackBar(context, l10n.successfullyJoinedPartner);
         
         context.go('/home');
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${l10n.failedToAcceptInvitation}: ${e.toString()}'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        showErrorSnackBar(context, l10n.failedToAcceptInvitation);
       }
     }
   }

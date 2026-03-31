@@ -51,7 +51,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         }
       } catch (e) {
         if (mounted) {
-          showErrorSnackBar(context, '${l10n.failedToUpdateProfile}: ${e.toString()}');
+          showErrorSnackBar(context, l10n.failedToUpdateProfile);
         }
       }
     }

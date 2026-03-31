@@ -222,7 +222,7 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
     } catch (error) {
       setState(() => _isLoading = false);
       if (mounted) {
-        showErrorSnackBar(context, 'Error: $error');
+        showErrorSnackBar(context, AppLocalizations.of(context)!.errorSubmittingResponse);
       }
     }
   }
@@ -246,7 +246,7 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
     } catch (error) {
       setState(() => _isLoading = false);
       if (mounted) {
-        showErrorSnackBar(context, 'Error loading summary: $error');
+        showErrorSnackBar(context, AppLocalizations.of(context)!.errorLoadingSummary);
       }
     }
   }

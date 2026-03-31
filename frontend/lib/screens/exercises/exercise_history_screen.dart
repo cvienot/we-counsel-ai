@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../services/exercise_service.dart';
 import '../../services/api_service.dart';
 import '../../l10n/app_localizations.dart';
+import '../../utils/snackbar_utils.dart';
 
 class ExerciseHistoryScreen extends ConsumerStatefulWidget {
   const ExerciseHistoryScreen({super.key});
@@ -41,7 +42,7 @@ class _ExerciseHistoryScreenState extends ConsumerState<ExerciseHistoryScreen> {
       });
     } catch (e) {
       setState(() {
-        _error = e.toString();
+        _error = cleanErrorMessage(e);
         _isLoading = false;
       });
     }

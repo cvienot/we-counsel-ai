@@ -940,4 +940,28 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get checkYourEmail => 'Revisa tu correo';
+
+  @override
+  String get errorSendingMessage =>
+      'No se pudo enviar el mensaje. Inténtalo de nuevo.';
+
+  @override
+  String get errorLoadingMessages => 'No se pudieron cargar los mensajes.';
+
+  @override
+  String get errorGeneric => 'Algo salió mal. Inténtalo de nuevo.';
+
+  @override
+  String get errorOpeningPaymentPage => 'No se pudo abrir la página de pago.';
+
+  @override
+  String get errorStartingCheckout =>
+      'No se pudo iniciar el pago. Inténtalo de nuevo.';
+
+  @override
+  String get errorLoadingSummary => 'No se pudo cargar el resumen.';
+
+  @override
+  String get errorSubmittingResponse =>
+      'No se pudo enviar la respuesta. Inténtalo de nuevo.';
 }

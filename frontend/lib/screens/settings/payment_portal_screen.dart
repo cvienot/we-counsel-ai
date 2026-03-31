@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../services/payment_service.dart';
 import '../../config/environment.dart';
 import '../../l10n/app_localizations.dart';
+import '../../utils/snackbar_utils.dart';
 
 class PaymentPortalScreen extends ConsumerStatefulWidget {
   const PaymentPortalScreen({super.key});
@@ -107,34 +108,20 @@ class _PaymentPortalScreenState extends ConsumerState<PaymentPortalScreen> {
           } else {
             if (mounted) {
               final l10n = AppLocalizations.of(context)!;
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(l10n.couldNotOpenPaymentPortal),
-                  backgroundColor: Colors.red,
-                ),
-              );
+              showErrorSnackBar(context, l10n.couldNotOpenPaymentPortal);
             }
           }
         }
       } else {
         if (mounted) {
           final l10n = AppLocalizations.of(context)!;
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(result['message'] ?? l10n.failedToOpenPortal),
-              backgroundColor: Colors.red,
-            ),
-          );
+          showErrorSnackBar(context, l10n.failedToOpenPortal);
         }
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        final l10n = AppLocalizations.of(context)!;
+        showErrorSnackBar(context, l10n.errorGeneric);
       }
     } finally {
       if (mounted) {

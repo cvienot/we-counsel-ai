@@ -3,6 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../services/payment_service.dart';
 import '../../config/environment.dart';
 import '../../l10n/app_localizations.dart';
+import '../../utils/snackbar_utils.dart';
 
 class BillingHistoryScreen extends StatefulWidget {
   const BillingHistoryScreen({super.key});
@@ -54,12 +55,7 @@ class _BillingHistoryScreenState extends State<BillingHistoryScreen> {
   Future<void> _openInvoice(String? url) async {
     final l10n = AppLocalizations.of(context)!;
     if (url == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(l10n.invoiceUrlNotAvailable),
-          backgroundColor: Colors.orange,
-        ),
-      );
+      showErrorSnackBar(context, l10n.invoiceUrlNotAvailable);
       return;
     }
 
@@ -69,22 +65,12 @@ class _BillingHistoryScreenState extends State<BillingHistoryScreen> {
         await launchUrl(uri, mode: LaunchMode.externalApplication);
       } else {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(l10n.couldNotOpenInvoice),
-              backgroundColor: Colors.red,
-            ),
-          );
+          showErrorSnackBar(context, l10n.couldNotOpenInvoice);
         }
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        showErrorSnackBar(context, l10n.errorGeneric);
       }
     }
   }
