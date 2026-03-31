@@ -118,8 +118,8 @@ class WeCounselApp extends ConsumerWidget {
           return null;
         }
 
-        // If still loading auth state, stay on splash
-        if (authState.isLoading && !isSplashRoute) {
+        // If still loading auth state, stay on splash (but don't redirect away from auth routes)
+        if (authState.isLoading && !isSplashRoute && !isLoginRoute && !isRegisterRoute) {
           print('🔀 ROUTER: Still loading, redirect to /splash');
           return '/splash';
         }
