@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import '../../l10n/app_localizations.dart';
 
 class PaymentSuccessScreen extends StatelessWidget {
   const PaymentSuccessScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     // Get session_id from query parameters if needed
     // final sessionId = Uri.base.queryParameters['session_id'];
 
@@ -29,9 +31,9 @@ class PaymentSuccessScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 32),
-              const Text(
-                'Payment Successful!',
-                style: TextStyle(
+              Text(
+                l10n.paymentSuccessful,
+                style: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
                 ),
@@ -39,7 +41,7 @@ class PaymentSuccessScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                'Your subscription has been activated.\nEnjoy your enhanced relationship coaching experience!',
+                l10n.subscriptionActivated,
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.grey.shade600,
@@ -65,9 +67,9 @@ class PaymentSuccessScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text(
-                    'Get Started',
-                    style: TextStyle(
+                  child: Text(
+                    l10n.getStarted,
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
@@ -79,9 +81,9 @@ class PaymentSuccessScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.pushNamed(context, '/payment-portal');
                 },
-                child: const Text(
-                  'View Payment Portal',
-                  style: TextStyle(fontSize: 16),
+                child: Text(
+                  l10n.viewPaymentPortal,
+                  style: const TextStyle(fontSize: 16),
                 ),
               ),
             ],

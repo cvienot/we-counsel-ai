@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
 
 class ExerciseSuggestionCard extends StatelessWidget {
   final String exerciseId;
@@ -139,7 +140,7 @@ class ExerciseSuggestionCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '🎯 Guided Exercise',
+                        AppLocalizations.of(context)!.guidedExerciseSuggestion,
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
                               color: color,
                               fontWeight: FontWeight.bold,
@@ -155,7 +156,7 @@ class ExerciseSuggestionCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Tap to start the guided exercise',
+                        AppLocalizations.of(context)!.tapToStartExercise,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               color: Colors.grey[600],
                             ),

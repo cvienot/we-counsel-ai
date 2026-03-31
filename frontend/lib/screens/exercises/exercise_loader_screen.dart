@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../services/exercise_service.dart';
 import '../../services/api_service.dart';
 import '../../providers/auth_provider.dart';
+import '../../l10n/app_localizations.dart';
 import 'exercise_screen.dart';
 
 class ExerciseLoaderScreen extends ConsumerStatefulWidget {
@@ -40,7 +41,7 @@ class _ExerciseLoaderScreenState extends ConsumerState<ExerciseLoaderScreen> {
       
       if (token == null || token.isEmpty) {
         setState(() {
-          _error = 'Not authenticated';
+          _error = 'notAuthenticated';
           _isLoading = false;
         });
         return;
@@ -50,7 +51,7 @@ class _ExerciseLoaderScreenState extends ConsumerState<ExerciseLoaderScreen> {
       final exercises = await _exerciseService.getExercises(token);
       final exercise = exercises.firstWhere(
         (e) => e['exerciseId'] == widget.exerciseId,
-        orElse: () => throw Exception('Exercise not found'),
+        orElse: () => throw Exception('exerciseNotFound'),
       );
 
       // Start the exercise session
@@ -89,19 +90,23 @@ class _ExerciseLoaderScreenState extends ConsumerState<ExerciseLoaderScreen> {
     }
 
     if (_error != null) {
+      final l10n = AppLocalizations.of(context)!;
+      final errorMsg = _error == 'notAuthenticated' ? l10n.notAuthenticated 
+          : _error == 'exerciseNotFound' ? l10n.exerciseNotFound 
+          : _error!;
       return Scaffold(
-        appBar: AppBar(title: const Text('Error')),
+        appBar: AppBar(title: Text(l10n.error)),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Icon(Icons.error_outline, size: 64, color: Colors.red),
               const SizedBox(height: 16),
-              Text(_error!, style: const TextStyle(color: Colors.red)),
+              Text(errorMsg, style: const TextStyle(color: Colors.red)),
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () => context.pop(),
-                child: const Text('Go Back'),
+                child: Text(l10n.goBack),
               ),
             ],
           ),

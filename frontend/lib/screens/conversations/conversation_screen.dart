@@ -189,12 +189,12 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(messagesState.conversationTitle ?? 'Conversation'),
+        title: Text(messagesState.conversationTitle ?? AppLocalizations.of(context)!.conversations),
         actions: [
           IconButton(
             icon: const Icon(Icons.health_and_safety_outlined),
             onPressed: () => CrisisAlertDialog.show(context),
-            tooltip: 'Crisis Resources',
+            tooltip: AppLocalizations.of(context)!.crisisResources,
           ),
         ],
       ),
@@ -220,7 +220,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                                     .read(messagesProvider(widget.conversationId).notifier)
                                     .loadMessages();
                               },
-                              child: const Text('Retry'),
+                              child: Text(AppLocalizations.of(context)!.retry),
                             ),
                           ],
                         ),
@@ -231,7 +231,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 const DisclaimerBanner(),
-                                const Text('Start the conversation by sending a message!'),
+                                Text(AppLocalizations.of(context)!.startConversation),
                               ],
                             ),
                           )
@@ -300,7 +300,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          '${_typingUsers.length > 1 ? "Partners are" : "Partner is"} typing',
+                          '${_typingUsers.length > 1 ? AppLocalizations.of(context)!.partnersTyping : AppLocalizations.of(context)!.partnerTyping}',
                           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: Theme.of(context).colorScheme.outline,
                             fontStyle: FontStyle.italic,
@@ -335,7 +335,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                   child: TextField(
                     controller: _messageController,
                     decoration: InputDecoration(
-                      hintText: 'Type your message...',
+                      hintText: AppLocalizations.of(context)!.typeMessage,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24),
                       ),
@@ -516,7 +516,7 @@ class _StreamingMessageBubble extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              'Typing',
+                              AppLocalizations.of(context)!.typing,
                               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                 color: Theme.of(context).colorScheme.primary,
                                 fontStyle: FontStyle.italic,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
 
 /// Disclaimer banner to show on conversation screen
 /// Reminds users that the service is not therapy
@@ -17,6 +18,7 @@ class _DisclaimerBannerState extends State<DisclaimerBanner> {
     if (_isDismissed) {
       return const SizedBox.shrink();
     }
+    final l10n = AppLocalizations.of(context)!;
 
     return Container(
       margin: const EdgeInsets.all(16),
@@ -35,7 +37,7 @@ class _DisclaimerBannerState extends State<DisclaimerBanner> {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  'Important Information',
+                  l10n.importantInformation,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.amber.shade900,
@@ -58,9 +60,7 @@ class _DisclaimerBannerState extends State<DisclaimerBanner> {
           ),
           const SizedBox(height: 8),
           Text(
-            'This AI provides relationship communication support only. '
-            'It is not therapy or a substitute for professional mental health services. '
-            'For serious concerns, please consult a licensed professional.',
+            l10n.disclaimerText,
             style: TextStyle(
               fontSize: 12,
               color: Colors.amber.shade900,
@@ -79,29 +79,30 @@ class CrisisAlertDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return AlertDialog(
       icon: const Icon(Icons.warning, color: Colors.red, size: 48),
-      title: const Text(
-        'Need Immediate Help?',
-        style: TextStyle(fontWeight: FontWeight.bold),
+      title: Text(
+        l10n.needImmediateHelp,
+        style: const TextStyle(fontWeight: FontWeight.bold),
       ),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'If you or your partner are in crisis or immediate danger:',
-              style: TextStyle(fontWeight: FontWeight.bold),
+            Text(
+              l10n.crisisDialogText,
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             _buildResourceSection(
-              'Emergency Services',
+              l10n.emergencyServices,
               ['Call 112 (EU), 911 (US), or your local emergency number'],
             ),
             const SizedBox(height: 16),
             _buildResourceSection(
-              '24/7 Crisis Hotlines',
+              l10n.crisisHotlines,
               [
                 'International: findahelpline.com',
                 'US Suicide Prevention: 988',
@@ -110,11 +111,9 @@ class CrisisAlertDialog extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            const Text(
-              'This app provides communication support only. '
-              'For mental health crises, abuse, or safety concerns, '
-              'please contact professional help immediately.',
-              style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
+            Text(
+              l10n.appProvidesSupport,
+              style: const TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
             ),
           ],
         ),
@@ -122,7 +121,7 @@ class CrisisAlertDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('I Understand'),
+          child: Text(l10n.iUnderstand),
         ),
       ],
     );

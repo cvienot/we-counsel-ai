@@ -3,6 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../services/payment_service.dart';
 import '../config/environment.dart';
 import '../utils/snackbar_utils.dart';
+import '../l10n/app_localizations.dart';
 
 class PlanSelectionScreen extends StatefulWidget {
   const PlanSelectionScreen({super.key});
@@ -53,52 +54,50 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
     }
   }
 
-  final List<Map<String, dynamic>> plans = [
+  List<Map<String, dynamic>> _getPlans(AppLocalizations l10n) => [
     {
       'tier': 'free',
-      'name': 'Free',
+      'name': l10n.free,
       'price': '€0',
-      'period': '/forever',
-      'description': 'Try the AI relationship coach',
+      'period': '/${l10n.forever}',
+      'description': l10n.tryAiCoach,
       'features': [
-        '10 AI messages per month',
-        'Unlimited partner messaging',
-        'Basic history (30 days)',
-        'Email notifications',
+        l10n.aiMessagesPerMonth(10),
+        l10n.unlimitedPartnerMessaging,
+        l10n.basicExercises,
       ],
       'color': Colors.grey,
       'popular': false,
     },
     {
       'tier': 'essential',
-      'name': 'Essential',
+      'name': l10n.essential,
       'price': '€9.99',
-      'period': '/month',
-      'description': 'Regular support',
+      'period': l10n.perMonth,
+      'description': l10n.regularSupport,
       'features': [
-        '100 AI messages per month',
-        'Unlimited partner messaging',
-        'Full conversation history',
-        'Conversation summaries',
-        'Priority support',
+        l10n.aiMessagesPerMonth(100),
+        l10n.unlimitedPartnerMessaging,
+        l10n.allFreeFeatures,
+        l10n.guidedExercises,
+        l10n.conversationSummaries,
       ],
       'color': Colors.blue,
       'popular': false,
     },
     {
       'tier': 'premium',
-      'name': 'Premium',
+      'name': l10n.premium,
       'price': '€19.99',
-      'period': '/month',
-      'description': 'Unlimited access',
+      'period': l10n.perMonth,
+      'description': l10n.unlimitedAccess,
       'features': [
-        'Unlimited AI messages',
-        'Unlimited partner messaging',
-        'Full conversation history',
-        'Conversation summaries',
-        'Guided exercises',
-        'Weekly insights',
-        'Priority support',
+        l10n.unlimitedAiMessages,
+        l10n.unlimitedPartnerMessaging,
+        l10n.allEssentialFeatures,
+        l10n.guidedExercises,
+        l10n.prioritySupport,
+        l10n.advancedInsights,
       ],
       'color': Colors.purple,
       'popular': true,
@@ -107,9 +106,11 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final plans = _getPlans(l10n);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Choose Your Plan'),
+        title: Text(l10n.chooseYourPlan),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -119,9 +120,9 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
               padding: const EdgeInsets.all(24.0),
               child: Column(
                 children: [
-                  const Text(
-                    'Start Your Journey Together',
-                    style: TextStyle(
+                  Text(
+                    l10n.startYourJourneyTogether,
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
@@ -129,7 +130,7 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Choose a plan that fits your needs. You can upgrade or cancel anytime.',
+                    l10n.choosePlanDescription,
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.grey[600],
@@ -303,9 +304,9 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
                                   color: plan['color'],
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                child: const Text(
-                                  'POPULAR',
-                                  style: TextStyle(
+                                child: Text(
+                                  l10n.popular,
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,
@@ -326,8 +327,8 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
                                   color: Colors.green,
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                child: const Text(
-                                  'CURRENT PLAN',
+                                child: Text(
+                                  l10n.currentPlan,
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 12,
@@ -386,7 +387,7 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Text(
-                                    'Monthly',
+                                    l10n.monthly,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontWeight: selectedBillingPeriod == 'monthly'
@@ -415,7 +416,7 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
                                   child: Column(
                                     children: [
                                       Text(
-                                        'Annual',
+                                        l10n.annual,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontWeight: selectedBillingPeriod == 'annual'
@@ -423,8 +424,8 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
                                               : FontWeight.normal,
                                         ),
                                       ),
-                                      const Text(
-                                        'Save 20%',
+                                      Text(
+                                        l10n.save20,
                                         style: TextStyle(
                                           fontSize: 10,
                                           color: Colors.green,
@@ -442,7 +443,7 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 12),
                         child: Text(
-                          '7-day free trial • Cancel anytime',
+                          l10n.freeTrialInfo,
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey[600],
@@ -476,10 +477,10 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
                               )
                             : Text(
                                 _currentTier != null && selectedTier == _currentTier
-                                    ? 'Current Plan'
+                                    ? l10n.currentPlanButton
                                     : (selectedTier == 'free'
-                                        ? 'Continue with Free'
-                                        : 'Start Free Trial'),
+                                        ? l10n.continueWithFree
+                                        : l10n.startFreeTrial),
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,

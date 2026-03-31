@@ -25,6 +25,7 @@ class _ConversationListScreenState extends ConsumerState<ConversationListScreen>
   }
 
   Future<void> _createNewConversation() async {
+    final l10n = AppLocalizations.of(context)!;
     final result = await showDialog<Map<String, String>>(
       context: context,
       builder: (context) => const _CreateConversationDialog(),
@@ -38,11 +39,11 @@ class _ConversationListScreenState extends ConsumerState<ConversationListScreen>
         );
         
         if (mounted) {
-          showSuccessSnackBar(context, 'Conversation created successfully');
+          showSuccessSnackBar(context, l10n.conversationCreatedSuccess);
         }
       } catch (e) {
         if (mounted) {
-          showErrorSnackBar(context, 'Failed to create conversation: ${e.toString()}');
+          showErrorSnackBar(context, '${l10n.failedToCreateConversation}: ${e.toString()}');
         }
       }
     }
@@ -52,10 +53,11 @@ class _ConversationListScreenState extends ConsumerState<ConversationListScreen>
   Widget build(BuildContext context) {
     final conversationsState = ref.watch(conversationsProvider);
     final hasPartner = ref.watch(hasPartnerProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Conversations'),
+        title: Text(l10n.conversations),
         actions: [
           if (hasPartner)
             IconButton(
@@ -82,7 +84,7 @@ class _ConversationListScreenState extends ConsumerState<ConversationListScreen>
                             onPressed: () {
                               ref.read(conversationsProvider.notifier).loadConversations();
                             },
-                            child: const Text('Retry'),
+                            child: Text(l10n.retry),
                           ),
                         ],
                       ),
@@ -158,7 +160,7 @@ class _ConversationCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    '${conversation.messageCount} messages',
+                    AppLocalizations.of(context)!.messageCount(conversation.messageCount),
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   const Spacer(),
@@ -182,6 +184,7 @@ class _NoPartnerMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -195,19 +198,19 @@ class _NoPartnerMessage extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'No Partner Connected',
+              l10n.noPartnerConnected,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 8),
             Text(
-              'You need to invite and connect with your partner before you can start conversations.',
+              l10n.needToInvitePartner,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: () => context.push('/invite'),
-              child: const Text('Invite Partner'),
+              child: Text(l10n.invitePartner),
             ),
           ],
         ),
@@ -234,7 +237,7 @@ class _EmptyConversations extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'No Conversations Yet',
+              AppLocalizations.of(context)!.noConversationsYet,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 8),
@@ -271,8 +274,9 @@ class _CreateConversationDialogState extends State<_CreateConversationDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return AlertDialog(
-      title: const Text('New Conversation'),
+      title: Text(l10n.newConversation),
       content: Form(
         key: _formKey,
         child: Column(
@@ -280,13 +284,13 @@ class _CreateConversationDialogState extends State<_CreateConversationDialog> {
           children: [
             TextFormField(
               controller: _titleController,
-              decoration: const InputDecoration(
-                labelText: 'Conversation Title',
-                hintText: 'e.g., Communication Issues',
+              decoration: InputDecoration(
+                labelText: l10n.conversationTitle,
+                hintText: l10n.conversationTitleHint,
               ),
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
-                  return 'Please enter a title';
+                  return l10n.pleaseEnterTitle;
                 }
                 return null;
               },
@@ -294,9 +298,9 @@ class _CreateConversationDialogState extends State<_CreateConversationDialog> {
             const SizedBox(height: 16),
             TextFormField(
               controller: _topicController,
-              decoration: const InputDecoration(
-                labelText: 'Topic (Optional)',
-                hintText: 'What would you like to discuss?',
+              decoration: InputDecoration(
+                labelText: l10n.conversationTopic,
+                hintText: l10n.conversationTopicHint,
               ),
               maxLines: 2,
             ),
@@ -306,7 +310,7 @@ class _CreateConversationDialogState extends State<_CreateConversationDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+          child: Text(l10n.cancel),
         ),
         ElevatedButton(
           onPressed: () {
@@ -317,7 +321,7 @@ class _CreateConversationDialogState extends State<_CreateConversationDialog> {
               });
             }
           },
-          child: const Text('Create'),
+          child: Text(l10n.create),
         ),
       ],
     );

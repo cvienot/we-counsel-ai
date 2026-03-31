@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../providers/auth_provider.dart';
 import '../../utils/snackbar_utils.dart';
+import '../../l10n/app_localizations.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -38,6 +39,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   Future<void> _saveProfile() async {
     if (_formKey.currentState!.validate()) {
+      final l10n = AppLocalizations.of(context)!;
       try {
         await ref.read(authProvider.notifier).updateProfile(
           firstName: _firstNameController.text.trim(),
@@ -45,11 +47,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         );
         
         if (mounted) {
-          showSuccessSnackBar(context, 'Profile updated successfully');
+          showSuccessSnackBar(context, l10n.profileUpdatedSuccess);
         }
       } catch (e) {
         if (mounted) {
-          showErrorSnackBar(context, 'Failed to update profile: ${e.toString()}');
+          showErrorSnackBar(context, '${l10n.failedToUpdateProfile}: ${e.toString()}');
         }
       }
     }
@@ -63,19 +65,20 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   Future<void> _logout() async {
+    final l10n = AppLocalizations.of(context)!;
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Logout'),
-        content: const Text('Are you sure you want to logout?'),
+        title: Text(l10n.logout),
+        content: Text(l10n.logoutConfirmation),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Cancel'),
+            child: Text(l10n.cancel),
           ),
           ElevatedButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Logout'),
+            child: Text(l10n.logout),
           ),
         ],
       ),
@@ -93,6 +96,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
     final user = authState.user;
+    final l10n = AppLocalizations.of(context)!;
 
     if (user == null) {
       return const Scaffold(
@@ -102,11 +106,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: Text(l10n.profile),
         actions: [
           TextButton(
             onPressed: authState.isLoading ? null : _saveProfile,
-            child: const Text('Save'),
+            child: Text(l10n.save),
           ),
         ],
       ),
@@ -157,7 +161,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Personal Information',
+                        l10n.personalInformation,
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       const SizedBox(height: 16),
@@ -168,12 +172,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             child: TextFormField(
                               controller: _firstNameController,
                               enabled: _isEditing,
-                              decoration: const InputDecoration(
-                                labelText: 'First Name',
+                              decoration: InputDecoration(
+                                labelText: l10n.firstName,
                               ),
                               validator: (value) {
                                 if (value == null || value.trim().isEmpty) {
-                                  return 'Please enter your first name';
+                                  return l10n.pleaseEnterFirstName;
                                 }
                                 return null;
                               },
@@ -184,12 +188,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             child: TextFormField(
                               controller: _lastNameController,
                               enabled: _isEditing,
-                              decoration: const InputDecoration(
-                                labelText: 'Last Name',
+                              decoration: InputDecoration(
+                                labelText: l10n.lastName,
                               ),
                               validator: (value) {
                                 if (value == null || value.trim().isEmpty) {
-                                  return 'Please enter your last name';
+                                  return l10n.pleaseEnterLastName;
                                 }
                                 return null;
                               },
@@ -203,9 +207,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       TextFormField(
                         initialValue: user.email,
                         enabled: false,
-                        decoration: const InputDecoration(
-                          labelText: 'Email',
-                          helperText: 'Email cannot be changed',
+                        decoration: InputDecoration(
+                          labelText: l10n.email,
+                          helperText: l10n.emailCannotBeChanged,
                         ),
                       ),
                     ],
@@ -224,17 +228,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Relationship Status',
+                      l10n.relationshipStatus,
                       style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: 8),
-                    // Debug info
-                    Text(
-                      'Debug: partnerId=${user.partnerId}, hasPartner=${user.hasPartner}, partner=${user.partner != null ? "not null" : "null"}',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Colors.grey,
-                        fontSize: 10,
-                      ),
                     ),
                     const SizedBox(height: 8),
                     
@@ -247,7 +242,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            'Connected with ${user.partner!.fullName}',
+                            l10n.connectedWith(user.partner!.fullName),
                             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               color: Colors.green,
                               fontWeight: FontWeight.w500,
@@ -264,7 +259,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            'No partner connected',
+                            l10n.noPartnerConnected,
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
                         ],
@@ -272,7 +267,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       const SizedBox(height: 12),
                       ElevatedButton(
                         onPressed: () => context.push('/invite'),
-                        child: const Text('Invite Partner'),
+                        child: Text(l10n.invitePartner),
                       ),
                     ],
                   ],
@@ -288,32 +283,32 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 children: [
                   ListTile(
                     leading: const Icon(Icons.fitness_center),
-                    title: const Text('Exercise History'),
-                    subtitle: const Text('View past exercises and summaries'),
+                    title: Text(l10n.exerciseHistory),
+                    subtitle: Text(l10n.viewPastExercises),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => context.push('/exercise-history'),
                   ),
                   const Divider(height: 1),
                   ListTile(
                     leading: const Icon(Icons.payment),
-                    title: const Text('Payment Portal'),
-                    subtitle: const Text('Manage subscription and billing'),
+                    title: Text(l10n.paymentPortal),
+                    subtitle: Text(l10n.manageSubscriptionBilling),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => context.push('/payment-portal'),
                   ),
                   const Divider(height: 1),
                   ListTile(
                     leading: const Icon(Icons.receipt_long),
-                    title: const Text('Billing History'),
-                    subtitle: const Text('View invoices and payments'),
+                    title: Text(l10n.billingHistory),
+                    subtitle: Text(l10n.viewInvoicesPayments),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => context.push('/billing-history'),
                   ),
                   const Divider(height: 1),
                   ListTile(
                     leading: const Icon(Icons.upgrade),
-                    title: const Text('Change Plan'),
-                    subtitle: const Text('Upgrade or change subscription'),
+                    title: Text(l10n.changePlan),
+                    subtitle: Text(l10n.upgradeOrChangeSubscription),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => context.push('/plan-selection'),
                   ),
@@ -332,7 +327,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   backgroundColor: Colors.red,
                   foregroundColor: Colors.white,
                 ),
-                child: const Text('Logout'),
+                child: Text(l10n.logout),
               ),
             ),
           ],

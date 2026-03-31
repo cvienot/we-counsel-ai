@@ -295,7 +295,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
       });
     } catch (e) {
       if (mounted) {
-        showErrorSnackBar(context, 'Failed to send message: ${e.toString()}');
+        showErrorSnackBar(context, '${AppLocalizations.of(context)!.failedToSend}: ${e.toString()}');
       }
     }
   }
@@ -542,7 +542,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                               onPressed: () {
                                 ref.read(messagesProvider(mainThread.conversationId).notifier).loadMessages();
                               },
-                              child: const Text('Retry'),
+                              child: Text(AppLocalizations.of(context)!.retry),
                             ),
                           ],
                         ),

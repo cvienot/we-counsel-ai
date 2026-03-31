@@ -1,473 +1,357 @@
 {
   "@@locale": "en",
   "appTitle": "We Coach",
-  "@appTitle": {
-    "description": "The application title"
-  },
   "appSubtitle": "Your relationship journey together",
-  "@appSubtitle": {
-    "description": "The application subtitle"
-  },
-  
+
   "login": "Login",
-  "@login": {
-    "description": "Login button text"
-  },
   "register": "Register",
-  "@register": {
-    "description": "Register button text"
-  },
   "logout": "Logout",
-  "@logout": {
-    "description": "Logout button text"
-  },
   "email": "Email",
-  "@email": {
-    "description": "Email field label"
-  },
   "password": "Password",
-  "@password": {
-    "description": "Password field label"
-  },
   "firstName": "First Name",
-  "@firstName": {
-    "description": "First name field label"
-  },
   "lastName": "Last Name",
-  "@lastName": {
-    "description": "Last name field label"
-  },
   "confirmPassword": "Confirm Password",
-  "@confirmPassword": {
-    "description": "Confirm password field label"
-  },
-  
+
   "welcomeTitle": "Welcome to your journey together",
-  "@welcomeTitle": {
-    "description": "Welcome message title"
-  },
   "welcomeMessage": "This is your main conversation space where you and your partner can share thoughts, feelings, and receive guidance from Coach Sarah, your AI coach.",
-  "@welcomeMessage": {
-    "description": "Welcome message description"
-  },
   "shareThoughts": "Share what's on your mind. Coach Sarah is here to help guide your conversation.",
-  "@shareThoughts": {
-    "description": "Placeholder message when no messages"
-  },
-  
+
   "conversations": "Conversations",
-  "@conversations": {
-    "description": "Conversations screen title"
-  },
   "profile": "Profile",
-  "@profile": {
-    "description": "Profile screen title"
-  },
   "mainConversation": "Main Conversation",
-  "@mainConversation": {
-    "description": "Main conversation title"
-  },
   "otherConversations": "Other Conversations",
-  "@otherConversations": {
-    "description": "Other conversations menu item"
-  },
-  
+
   "typeMessage": "Type a message...",
-  "@typeMessage": {
-    "description": "Message input placeholder"
-  },
   "send": "Send",
-  "@send": {
-    "description": "Send button text"
-  },
   "typing": "Typing",
-  "@typing": {
-    "description": "Typing indicator text"
-  },
   "partnerTyping": "Partner is typing",
-  "@partnerTyping": {
-    "description": "Partner typing indicator"
-  },
   "partnersTyping": "Partners are typing",
-  "@partnersTyping": {
-    "description": "Multiple partners typing indicator"
-  },
-  
+
   "loading": "Loading...",
-  "@loading": {
-    "description": "Loading indicator text"
-  },
   "error": "Error",
-  "@error": {
-    "description": "Generic error title"
-  },
   "retry": "Retry",
-  "@retry": {
-    "description": "Retry button text"
-  },
   "cancel": "Cancel",
-  "@cancel": {
-    "description": "Cancel button text"
-  },
   "save": "Save",
-  "@save": {
-    "description": "Save button text"
-  },
-  
+  "close": "Close",
+  "back": "Back",
+
   "invitePartner": "Invite Partner",
-  "@invitePartner": {
-    "description": "Invite partner button text"
-  },
   "inviteYourPartner": "Invite Your Partner",
-  "@inviteYourPartner": {
-    "description": "Invite partner screen title"
-  },
   "sendInvitation": "Send Invitation",
-  "@sendInvitation": {
-    "description": "Send invitation card title"
-  },
   "invitePartnerDescription": "Invite your partner to join you on We Connect. They will receive an email with instructions to create their account and connect with you.",
-  "@invitePartnerDescription": {
-    "description": "Invite partner description text"
-  },
   "partnerEmailAddress": "Partner's Email Address",
-  "@partnerEmailAddress": {
-    "description": "Partner email field label"
-  },
   "enterPartnerEmail": "Enter your partner's email address",
-  "@enterPartnerEmail": {
-    "description": "Partner email field hint"
-  },
   "pleaseEnterPartnerEmail": "Please enter your partner's email",
-  "@pleaseEnterPartnerEmail": {
-    "description": "Partner email validation error"
-  },
   "pleaseEnterValidEmail": "Please enter a valid email address",
-  "@pleaseEnterValidEmail": {
-    "description": "Email format validation error"
-  },
   "cannotInviteYourself": "You cannot invite yourself",
-  "@cannotInviteYourself": {
-    "description": "Self-invite validation error"
-  },
   "personalMessageOptional": "Personal Message (Optional)",
-  "@personalMessageOptional": {
-    "description": "Personal message field label"
-  },
   "addPersonalMessage": "Add a personal message to your invitation...",
-  "@addPersonalMessage": {
-    "description": "Personal message field hint"
-  },
   "invitationSent": "Invitation Sent!",
-  "@invitationSent": {
-    "description": "Invitation sent dialog title"
-  },
   "invitationSentMessage": "An invitation has been sent to {email}. They will receive an email with instructions to join you on We Connect.",
   "@invitationSentMessage": {
-    "description": "Invitation sent success message",
     "placeholders": {
-      "email": {
-        "type": "String"
-      }
+      "email": { "type": "String" }
     }
   },
   "failedToSendInvitation": "Failed to send invitation",
-  "@failedToSendInvitation": {
-    "description": "Failed to send invitation error prefix"
-  },
-  "invitationSteps": "1. Your partner will receive an email invitation\\n2. They can click the link to create their account\\n3. Once they accept, you'll both be connected\\n4. You can start having conversations with AI guidance",
-  "@invitationSteps": {
-    "description": "Invitation process steps"
-  },
-  "ok": "OK",
-  "@ok": {
-    "description": "OK button text"
-  },
-  "inviteYourPartner": "Invite Your Partner",
-  "@inviteYourPartner": {
-    "description": "Invite partner screen title"
-  },
-  "sendInvitation": "Send Invitation",
-  "@sendInvitation": {
-    "description": "Send invitation card title"
-  },
-  "invitePartnerDescription": "Invite your partner to join you on We Connect. They will receive an email with instructions to create their account and connect with you.",
-  "@invitePartnerDescription": {
-    "description": "Invite partner description text"
-  },
-  "partnerEmailAddress": "Partner's Email Address",
-  "@partnerEmailAddress": {
-    "description": "Partner email field label"
-  },
-  "enterPartnerEmail": "Enter your partner's email address",
-  "@enterPartnerEmail": {
-    "description": "Partner email field hint"
-  },
-  "pleaseEnterPartnerEmail": "Please enter your partner's email",
-  "@pleaseEnterPartnerEmail": {
-    "description": "Partner email validation error"
-  },
-  "pleaseEnterValidEmail": "Please enter a valid email address",
-  "@pleaseEnterValidEmail": {
-    "description": "Email format validation error"
-  },
-  "cannotInviteYourself": "You cannot invite yourself",
-  "@cannotInviteYourself": {
-    "description": "Self-invite validation error"
-  },
-  "personalMessageOptional": "Personal Message (Optional)",
-  "@personalMessageOptional": {
-    "description": "Personal message field label"
-  },
-  "addPersonalMessage": "Add a personal message to your invitation...",
-  "@addPersonalMessage": {
-    "description": "Personal message field hint"
-  },
-  "invitationSent": "Invitation Sent!",
-  "@invitationSent": {
-    "description": "Invitation sent dialog title"
-  },
-  "invitationSentMessage": "An invitation has been sent to {email}. They will receive an email with instructions to join you on We Connect.",
-  "@invitationSentMessage": {
-    "description": "Invitation sent success message",
-    "placeholders": {
-      "email": {
-        "type": "String"
-      }
-    }
-  },
-  "failedToSendInvitation": "Failed to send invitation",
-  "@failedToSendInvitation": {
-    "description": "Failed to send invitation error prefix"
-  },
   "invitationSteps": "1. Your partner will receive an email invitation\n2. They can click the link to create their account\n3. Once they accept, you'll both be connected\n4. You can start having conversations with AI guidance",
-  "@invitationSteps": {
-    "description": "Invitation process steps"
-  },
+  "ok": "OK",
   "waitingForPartner": "Waiting for your partner to join...",
-  "@waitingForPartner": {
-    "description": "Waiting for partner message"
-  },
   "waitingForPartnerTitle": "Waiting for your partner",
-  "@waitingForPartnerTitle": {
-    "description": "Waiting room title"
-  },
   "waitingRoomGreeting": "Hi {name}! Your coaching journey will begin once your partner joins you on We Coach.",
   "@waitingRoomGreeting": {
-    "description": "Waiting room greeting message",
     "placeholders": {
-      "name": {
-        "type": "String"
-      }
+      "name": { "type": "String" }
     }
   },
   "whatHappensNext": "What happens next?",
-  "@whatHappensNext": {
-    "description": "What happens next section title"
-  },
   "sendAnotherInvitation": "Send Another Invitation",
-  "@sendAnotherInvitation": {
-    "description": "Send another invitation button"
-  },
   "invitePartnerMessage": "Share this invitation with your partner to start your counselling journey together.",
-  "@invitePartnerMessage": {
-    "description": "Invite partner description"
-  },
-  
+
   "createNewConversation": "Create New Conversation",
-  "@createNewConversation": {
-    "description": "Create new conversation button"
-  },
   "conversationTitle": "Conversation Title",
-  "@conversationTitle": {
-    "description": "Conversation title field label"
-  },
   "conversationTopic": "Topic (Optional)",
-  "@conversationTopic": {
-    "description": "Conversation topic field label"
-  },
   "create": "Create",
-  "@create": {
-    "description": "Create button text"
-  },
-  
+
   "failedToLoad": "Failed to load",
-  "@failedToLoad": {
-    "description": "Failed to load error message"
-  },
   "failedToSend": "Failed to send message",
-  "@failedToSend": {
-    "description": "Failed to send message error"
-  },
   "startConversation": "Start the conversation by sending a message!",
-  "@startConversation": {
-    "description": "Empty conversation message"
-  },
   "startYourConversation": "Start your conversation",
-  "@startYourConversation": {
-    "description": "Start conversation prompt message"
-  },
-  
+
   "settings": "Settings",
-  "@settings": {
-    "description": "Settings menu item"
-  },
   "language": "Language",
-  "@language": {
-    "description": "Language settings label"
-  },
   "selectLanguage": "Select Language",
-  "@selectLanguage": {
-    "description": "Language selection title"
-  },
   "mainConversationTitle": "Main Conversation",
-  "@mainConversationTitle": {
-    "description": "Main conversation thread title"
-  },
   "mainConversationTopic": "Your ongoing journey together",
-  "@mainConversationTopic": {
-    "description": "Main conversation thread topic"
-  },
   "aiCounsellor": "AI Counsellor",
-  "@aiCounsellor": {
-    "description": "AI Counsellor label"
-  },
   "drSarahAiCounsellor": "Coach Sarah (AI Coach)",
-  "@drSarahAiCounsellor": {
-    "description": "Coach Sarah AI Coach full name"
-  },
   "startFirstConversationMessage": "Start your first conversation with your partner and get guidance from our AI counsellor.",
-  "@startFirstConversationMessage": {
-    "description": "Message encouraging users to start their first conversation"
-  },
   "partnerInvitationMessage": "Once your partner accepts the invitation and creates their account, you'll both have access to your main conversation thread where you can start sharing and receiving guidance from our AI counsellor.",
-  "@partnerInvitationMessage": {
-    "description": "Message explaining what happens after partner accepts invitation"
-  },
   "exerciseStepProgress": "Step {current}/{total}",
   "@exerciseStepProgress": {
-    "description": "Exercise step progress indicator",
     "placeholders": {
-      "current": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
+      "current": { "type": "int" },
+      "total": { "type": "int" }
     }
   },
   "exerciseYourTurn": "Your turn!",
-  "@exerciseYourTurn": {
-    "description": "Indicator that it is the current user turn in the exercise"
-  },
   "exerciseWaitingFor": "Waiting for {partnerName}...",
   "@exerciseWaitingFor": {
-    "description": "Indicator that the exercise is waiting for partner",
     "placeholders": {
-      "partnerName": {
-        "type": "String"
-      }
+      "partnerName": { "type": "String" }
     }
   },
   "exerciseJoin": "Join",
-  "@exerciseJoin": {
-    "description": "Button to join an active exercise"
-  },
   "exerciseView": "View",
-  "@exerciseView": {
-    "description": "Button to view an active exercise while waiting"
-  },
 
   "progressDashboard": "Progress Dashboard",
-  "@progressDashboard": {
-    "description": "Progress dashboard screen title"
-  },
   "relationshipHealth": "Relationship Health",
-  "@relationshipHealth": {
-    "description": "Relationship health score label"
-  },
   "healthGreat": "Great",
-  "@healthGreat": {
-    "description": "Health score label for high scores"
-  },
   "healthGood": "Good",
-  "@healthGood": {
-    "description": "Health score label for medium scores"
-  },
   "healthGettingStarted": "Getting Started",
-  "@healthGettingStarted": {
-    "description": "Health score label for low scores"
-  },
   "healthScoreDescription": "Based on your conversations, exercises, and engagement",
-  "@healthScoreDescription": {
-    "description": "Description of how health score is calculated"
-  },
   "activityStreak": "Activity Streak",
-  "@activityStreak": {
-    "description": "Activity streak card title"
-  },
   "days": "days",
-  "@days": {
-    "description": "Days unit label"
-  },
   "best": "Best",
-  "@best": {
-    "description": "Best streak label"
-  },
   "totalDaysActive": "Total",
-  "@totalDaysActive": {
-    "description": "Total active days label"
-  },
   "weeklyActivity": "Weekly Activity",
-  "@weeklyActivity": {
-    "description": "Weekly activity section title"
-  },
   "noActivityYet": "No activity yet this week",
-  "@noActivityYet": {
-    "description": "Empty state for weekly activity"
-  },
   "exerciseProgress": "Exercise Progress",
-  "@exerciseProgress": {
-    "description": "Exercise progress section title"
-  },
   "messages": "Messages",
-  "@messages": {
-    "description": "Messages stat label"
-  },
   "exercisesCompleted": "Exercises",
-  "@exercisesCompleted": {
-    "description": "Exercises completed stat label"
-  },
   "aiSessions": "AI Sessions",
-  "@aiSessions": {
-    "description": "AI sessions stat label"
-  },
   "completionRate": "Completion Rate",
-  "@completionRate": {
-    "description": "Exercise completion rate label"
-  },
   "completed": "Completed",
-  "@completed": {
-    "description": "Completed count label"
-  },
   "totalStarted": "Started",
-  "@totalStarted": {
-    "description": "Total started exercises label"
-  },
   "thisMonth": "This Month",
-  "@thisMonth": {
-    "description": "This month label"
-  },
   "byCategory": "By Category",
-  "@byCategory": {
-    "description": "By category section label"
-  },
+  "yourJourney": "Your Journey",
   "viewProgress": "View Progress",
-  "@viewProgress": {
-    "description": "View progress button label"
-  },
   "trackYourJourney": "Track your relationship journey and growth",
-  "@trackYourJourney": {
-    "description": "Progress dashboard card subtitle"
-  }
+
+  "welcomeBack": "Welcome back, {name}!",
+  "@welcomeBack": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "connectedWith": "You're connected with {name}",
+  "@connectedWith": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "invitePartnerPrompt": "Invite your partner to start your counselling journey together",
+  "sendInvitationSubtitle": "Send an invitation to start counselling together",
+  "getStarted": "Get Started",
+  "mainThread": "Main Thread",
+  "continueMainConversation": "Continue your main conversation with your partner",
+  "viewAllConversations": "View all your conversation threads",
+  "profileSettings": "Profile Settings",
+  "manageAccountPreferences": "Manage your account and preferences",
+
+  "profileUpdatedSuccess": "Profile updated successfully",
+  "failedToUpdateProfile": "Failed to update profile",
+  "logoutConfirmation": "Are you sure you want to logout?",
+  "personalInformation": "Personal Information",
+  "pleaseEnterFirstName": "Please enter your first name",
+  "pleaseEnterLastName": "Please enter your last name",
+  "emailCannotBeChanged": "Email cannot be changed",
+  "relationshipStatus": "Relationship Status",
+  "noPartnerConnected": "No partner connected",
+  "exerciseHistory": "Exercise History",
+  "viewPastExercises": "View past exercises and summaries",
+  "paymentPortal": "Payment Portal",
+  "manageSubscriptionBilling": "Manage subscription and billing",
+  "billingHistory": "Billing History",
+  "viewInvoicesPayments": "View invoices and payments",
+  "changePlan": "Change Plan",
+  "upgradeOrChangeSubscription": "Upgrade or change subscription",
+
+  "welcomeToApp": "Welcome to We Coach",
+  "strengthenRelationship": "Strengthen your relationship together",
+  "pleaseEnterEmail": "Please enter your email",
+  "pleaseEnterPassword": "Please enter your password",
+  "signIn": "Sign In",
+  "noAccountSignUp": "Don't have an account? Sign up",
+  "loginJoinedPartner": "Successfully logged in and joined your partner!",
+  "loginFailed": "Login failed",
+
+  "createAccount": "Create Account",
+  "joinApp": "Join We Coach",
+  "startJourneyBetterComm": "Start your journey to better communication",
+  "pleaseEnterAPassword": "Please enter a password",
+  "passwordMinLength": "Password must be at least 6 characters",
+  "pleaseConfirmPassword": "Please confirm your password",
+  "passwordsDoNotMatch": "Passwords do not match",
+  "serviceDisclaimer": "This service provides relationship communication support only. It is NOT therapy or a substitute for professional mental health services.",
+  "iAgreeToThe": "I agree to the ",
+  "termsOfService": "Terms of Service",
+  "mustAcceptTerms": "You must accept the Terms of Service to create an account",
+  "accountCreatedJoinedPartner": "Account created and successfully joined your partner!",
+  "registrationFailed": "Registration failed",
+  "alreadyHaveAccountSignIn": "Already have an account? Sign in",
+
+  "joinYourPartner": "Join Your Partner",
+  "youveBeenInvited": "You've been invited!",
+  "partnerInvitedYou": "Your partner has invited you to join We Coach. Create an account or sign in to start your relationship coaching journey together.",
+  "alreadySignedInAccept": "You're already signed in. Click below to accept the invitation.",
+  "acceptInvitation": "Accept Invitation",
+  "invitationInfoSteps": "• If you already have an account, sign in to connect with your partner\n• If you're new, create an account to get started\n• Once connected, you can start conversations together",
+  "successfullyJoinedPartner": "Successfully joined your partner!",
+  "failedToAcceptInvitation": "Failed to accept invitation",
+  "failedToLoadTerms": "Failed to load Terms of Service",
+
+  "conversationCreatedSuccess": "Conversation created successfully",
+  "failedToCreateConversation": "Failed to create conversation",
+  "messageCount": "{count} messages",
+  "@messageCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "needToInvitePartner": "You need to invite and connect with your partner before you can start conversations.",
+  "noConversationsYet": "No Conversations Yet",
+  "newConversation": "New Conversation",
+  "conversationTitleHint": "e.g., Communication Issues",
+  "pleaseEnterTitle": "Please enter a title",
+  "conversationTopicHint": "What would you like to discuss?",
+  "crisisResources": "Crisis Resources",
+
+  "chooseYourPlan": "Choose Your Plan",
+  "startYourJourneyTogether": "Start Your Journey Together",
+  "choosePlanDescription": "Choose a plan that fits your needs. You can change your plan at any time.",
+  "free": "Free",
+  "forever": "forever",
+  "tryAiCoach": "Try the AI relationship coach",
+  "aiMessagesPerMonth": "{count} AI messages per month",
+  "@aiMessagesPerMonth": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "unlimitedPartnerMessaging": "Unlimited partner messaging",
+  "basicExercises": "Basic exercises",
+  "essential": "Essential",
+  "regularSupport": "Regular support for your relationship",
+  "allFreeFeatures": "All Free features",
+  "guidedExercises": "Guided exercises",
+  "conversationSummaries": "Conversation summaries",
+  "premium": "Premium",
+  "unlimitedAccess": "Unlimited access to all features",
+  "unlimitedAiMessages": "Unlimited AI messages",
+  "allEssentialFeatures": "All Essential features",
+  "prioritySupport": "Priority support",
+  "advancedInsights": "Advanced insights",
+  "popular": "POPULAR",
+  "currentPlan": "CURRENT PLAN",
+  "monthly": "Monthly",
+  "annual": "Annual",
+  "save20": "Save 20%",
+  "freeTrialInfo": "7-day free trial • Cancel anytime",
+  "currentPlanButton": "Current Plan",
+  "continueWithFree": "Continue with Free",
+  "startFreeTrial": "Start Free Trial",
+  "perMonth": "/month",
+  "perYear": "/year",
+
+  "manageSubscription": "Manage Subscription",
+  "upgradePlan": "Upgrade Plan",
+  "aboutPaymentPortal": "About Payment Portal",
+  "paymentPortalDescription": "You can manage your subscription, update payment methods, and view billing history through our secure payment portal powered by Stripe.",
+  "couldNotOpenPaymentPortal": "Could not open payment portal",
+  "failedToOpenPortal": "Failed to open portal",
+
+  "refresh": "Refresh",
+  "tryAgain": "Try Again",
+  "noBillingHistoryYet": "No billing history yet",
+  "invoicesWillAppearHere": "Your invoices will appear here once you make a payment.",
+  "viewInvoice": "View Invoice",
+  "paid": "Paid",
+  "pending": "Pending",
+  "void_": "Void",
+  "failed": "Failed",
+  "subscription": "Subscription",
+  "invoiceUrlNotAvailable": "Invoice URL not available",
+  "couldNotOpenInvoice": "Could not open invoice",
+  "failedToLoadBillingHistory": "Failed to load billing history",
+
+  "paymentSuccessful": "Payment Successful!",
+  "subscriptionActivated": "Your subscription has been activated.\nEnjoy your enhanced coaching experience!",
+  "viewPaymentPortal": "View Payment Portal",
+
+  "guidedExercise": "Guided Exercise",
+  "exerciseComplete": "Exercise Complete",
+  "exerciseCompleteTitle": "Exercise Complete! ✨",
+  "greatWorkCompleting": "Great work on completing \"{name}\"!",
+  "@greatWorkCompleting": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "keyTakeaways": "Key Takeaways",
+  "generatingSummary": "Generating your summary...",
+  "returnToConversation": "Return to Conversation",
+  "instruction": "Instruction",
+  "guidance": "Guidance",
+  "conversationSoFar": "Conversation So Far",
+  "waitingForPartnerResponse": "Waiting for your partner to respond...",
+  "typeYourResponseHere": "Type your response here...",
+  "waitingForYourPartner": "Waiting for your partner...",
+  "completeExercise": "Complete Exercise",
+  "nextStep": "Next Step",
+  "leaveExercise": "Leave Exercise?",
+  "leaveExerciseConfirmation": "Are you sure you want to leave? Your progress will be saved.",
+  "stay": "Stay",
+  "leave": "Leave",
+  "pleaseEnterResponse": "Please enter a response",
+
+  "noExercisesYet": "No exercises yet",
+  "completeExercisePrompt": "Complete an exercise with your partner\nto see it here.",
+  "noSummaryAvailable": "No summary available.",
+  "failedToLoadHistory": "Failed to load history",
+  "inProgressStatus": "In progress ({current}/{total})",
+  "@inProgressStatus": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "notAuthenticated": "Not authenticated",
+  "exerciseNotFound": "Exercise not found",
+  "goBack": "Go Back",
+
+  "categoryCommunication": "Communication",
+  "categoryAppreciation": "Appreciation",
+  "categoryConflict": "Conflict",
+  "categoryEmotional": "Emotional",
+
+  "importantInformation": "Important Information",
+  "disclaimerText": "This AI provides relationship communication support only. It is NOT therapy or a substitute for professional mental health services. In case of crisis, please contact emergency services.",
+  "needImmediateHelp": "Need Immediate Help?",
+  "crisisDialogText": "If you or your partner are in crisis or experiencing a mental health emergency, please contact:",
+  "emergencyServices": "Emergency Services",
+  "crisisHotlines": "24/7 Crisis Hotlines",
+  "crisisHotlinesList": "• National Suicide Prevention: 988\n• Crisis Text Line: Text HOME to 741741\n• International Association for Suicide Prevention: https://www.iasp.info/resources/Crisis_Centres/",
+  "appProvidesSupport": "This app provides communication support only. It is not a substitute for professional help.",
+  "iUnderstand": "I Understand",
+
+  "guidedExerciseSuggestion": "🎯 Guided Exercise",
+  "tapToStartExercise": "Tap to start the guided exercise",
+  "continueExercise": "Continue Exercise",
+  "tryGuidedExercise": "Try a Guided Exercise",
+  "exerciseInProgress": "You have an exercise in progress",
+  "practiceSkillsTogether": "Practice communication skills together",
+
+  "chooseAnExercise": "Choose an Exercise",
+  "practiceSkillsWithExercises": "Practice skills together with guided exercises",
+  "noExercisesAvailable": "No exercises available",
+
+  "userIsTyping": "{name} is typing",
+  "@userIsTyping": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "aiCoach": "AI Coach"
 }

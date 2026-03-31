@@ -83,7 +83,7 @@ class MessageBubble extends StatelessWidget {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
-                              'AI Coach',
+                              AppLocalizations.of(context)!.aiCoach,
                               style: theme.textTheme.bodySmall?.copyWith(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w600,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../services/payment_service.dart';
 import '../../config/environment.dart';
+import '../../l10n/app_localizations.dart';
 
 class BillingHistoryScreen extends StatefulWidget {
   const BillingHistoryScreen({super.key});
@@ -51,10 +52,11 @@ class _BillingHistoryScreenState extends State<BillingHistoryScreen> {
   }
 
   Future<void> _openInvoice(String? url) async {
+    final l10n = AppLocalizations.of(context)!;
     if (url == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Invoice URL not available'),
+        SnackBar(
+          content: Text(l10n.invoiceUrlNotAvailable),
           backgroundColor: Colors.orange,
         ),
       );
@@ -68,8 +70,8 @@ class _BillingHistoryScreenState extends State<BillingHistoryScreen> {
       } else {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Could not open invoice'),
+            SnackBar(
+              content: Text(l10n.couldNotOpenInvoice),
               backgroundColor: Colors.red,
             ),
           );
@@ -89,14 +91,15 @@ class _BillingHistoryScreenState extends State<BillingHistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Billing History'),
+        title: Text(l10n.billingHistory),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: _loadInvoices,
-            tooltip: 'Refresh',
+            tooltip: l10n.refresh,
           ),
         ],
       ),
@@ -105,6 +108,7 @@ class _BillingHistoryScreenState extends State<BillingHistoryScreen> {
   }
 
   Widget _buildBody() {
+    final l10n = AppLocalizations.of(context)!;
     if (_isLoading) {
       return const Center(
         child: CircularProgressIndicator(),
@@ -134,7 +138,7 @@ class _BillingHistoryScreenState extends State<BillingHistoryScreen> {
             ElevatedButton.icon(
               onPressed: _loadInvoices,
               icon: const Icon(Icons.refresh),
-              label: const Text('Try Again'),
+              label: Text(l10n.tryAgain),
             ),
           ],
         ),
@@ -153,7 +157,7 @@ class _BillingHistoryScreenState extends State<BillingHistoryScreen> {
             ),
             const SizedBox(height: 16),
             Text(
-              'No billing history yet',
+              l10n.noBillingHistoryYet,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -162,7 +166,7 @@ class _BillingHistoryScreenState extends State<BillingHistoryScreen> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Your invoices will appear here',
+              l10n.invoicesWillAppearHere,
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.grey.shade500,
@@ -187,11 +191,12 @@ class _BillingHistoryScreenState extends State<BillingHistoryScreen> {
   }
 
   Widget _buildInvoiceCard(Map<String, dynamic> invoice) {
+    final l10n = AppLocalizations.of(context)!;
     final amount = invoice['amount'] ?? 0;
     final currency = invoice['currency'] ?? 'USD';
     final status = invoice['status'] ?? 'unknown';
     final dateStr = invoice['date'];
-    final description = invoice['description'] ?? 'Subscription';
+    final description = invoice['description'] ?? l10n.subscription;
     final pdfUrl = invoice['pdfUrl'];
     final hostedUrl = invoice['hostedUrl'];
 
@@ -259,7 +264,7 @@ class _BillingHistoryScreenState extends State<BillingHistoryScreen> {
                     TextButton.icon(
                       onPressed: () => _openInvoice(pdfUrl ?? hostedUrl),
                       icon: const Icon(Icons.file_download, size: 18),
-                      label: const Text('View Invoice'),
+                      label: Text(l10n.viewInvoice),
                     ),
                   ],
                 ),
@@ -272,25 +277,26 @@ class _BillingHistoryScreenState extends State<BillingHistoryScreen> {
   }
 
   Widget _buildStatusBadge(String status) {
+    final l10n = AppLocalizations.of(context)!;
     Color color;
     String label;
 
     switch (status.toLowerCase()) {
       case 'paid':
         color = Colors.green;
-        label = 'Paid';
+        label = l10n.paid;
         break;
       case 'open':
         color = Colors.orange;
-        label = 'Pending';
+        label = l10n.pending;
         break;
       case 'void':
         color = Colors.grey;
-        label = 'Void';
+        label = l10n.void_;
         break;
       case 'uncollectible':
         color = Colors.red;
-        label = 'Failed';
+        label = l10n.failed;
         break;
       default:
         color = Colors.grey;

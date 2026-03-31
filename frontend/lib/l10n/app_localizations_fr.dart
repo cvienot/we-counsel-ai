@@ -92,6 +92,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get save => 'Sauvegarder';
 
   @override
+  String get close => 'Fermer';
+
+  @override
+  String get back => 'Retour';
+
+  @override
   String get invitePartner => 'Inviter Partenaire';
 
   @override
@@ -143,7 +149,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get invitationSteps =>
-      '1. Votre partenaire recevra une invitation par e-mail\\n2. Il pourra cliquer sur le lien pour créer son compte\\n3. Une fois accepté, vous serez tous les deux connectés\\n4. Vous pourrez commencer à avoir des conversations avec l\'aide de l\'IA';
+      '1. Votre partenaire recevra une invitation par e-mail\n2. Il pourra cliquer sur le lien pour créer son compte\n3. Une fois accepté, vous serez tous les deux connectés\n4. Vous pourrez commencer à avoir des conversations avec l\'aide de l\'IA';
 
   @override
   String get ok => 'OK';
@@ -307,9 +313,582 @@ class AppLocalizationsFr extends AppLocalizations {
   String get byCategory => 'Par Catégorie';
 
   @override
+  String get yourJourney => 'Votre Parcours';
+
+  @override
   String get viewProgress => 'Voir la Progression';
 
   @override
   String get trackYourJourney =>
       'Suivez votre parcours relationnel et votre croissance';
+
+  @override
+  String welcomeBack(String name) {
+    return 'Bienvenue, $name !';
+  }
+
+  @override
+  String connectedWith(String name) {
+    return 'Vous êtes connecté(e) avec $name';
+  }
+
+  @override
+  String get invitePartnerPrompt =>
+      'Invitez votre partenaire pour commencer votre parcours de conseil ensemble';
+
+  @override
+  String get sendInvitationSubtitle =>
+      'Envoyez une invitation pour commencer le coaching ensemble';
+
+  @override
+  String get getStarted => 'Commencer';
+
+  @override
+  String get mainThread => 'Fil Principal';
+
+  @override
+  String get continueMainConversation =>
+      'Continuez votre conversation principale avec votre partenaire';
+
+  @override
+  String get viewAllConversations => 'Voir tous vos fils de conversation';
+
+  @override
+  String get profileSettings => 'Paramètres du Profil';
+
+  @override
+  String get manageAccountPreferences =>
+      'Gérez votre compte et vos préférences';
+
+  @override
+  String get profileUpdatedSuccess => 'Profil mis à jour avec succès';
+
+  @override
+  String get failedToUpdateProfile => 'Échec de la mise à jour du profil';
+
+  @override
+  String get logoutConfirmation =>
+      'Êtes-vous sûr(e) de vouloir vous déconnecter ?';
+
+  @override
+  String get personalInformation => 'Informations Personnelles';
+
+  @override
+  String get pleaseEnterFirstName => 'Veuillez entrer votre prénom';
+
+  @override
+  String get pleaseEnterLastName => 'Veuillez entrer votre nom';
+
+  @override
+  String get emailCannotBeChanged => 'L\'e-mail ne peut pas être modifié';
+
+  @override
+  String get relationshipStatus => 'Statut Relationnel';
+
+  @override
+  String get noPartnerConnected => 'Aucun partenaire connecté';
+
+  @override
+  String get exerciseHistory => 'Historique des Exercices';
+
+  @override
+  String get viewPastExercises => 'Voir les exercices passés et leurs résumés';
+
+  @override
+  String get paymentPortal => 'Portail de Paiement';
+
+  @override
+  String get manageSubscriptionBilling =>
+      'Gérer l\'abonnement et la facturation';
+
+  @override
+  String get billingHistory => 'Historique de Facturation';
+
+  @override
+  String get viewInvoicesPayments => 'Voir les factures et paiements';
+
+  @override
+  String get changePlan => 'Changer de Plan';
+
+  @override
+  String get upgradeOrChangeSubscription =>
+      'Améliorer ou changer d\'abonnement';
+
+  @override
+  String get welcomeToApp => 'Bienvenue sur We Coach';
+
+  @override
+  String get strengthenRelationship => 'Renforcez votre relation ensemble';
+
+  @override
+  String get pleaseEnterEmail => 'Veuillez entrer votre e-mail';
+
+  @override
+  String get pleaseEnterPassword => 'Veuillez entrer votre mot de passe';
+
+  @override
+  String get signIn => 'Se Connecter';
+
+  @override
+  String get noAccountSignUp => 'Pas encore de compte ? Inscrivez-vous';
+
+  @override
+  String get loginJoinedPartner => 'Connexion réussie et partenaire rejoint !';
+
+  @override
+  String get loginFailed => 'Échec de la connexion';
+
+  @override
+  String get createAccount => 'Créer un Compte';
+
+  @override
+  String get joinApp => 'Rejoindre We Coach';
+
+  @override
+  String get startJourneyBetterComm =>
+      'Commencez votre parcours vers une meilleure communication';
+
+  @override
+  String get pleaseEnterAPassword => 'Veuillez entrer un mot de passe';
+
+  @override
+  String get passwordMinLength =>
+      'Le mot de passe doit contenir au moins 6 caractères';
+
+  @override
+  String get pleaseConfirmPassword => 'Veuillez confirmer votre mot de passe';
+
+  @override
+  String get passwordsDoNotMatch => 'Les mots de passe ne correspondent pas';
+
+  @override
+  String get serviceDisclaimer =>
+      'Ce service fournit uniquement un soutien à la communication relationnelle. Ce n\'est PAS une thérapie ni un substitut aux services de santé mentale professionnels.';
+
+  @override
+  String get iAgreeToThe => 'J\'accepte les ';
+
+  @override
+  String get termsOfService => 'Conditions d\'Utilisation';
+
+  @override
+  String get mustAcceptTerms =>
+      'Vous devez accepter les Conditions d\'Utilisation pour créer un compte';
+
+  @override
+  String get accountCreatedJoinedPartner =>
+      'Compte créé et partenaire rejoint avec succès !';
+
+  @override
+  String get registrationFailed => 'Échec de l\'inscription';
+
+  @override
+  String get alreadyHaveAccountSignIn =>
+      'Vous avez déjà un compte ? Connectez-vous';
+
+  @override
+  String get joinYourPartner => 'Rejoignez votre Partenaire';
+
+  @override
+  String get youveBeenInvited => 'Vous avez été invité(e) !';
+
+  @override
+  String get partnerInvitedYou =>
+      'Votre partenaire vous a invité(e) à rejoindre We Coach. Créez un compte ou connectez-vous pour commencer votre parcours de coaching relationnel ensemble.';
+
+  @override
+  String get alreadySignedInAccept =>
+      'Vous êtes déjà connecté(e). Cliquez ci-dessous pour accepter l\'invitation.';
+
+  @override
+  String get acceptInvitation => 'Accepter l\'Invitation';
+
+  @override
+  String get invitationInfoSteps =>
+      '• Si vous avez déjà un compte, connectez-vous pour vous lier à votre partenaire\n• Si vous êtes nouveau, créez un compte pour commencer\n• Une fois connectés, vous pourrez avoir des conversations ensemble';
+
+  @override
+  String get successfullyJoinedPartner => 'Partenaire rejoint avec succès !';
+
+  @override
+  String get failedToAcceptInvitation =>
+      'Échec de l\'acceptation de l\'invitation';
+
+  @override
+  String get failedToLoadTerms =>
+      'Échec du chargement des Conditions d\'Utilisation';
+
+  @override
+  String get conversationCreatedSuccess => 'Conversation créée avec succès';
+
+  @override
+  String get failedToCreateConversation =>
+      'Échec de la création de la conversation';
+
+  @override
+  String messageCount(int count) {
+    return '$count messages';
+  }
+
+  @override
+  String get needToInvitePartner =>
+      'Vous devez inviter et vous connecter avec votre partenaire avant de pouvoir commencer des conversations.';
+
+  @override
+  String get noConversationsYet => 'Aucune Conversation';
+
+  @override
+  String get newConversation => 'Nouvelle Conversation';
+
+  @override
+  String get conversationTitleHint => 'ex. Problèmes de Communication';
+
+  @override
+  String get pleaseEnterTitle => 'Veuillez entrer un titre';
+
+  @override
+  String get conversationTopicHint => 'De quoi souhaitez-vous discuter ?';
+
+  @override
+  String get crisisResources => 'Ressources de Crise';
+
+  @override
+  String get chooseYourPlan => 'Choisissez Votre Plan';
+
+  @override
+  String get startYourJourneyTogether => 'Commencez Votre Parcours Ensemble';
+
+  @override
+  String get choosePlanDescription =>
+      'Choisissez un plan adapté à vos besoins. Vous pouvez changer de plan à tout moment.';
+
+  @override
+  String get free => 'Gratuit';
+
+  @override
+  String get forever => 'pour toujours';
+
+  @override
+  String get tryAiCoach => 'Essayez le coach relationnel IA';
+
+  @override
+  String aiMessagesPerMonth(int count) {
+    return '$count messages IA par mois';
+  }
+
+  @override
+  String get unlimitedPartnerMessaging =>
+      'Messages illimités avec le partenaire';
+
+  @override
+  String get basicExercises => 'Exercices de base';
+
+  @override
+  String get essential => 'Essentiel';
+
+  @override
+  String get regularSupport => 'Un soutien régulier pour votre relation';
+
+  @override
+  String get allFreeFeatures => 'Toutes les fonctionnalités gratuites';
+
+  @override
+  String get guidedExercises => 'Exercices guidés';
+
+  @override
+  String get conversationSummaries => 'Résumés de conversation';
+
+  @override
+  String get premium => 'Premium';
+
+  @override
+  String get unlimitedAccess => 'Accès illimité à toutes les fonctionnalités';
+
+  @override
+  String get unlimitedAiMessages => 'Messages IA illimités';
+
+  @override
+  String get allEssentialFeatures => 'Toutes les fonctionnalités Essentiel';
+
+  @override
+  String get prioritySupport => 'Support prioritaire';
+
+  @override
+  String get advancedInsights => 'Analyses avancées';
+
+  @override
+  String get popular => 'POPULAIRE';
+
+  @override
+  String get currentPlan => 'PLAN ACTUEL';
+
+  @override
+  String get monthly => 'Mensuel';
+
+  @override
+  String get annual => 'Annuel';
+
+  @override
+  String get save20 => 'Économisez 20%';
+
+  @override
+  String get freeTrialInfo =>
+      'Essai gratuit de 7 jours • Annulez à tout moment';
+
+  @override
+  String get currentPlanButton => 'Plan Actuel';
+
+  @override
+  String get continueWithFree => 'Continuer en Gratuit';
+
+  @override
+  String get startFreeTrial => 'Commencer l\'Essai Gratuit';
+
+  @override
+  String get perMonth => '/mois';
+
+  @override
+  String get perYear => '/an';
+
+  @override
+  String get manageSubscription => 'Gérer l\'Abonnement';
+
+  @override
+  String get upgradePlan => 'Améliorer le Plan';
+
+  @override
+  String get aboutPaymentPortal => 'À Propos du Portail de Paiement';
+
+  @override
+  String get paymentPortalDescription =>
+      'Vous pouvez gérer votre abonnement, mettre à jour vos moyens de paiement et consulter votre historique de facturation via notre portail de paiement sécurisé propulsé par Stripe.';
+
+  @override
+  String get couldNotOpenPaymentPortal =>
+      'Impossible d\'ouvrir le portail de paiement';
+
+  @override
+  String get failedToOpenPortal => 'Échec de l\'ouverture du portail';
+
+  @override
+  String get refresh => 'Actualiser';
+
+  @override
+  String get tryAgain => 'Réessayer';
+
+  @override
+  String get noBillingHistoryYet => 'Aucun historique de facturation';
+
+  @override
+  String get invoicesWillAppearHere =>
+      'Vos factures apparaîtront ici une fois que vous aurez effectué un paiement.';
+
+  @override
+  String get viewInvoice => 'Voir la Facture';
+
+  @override
+  String get paid => 'Payé';
+
+  @override
+  String get pending => 'En attente';
+
+  @override
+  String get void_ => 'Annulé';
+
+  @override
+  String get failed => 'Échoué';
+
+  @override
+  String get subscription => 'Abonnement';
+
+  @override
+  String get invoiceUrlNotAvailable => 'URL de la facture non disponible';
+
+  @override
+  String get couldNotOpenInvoice => 'Impossible d\'ouvrir la facture';
+
+  @override
+  String get failedToLoadBillingHistory =>
+      'Échec du chargement de l\'historique de facturation';
+
+  @override
+  String get paymentSuccessful => 'Paiement Réussi !';
+
+  @override
+  String get subscriptionActivated =>
+      'Votre abonnement a été activé.\nProfitez de votre expérience de coaching améliorée !';
+
+  @override
+  String get viewPaymentPortal => 'Voir le Portail de Paiement';
+
+  @override
+  String get guidedExercise => 'Exercice Guidé';
+
+  @override
+  String get exerciseComplete => 'Exercice Terminé';
+
+  @override
+  String get exerciseCompleteTitle => 'Exercice Terminé ! ✨';
+
+  @override
+  String greatWorkCompleting(String name) {
+    return 'Excellent travail en complétant \"$name\" !';
+  }
+
+  @override
+  String get keyTakeaways => 'Points Clés';
+
+  @override
+  String get generatingSummary => 'Génération de votre résumé...';
+
+  @override
+  String get returnToConversation => 'Retour à la Conversation';
+
+  @override
+  String get instruction => 'Instruction';
+
+  @override
+  String get guidance => 'Conseils';
+
+  @override
+  String get conversationSoFar => 'Conversation Jusqu\'ici';
+
+  @override
+  String get waitingForPartnerResponse =>
+      'En attente de la réponse de votre partenaire...';
+
+  @override
+  String get typeYourResponseHere => 'Tapez votre réponse ici...';
+
+  @override
+  String get waitingForYourPartner => 'En attente de votre partenaire...';
+
+  @override
+  String get completeExercise => 'Terminer l\'Exercice';
+
+  @override
+  String get nextStep => 'Étape Suivante';
+
+  @override
+  String get leaveExercise => 'Quitter l\'Exercice ?';
+
+  @override
+  String get leaveExerciseConfirmation =>
+      'Êtes-vous sûr(e) de vouloir quitter ? Votre progression sera sauvegardée.';
+
+  @override
+  String get stay => 'Rester';
+
+  @override
+  String get leave => 'Quitter';
+
+  @override
+  String get pleaseEnterResponse => 'Veuillez entrer une réponse';
+
+  @override
+  String get noExercisesYet => 'Aucun exercice pour le moment';
+
+  @override
+  String get completeExercisePrompt =>
+      'Complétez un exercice avec votre partenaire\npour le voir ici.';
+
+  @override
+  String get noSummaryAvailable => 'Aucun résumé disponible.';
+
+  @override
+  String get failedToLoadHistory => 'Échec du chargement de l\'historique';
+
+  @override
+  String inProgressStatus(int current, int total) {
+    return 'En cours ($current/$total)';
+  }
+
+  @override
+  String get notAuthenticated => 'Non authentifié';
+
+  @override
+  String get exerciseNotFound => 'Exercice introuvable';
+
+  @override
+  String get goBack => 'Retour';
+
+  @override
+  String get categoryCommunication => 'Communication';
+
+  @override
+  String get categoryAppreciation => 'Appréciation';
+
+  @override
+  String get categoryConflict => 'Conflit';
+
+  @override
+  String get categoryEmotional => 'Émotionnel';
+
+  @override
+  String get importantInformation => 'Information Importante';
+
+  @override
+  String get disclaimerText =>
+      'Cette IA fournit uniquement un soutien à la communication relationnelle. Ce n\'est PAS une thérapie ni un substitut aux services de santé mentale professionnels. En cas de crise, veuillez contacter les services d\'urgence.';
+
+  @override
+  String get needImmediateHelp => 'Besoin d\'Aide Immédiate ?';
+
+  @override
+  String get crisisDialogText =>
+      'Si vous ou votre partenaire êtes en crise ou vivez une urgence de santé mentale, veuillez contacter :';
+
+  @override
+  String get emergencyServices => 'Services d\'Urgence';
+
+  @override
+  String get crisisHotlines => 'Lignes de Crise 24h/24';
+
+  @override
+  String get crisisHotlinesList =>
+      '• SOS Amitié : 09 72 39 40 50\n• Fil Santé Jeunes : 0 800 235 236\n• Numéro national de prévention du suicide : 3114';
+
+  @override
+  String get appProvidesSupport =>
+      'Cette application fournit uniquement un soutien à la communication. Ce n\'est pas un substitut à l\'aide professionnelle.';
+
+  @override
+  String get iUnderstand => 'Je Comprends';
+
+  @override
+  String get guidedExerciseSuggestion => '🎯 Exercice Guidé';
+
+  @override
+  String get tapToStartExercise => 'Appuyez pour démarrer l\'exercice guidé';
+
+  @override
+  String get continueExercise => 'Continuer l\'Exercice';
+
+  @override
+  String get tryGuidedExercise => 'Essayer un Exercice Guidé';
+
+  @override
+  String get exerciseInProgress => 'Vous avez un exercice en cours';
+
+  @override
+  String get practiceSkillsTogether =>
+      'Pratiquez des compétences de communication ensemble';
+
+  @override
+  String get chooseAnExercise => 'Choisir un Exercice';
+
+  @override
+  String get practiceSkillsWithExercises =>
+      'Pratiquez des compétences ensemble avec des exercices guidés';
+
+  @override
+  String get noExercisesAvailable => 'Aucun exercice disponible';
+
+  @override
+  String userIsTyping(String name) {
+    return '$name est en train d\'écrire';
+  }
+
+  @override
+  String get aiCoach => 'Coach IA';
 }

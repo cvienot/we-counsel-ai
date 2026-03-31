@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/language_provider.dart';
+import '../../l10n/app_localizations.dart';
 import '../plan_selection_screen.dart';
 import 'terms_of_service_screen.dart';
 
@@ -45,10 +46,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   Future<void> _handleRegister() async {
     if (_formKey.currentState!.validate()) {
       if (!_termsAccepted) {
-
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('You must accept the Terms of Service to create an account'),
+          SnackBar(
+            content: Text(l10n.mustAcceptTerms),
             backgroundColor: Colors.red,
           ),
         );
@@ -88,9 +89,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           ref.read(pendingInvitationProvider.notifier).state = null;
           
           if (pendingInvitation != null) {
+            final l10n = AppLocalizations.of(context)!;
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Account created and successfully joined your partner!'),
+              SnackBar(
+                content: Text(l10n.accountCreatedJoinedPartner),
                 backgroundColor: Colors.green,
               ),
             );
@@ -102,9 +104,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         }
       } catch (e) {
         if (mounted) {
+          final l10n = AppLocalizations.of(context)!;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Registration failed: ${e.toString()}'),
+              content: Text('${l10n.registrationFailed}: ${e.toString()}'),
               backgroundColor: Colors.red,
             ),
           );
@@ -116,10 +119,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Account'),
+        title: Text(l10n.createAccount),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -136,13 +140,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 ),
                 const SizedBox(height: 24),
                 Text(
-                  'Join We Coach',
+                  l10n.joinApp,
                   style: Theme.of(context).textTheme.headlineSmall,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Start your journey to better communication',
+                  l10n.startJourneyBetterComm,
                   style: Theme.of(context).textTheme.bodyMedium,
                   textAlign: TextAlign.center,
                 ),
@@ -152,13 +156,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     Expanded(
                       child: TextFormField(
                         controller: _firstNameController,
-                        decoration: const InputDecoration(
-                          labelText: 'First Name',
-                          prefixIcon: Icon(Icons.person),
+                        decoration: InputDecoration(
+                          labelText: l10n.firstName,
+                          prefixIcon: const Icon(Icons.person),
                         ),
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
-                            return 'Please enter your first name';
+                            return l10n.pleaseEnterFirstName;
                           }
                           return null;
                         },
@@ -168,13 +172,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     Expanded(
                       child: TextFormField(
                         controller: _lastNameController,
-                        decoration: const InputDecoration(
-                          labelText: 'Last Name',
-                          prefixIcon: Icon(Icons.person_outline),
+                        decoration: InputDecoration(
+                          labelText: l10n.lastName,
+                          prefixIcon: const Icon(Icons.person_outline),
                         ),
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
-                            return 'Please enter your last name';
+                            return l10n.pleaseEnterLastName;
                           }
                           return null;
                         },
@@ -186,16 +190,16 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    prefixIcon: Icon(Icons.email),
+                  decoration: InputDecoration(
+                    labelText: l10n.email,
+                    prefixIcon: const Icon(Icons.email),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
+                      return l10n.pleaseEnterEmail;
                     }
                     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                      return 'Please enter a valid email';
+                      return l10n.pleaseEnterValidEmail;
                     }
                     return null;
                   },
@@ -204,16 +208,16 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 TextFormField(
                   controller: _passwordController,
                   obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    prefixIcon: Icon(Icons.lock),
+                  decoration: InputDecoration(
+                    labelText: l10n.password,
+                    prefixIcon: const Icon(Icons.lock),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a password';
+                      return l10n.pleaseEnterAPassword;
                     }
                     if (value.length < 6) {
-                      return 'Password must be at least 6 characters';
+                      return l10n.passwordMinLength;
                     }
                     return null;
                   },
@@ -222,16 +226,16 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 TextFormField(
                   controller: _confirmPasswordController,
                   obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Confirm Password',
-                    prefixIcon: Icon(Icons.lock_outline),
+                  decoration: InputDecoration(
+                    labelText: l10n.confirmPassword,
+                    prefixIcon: const Icon(Icons.lock_outline),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please confirm your password';
+                      return l10n.pleaseConfirmPassword;
                     }
                     if (value != _passwordController.text) {
-                      return 'Passwords do not match';
+                      return l10n.passwordsDoNotMatch;
                     }
                     return null;
                   },
@@ -252,8 +256,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          'This service provides relationship communication support only. '
-                          'It is NOT therapy or a substitute for professional mental health services.',
+                          l10n.serviceDisclaimer,
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.amber.shade900,
@@ -289,12 +292,12 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                             text: TextSpan(
                               style: Theme.of(context).textTheme.bodyMedium,
                               children: [
-                                const TextSpan(text: 'I agree to the '),
+                                TextSpan(text: l10n.iAgreeToThe),
                                 WidgetSpan(
                                   child: GestureDetector(
                                     onTap: _showTermsOfService,
                                     child: Text(
-                                      'Terms of Service',
+                                      l10n.termsOfService,
                                       style: TextStyle(
                                         color: Theme.of(context).colorScheme.primary,
                                         decoration: TextDecoration.underline,
@@ -319,12 +322,12 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                           width: 20,
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
-                      : const Text('Create Account'),
+                      : Text(l10n.createAccount),
                 ),
                 const SizedBox(height: 16),
                 TextButton(
                   onPressed: () => context.go('/login'),
-                  child: const Text('Already have an account? Sign in'),
+                  child: Text(l10n.alreadyHaveAccountSignIn),
                 ),
               ],
             ),

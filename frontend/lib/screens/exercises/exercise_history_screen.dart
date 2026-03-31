@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../services/exercise_service.dart';
 import '../../services/api_service.dart';
+import '../../l10n/app_localizations.dart';
 
 class ExerciseHistoryScreen extends ConsumerStatefulWidget {
   const ExerciseHistoryScreen({super.key});
@@ -83,6 +84,7 @@ class _ExerciseHistoryScreenState extends ConsumerState<ExerciseHistoryScreen> {
   }
 
   void _showSummaryDialog(Map<String, dynamic> session) {
+    final l10n = AppLocalizations.of(context)!;
     final summary = session['summary'] as String?;
     final name = session['exerciseName'] as String? ?? 'Exercise';
 
@@ -98,7 +100,7 @@ class _ExerciseHistoryScreenState extends ConsumerState<ExerciseHistoryScreen> {
         ),
         content: SingleChildScrollView(
           child: SelectableText(
-            summary ?? 'No summary available.',
+            summary ?? l10n.noSummaryAvailable,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   height: 1.6,
                 ),
@@ -107,7 +109,7 @@ class _ExerciseHistoryScreenState extends ConsumerState<ExerciseHistoryScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Close'),
+            child: Text(l10n.close),
           ),
         ],
       ),
@@ -116,9 +118,10 @@ class _ExerciseHistoryScreenState extends ConsumerState<ExerciseHistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Exercise History'),
+        title: Text(l10n.exerciseHistory),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -135,7 +138,7 @@ class _ExerciseHistoryScreenState extends ConsumerState<ExerciseHistoryScreen> {
                       const SizedBox(height: 8),
                       TextButton(
                         onPressed: _loadHistory,
-                        child: const Text('Retry'),
+                        child: Text(l10n.retry),
                       ),
                     ],
                   ),
@@ -150,7 +153,7 @@ class _ExerciseHistoryScreenState extends ConsumerState<ExerciseHistoryScreen> {
                               color: Colors.grey.shade300),
                           const SizedBox(height: 16),
                           Text(
-                            'No exercises yet',
+                            l10n.noExercisesYet,
                             style: Theme.of(context)
                                 .textTheme
                                 .titleMedium
@@ -158,7 +161,7 @@ class _ExerciseHistoryScreenState extends ConsumerState<ExerciseHistoryScreen> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'Complete an exercise with your partner\nto see it here.',
+                            l10n.completeExercisePrompt,
                             textAlign: TextAlign.center,
                             style: Theme.of(context)
                                 .textTheme
@@ -236,9 +239,9 @@ class _ExerciseHistoryScreenState extends ConsumerState<ExerciseHistoryScreen> {
                                             children: [
                                               Text(
                                                 status == 'completed'
-                                                    ? 'Completed'
+                                                    ? l10n.completed
                                                     : status == 'active'
-                                                        ? 'In progress ($currentStep/$totalSteps)'
+                                                        ? l10n.inProgressStatus(currentStep, totalSteps)
                                                         : status
                                                             .substring(
                                                                 0, 1)

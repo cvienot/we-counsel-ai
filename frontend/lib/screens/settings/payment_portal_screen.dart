@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../services/payment_service.dart';
 import '../../config/environment.dart';
+import '../../l10n/app_localizations.dart';
 
 class PaymentPortalScreen extends ConsumerStatefulWidget {
   const PaymentPortalScreen({super.key});
@@ -105,9 +106,10 @@ class _PaymentPortalScreenState extends ConsumerState<PaymentPortalScreen> {
             await launchUrl(uri, mode: LaunchMode.externalApplication);
           } else {
             if (mounted) {
+              final l10n = AppLocalizations.of(context)!;
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Could not open payment portal'),
+                SnackBar(
+                  content: Text(l10n.couldNotOpenPaymentPortal),
                   backgroundColor: Colors.red,
                 ),
               );
@@ -116,9 +118,10 @@ class _PaymentPortalScreenState extends ConsumerState<PaymentPortalScreen> {
         }
       } else {
         if (mounted) {
+          final l10n = AppLocalizations.of(context)!;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(result['message'] ?? 'Failed to open portal'),
+              content: Text(result['message'] ?? l10n.failedToOpenPortal),
               backgroundColor: Colors.red,
             ),
           );
@@ -142,9 +145,10 @@ class _PaymentPortalScreenState extends ConsumerState<PaymentPortalScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     if (!_dataLoaded) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Payment Portal')),
+        appBar: AppBar(title: Text(l10n.paymentPortal)),
         body: const Center(child: CircularProgressIndicator()),
       );
     }
@@ -158,7 +162,7 @@ class _PaymentPortalScreenState extends ConsumerState<PaymentPortalScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Payment Portal'),
+        title: Text(l10n.paymentPortal),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -173,7 +177,7 @@ class _PaymentPortalScreenState extends ConsumerState<PaymentPortalScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Current Plan',
+                      l10n.currentPlan,
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     const SizedBox(height: 16),
@@ -211,7 +215,7 @@ class _PaymentPortalScreenState extends ConsumerState<PaymentPortalScreen> {
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
                     : const Icon(Icons.payment),
-                label: const Text('Manage Subscription'),
+                label: Text(l10n.manageSubscription),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.all(16),
                 ),
@@ -225,7 +229,7 @@ class _PaymentPortalScreenState extends ConsumerState<PaymentPortalScreen> {
                 context.go('/plan-selection');
               },
               icon: const Icon(Icons.upgrade),
-              label: Text(tier == 'free' ? 'Upgrade Plan' : 'Change Plan'),
+              label: Text(tier == 'free' ? l10n.upgradePlan : l10n.changePlan),
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.all(16),
               ),
@@ -240,7 +244,7 @@ class _PaymentPortalScreenState extends ConsumerState<PaymentPortalScreen> {
                   context.go('/billing-history');
                 },
                 icon: const Icon(Icons.receipt_long),
-                label: const Text('Billing History'),
+                label: Text(l10n.billingHistory),
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.all(16),
                 ),
@@ -251,27 +255,27 @@ class _PaymentPortalScreenState extends ConsumerState<PaymentPortalScreen> {
             // Info Card
             Card(
               color: Colors.blue.shade50,
-              child: const Padding(
-                padding: EdgeInsets.all(16),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.info_outline, color: Colors.blue),
-                        SizedBox(width: 8),
+                        const Icon(Icons.info_outline, color: Colors.blue),
+                        const SizedBox(width: 8),
                         Text(
-                          'About Payment Portal',
-                          style: TextStyle(
+                          l10n.aboutPaymentPortal,
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.blue,
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text(
-                      'Use the Manage Subscription button to update payment methods, view invoices, or cancel your subscription. All payment processing is securely handled by Stripe.',
+                      l10n.paymentPortalDescription,
                     ),
                   ],
                 ),

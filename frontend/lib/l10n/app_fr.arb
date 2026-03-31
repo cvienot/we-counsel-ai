@@ -2,7 +2,7 @@
   "@@locale": "fr",
   "appTitle": "We Coach",
   "appSubtitle": "Votre parcours relationnel ensemble",
-  
+
   "login": "Connexion",
   "register": "S'inscrire",
   "logout": "Déconnexion",
@@ -11,28 +11,30 @@
   "firstName": "Prénom",
   "lastName": "Nom",
   "confirmPassword": "Confirmer le mot de passe",
-  
+
   "welcomeTitle": "Bienvenue dans votre parcours ensemble",
   "welcomeMessage": "Ceci est votre espace de conversation principal où vous et votre partenaire pouvez partager vos pensées, sentiments et recevoir des conseils de Coach Sarah, votre coach IA.",
   "shareThoughts": "Partagez ce qui vous préoccupe. Coach Sarah est là pour vous aider à guider votre conversation.",
-  
+
   "conversations": "Conversations",
   "profile": "Profil",
   "mainConversation": "Conversation Principale",
   "otherConversations": "Autres Conversations",
-  
+
   "typeMessage": "Tapez un message...",
   "send": "Envoyer",
   "typing": "En train d'écrire",
   "partnerTyping": "Le partenaire écrit",
   "partnersTyping": "Les partenaires écrivent",
-  
+
   "loading": "Chargement...",
   "error": "Erreur",
   "retry": "Réessayer",
   "cancel": "Annuler",
   "save": "Sauvegarder",
-  
+  "close": "Fermer",
+  "back": "Retour",
+
   "invitePartner": "Inviter Partenaire",
   "inviteYourPartner": "Invitez votre partenaire",
   "sendInvitation": "Envoyer l'invitation",
@@ -47,7 +49,7 @@
   "invitationSent": "Invitation envoyée !",
   "invitationSentMessage": "Une invitation a été envoyée à {email}. Il recevra un e-mail avec les instructions pour vous rejoindre sur We Coach.",
   "failedToSendInvitation": "Échec de l'envoi de l'invitation",
-  "invitationSteps": "1. Votre partenaire recevra une invitation par e-mail\\n2. Il pourra cliquer sur le lien pour créer son compte\\n3. Une fois accepté, vous serez tous les deux connectés\\n4. Vous pourrez commencer à avoir des conversations avec l'aide de l'IA",
+  "invitationSteps": "1. Votre partenaire recevra une invitation par e-mail\n2. Il pourra cliquer sur le lien pour créer son compte\n3. Une fois accepté, vous serez tous les deux connectés\n4. Vous pourrez commencer à avoir des conversations avec l'aide de l'IA",
   "ok": "OK",
   "waitingForPartner": "En attente de votre partenaire...",
   "waitingForPartnerTitle": "En attente de votre partenaire",
@@ -55,74 +57,42 @@
   "whatHappensNext": "Que se passe-t-il ensuite ?",
   "sendAnotherInvitation": "Envoyer une autre invitation",
   "invitePartnerMessage": "Partagez cette invitation avec votre partenaire pour commencer votre parcours de conseil ensemble.",
-  
+
   "createNewConversation": "Créer Nouvelle Conversation",
   "conversationTitle": "Titre de la Conversation",
   "conversationTopic": "Sujet (Optionnel)",
   "create": "Créer",
-  
+
   "failedToLoad": "Échec du chargement",
   "failedToSend": "Échec de l'envoi du message",
   "startConversation": "Commencez la conversation en envoyant un message !",
   "startYourConversation": "Commencez votre conversation",
-  
+
   "settings": "Paramètres",
   "language": "Langue",
   "selectLanguage": "Sélectionner la Langue",
   "mainConversationTitle": "Conversation Principale",
-    "mainConversationTopic": "Votre voyage continu ensemble",
-  "@mainConversationTopic": {
-    "description": "Sujet du fil de conversation principal"
-  },
+  "mainConversationTopic": "Votre voyage continu ensemble",
   "aiCounsellor": "Conseiller IA",
-  "@aiCounsellor": {
-    "description": "Étiquette du conseiller IA"
-  },
   "drSarahAiCounsellor": "Coach Sarah (Coach IA)",
-  "@drSarahAiCounsellor": {
-    "description": "Nom complet de Coach Sarah coach IA"
-  },
   "startFirstConversationMessage": "Commencez votre première conversation avec votre partenaire et recevez des conseils de notre conseiller IA.",
-  "@startFirstConversationMessage": {
-    "description": "Message encourageant les utilisateurs à commencer leur première conversation"
-  },
   "partnerInvitationMessage": "Une fois que votre partenaire accepte l'invitation et crée son compte, vous aurez tous les deux accès à votre fil de conversation principal où vous pourrez commencer à partager et recevoir des conseils de notre conseiller IA.",
-  "@partnerInvitationMessage": {
-    "description": "Message expliquant ce qui se passe après que le partenaire accepte l'invitation"
-  },
   "exerciseStepProgress": "Étape {current}/{total}",
   "@exerciseStepProgress": {
-    "description": "Indicateur de progression de l'exercice",
     "placeholders": {
-      "current": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
+      "current": { "type": "int" },
+      "total": { "type": "int" }
     }
   },
   "exerciseYourTurn": "À vous !",
-  "@exerciseYourTurn": {
-    "description": "Indicateur que c'est au tour de l'utilisateur dans l'exercice"
-  },
   "exerciseWaitingFor": "En attente de {partnerName}...",
   "@exerciseWaitingFor": {
-    "description": "Indicateur que l'exercice attend le partenaire",
     "placeholders": {
-      "partnerName": {
-        "type": "String"
-      }
+      "partnerName": { "type": "String" }
     }
   },
   "exerciseJoin": "Rejoindre",
-  "@exerciseJoin": {
-    "description": "Bouton pour rejoindre un exercice actif"
-  },
   "exerciseView": "Voir",
-  "@exerciseView": {
-    "description": "Bouton pour voir un exercice actif en attente"
-  },
 
   "progressDashboard": "Tableau de Progression",
   "relationshipHealth": "Santé Relationnelle",
@@ -145,6 +115,221 @@
   "totalStarted": "Commencés",
   "thisMonth": "Ce Mois",
   "byCategory": "Par Catégorie",
+  "yourJourney": "Votre Parcours",
   "viewProgress": "Voir la Progression",
-  "trackYourJourney": "Suivez votre parcours relationnel et votre croissance"
+  "trackYourJourney": "Suivez votre parcours relationnel et votre croissance",
+
+  "welcomeBack": "Bienvenue, {name} !",
+  "connectedWith": "Vous êtes connecté(e) avec {name}",
+  "invitePartnerPrompt": "Invitez votre partenaire pour commencer votre parcours de conseil ensemble",  "sendInvitationSubtitle": "Envoyez une invitation pour commencer le coaching ensemble",  "getStarted": "Commencer",
+  "mainThread": "Fil Principal",
+  "continueMainConversation": "Continuez votre conversation principale avec votre partenaire",
+  "viewAllConversations": "Voir tous vos fils de conversation",
+  "profileSettings": "Paramètres du Profil",
+  "manageAccountPreferences": "Gérez votre compte et vos préférences",
+
+  "profileUpdatedSuccess": "Profil mis à jour avec succès",
+  "failedToUpdateProfile": "Échec de la mise à jour du profil",
+  "logoutConfirmation": "Êtes-vous sûr(e) de vouloir vous déconnecter ?",
+  "personalInformation": "Informations Personnelles",
+  "pleaseEnterFirstName": "Veuillez entrer votre prénom",
+  "pleaseEnterLastName": "Veuillez entrer votre nom",
+  "emailCannotBeChanged": "L'e-mail ne peut pas être modifié",
+  "relationshipStatus": "Statut Relationnel",
+  "noPartnerConnected": "Aucun partenaire connecté",
+  "exerciseHistory": "Historique des Exercices",
+  "viewPastExercises": "Voir les exercices passés et leurs résumés",
+  "paymentPortal": "Portail de Paiement",
+  "manageSubscriptionBilling": "Gérer l'abonnement et la facturation",
+  "billingHistory": "Historique de Facturation",
+  "viewInvoicesPayments": "Voir les factures et paiements",
+  "changePlan": "Changer de Plan",
+  "upgradeOrChangeSubscription": "Améliorer ou changer d'abonnement",
+
+  "welcomeToApp": "Bienvenue sur We Coach",
+  "strengthenRelationship": "Renforcez votre relation ensemble",
+  "pleaseEnterEmail": "Veuillez entrer votre e-mail",
+  "pleaseEnterPassword": "Veuillez entrer votre mot de passe",
+  "signIn": "Se Connecter",
+  "noAccountSignUp": "Pas encore de compte ? Inscrivez-vous",
+  "loginJoinedPartner": "Connexion réussie et partenaire rejoint !",
+  "loginFailed": "Échec de la connexion",
+
+  "createAccount": "Créer un Compte",
+  "joinApp": "Rejoindre We Coach",
+  "startJourneyBetterComm": "Commencez votre parcours vers une meilleure communication",
+  "pleaseEnterAPassword": "Veuillez entrer un mot de passe",
+  "passwordMinLength": "Le mot de passe doit contenir au moins 6 caractères",
+  "pleaseConfirmPassword": "Veuillez confirmer votre mot de passe",
+  "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
+  "serviceDisclaimer": "Ce service fournit uniquement un soutien à la communication relationnelle. Ce n'est PAS une thérapie ni un substitut aux services de santé mentale professionnels.",
+  "iAgreeToThe": "J'accepte les ",
+  "termsOfService": "Conditions d'Utilisation",
+  "mustAcceptTerms": "Vous devez accepter les Conditions d'Utilisation pour créer un compte",
+  "accountCreatedJoinedPartner": "Compte créé et partenaire rejoint avec succès !",
+  "registrationFailed": "Échec de l'inscription",
+  "alreadyHaveAccountSignIn": "Vous avez déjà un compte ? Connectez-vous",
+
+  "joinYourPartner": "Rejoignez votre Partenaire",
+  "youveBeenInvited": "Vous avez été invité(e) !",
+  "partnerInvitedYou": "Votre partenaire vous a invité(e) à rejoindre We Coach. Créez un compte ou connectez-vous pour commencer votre parcours de coaching relationnel ensemble.",
+  "alreadySignedInAccept": "Vous êtes déjà connecté(e). Cliquez ci-dessous pour accepter l'invitation.",
+  "acceptInvitation": "Accepter l'Invitation",
+  "invitationInfoSteps": "• Si vous avez déjà un compte, connectez-vous pour vous lier à votre partenaire\n• Si vous êtes nouveau, créez un compte pour commencer\n• Une fois connectés, vous pourrez avoir des conversations ensemble",
+  "successfullyJoinedPartner": "Partenaire rejoint avec succès !",
+  "failedToAcceptInvitation": "Échec de l'acceptation de l'invitation",
+  "failedToLoadTerms": "Échec du chargement des Conditions d'Utilisation",
+
+  "conversationCreatedSuccess": "Conversation créée avec succès",
+  "failedToCreateConversation": "Échec de la création de la conversation",
+  "messageCount": "{count} messages",
+  "@messageCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "needToInvitePartner": "Vous devez inviter et vous connecter avec votre partenaire avant de pouvoir commencer des conversations.",
+  "noConversationsYet": "Aucune Conversation",
+  "newConversation": "Nouvelle Conversation",
+  "conversationTitleHint": "ex. Problèmes de Communication",
+  "pleaseEnterTitle": "Veuillez entrer un titre",
+  "conversationTopicHint": "De quoi souhaitez-vous discuter ?",
+  "crisisResources": "Ressources de Crise",
+
+  "chooseYourPlan": "Choisissez Votre Plan",
+  "startYourJourneyTogether": "Commencez Votre Parcours Ensemble",
+  "choosePlanDescription": "Choisissez un plan adapté à vos besoins. Vous pouvez changer de plan à tout moment.",
+  "free": "Gratuit",
+  "forever": "pour toujours",
+  "tryAiCoach": "Essayez le coach relationnel IA",
+  "aiMessagesPerMonth": "{count} messages IA par mois",
+  "@aiMessagesPerMonth": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "unlimitedPartnerMessaging": "Messages illimités avec le partenaire",
+  "basicExercises": "Exercices de base",
+  "essential": "Essentiel",
+  "regularSupport": "Un soutien régulier pour votre relation",
+  "allFreeFeatures": "Toutes les fonctionnalités gratuites",
+  "guidedExercises": "Exercices guidés",
+  "conversationSummaries": "Résumés de conversation",
+  "premium": "Premium",
+  "unlimitedAccess": "Accès illimité à toutes les fonctionnalités",
+  "unlimitedAiMessages": "Messages IA illimités",
+  "allEssentialFeatures": "Toutes les fonctionnalités Essentiel",
+  "prioritySupport": "Support prioritaire",
+  "advancedInsights": "Analyses avancées",
+  "popular": "POPULAIRE",
+  "currentPlan": "PLAN ACTUEL",
+  "monthly": "Mensuel",
+  "annual": "Annuel",
+  "save20": "Économisez 20%",
+  "freeTrialInfo": "Essai gratuit de 7 jours • Annulez à tout moment",
+  "currentPlanButton": "Plan Actuel",
+  "continueWithFree": "Continuer en Gratuit",
+  "startFreeTrial": "Commencer l'Essai Gratuit",
+  "perMonth": "/mois",
+  "perYear": "/an",
+
+  "manageSubscription": "Gérer l'Abonnement",
+  "upgradePlan": "Améliorer le Plan",
+  "aboutPaymentPortal": "À Propos du Portail de Paiement",
+  "paymentPortalDescription": "Vous pouvez gérer votre abonnement, mettre à jour vos moyens de paiement et consulter votre historique de facturation via notre portail de paiement sécurisé propulsé par Stripe.",
+  "couldNotOpenPaymentPortal": "Impossible d'ouvrir le portail de paiement",
+  "failedToOpenPortal": "Échec de l'ouverture du portail",
+
+  "refresh": "Actualiser",
+  "tryAgain": "Réessayer",
+  "noBillingHistoryYet": "Aucun historique de facturation",
+  "invoicesWillAppearHere": "Vos factures apparaîtront ici une fois que vous aurez effectué un paiement.",
+  "viewInvoice": "Voir la Facture",
+  "paid": "Payé",
+  "pending": "En attente",
+  "void_": "Annulé",
+  "failed": "Échoué",
+  "subscription": "Abonnement",
+  "invoiceUrlNotAvailable": "URL de la facture non disponible",
+  "couldNotOpenInvoice": "Impossible d'ouvrir la facture",
+  "failedToLoadBillingHistory": "Échec du chargement de l'historique de facturation",
+
+  "paymentSuccessful": "Paiement Réussi !",
+  "subscriptionActivated": "Votre abonnement a été activé.\nProfitez de votre expérience de coaching améliorée !",
+  "viewPaymentPortal": "Voir le Portail de Paiement",
+
+  "guidedExercise": "Exercice Guidé",
+  "exerciseComplete": "Exercice Terminé",
+  "exerciseCompleteTitle": "Exercice Terminé ! ✨",
+  "greatWorkCompleting": "Excellent travail en complétant \"{name}\" !",
+  "@greatWorkCompleting": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "keyTakeaways": "Points Clés",
+  "generatingSummary": "Génération de votre résumé...",
+  "returnToConversation": "Retour à la Conversation",
+  "instruction": "Instruction",
+  "guidance": "Conseils",
+  "conversationSoFar": "Conversation Jusqu'ici",
+  "waitingForPartnerResponse": "En attente de la réponse de votre partenaire...",
+  "typeYourResponseHere": "Tapez votre réponse ici...",
+  "waitingForYourPartner": "En attente de votre partenaire...",
+  "completeExercise": "Terminer l'Exercice",
+  "nextStep": "Étape Suivante",
+  "leaveExercise": "Quitter l'Exercice ?",
+  "leaveExerciseConfirmation": "Êtes-vous sûr(e) de vouloir quitter ? Votre progression sera sauvegardée.",
+  "stay": "Rester",
+  "leave": "Quitter",
+  "pleaseEnterResponse": "Veuillez entrer une réponse",
+
+  "noExercisesYet": "Aucun exercice pour le moment",
+  "completeExercisePrompt": "Complétez un exercice avec votre partenaire\npour le voir ici.",
+  "noSummaryAvailable": "Aucun résumé disponible.",
+  "failedToLoadHistory": "Échec du chargement de l'historique",
+  "inProgressStatus": "En cours ({current}/{total})",
+  "@inProgressStatus": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "notAuthenticated": "Non authentifié",
+  "exerciseNotFound": "Exercice introuvable",
+  "goBack": "Retour",
+
+  "categoryCommunication": "Communication",
+  "categoryAppreciation": "Appréciation",
+  "categoryConflict": "Conflit",
+  "categoryEmotional": "Émotionnel",
+
+  "importantInformation": "Information Importante",
+  "disclaimerText": "Cette IA fournit uniquement un soutien à la communication relationnelle. Ce n'est PAS une thérapie ni un substitut aux services de santé mentale professionnels. En cas de crise, veuillez contacter les services d'urgence.",
+  "needImmediateHelp": "Besoin d'Aide Immédiate ?",
+  "crisisDialogText": "Si vous ou votre partenaire êtes en crise ou vivez une urgence de santé mentale, veuillez contacter :",
+  "emergencyServices": "Services d'Urgence",
+  "crisisHotlines": "Lignes de Crise 24h/24",
+  "crisisHotlinesList": "• SOS Amitié : 09 72 39 40 50\n• Fil Santé Jeunes : 0 800 235 236\n• Numéro national de prévention du suicide : 3114",
+  "appProvidesSupport": "Cette application fournit uniquement un soutien à la communication. Ce n'est pas un substitut à l'aide professionnelle.",
+  "iUnderstand": "Je Comprends",
+
+  "guidedExerciseSuggestion": "🎯 Exercice Guidé",
+  "tapToStartExercise": "Appuyez pour démarrer l'exercice guidé",
+  "continueExercise": "Continuer l'Exercice",
+  "tryGuidedExercise": "Essayer un Exercice Guidé",
+  "exerciseInProgress": "Vous avez un exercice en cours",
+  "practiceSkillsTogether": "Pratiquez des compétences de communication ensemble",
+
+  "chooseAnExercise": "Choisir un Exercice",
+  "practiceSkillsWithExercises": "Pratiquez des compétences ensemble avec des exercices guidés",
+  "noExercisesAvailable": "Aucun exercice disponible",
+
+  "userIsTyping": "{name} est en train d'écrire",
+  "@userIsTyping": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "aiCoach": "Coach IA"
 }

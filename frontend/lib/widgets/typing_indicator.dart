@@ -80,7 +80,7 @@ class _TypingIndicatorState extends State<TypingIndicator>
                 children: [
                   if (widget.userName != null) ...[
                     Text(
-                      '${widget.userName} is typing',
+                      AppLocalizations.of(context)!.userIsTyping(widget.userName!),
                       style: TextStyle(
                         color: Colors.grey[600],
                         fontSize: 12,

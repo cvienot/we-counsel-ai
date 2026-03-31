@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../providers/auth_provider.dart';
+import '../../l10n/app_localizations.dart';
 
 class InvitationScreen extends ConsumerStatefulWidget {
   final String invitationId;
@@ -28,10 +29,11 @@ class _InvitationScreenState extends ConsumerState<InvitationScreen> {
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Join Your Partner'),
+        title: Text(l10n.joinYourPartner),
       ),
       body: SafeArea(
         child: Padding(
@@ -47,20 +49,20 @@ class _InvitationScreenState extends ConsumerState<InvitationScreen> {
               ),
               const SizedBox(height: 32),
               Text(
-                'You\'ve been invited!',
+                l10n.youveBeenInvited,
                 style: Theme.of(context).textTheme.headlineMedium,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
               Text(
-                'Your partner has invited you to join We Coach. Please sign in or create an account to get started.',
+                l10n.partnerInvitedYou,
                 style: Theme.of(context).textTheme.bodyLarge,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 48),
               if (authState.isAuthenticated) ...[
                 Text(
-                  'You\'re already signed in. Click below to accept the invitation.',
+                  l10n.alreadySignedInAccept,
                   style: Theme.of(context).textTheme.bodyMedium,
                   textAlign: TextAlign.center,
                 ),
@@ -69,17 +71,17 @@ class _InvitationScreenState extends ConsumerState<InvitationScreen> {
                   onPressed: authState.isLoading ? null : _acceptInvitation,
                   child: authState.isLoading
                       ? const CircularProgressIndicator()
-                      : const Text('Accept Invitation'),
+                      : Text(l10n.acceptInvitation),
                 ),
               ] else ...[
                 ElevatedButton(
                   onPressed: () => context.go('/login'),
-                  child: const Text('Sign In'),
+                  child: Text(l10n.signIn),
                 ),
                 const SizedBox(height: 16),
                 OutlinedButton(
                   onPressed: () => context.go('/register'),
-                  child: const Text('Create Account'),
+                  child: Text(l10n.createAccount),
                 ),
               ],
               const SizedBox(height: 32),
@@ -94,14 +96,12 @@ class _InvitationScreenState extends ConsumerState<InvitationScreen> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'What happens next?',
+                        l10n.whatHappensNext,
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        '• If you already have an account, sign in and accept the invitation\n'
-                        '• If you\'re new, create an account and you\'ll automatically be paired\n'
-                        '• Once paired, you can start your counselling journey together',
+                        l10n.invitationInfoSteps,
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ],
@@ -116,6 +116,7 @@ class _InvitationScreenState extends ConsumerState<InvitationScreen> {
   }
 
   Future<void> _acceptInvitation() async {
+    final l10n = AppLocalizations.of(context)!;
     try {
       await ref.read(authProvider.notifier).acceptInvitation(widget.invitationId);
       
@@ -124,8 +125,8 @@ class _InvitationScreenState extends ConsumerState<InvitationScreen> {
         ref.read(pendingInvitationProvider.notifier).state = null;
         
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Successfully joined your partner!'),
+          SnackBar(
+            content: Text(l10n.successfullyJoinedPartner),
             backgroundColor: Colors.green,
           ),
         );
@@ -136,7 +137,7 @@ class _InvitationScreenState extends ConsumerState<InvitationScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to accept invitation: ${e.toString()}'),
+            content: Text('${l10n.failedToAcceptInvitation}: ${e.toString()}'),
             backgroundColor: Colors.red,
           ),
         );

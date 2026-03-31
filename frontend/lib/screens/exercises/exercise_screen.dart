@@ -6,6 +6,7 @@ import '../../services/exercise_service.dart';
 import '../../services/api_service.dart';
 import '../../providers/auth_provider.dart';
 import '../../utils/snackbar_utils.dart';
+import '../../l10n/app_localizations.dart';
 
 class ExerciseScreen extends ConsumerStatefulWidget {
   final String conversationId;
@@ -172,8 +173,9 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
   }
 
   Future<void> _submitResponse() async {
+    final l10n = AppLocalizations.of(context)!;
     if (_responseController.text.trim().isEmpty) {
-      showErrorSnackBar(context, 'Please enter a response');
+      showErrorSnackBar(context, l10n.pleaseEnterResponse);
       return;
     }
 
@@ -246,6 +248,7 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
   }
 
   Widget _buildCompletionView() {
+    final l10n = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24.0),
       child: Column(
@@ -258,7 +261,7 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
           ),
           const SizedBox(height: 24),
           Text(
-            'Exercise Complete! ✨',
+            l10n.exerciseCompleteTitle,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -266,7 +269,7 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
           ),
           const SizedBox(height: 16),
           Text(
-            'Great work on completing "${_currentExercise['name']}"!',
+            l10n.greatWorkCompleting(_currentExercise['name']),
             style: Theme.of(context).textTheme.bodyLarge,
             textAlign: TextAlign.center,
           ),
@@ -283,7 +286,7 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
                         const Icon(Icons.insights, color: Colors.blue),
                         const SizedBox(width: 8),
                         Text(
-                          'Key Takeaways',
+                          l10n.keyTakeaways,
                           style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -306,7 +309,7 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
             const Center(child: CircularProgressIndicator()),
             const SizedBox(height: 16),
             Text(
-              'Generating your summary...',
+              l10n.generatingSummary,
               style: Theme.of(context).textTheme.bodyMedium,
               textAlign: TextAlign.center,
             ),
@@ -317,7 +320,7 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
             ),
-            child: const Text('Return to Conversation'),
+            child: Text(l10n.returnToConversation),
           ),
         ],
       ),
@@ -347,6 +350,7 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
   }
   
   Widget _buildStepView(int stepNumber, int totalSteps, double progress, Map<String, dynamic> currentStepData) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         // Progress indicator
@@ -367,7 +371,7 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Step $stepNumber of $totalSteps',
+                  l10n.exerciseStepProgress(stepNumber, totalSteps),
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Theme.of(context).colorScheme.secondary,
                       ),
@@ -390,7 +394,7 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              'Instruction',
+                              l10n.instruction,
                               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -423,7 +427,7 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
                             const Icon(Icons.lightbulb, color: Colors.orange),
                             const SizedBox(width: 8),
                             Text(
-                              'Guidance',
+                              l10n.guidance,
                               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -457,7 +461,7 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
                               const Icon(Icons.history, color: Colors.grey),
                               const SizedBox(width: 8),
                               Text(
-                                'Conversation So Far',
+                                l10n.conversationSoFar,
                                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -494,7 +498,7 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
                           const SizedBox(width: 12),
                           Expanded(
                             child: Text(
-                              'Waiting for your partner to respond...',
+                              l10n.waitingForPartnerResponse,
                               style: TextStyle(
                                 color: Colors.orange.shade900,
                                 fontWeight: FontWeight.w500,
@@ -515,8 +519,8 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
                   enabled: _isCurrentUsersTurn(currentStepData['prompt']) && !_isLoading,
                   decoration: InputDecoration(
                     hintText: _isCurrentUsersTurn(currentStepData['prompt']) 
-                      ? 'Type your response here...'
-                      : 'Waiting for your partner...',
+                      ? l10n.typeYourResponseHere
+                      : l10n.waitingForYourPartner,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -538,7 +542,7 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
                       : Text(
-                          stepNumber == totalSteps ? 'Complete Exercise' : 'Next Step',
+                          stepNumber == totalSteps ? l10n.completeExercise : l10n.nextStep,
                         ),
                 ),
               ],
@@ -660,10 +664,11 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
   @override
   Widget build(BuildContext context) {
     final isCompleted = _currentSession['status'] == 'completed';
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(isCompleted ? 'Exercise Complete' : 'Guided Exercise'),
+        title: Text(isCompleted ? l10n.exerciseComplete : l10n.guidedExercise),
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () {
@@ -674,21 +679,21 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: const Text('Leave Exercise?'),
-                  content: const Text(
-                    'Are you sure you want to leave? Your progress will be saved and you can continue later.',
+                  title: Text(l10n.leaveExercise),
+                  content: Text(
+                    l10n.leaveExerciseConfirmation,
                   ),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Stay'),
+                      child: Text(l10n.stay),
                     ),
                     TextButton(
                       onPressed: () {
                         Navigator.pop(context);
                         Navigator.pop(context);
                       },
-                      child: const Text('Leave'),
+                      child: Text(l10n.leave),
                     ),
                   ],
                 ),

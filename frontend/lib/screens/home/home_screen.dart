@@ -25,30 +25,31 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final user = ref.watch(currentUserProvider);
     final hasPartner = ref.watch(hasPartnerProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('We Coach'),
+        title: Text(l10n.appTitle),
         actions: [
           PopupMenuButton(
             itemBuilder: (context) => [
               PopupMenuItem(
                 onTap: () => context.push('/profile'),
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.person),
-                    SizedBox(width: 8),
-                    Text('Profile'),
+                    const Icon(Icons.person),
+                    const SizedBox(width: 8),
+                    Text(l10n.profile),
                   ],
                 ),
               ),
               PopupMenuItem(
                 onTap: () => context.push('/language'),
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.language),
-                    SizedBox(width: 8),
-                    Text('Language'),
+                    const Icon(Icons.language),
+                    const SizedBox(width: 8),
+                    Text(l10n.language),
                   ],
                 ),
               ),
@@ -59,11 +60,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     context.go('/login');
                   }
                 },
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.logout),
-                    SizedBox(width: 8),
-                    Text('Logout'),
+                    const Icon(Icons.logout),
+                    const SizedBox(width: 8),
+                    Text(l10n.logout),
                   ],
                 ),
               ),
@@ -84,13 +85,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Welcome back, ${user?.firstName ?? 'User'}!',
+                      l10n.welcomeBack(user?.firstName ?? 'User'),
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     const SizedBox(height: 8),
                     if (hasPartner && user?.partner != null)
                       Text(
-                        'You\'re connected with ${user!.partner!.fullName}',
+                        l10n.connectedWith(user!.partner!.fullName),
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Colors.green,
                           fontWeight: FontWeight.w500,
@@ -98,7 +99,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       )
                     else
                       Text(
-                        'Invite your partner to start your counselling journey together',
+                        l10n.invitePartnerPrompt,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                   ],
@@ -110,38 +111,38 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             // Quick actions
             if (!hasPartner) ...[
               Text(
-                'Get Started',
+                l10n.getStarted,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 16),
               _QuickActionCard(
                 icon: Icons.email,
-                title: 'Invite Your Partner',
-                subtitle: 'Send an invitation to start counselling together',
+                title: l10n.inviteYourPartner,
+                subtitle: l10n.sendInvitationSubtitle,
                 onTap: () => context.push('/invite'),
               ),
             ] else ...[
               Text(
-                'Your Journey',
+                l10n.yourJourney,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 16),
               _QuickActionCard(                icon: Icons.insights,
-                title: AppLocalizations.of(context)?.viewProgress ?? 'View Progress',
-                subtitle: AppLocalizations.of(context)?.trackYourJourney ?? 'Track your relationship journey and growth',
+                title: l10n.viewProgress,
+                subtitle: l10n.trackYourJourney,
                 onTap: () => context.push('/progress'),
               ),
               const SizedBox(height: 16),
               _QuickActionCard(                icon: Icons.forum,
-                title: 'Main Thread',
-                subtitle: 'Continue your main conversation with your partner',
+                title: l10n.mainThread,
+                subtitle: l10n.continueMainConversation,
                 onTap: () => context.push('/main-thread'),
               ),
               const SizedBox(height: 16),
               _QuickActionCard(
                 icon: Icons.chat_bubble_outline,
-                title: 'Other Conversations',
-                subtitle: 'View all your conversation threads',
+                title: l10n.otherConversations,
+                subtitle: l10n.viewAllConversations,
                 onTap: () => context.push('/conversations'),
               ),
             ],
@@ -149,8 +150,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const SizedBox(height: 16),
             _QuickActionCard(
               icon: Icons.person,
-              title: 'Profile Settings',
-              subtitle: 'Manage your account and preferences',
+              title: l10n.profileSettings,
+              subtitle: l10n.manageAccountPreferences,
               onTap: () => context.push('/profile'),
             ),
           ],

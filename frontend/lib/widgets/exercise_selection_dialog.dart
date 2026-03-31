@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/exercise_service.dart';
 import '../providers/auth_provider.dart';
+import '../l10n/app_localizations.dart';
 
 class ExerciseSelectionDialog extends ConsumerStatefulWidget {
   final String conversationId;
@@ -139,13 +140,13 @@ class _ExerciseSelectionDialogState extends ConsumerState<ExerciseSelectionDialo
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Choose an Exercise',
+                          AppLocalizations.of(context)!.chooseAnExercise,
                           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
                         ),
                         Text(
-                          'Practice skills together with guided exercises',
+                          AppLocalizations.of(context)!.practiceSkillsWithExercises,
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ],
@@ -176,14 +177,14 @@ class _ExerciseSelectionDialogState extends ConsumerState<ExerciseSelectionDialo
                                 const SizedBox(height: 16),
                                 ElevatedButton(
                                   onPressed: _loadExercises,
-                                  child: const Text('Retry'),
+                                  child: Text(AppLocalizations.of(context)!.retry),
                                 ),
                               ],
                             ),
                           ),
                         )
                       : _exercises == null || _exercises!.isEmpty
-                          ? const Center(child: Text('No exercises available'))
+                          ? Center(child: Text(AppLocalizations.of(context)!.noExercisesAvailable))
                           : ListView.builder(
                               padding: const EdgeInsets.all(16),
                               itemCount: _exercises!.length,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
 
 class ExerciseButton extends StatelessWidget {
   final VoidCallback onPressed;
@@ -12,6 +13,7 @@ class ExerciseButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Material(
@@ -43,7 +45,7 @@ class ExerciseButton extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        hasActiveExercise ? 'Continue Exercise' : 'Try a Guided Exercise',
+                        hasActiveExercise ? l10n.continueExercise : l10n.tryGuidedExercise,
                         style: Theme.of(context).textTheme.titleSmall?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
@@ -51,8 +53,8 @@ class ExerciseButton extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         hasActiveExercise
-                            ? 'You have an exercise in progress'
-                            : 'Practice communication skills together',
+                            ? l10n.exerciseInProgress
+                            : l10n.practiceSkillsTogether,
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ],
