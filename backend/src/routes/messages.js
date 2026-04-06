@@ -324,26 +324,21 @@ router.post('/:conversationId/ai-stream', authenticateToken, checkAIMessageLimit
           
           if (coupleResult.Item) {
             const couple = coupleResult.Item;
-            // Get both users
-            const user1Params = {
-              TableName: TABLES.USERS,
-              Key: { userId: couple.user1Id }
-            };
-            const user2Params = {
-              TableName: TABLES.USERS,
-              Key: { userId: couple.user2Id }
-            };
+            const p1Id = couple.partner1Id || couple.user1Id;
+            const p2Id = couple.partner2Id || couple.user2Id;
             
-            const [user1Result, user2Result] = await Promise.all([
-              docClient.send(new GetCommand(user1Params)),
-              docClient.send(new GetCommand(user2Params))
-            ]);
-            
-            if (user1Result.Item && user2Result.Item) {
-              partnerNames = {
-                partner1: user1Result.Item.firstName || 'Partner 1',
-                partner2: user2Result.Item.firstName || 'Partner 2'
-              };
+            if (p1Id && p2Id) {
+              const [user1Result, user2Result] = await Promise.all([
+                docClient.send(new GetCommand({ TableName: TABLES.USERS, Key: { userId: p1Id } })),
+                docClient.send(new GetCommand({ TableName: TABLES.USERS, Key: { userId: p2Id } }))
+              ]);
+              
+              if (user1Result.Item && user2Result.Item) {
+                partnerNames = {
+                  partner1: user1Result.Item.firstName || 'Partner 1',
+                  partner2: user2Result.Item.firstName || 'Partner 2'
+                };
+              }
             }
           }
         } catch (error) {
@@ -384,6 +379,7 @@ router.post('/:conversationId/ai-stream', authenticateToken, checkAIMessageLimit
         }
 
         // Stream AI response with proper error handling
+        console.log('🤖 Starting AI response generation for conversation:', conversationId);
         try {
           await generateCoachResponse({
             messages: [...contextMessages, messageData],

@@ -66,26 +66,27 @@ router.post('/start', authenticateToken, async (req, res) => {
       console.log('📝 Starting exercise - Couple result:', coupleResult.Item);
 
       if (coupleResult.Item) {
-        const [user1Result, user2Result] = await Promise.all([
-          docClient.send(new GetCommand({
-            TableName: TABLES.USERS,
-            Key: { userId: coupleResult.Item.user1Id }
-          })),
-          docClient.send(new GetCommand({
-            TableName: TABLES.USERS,
-            Key: { userId: coupleResult.Item.user2Id }
-          }))
-        ]);
+        const p1Id = coupleResult.Item.partner1Id || coupleResult.Item.user1Id;
+        const p2Id = coupleResult.Item.partner2Id || coupleResult.Item.user2Id;
+        
+        if (p1Id && p2Id) {
+          const [user1Result, user2Result] = await Promise.all([
+            docClient.send(new GetCommand({
+              TableName: TABLES.USERS,
+              Key: { userId: p1Id }
+            })),
+            docClient.send(new GetCommand({
+              TableName: TABLES.USERS,
+              Key: { userId: p2Id }
+            }))
+          ]);
 
-        console.log('📝 User1:', user1Result.Item);
-        console.log('📝 User2:', user2Result.Item);
-
-        if (user1Result.Item && user2Result.Item) {
-          partnerNames = {
-            partner1: user1Result.Item.firstName || 'Partner 1',
-            partner2: user2Result.Item.firstName || 'Partner 2'
-          };
-          console.log('📝 Partner names:', partnerNames);
+          if (user1Result.Item && user2Result.Item) {
+            partnerNames = {
+              partner1: user1Result.Item.firstName || 'Partner 1',
+              partner2: user2Result.Item.firstName || 'Partner 2'
+            };
+          }
         }
       }
     } catch (error) {
@@ -187,22 +188,21 @@ router.post('/:sessionId/progress', authenticateToken, async (req, res) => {
       }));
 
       if (coupleResult.Item) {
-        const [user1Result, user2Result] = await Promise.all([
-          docClient.send(new GetCommand({
-            TableName: TABLES.USERS,
-            Key: { userId: coupleResult.Item.user1Id }
-          })),
-          docClient.send(new GetCommand({
-            TableName: TABLES.USERS,
-            Key: { userId: coupleResult.Item.user2Id }
-          }))
-        ]);
+        const p1Id = coupleResult.Item.partner1Id || coupleResult.Item.user1Id;
+        const p2Id = coupleResult.Item.partner2Id || coupleResult.Item.user2Id;
+        
+        if (p1Id && p2Id) {
+          const [user1Result, user2Result] = await Promise.all([
+            docClient.send(new GetCommand({ TableName: TABLES.USERS, Key: { userId: p1Id } })),
+            docClient.send(new GetCommand({ TableName: TABLES.USERS, Key: { userId: p2Id } }))
+          ]);
 
-        if (user1Result.Item && user2Result.Item) {
-          partnerNames = {
-            partner1: user1Result.Item.firstName || 'Partner 1',
-            partner2: user2Result.Item.firstName || 'Partner 2'
-          };
+          if (user1Result.Item && user2Result.Item) {
+            partnerNames = {
+              partner1: user1Result.Item.firstName || 'Partner 1',
+              partner2: user2Result.Item.firstName || 'Partner 2'
+            };
+          }
         }
       }
     } catch (error) {
@@ -223,9 +223,10 @@ router.post('/:sessionId/progress', authenticateToken, async (req, res) => {
         Key: { coupleId: req.user.coupleId }
       }));
       if (coupleResult2.Item) {
-        const partnerId = coupleResult2.Item.user1Id === req.user.userId
-          ? coupleResult2.Item.user2Id
-          : coupleResult2.Item.user1Id;
+        const couple = coupleResult2.Item;
+        const p1 = couple.partner1Id || couple.user1Id;
+        const p2 = couple.partner2Id || couple.user2Id;
+        const partnerId = p1 === req.user.userId ? p2 : p1;
         streamingService.sendToUser(partnerId, {
           type: 'exerciseProgress',
           sessionId,
