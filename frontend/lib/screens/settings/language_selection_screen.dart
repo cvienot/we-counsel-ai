@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/language_provider.dart';
+import '../../widgets/responsive_layout.dart';
 
 class LanguageSelectionScreen extends ConsumerWidget {
   const LanguageSelectionScreen({super.key});
@@ -17,7 +18,8 @@ class LanguageSelectionScreen extends ConsumerWidget {
         title: Text(l10n.selectLanguage),
         elevation: 0,
       ),
-      body: ListView.builder(
+      body: ResponsiveCenter(
+        child: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: LanguageNotifier.supportedLocales.length,
         itemBuilder: (context, index) {
@@ -55,6 +57,7 @@ class LanguageSelectionScreen extends ConsumerWidget {
             ),
           );
         },
+      ),
       ),
     );
   }

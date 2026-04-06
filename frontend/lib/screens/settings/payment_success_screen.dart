@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../l10n/app_localizations.dart';
+import '../../widgets/responsive_layout.dart';
 
 class PaymentSuccessScreen extends StatelessWidget {
   const PaymentSuccessScreen({super.key});
@@ -11,8 +12,9 @@ class PaymentSuccessScreen extends StatelessWidget {
     // final sessionId = Uri.base.queryParameters['session_id'];
 
     return Scaffold(
-      body: Center(
-        child: Padding(
+      body: ResponsiveCenter(
+        child: Center(
+          child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -89,6 +91,7 @@ class PaymentSuccessScreen extends StatelessWidget {
             ],
           ),
         ),
+      ),
       ),
     );
   }

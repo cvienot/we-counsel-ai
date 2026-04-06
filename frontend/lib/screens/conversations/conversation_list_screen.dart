@@ -6,6 +6,7 @@ import '../../providers/auth_provider.dart';
 import '../../providers/conversation_provider.dart';
 import '../../models/conversation.dart';
 import '../../utils/snackbar_utils.dart';
+import '../../widgets/responsive_layout.dart';
 import 'package:intl/intl.dart';
 
 class ConversationListScreen extends ConsumerStatefulWidget {
@@ -66,7 +67,8 @@ class _ConversationListScreenState extends ConsumerState<ConversationListScreen>
             ),
         ],
       ),
-      body: !hasPartner
+      body: ResponsiveCenter(
+        child: !hasPartner
           ? const _NoPartnerMessage()
           : conversationsState.isLoading
               ? const Center(child: CircularProgressIndicator())
@@ -102,6 +104,7 @@ class _ConversationListScreenState extends ConsumerState<ConversationListScreen>
                             );
                           },
                         ),
+      ),
     );
   }
 }

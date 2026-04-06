@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../services/payment_service.dart';
 import '../../config/environment.dart';
 import '../../l10n/app_localizations.dart';
+import '../../widgets/responsive_layout.dart';
 import '../../utils/snackbar_utils.dart';
 
 class PaymentPortalScreen extends ConsumerStatefulWidget {
@@ -151,9 +152,10 @@ class _PaymentPortalScreenState extends ConsumerState<PaymentPortalScreen> {
       appBar: AppBar(
         title: Text(l10n.paymentPortal),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
+      body: ResponsiveCenter(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // Current Plan Card
@@ -270,6 +272,7 @@ class _PaymentPortalScreenState extends ConsumerState<PaymentPortalScreen> {
             ),
           ],
         ),
+      ),
       ),
     );
   }

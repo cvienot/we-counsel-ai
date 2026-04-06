@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/progress_provider.dart';
+import '../../widgets/responsive_layout.dart';
 
 class ProgressDashboardScreen extends ConsumerStatefulWidget {
   const ProgressDashboardScreen({super.key});
@@ -37,7 +38,8 @@ class _ProgressDashboardScreenState
           onPressed: () => context.pop(),
         ),
       ),
-      body: state.isLoading
+      body: ResponsiveCenter(
+        child: state.isLoading
           ? const Center(child: CircularProgressIndicator())
           : state.error != null
               ? _ErrorView(
@@ -91,6 +93,7 @@ class _ProgressDashboardScreenState
                     ),
                   ),
                 ),
+      ),
     );
   }
 }

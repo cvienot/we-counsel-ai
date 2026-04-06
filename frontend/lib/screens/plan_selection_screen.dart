@@ -4,6 +4,7 @@ import '../services/payment_service.dart';
 import '../config/environment.dart';
 import '../utils/snackbar_utils.dart';
 import '../l10n/app_localizations.dart';
+import '../widgets/responsive_layout.dart';
 
 class PlanSelectionScreen extends StatefulWidget {
   const PlanSelectionScreen({super.key});
@@ -113,8 +114,9 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
         title: Text(l10n.chooseYourPlan),
         centerTitle: true,
       ),
-      body: SafeArea(
-        child: Column(
+      body: ResponsiveCenter(
+        child: SafeArea(
+          child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.all(24.0),
@@ -497,6 +499,7 @@ class _PlanSelectionScreenState extends State<PlanSelectionScreen> {
             ),
           ],
         ),
+      ),
       ),
     );
   }

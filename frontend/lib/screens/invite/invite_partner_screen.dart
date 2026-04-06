@@ -5,6 +5,7 @@ import '../../providers/auth_provider.dart';
 import '../../l10n/app_localizations.dart';
 import '../../widgets/ctrl_enter_submit.dart';
 import '../../utils/snackbar_utils.dart';
+import '../../widgets/responsive_layout.dart';
 
 
 class InvitePartnerScreen extends ConsumerStatefulWidget {
@@ -76,9 +77,10 @@ class _InvitePartnerScreenState extends ConsumerState<InvitePartnerScreen> {
       appBar: AppBar(
         title: Text(l10n.inviteYourPartner),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
+      body: ResponsiveCenter(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header
@@ -221,6 +223,7 @@ class _InvitePartnerScreenState extends ConsumerState<InvitePartnerScreen> {
             ),
           ],
         ),
+      ),
       ),
     );
   }

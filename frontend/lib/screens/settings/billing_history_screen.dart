@@ -4,6 +4,7 @@ import '../../services/payment_service.dart';
 import '../../config/environment.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/snackbar_utils.dart';
+import '../../widgets/responsive_layout.dart';
 
 class BillingHistoryScreen extends StatefulWidget {
   const BillingHistoryScreen({super.key});
@@ -89,7 +90,9 @@ class _BillingHistoryScreenState extends State<BillingHistoryScreen> {
           ),
         ],
       ),
-      body: _buildBody(),
+      body: ResponsiveCenter(
+        child: _buildBody(),
+      ),
     );
   }
 

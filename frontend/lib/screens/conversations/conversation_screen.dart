@@ -10,6 +10,7 @@ import '../../widgets/message_bubble.dart';
 import '../../widgets/disclaimer_banner.dart';
 import '../../widgets/ctrl_enter_submit.dart';
 import '../../utils/snackbar_utils.dart';
+import '../../widgets/responsive_layout.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
 
@@ -202,7 +203,8 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
           ),
         ],
       ),
-      body: Column(
+      body: ResponsiveCenter(
+        child: Column(
         children: [
           // Messages list
           Expanded(
@@ -369,6 +371,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
             ),
           ),
         ],
+      ),
       ),
     );
   }

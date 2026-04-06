@@ -8,6 +8,7 @@ import '../../providers/auth_provider.dart';
 import '../../utils/snackbar_utils.dart';
 import '../../l10n/app_localizations.dart';
 import '../../widgets/ctrl_enter_submit.dart';
+import '../../widgets/responsive_layout.dart';
 
 class ExerciseScreen extends ConsumerStatefulWidget {
   final String conversationId;
@@ -707,7 +708,9 @@ class _ExerciseScreenState extends ConsumerState<ExerciseScreen> {
           },
         ),
       ),
-      body: isCompleted ? _buildCompletionView() : _buildExerciseView(),
+      body: ResponsiveCenter(
+        child: isCompleted ? _buildCompletionView() : _buildExerciseView(),
+      ),
     );
   }
 }

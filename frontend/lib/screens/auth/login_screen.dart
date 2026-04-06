@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../providers/auth_provider.dart';
 import '../../l10n/app_localizations.dart';
 import '../../widgets/ctrl_enter_submit.dart';
+import '../../widgets/responsive_layout.dart';
 import '../../utils/snackbar_utils.dart';
 
 
@@ -63,10 +64,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: CtrlEnterSubmit(
+      body: ResponsiveCenter(
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: CtrlEnterSubmit(
             onSubmit: _handleLogin,
             child: Form(
               key: _formKey,
@@ -150,6 +152,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           ),
           ),
         ),
+      ),
       ),
     );
   }

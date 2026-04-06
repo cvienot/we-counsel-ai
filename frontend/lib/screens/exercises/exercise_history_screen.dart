@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../services/exercise_service.dart';
 import '../../services/api_service.dart';
 import '../../l10n/app_localizations.dart';
+import '../../widgets/responsive_layout.dart';
 import '../../utils/snackbar_utils.dart';
 
 class ExerciseHistoryScreen extends ConsumerStatefulWidget {
@@ -124,7 +125,8 @@ class _ExerciseHistoryScreenState extends ConsumerState<ExerciseHistoryScreen> {
       appBar: AppBar(
         title: Text(l10n.exerciseHistory),
       ),
-      body: _isLoading
+      body: ResponsiveCenter(
+        child: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _error != null
               ? Center(
@@ -312,6 +314,7 @@ class _ExerciseHistoryScreenState extends ConsumerState<ExerciseHistoryScreen> {
                         },
                       ),
                     ),
+      ),
     );
   }
 }

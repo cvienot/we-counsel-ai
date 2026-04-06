@@ -5,6 +5,7 @@ import '../../providers/auth_provider.dart';
 import '../../providers/language_provider.dart';
 import '../../l10n/app_localizations.dart';
 import '../../widgets/ctrl_enter_submit.dart';
+import '../../widgets/responsive_layout.dart';
 import '../../utils/snackbar_utils.dart';
 import '../plan_selection_screen.dart';
 import 'terms_of_service_screen.dart';
@@ -112,10 +113,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       appBar: AppBar(
         title: Text(l10n.createAccount),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
-          child: CtrlEnterSubmit(
+      body: ResponsiveCenter(
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24.0),
+            child: CtrlEnterSubmit(
             onSubmit: _handleRegister,
             child: Form(
               key: _formKey,
@@ -323,6 +325,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           ),
           ),
         ),
+      ),
       ),
     );
   }

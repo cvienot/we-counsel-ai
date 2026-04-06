@@ -10,6 +10,7 @@ import '../../services/exercise_service.dart';
 import '../../services/api_service.dart';
 import '../../services/realtime_service.dart';
 import '../../utils/snackbar_utils.dart';
+import '../../widgets/responsive_layout.dart';
 import '../../widgets/ctrl_enter_submit.dart';
 import 'dart:async';
 
@@ -467,7 +468,8 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
           ),
         ],
       ),
-      body: Column(
+      body: ResponsiveCenter(
+        child: Column(
         children: [
           // Welcome message for main thread
           Container(
@@ -711,6 +713,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
           ),
         ],
       ),
+      ),
     );
   }
 }
@@ -768,9 +771,10 @@ class _WaitingRoomScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
+      body: ResponsiveCenter(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
@@ -824,6 +828,7 @@ class _WaitingRoomScreen extends ConsumerWidget {
             ),
           ],
         ),
+      ),
       ),
     );
   }

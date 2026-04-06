@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../providers/auth_provider.dart';
 import '../../l10n/app_localizations.dart';
+import '../../widgets/responsive_layout.dart';
 import '../../utils/snackbar_utils.dart';
 
 class InvitationScreen extends ConsumerStatefulWidget {
@@ -36,10 +37,11 @@ class _InvitationScreenState extends ConsumerState<InvitationScreen> {
       appBar: AppBar(
         title: Text(l10n.joinYourPartner),
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
+      body: ResponsiveCenter(
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -112,6 +114,7 @@ class _InvitationScreenState extends ConsumerState<InvitationScreen> {
             ],
           ),
         ),
+      ),
       ),
     );
   }
