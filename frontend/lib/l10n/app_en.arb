@@ -18,7 +18,7 @@
 
   "conversations": "Conversations",
   "profile": "Profile",
-  "mainConversation": "Main Conversation",
+  "mainConversation": "Conversation",
   "otherConversations": "Other Conversations",
 
   "typeMessage": "Type a message...",
@@ -81,12 +81,12 @@
   "settings": "Settings",
   "language": "Language",
   "selectLanguage": "Select Language",
-  "mainConversationTitle": "Main Conversation",
-  "mainConversationTopic": "Your ongoing journey together",
+  "mainConversationTitle": "Conversation",
+  "mainConversationTopic": "Your journey together",
   "aiCounsellor": "AI Counsellor",
   "drSarahAiCounsellor": "Coach Sarah (AI Coach)",
   "startFirstConversationMessage": "Start your first conversation with your partner and get guidance from our AI counsellor.",
-  "partnerInvitationMessage": "Once your partner accepts the invitation and creates their account, you'll both have access to your main conversation thread where you can start sharing and receiving guidance from our AI counsellor.",
+  "partnerInvitationMessage": "Once your partner accepts the invitation and creates their account, you'll both have access to your conversation where you can start sharing and receiving guidance from our AI counsellor.",
   "exerciseStepProgress": "Step {current}/{total}",
   "@exerciseStepProgress": {
     "placeholders": {
@@ -152,8 +152,8 @@
   "resendInvitation": "Resend Invitation",
   "sendInvitationSubtitle": "Send an invitation to start counselling together",
   "getStarted": "Get Started",
-  "mainThread": "Main Thread",
-  "continueMainConversation": "Continue your main conversation with your partner",
+  "mainThread": "Conversation",
+  "continueMainConversation": "Continue your conversation with your partner",
   "viewAllConversations": "View all your conversation threads",
   "profileSettings": "Profile Settings",
   "manageAccountPreferences": "Manage your account and preferences",

@@ -305,23 +305,6 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
     }
   }
 
-  String _getLocalizedTitle(String title, AppLocalizations l10n) {
-    // Check if it's the default English title from backend
-    if (title == 'Main Conversation') {
-      // Changed to "We Coach" instead of localized version
-      return 'We Coach';
-    }
-    return title;
-  }
-
-  String _getLocalizedTopic(String topic, AppLocalizations l10n) {
-    // Check if it's the default English topic from backend
-    if (topic == 'Your ongoing journey together') {
-      return l10n.mainConversationTopic;
-    }
-    return topic;
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -402,33 +385,30 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(_getLocalizedTitle(mainThread.title, l10n)),
-            if (mainThread.topic.isNotEmpty)
-              Text(
-                _getLocalizedTopic(mainThread.topic, l10n),
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
-                ),
-              ),
-          ],
-        ),
+        title: Text(l10n.appTitle),
         actions: [
           PopupMenuButton(
             itemBuilder: (context) => [
-              // TODO: Re-enable when needed
-              // PopupMenuItem(
-              //   onTap: () => context.push('/conversations'),
-              //   child: Row(
-              //     children: [
-              //       const Icon(Icons.forum),
-              //       const SizedBox(width: 8),
-              //       Text(l10n.otherConversations),
-              //     ],
-              //   ),
-              // ),
+              PopupMenuItem(
+                onTap: () => context.push('/progress'),
+                child: Row(
+                  children: [
+                    const Icon(Icons.insights),
+                    const SizedBox(width: 8),
+                    Text(l10n.viewProgress),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                onTap: () => context.push('/exercise-history'),
+                child: Row(
+                  children: [
+                    const Icon(Icons.history),
+                    const SizedBox(width: 8),
+                    Text(l10n.exerciseHistory),
+                  ],
+                ),
+              ),
               PopupMenuItem(
                 onTap: () => context.push('/profile'),
                 child: Row(

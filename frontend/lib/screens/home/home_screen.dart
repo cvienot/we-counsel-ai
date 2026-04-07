@@ -192,13 +192,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 subtitle: l10n.continueMainConversation,
                 onTap: () => context.push('/main-thread'),
               ),
-              const SizedBox(height: 16),
-              _QuickActionCard(
-                icon: Icons.chat_bubble_outline,
-                title: l10n.otherConversations,
-                subtitle: l10n.viewAllConversations,
-                onTap: () => context.push('/conversations'),
-              ),
             ],
             
             const SizedBox(height: 16),

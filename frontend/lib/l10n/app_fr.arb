@@ -18,7 +18,7 @@
 
   "conversations": "Conversations",
   "profile": "Profil",
-  "mainConversation": "Conversation Principale",
+  "mainConversation": "Conversation",
   "otherConversations": "Autres Conversations",
 
   "typeMessage": "Tapez un message...",
@@ -71,12 +71,12 @@
   "settings": "Paramètres",
   "language": "Langue",
   "selectLanguage": "Sélectionner la Langue",
-  "mainConversationTitle": "Conversation Principale",
-  "mainConversationTopic": "Votre voyage continu ensemble",
+  "mainConversationTitle": "Conversation",
+  "mainConversationTopic": "Votre parcours ensemble",
   "aiCounsellor": "Conseiller IA",
   "drSarahAiCounsellor": "Coach Sarah (Coach IA)",
   "startFirstConversationMessage": "Commencez votre première conversation avec votre partenaire et recevez des conseils de notre conseiller IA.",
-  "partnerInvitationMessage": "Une fois que votre partenaire accepte l'invitation et crée son compte, vous aurez tous les deux accès à votre fil de conversation principal où vous pourrez commencer à partager et recevoir des conseils de notre conseiller IA.",
+  "partnerInvitationMessage": "Une fois que votre partenaire accepte l'invitation et crée son compte, vous aurez tous les deux accès à votre conversation où vous pourrez commencer à partager et recevoir des conseils de notre conseiller IA.",
   "exerciseStepProgress": "Étape {current}/{total}",
   "@exerciseStepProgress": {
     "placeholders": {
@@ -127,8 +127,8 @@
   "resendInvitation": "Renvoyer l'invitation",
   "sendInvitationSubtitle": "Envoyez une invitation pour commencer le coaching ensemble",
   "getStarted": "Commencer",
-  "mainThread": "Fil Principal",
-  "continueMainConversation": "Continuez votre conversation principale avec votre partenaire",
+  "mainThread": "Conversation",
+  "continueMainConversation": "Continuez votre conversation avec votre partenaire",
   "viewAllConversations": "Voir tous vos fils de conversation",
   "profileSettings": "Paramètres du Profil",
   "manageAccountPreferences": "Gérez votre compte et vos préférences",

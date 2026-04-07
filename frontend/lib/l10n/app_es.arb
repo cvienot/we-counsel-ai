@@ -18,7 +18,7 @@
 
   "conversations": "Conversaciones",
   "profile": "Perfil",
-  "mainConversation": "Conversación Principal",
+  "mainConversation": "Conversación",
   "otherConversations": "Otras Conversaciones",
 
   "typeMessage": "Escriba un mensaje...",
@@ -71,12 +71,12 @@
   "settings": "Configuración",
   "language": "Idioma",
   "selectLanguage": "Seleccionar Idioma",
-  "mainConversationTitle": "Conversación Principal",
-  "mainConversationTopic": "Su viaje continuo juntos",
+  "mainConversationTitle": "Conversación",
+  "mainConversationTopic": "Su camino juntos",
   "aiCounsellor": "Consejero IA",
   "drSarahAiCounsellor": "Coach Sarah (Coach IA)",
   "startFirstConversationMessage": "Comience su primera conversación con su pareja y reciba orientación de nuestro consejero IA.",
-  "partnerInvitationMessage": "Una vez que su pareja acepte la invitación y cree su cuenta, ambos tendrán acceso a su hilo de conversación principal donde pueden comenzar a compartir y recibir orientación de nuestro consejero IA.",
+  "partnerInvitationMessage": "Una vez que su pareja acepte la invitación y cree su cuenta, ambos tendrán acceso a su conversación donde pueden comenzar a compartir y recibir orientación de nuestro consejero IA.",
   "exerciseStepProgress": "Paso {current}/{total}",
   "@exerciseStepProgress": {
     "placeholders": {
@@ -127,8 +127,8 @@
   "resendInvitation": "Reenviar invitación",
   "sendInvitationSubtitle": "Envía una invitación para empezar el coaching juntos",
   "getStarted": "Comenzar",
-  "mainThread": "Hilo Principal",
-  "continueMainConversation": "Continúa tu conversación principal con tu pareja",
+  "mainThread": "Conversación",
+  "continueMainConversation": "Continúa tu conversación con tu pareja",
   "viewAllConversations": "Ver todos tus hilos de conversación",
   "profileSettings": "Configuración del Perfil",
   "manageAccountPreferences": "Gestiona tu cuenta y preferencias",

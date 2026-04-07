@@ -130,7 +130,7 @@ class _InvitationScreenState extends ConsumerState<InvitationScreen> {
         
         showSuccessSnackBar(context, l10n.successfullyJoinedPartner);
         
-        context.go('/home');
+        context.go('/main-thread');
       }
     } catch (e) {
       if (mounted) {

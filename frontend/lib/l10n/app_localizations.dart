@@ -193,7 +193,7 @@ abstract class AppLocalizations {
   /// No description provided for @mainConversation.
   ///
   /// In en, this message translates to:
-  /// **'Main Conversation'**
+  /// **'Conversation'**
   String get mainConversation;
 
   /// No description provided for @otherConversations.
@@ -475,13 +475,13 @@ abstract class AppLocalizations {
   /// No description provided for @mainConversationTitle.
   ///
   /// In en, this message translates to:
-  /// **'Main Conversation'**
+  /// **'Conversation'**
   String get mainConversationTitle;
 
   /// No description provided for @mainConversationTopic.
   ///
   /// In en, this message translates to:
-  /// **'Your ongoing journey together'**
+  /// **'Your journey together'**
   String get mainConversationTopic;
 
   /// No description provided for @aiCounsellor.
@@ -505,7 +505,7 @@ abstract class AppLocalizations {
   /// No description provided for @partnerInvitationMessage.
   ///
   /// In en, this message translates to:
-  /// **'Once your partner accepts the invitation and creates their account, you\'ll both have access to your main conversation thread where you can start sharing and receiving guidance from our AI counsellor.'**
+  /// **'Once your partner accepts the invitation and creates their account, you\'ll both have access to your conversation where you can start sharing and receiving guidance from our AI counsellor.'**
   String get partnerInvitationMessage;
 
   /// No description provided for @exerciseStepProgress.
@@ -733,13 +733,13 @@ abstract class AppLocalizations {
   /// No description provided for @mainThread.
   ///
   /// In en, this message translates to:
-  /// **'Main Thread'**
+  /// **'Conversation'**
   String get mainThread;
 
   /// No description provided for @continueMainConversation.
   ///
   /// In en, this message translates to:
-  /// **'Continue your main conversation with your partner'**
+  /// **'Continue your conversation with your partner'**
   String get continueMainConversation;
 
   /// No description provided for @viewAllConversations.

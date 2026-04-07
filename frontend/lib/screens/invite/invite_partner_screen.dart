@@ -50,7 +50,7 @@ class _InvitePartnerScreenState extends ConsumerState<InvitePartnerScreen> {
                 ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pop();
-                    context.go('/home');
+                    context.go('/main-thread');
                   },
                   child: Text(l10n.ok),
                 ),

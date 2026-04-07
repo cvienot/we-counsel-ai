@@ -56,10 +56,10 @@ class PaymentSuccessScreen extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Navigate to home and remove all previous routes
+                    // Navigate to conversation and remove all previous routes
                     Navigator.pushNamedAndRemoveUntil(
                       context,
-                      '/home',
+                      '/main-thread',
                       (route) => false,
                     );
                   },

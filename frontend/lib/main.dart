@@ -130,10 +130,10 @@ class WeCounselApp extends ConsumerWidget {
           return '/login';
         }
 
-        // If authenticated and on auth/splash routes, redirect to home
+        // If authenticated and on auth/splash routes, redirect to main conversation
         if (authState.isAuthenticated && (isLoginRoute || isRegisterRoute || isSplashRoute)) {
-          print('🔀 ROUTER: Authenticated, redirect to /home');
-          return '/home';
+          print('🔀 ROUTER: Authenticated, redirect to /main-thread');
+          return '/main-thread';
         }
 
         print('🔀 ROUTER: No redirect needed');
@@ -237,9 +237,9 @@ class WeCounselApp extends ConsumerWidget {
             final exerciseId = args?['exerciseId'] as String?;
             
             if (conversationId == null || exerciseId == null) {
-              // Redirect to home if required parameters are missing
+              // Redirect to conversation if required parameters are missing
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                context.go('/home');
+                context.go('/main-thread');
               });
               return const Scaffold(
                 body: Center(child: CircularProgressIndicator()),

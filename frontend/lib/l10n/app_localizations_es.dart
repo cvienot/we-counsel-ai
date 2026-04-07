@@ -56,7 +56,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get profile => 'Perfil';
 
   @override
-  String get mainConversation => 'Conversación Principal';
+  String get mainConversation => 'Conversación';
 
   @override
   String get otherConversations => 'Otras Conversaciones';
@@ -210,10 +210,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get selectLanguage => 'Seleccionar Idioma';
 
   @override
-  String get mainConversationTitle => 'Conversación Principal';
+  String get mainConversationTitle => 'Conversación';
 
   @override
-  String get mainConversationTopic => 'Su viaje continuo juntos';
+  String get mainConversationTopic => 'Su camino juntos';
 
   @override
   String get aiCounsellor => 'Consejero IA';
@@ -227,7 +227,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get partnerInvitationMessage =>
-      'Una vez que su pareja acepte la invitación y cree su cuenta, ambos tendrán acceso a su hilo de conversación principal donde pueden comenzar a compartir y recibir orientación de nuestro consejero IA.';
+      'Una vez que su pareja acepte la invitación y cree su cuenta, ambos tendrán acceso a su conversación donde pueden comenzar a compartir y recibir orientación de nuestro consejero IA.';
 
   @override
   String exerciseStepProgress(int current, int total) {
@@ -354,11 +354,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String get getStarted => 'Comenzar';
 
   @override
-  String get mainThread => 'Hilo Principal';
+  String get mainThread => 'Conversación';
 
   @override
   String get continueMainConversation =>
-      'Continúa tu conversación principal con tu pareja';
+      'Continúa tu conversación con tu pareja';
 
   @override
   String get viewAllConversations => 'Ver todos tus hilos de conversación';

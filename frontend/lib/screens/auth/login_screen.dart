@@ -47,7 +47,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             showSuccessSnackBar(context, l10n.loginJoinedPartner);
           }
           
-          context.go('/home');
+          context.go('/main-thread');
         }
       } catch (e) {
         if (mounted) {
