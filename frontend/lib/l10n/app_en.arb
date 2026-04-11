@@ -66,6 +66,22 @@
   },
   "whatHappensNext": "What happens next?",
   "sendAnotherInvitation": "Send Another Invitation",
+  "getStartedTitle": "Get Started",
+  "getStartedGreeting": "Hi {name}! To begin your coaching journey, invite your partner to join you on We Coach.",
+  "@getStartedGreeting": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "howItWorks": "How it works",
+  "getStartedExplanation": "Send an invitation to your partner by email. Once they create their account and accept, you'll both be connected and can start your coaching sessions together.",
+  "invitePartnerButton": "Invite Your Partner",
+  "pendingInvitationInfo": "An invitation was sent to {email}. Once they create their account and accept, you'll be connected.",
+  "@pendingInvitationInfo": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
   "invitePartnerMessage": "Share this invitation with your partner to start your counselling journey together.",
 
   "createNewConversation": "Create New Conversation",

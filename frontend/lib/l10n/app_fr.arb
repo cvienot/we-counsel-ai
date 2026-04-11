@@ -56,6 +56,12 @@
   "waitingRoomGreeting": "Bonjour {name} ! Votre parcours de coaching commencera une fois que votre partenaire vous rejoindra sur We Coach.",
   "whatHappensNext": "Que se passe-t-il ensuite ?",
   "sendAnotherInvitation": "Envoyer une autre invitation",
+  "getStartedTitle": "Pour commencer",
+  "getStartedGreeting": "Bonjour {name} ! Pour commencer votre parcours de coaching, invitez votre partenaire à vous rejoindre sur We Coach.",
+  "howItWorks": "Comment ça marche",
+  "getStartedExplanation": "Envoyez une invitation à votre partenaire par e-mail. Une fois son compte créé et l'invitation acceptée, vous serez connectés et pourrez commencer vos séances de coaching ensemble.",
+  "invitePartnerButton": "Inviter votre partenaire",
+  "pendingInvitationInfo": "Une invitation a été envoyée à {email}. Une fois son compte créé et accepté, vous serez connectés.",
   "invitePartnerMessage": "Partagez cette invitation avec votre partenaire pour commencer votre parcours de conseil ensemble.",
 
   "createNewConversation": "Créer Nouvelle Conversation",

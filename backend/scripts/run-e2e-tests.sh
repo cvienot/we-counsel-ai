@@ -215,9 +215,10 @@ if [ $QUOTA_EXIT_CODE -ne 0 ]; then
 fi
 
 # Run UI integration test
+# caffeinate -i prevents App Nap from throttling the test app when unfocused
 echo -e "\n${YELLOW}Running UI integration test...${NC}"
 cd "$FRONTEND_DIR"
-flutter test integration_test/complete_journey_test.dart \
+caffeinate -i flutter test integration_test/complete_journey_test.dart \
     -d macos \
     --dart-define=API_BASE_URL=http://localhost:$API_PORT/api
 

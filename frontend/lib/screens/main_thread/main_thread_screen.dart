@@ -705,6 +705,7 @@ class _WaitingRoomScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final user = ref.watch(currentUserProvider);
+    final hasPendingInvitation = user?.pendingInvitationEmail != null;
     
     return Scaffold(
       appBar: AppBar(
@@ -752,60 +753,92 @@ class _WaitingRoomScreen extends ConsumerWidget {
         ],
       ),
       body: ResponsiveCenter(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
           child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              Icons.hourglass_empty,
+              hasPendingInvitation ? Icons.hourglass_empty : Icons.favorite_border,
               size: 100,
               color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(height: 32),
             Text(
-              l10n.waitingForPartnerTitle,
+              hasPendingInvitation ? l10n.waitingForPartnerTitle : l10n.getStartedTitle,
               style: Theme.of(context).textTheme.headlineMedium,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
             Text(
-              l10n.waitingRoomGreeting(user?.firstName ?? 'there'),
+              hasPendingInvitation
+                  ? l10n.waitingRoomGreeting(user?.firstName ?? 'there')
+                  : l10n.getStartedGreeting(user?.firstName ?? 'there'),
               style: Theme.of(context).textTheme.bodyLarge,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 32),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    Icon(
-                      Icons.info_outline,
-                      color: Theme.of(context).colorScheme.primary,
-                      size: 32,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      l10n.whatHappensNext,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      l10n.partnerInvitationMessage,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+            if (hasPendingInvitation) ...[
+              Card(
+                color: Colors.green.shade50,
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.mark_email_read,
+                        color: Colors.green.shade700,
+                        size: 32,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        l10n.pendingInvitationInfo(user!.pendingInvitationEmail!),
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 32),
-            ElevatedButton.icon(
-              onPressed: () => context.push('/invite'),
-              icon: const Icon(Icons.email),
-              label: Text(l10n.sendAnotherInvitation),
-            ),
+              const SizedBox(height: 32),
+              ElevatedButton.icon(
+                onPressed: () => context.push('/invite'),
+                icon: const Icon(Icons.refresh),
+                label: Text(l10n.sendAnotherInvitation),
+              ),
+            ] else ...[
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.info_outline,
+                        color: Theme.of(context).colorScheme.primary,
+                        size: 32,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        l10n.howItWorks,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        l10n.getStartedExplanation,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 32),
+              ElevatedButton.icon(
+                onPressed: () => context.push('/invite'),
+                icon: const Icon(Icons.email),
+                label: Text(l10n.invitePartnerButton),
+              ),
+            ],
           ],
         ),
       ),

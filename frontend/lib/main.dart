@@ -40,9 +40,15 @@ void main() {
 class WeCounselApp extends ConsumerWidget {
   const WeCounselApp({super.key});
 
+  // Cache the router so locale changes don't recreate it (which would reset navigation)
+  static GoRouter? _cachedRouter;
+
+  /// Reset the cached router. Call between integration test cases.
+  static void resetRouter() => _cachedRouter = null;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final router = _createRouter(ref);
+    _cachedRouter ??= _createRouter(ref);
     final currentLocale = ref.watch(currentLocaleProvider);
 
     return MaterialApp.router(
@@ -91,7 +97,7 @@ class WeCounselApp extends ConsumerWidget {
           fillColor: Colors.grey.shade50,
         ),
       ),
-      routerConfig: router,
+      routerConfig: _cachedRouter!,
     );
   }
 

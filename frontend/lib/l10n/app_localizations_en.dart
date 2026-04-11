@@ -168,6 +168,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sendAnotherInvitation => 'Send Another Invitation';
 
   @override
+  String get getStartedTitle => 'Get Started';
+
+  @override
+  String getStartedGreeting(String name) {
+    return 'Hi $name! To begin your coaching journey, invite your partner to join you on We Coach.';
+  }
+
+  @override
+  String get howItWorks => 'How it works';
+
+  @override
+  String get getStartedExplanation =>
+      'Send an invitation to your partner by email. Once they create their account and accept, you\'ll both be connected and can start your coaching sessions together.';
+
+  @override
+  String get invitePartnerButton => 'Invite Your Partner';
+
+  @override
+  String pendingInvitationInfo(String email) {
+    return 'An invitation was sent to $email. Once they create their account and accept, you\'ll be connected.';
+  }
+
+  @override
   String get invitePartnerMessage =>
       'Share this invitation with your partner to start your counselling journey together.';
 

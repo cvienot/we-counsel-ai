@@ -400,6 +400,42 @@ abstract class AppLocalizations {
   /// **'Send Another Invitation'**
   String get sendAnotherInvitation;
 
+  /// No description provided for @getStartedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Started'**
+  String get getStartedTitle;
+
+  /// No description provided for @getStartedGreeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Hi {name}! To begin your coaching journey, invite your partner to join you on We Coach.'**
+  String getStartedGreeting(String name);
+
+  /// No description provided for @howItWorks.
+  ///
+  /// In en, this message translates to:
+  /// **'How it works'**
+  String get howItWorks;
+
+  /// No description provided for @getStartedExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Send an invitation to your partner by email. Once they create their account and accept, you\'ll both be connected and can start your coaching sessions together.'**
+  String get getStartedExplanation;
+
+  /// No description provided for @invitePartnerButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite Your Partner'**
+  String get invitePartnerButton;
+
+  /// No description provided for @pendingInvitationInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'An invitation was sent to {email}. Once they create their account and accept, you\'ll be connected.'**
+  String pendingInvitationInfo(String email);
+
   /// No description provided for @invitePartnerMessage.
   ///
   /// In en, this message translates to:

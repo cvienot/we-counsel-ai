@@ -6,8 +6,8 @@ const dynamoConfig = {
   region: process.env.DYNAMODB_REGION || 'us-east-1'
 };
 
-// Use local DynamoDB for development
-if (process.env.NODE_ENV === 'development') {
+// Use local DynamoDB for development and test
+if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
   dynamoConfig.endpoint = process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000';
   // DynamoDB Local requires these specific dummy credentials
   dynamoConfig.credentials = {

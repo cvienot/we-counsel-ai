@@ -172,6 +172,29 @@ class AppLocalizationsEs extends AppLocalizations {
   String get sendAnotherInvitation => 'Enviar otra invitación';
 
   @override
+  String get getStartedTitle => 'Para empezar';
+
+  @override
+  String getStartedGreeting(String name) {
+    return '¡Hola $name! Para comenzar su viaje de coaching, invite a su pareja a unirse en We Coach.';
+  }
+
+  @override
+  String get howItWorks => 'Cómo funciona';
+
+  @override
+  String get getStartedExplanation =>
+      'Envíe una invitación a su pareja por correo electrónico. Una vez que cree su cuenta y acepte, estarán conectados y podrán comenzar sus sesiones de coaching juntos.';
+
+  @override
+  String get invitePartnerButton => 'Invitar a su pareja';
+
+  @override
+  String pendingInvitationInfo(String email) {
+    return 'Se envió una invitación a $email. Una vez que cree su cuenta y acepte, estarán conectados.';
+  }
+
+  @override
   String get invitePartnerMessage =>
       'Comparta esta invitación con su pareja para comenzar su viaje de consejería juntos.';
 

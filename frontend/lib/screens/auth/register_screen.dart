@@ -91,9 +91,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
             showSuccessSnackBar(context, l10n.accountCreatedJoinedPartner);
           }
           
-          // Don't manually navigate - let the router redirect automatically
-          // based on the updated auth state (isAuthenticated: true)
-          // The router will see we're authenticated and redirect to /home
+          // Navigate to the conversation screen
+          context.go('/main-thread');
         }
       } catch (e) {
         if (mounted) {

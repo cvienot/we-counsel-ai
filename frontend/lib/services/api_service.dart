@@ -9,6 +9,12 @@ class ApiService {
   static final String _baseUrl = Environment.apiBaseUrl;
   static const _storage = FlutterSecureStorage();
   static const String _tokenKey = 'auth_token';
+
+  // In-memory fallback when Keychain/SecureStorage is unavailable (e.g. macOS integration tests)
+  static String? _memoryToken;
+
+  /// Clear in-memory token state. Used by integration tests between test cases.
+  static void resetMemoryToken() => _memoryToken = null;
   
   // Toggle for detailed API logging
   static bool enableDetailedLogging = !Environment.isProduction;
@@ -90,18 +96,30 @@ class ApiService {
   // Token management
   Future<String?> getToken() async {
     try {
-      return await _storage.read(key: _tokenKey);
+      final token = await _storage.read(key: _tokenKey);
+      if (token != null) return token;
     } catch (e) {
-      return null;
+      // FlutterSecureStorage unavailable (e.g. macOS Keychain entitlement missing)
     }
+    return _memoryToken;
   }
 
   Future<void> setToken(String token) async {
-    await _storage.write(key: _tokenKey, value: token);
+    _memoryToken = token;
+    try {
+      await _storage.write(key: _tokenKey, value: token);
+    } catch (e) {
+      print('⚠️ Failed to store token in secure storage, using in-memory fallback: $e');
+    }
   }
 
   Future<void> clearToken() async {
-    await _storage.delete(key: _tokenKey);
+    _memoryToken = null;
+    try {
+      await _storage.delete(key: _tokenKey);
+    } catch (e) {
+      print('⚠️ Failed to clear token from secure storage: $e');
+    }
   }
 
   // Utility methods for debugging

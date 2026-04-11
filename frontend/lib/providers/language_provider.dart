@@ -104,7 +104,10 @@ class LanguageNotifier extends StateNotifier<LanguageState> {
       if (syncToBackend) {
         try {
           final apiService = ApiService();
-          await apiService.updateLanguage(locale.languageCode);
+          final token = await apiService.getToken();
+          if (token != null && token.isNotEmpty) {
+            await apiService.updateLanguage(locale.languageCode);
+          }
         } catch (e) {
           // Don't fail the language change if backend sync fails
           print('Failed to sync language to backend: $e');
