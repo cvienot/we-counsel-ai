@@ -2,23 +2,30 @@ const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
 const { DynamoDBDocumentClient, PutCommand, GetCommand, QueryCommand, UpdateCommand, DeleteCommand, ScanCommand } = require('@aws-sdk/lib-dynamodb');
 
 // Configure DynamoDB client
+const isProduction = process.env.NODE_ENV === 'production';
 const dynamoConfig = {
   region: process.env.DYNAMODB_REGION || 'us-east-1'
 };
 
-// Use local DynamoDB for development and test
-if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
+// SAFETY: Only production uses remote AWS DynamoDB.
+// All other environments (development, test, undefined) MUST use local DynamoDB
+// to prevent test data from leaking into production.
+if (isProduction) {
+  if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
+    dynamoConfig.credentials = {
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+    };
+  }
+  // In production without explicit credentials, SDK uses IAM role (App Runner)
+} else {
   dynamoConfig.endpoint = process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000';
   // DynamoDB Local requires these specific dummy credentials
   dynamoConfig.credentials = {
     accessKeyId: 'local',
     secretAccessKey: 'local'
   };
-} else if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
-  dynamoConfig.credentials = {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-  };
+  console.log(`🔒 Database: using LOCAL DynamoDB (${dynamoConfig.endpoint}) [NODE_ENV=${process.env.NODE_ENV}]`);
 }
 
 const client = new DynamoDBClient(dynamoConfig);
