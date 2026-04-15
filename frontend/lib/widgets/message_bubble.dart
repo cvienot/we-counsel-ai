@@ -3,18 +3,23 @@ import '../models/message.dart';
 import '../l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:markdown/markdown.dart' as md;
 import 'exercise_suggestion_card.dart';
 
 class MessageBubble extends StatelessWidget {
   final Message message;
   final bool isCurrentUser;
   final Function(String exerciseId)? onExerciseSuggestion;
+  final String? currentUserName;
+  final String? partnerName;
 
   const MessageBubble({
     super.key,
     required this.message,
     required this.isCurrentUser,
     this.onExerciseSuggestion,
+    this.currentUserName,
+    this.partnerName,
   });
 
   String _getLocalizedSenderName(BuildContext context) {
@@ -127,6 +132,14 @@ class MessageBubble extends StatelessWidget {
                       MarkdownBody(
                         data: _getCleanContent(),
                         selectable: true,
+                        inlineSyntaxes: [MentionSyntax()],
+                        builders: {
+                          'mention': MentionBuilder(
+                            currentUserName: currentUserName,
+                            partnerName: partnerName,
+                            baseTextColor: _getTextColor(context),
+                          ),
+                        },
                         styleSheet: MarkdownStyleSheet(
                           p: theme.textTheme.bodyMedium?.copyWith(
                             color: _getTextColor(context),
@@ -253,5 +266,86 @@ class MessageBubble extends StatelessWidget {
       return suggestion.cleanContent;
     }
     return message.content;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Custom Markdown inline syntax for @mentions
+// ---------------------------------------------------------------------------
+
+/// Parses `@Name` tokens into a custom `mention` element.
+class MentionSyntax extends md.InlineSyntax {
+  // Match @Word (including Unicode letters, digits, hyphens, underscores)
+  MentionSyntax() : super(r'@([\w\u00C0-\u024F-]+)');
+
+  @override
+  bool onMatch(md.InlineParser parser, Match match) {
+    final name = match[1]!;
+    final el = md.Element.text('mention', '@$name');
+    el.attributes['name'] = name;
+    parser.addNode(el);
+    return true;
+  }
+}
+
+/// Renders `mention` elements as highlighted chips with different colors
+/// for the current user vs. partner, similar to Slack.
+class MentionBuilder extends MarkdownElementBuilder {
+  final String? currentUserName;
+  final String? partnerName;
+  final Color baseTextColor;
+
+  // Slack-inspired colors
+  static const _currentUserColor = Color(0xFF1264A3); // Blue
+  static const _partnerColor = Color(0xFF9C27B0); // Purple
+
+  MentionBuilder({
+    this.currentUserName,
+    this.partnerName,
+    this.baseTextColor = Colors.black,
+  });
+
+  @override
+  Widget visitElementAfterWithContext(
+    BuildContext context,
+    md.Element element,
+    TextStyle? preferredStyle,
+    TextStyle? parentStyle,
+  ) {
+    final name = element.attributes['name'] ?? '';
+    final fullText = element.textContent;
+
+    final isCurrentUser = currentUserName != null &&
+        name.toLowerCase() == currentUserName!.toLowerCase();
+    final isPartner = partnerName != null &&
+        name.toLowerCase() == partnerName!.toLowerCase();
+
+    final Color chipColor;
+    final Color textColor;
+    if (isCurrentUser) {
+      chipColor = _currentUserColor;
+      textColor = _currentUserColor;
+    } else if (isPartner) {
+      chipColor = _partnerColor;
+      textColor = _partnerColor;
+    } else {
+      chipColor = Colors.grey;
+      textColor = Colors.grey.shade700;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+      decoration: BoxDecoration(
+        color: chipColor.withOpacity(0.15),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Text(
+        fullText,
+        style: (preferredStyle ?? const TextStyle()).copyWith(
+          color: textColor,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
   }
 }

@@ -5,6 +5,7 @@ import '../../l10n/app_localizations.dart';
 import '../../providers/conversation_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../widgets/message_bubble.dart';
+import '../../widgets/mention_text.dart';
 import '../../widgets/active_exercise_banner.dart';
 import '../../services/exercise_service.dart';
 import '../../services/api_service.dart';
@@ -569,6 +570,8 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                                 return MessageBubble(
                                   message: message,
                                   isCurrentUser: message.senderId == currentUser?.userId,
+                                  currentUserName: currentUser?.firstName,
+                                  partnerName: currentUser?.partner?.firstName,
                                   onExerciseSuggestion: mainThread != null ? (exerciseId) {
                                     // Navigate to exercise screen
                                     context.push('/exercise', extra: {
@@ -589,6 +592,8 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                                 return _StreamingMessageBubble(
                                   content: streamingContent,
                                   isStreaming: true,
+                                  currentUserName: currentUser?.firstName,
+                                  partnerName: currentUser?.partner?.firstName,
                                 );
                               }
                               
@@ -919,10 +924,14 @@ class _TypingAnimationState extends State<_TypingAnimation>
 class _StreamingMessageBubble extends StatelessWidget {
   final String content;
   final bool isStreaming;
+  final String? currentUserName;
+  final String? partnerName;
 
   const _StreamingMessageBubble({
     required this.content,
     required this.isStreaming,
+    this.currentUserName,
+    this.partnerName,
   });
 
   @override
@@ -978,9 +987,11 @@ class _StreamingMessageBubble extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (content.isNotEmpty)
-                        Text(
-                          content,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        MentionText(
+                          text: content,
+                          currentUserName: currentUserName,
+                          partnerName: partnerName,
+                          baseStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             color: Theme.of(context).colorScheme.onSurface,
                           ),
                         ),
