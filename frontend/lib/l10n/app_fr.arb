@@ -179,6 +179,7 @@
   "mustAcceptTerms": "Vous devez accepter les Conditions d'Utilisation pour créer un compte",
   "accountCreatedJoinedPartner": "Compte créé et partenaire rejoint avec succès !",
   "registrationFailed": "Échec de l'inscription",
+  "emailAlreadyExists": "Un compte avec cet email existe déjà. Veuillez vous connecter ou utiliser un autre email.",
   "alreadyHaveAccountSignIn": "Vous avez déjà un compte ? Connectez-vous",
 
   "joinYourPartner": "Rejoignez votre Partenaire",

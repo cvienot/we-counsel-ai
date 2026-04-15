@@ -214,6 +214,7 @@
   "mustAcceptTerms": "You must accept the Terms of Service to create an account",
   "accountCreatedJoinedPartner": "Account created and successfully joined your partner!",
   "registrationFailed": "Registration failed",
+  "emailAlreadyExists": "An account with this email already exists. Please log in or use a different email.",
   "alreadyHaveAccountSignIn": "Already have an account? Sign in",
 
   "joinYourPartner": "Join Your Partner",

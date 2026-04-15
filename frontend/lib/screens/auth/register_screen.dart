@@ -97,7 +97,12 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       } catch (e) {
         if (mounted) {
           final l10n = AppLocalizations.of(context)!;
-          showErrorSnackBar(context, l10n.registrationFailed);
+          final msg = e.toString().replaceFirst('Exception: ', '');
+          if (msg.contains('already exists')) {
+            showErrorSnackBar(context, l10n.emailAlreadyExists);
+          } else {
+            showErrorSnackBar(context, '${l10n.registrationFailed}: $msg');
+          }
         }
       }
     }

@@ -517,6 +517,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get registrationFailed => 'Échec de l\'inscription';
 
   @override
+  String get emailAlreadyExists =>
+      'Un compte avec cet email existe déjà. Veuillez vous connecter ou utiliser un autre email.';
+
+  @override
   String get alreadyHaveAccountSignIn =>
       'Vous avez déjà un compte ? Connectez-vous';
 

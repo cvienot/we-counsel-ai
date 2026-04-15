@@ -179,6 +179,7 @@
   "mustAcceptTerms": "Debes aceptar los Términos de Servicio para crear una cuenta",
   "accountCreatedJoinedPartner": "¡Cuenta creada y pareja unida con éxito!",
   "registrationFailed": "Error de registro",
+  "emailAlreadyExists": "Ya existe una cuenta con este correo. Inicia sesión o usa otro correo.",
   "alreadyHaveAccountSignIn": "¿Ya tienes cuenta? Inicia sesión",
 
   "joinYourPartner": "Únete a tu Pareja",

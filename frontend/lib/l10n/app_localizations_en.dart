@@ -508,6 +508,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get registrationFailed => 'Registration failed';
 
   @override
+  String get emailAlreadyExists =>
+      'An account with this email already exists. Please log in or use a different email.';
+
+  @override
   String get alreadyHaveAccountSignIn => 'Already have an account? Sign in';
 
   @override

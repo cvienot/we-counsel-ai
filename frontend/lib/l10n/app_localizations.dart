@@ -1024,6 +1024,12 @@ abstract class AppLocalizations {
   /// **'Registration failed'**
   String get registrationFailed;
 
+  /// No description provided for @emailAlreadyExists.
+  ///
+  /// In en, this message translates to:
+  /// **'An account with this email already exists. Please log in or use a different email.'**
+  String get emailAlreadyExists;
+
   /// No description provided for @alreadyHaveAccountSignIn.
   ///
   /// In en, this message translates to:
