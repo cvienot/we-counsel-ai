@@ -94,7 +94,6 @@ frontend/ios/
 frontend/linux/
 frontend/macos/
 frontend/windows/
-frontend/web/
 
 # Flutter generated files
 frontend/lib/generated_plugin_registrant.dart

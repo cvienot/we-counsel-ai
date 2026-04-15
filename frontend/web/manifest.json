@@ -1,0 +1,35 @@
+{
+    "name": "We Counsel",
+    "short_name": "We Counsel",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#6B73FF",
+    "theme_color": "#6B73FF",
+    "description": "Couples coaching with AI relationship coach",
+    "orientation": "portrait-primary",
+    "prefer_related_applications": false,
+    "icons": [
+        {
+            "src": "icons/Icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-maskable-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "icons/Icon-maskable-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
+}
