@@ -39,9 +39,11 @@ class _InvitePartnerScreenState extends ConsumerState<InvitePartnerScreen> {
         
         if (mounted) {
           final email = _emailController.text.trim();
+          final outerContext = context; // Capture the page context
           showDialog(
             context: context,
-            builder: (context) => AlertDialog(
+            barrierDismissible: false,
+            builder: (dialogContext) => AlertDialog(
               title: Text(l10n.invitationSent),
               content: Text(
                 l10n.invitationSentMessage(email),
@@ -49,8 +51,8 @@ class _InvitePartnerScreenState extends ConsumerState<InvitePartnerScreen> {
               actions: [
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
-                    context.go('/main-thread');
+                    Navigator.of(dialogContext).pop();
+                    outerContext.go('/main-thread');
                   },
                   child: Text(l10n.ok),
                 ),
