@@ -1720,6 +1720,166 @@ void main() {
       print('✅ UI navigation and rendering');
       print('');
     });
+
+    testWidgets('Invite partner via UI navigates to waiting room on success',
+        (WidgetTester tester) async {
+      // Launch the app
+      app.main();
+      await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
+
+      // Test data
+      final userEmail = 'invite-ui-${DateTime.now().millisecondsSinceEpoch}@test.com';
+      final partnerEmail = 'partner-ui-${DateTime.now().millisecondsSinceEpoch}@test.com';
+      final userPassword = 'Test123!';
+
+      print('🧪 Starting Invite UI Navigation Test');
+      print('   User: $userEmail');
+      print('   Partner: $partnerEmail');
+
+      // ============================================
+      // STEP 1: Register user via UI
+      // ============================================
+      print('\n📝 Step 1: Register user via UI');
+
+      final foundLogin = await pumpUntilFound(
+        tester,
+        find.text('Don\'t have an account? Sign up'),
+        timeout: const Duration(seconds: 10),
+      );
+      expect(foundLogin, isTrue, reason: 'Login screen should appear');
+
+      await tester.tap(find.text('Don\'t have an account? Sign up'));
+      await settleWithTimeout(tester, timeout: const Duration(seconds: 2));
+
+      final allFields = find.byType(TextFormField);
+      await tester.enterText(allFields.at(0), 'InviteTest');
+      await tester.enterText(allFields.at(1), 'User');
+      await tester.enterText(allFields.at(2), userEmail);
+      await tester.enterText(allFields.at(3), userPassword);
+      await tester.enterText(allFields.at(4), userPassword);
+
+      await tester.dragUntilVisible(
+        find.byType(Checkbox),
+        find.byType(SingleChildScrollView),
+        const Offset(0, -100),
+      );
+      await settleWithTimeout(tester, timeout: const Duration(seconds: 1));
+
+      await tester.tap(find.byType(Checkbox));
+      await settleWithTimeout(tester, timeout: const Duration(seconds: 1));
+
+      await tester.dragUntilVisible(
+        find.widgetWithText(ElevatedButton, 'Create Account'),
+        find.byType(SingleChildScrollView),
+        const Offset(0, -100),
+      );
+      await settleWithTimeout(tester, timeout: const Duration(seconds: 1));
+
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Create Account'));
+
+      final foundPlan = await pumpUntilFound(
+        tester,
+        find.text('Continue with Free'),
+        timeout: const Duration(seconds: 10),
+      );
+      if (foundPlan) {
+        await tester.tap(find.text('Continue with Free'));
+        await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
+      }
+
+      // Wait for waiting room (no partner yet)
+      final onWaitingRoom = await pumpUntilFound(
+        tester,
+        find.text('Invite Your Partner'),
+        timeout: const Duration(seconds: 15),
+      );
+      expect(onWaitingRoom, isTrue, reason: 'Should be on waiting room after registration');
+      print('   ✅ User registered, on waiting room');
+
+      // ============================================
+      // STEP 2: Tap "Invite Your Partner" button
+      // ============================================
+      print('\n📧 Step 2: Navigate to invite screen via UI');
+
+      await tester.tap(find.text('Invite Your Partner'));
+      await settleWithTimeout(tester, timeout: const Duration(seconds: 2));
+
+      // Verify we're on the invite screen
+      final onInviteScreen = await pumpUntilFound(
+        tester,
+        find.text('Send Invitation'),
+        timeout: const Duration(seconds: 5),
+      );
+      expect(onInviteScreen, isTrue, reason: 'Should navigate to invite partner screen');
+      print('   ✅ On invite partner screen');
+
+      // ============================================
+      // STEP 3: Fill and submit invitation form
+      // ============================================
+      print('\n📨 Step 3: Send invitation via UI');
+
+      // Find the email field on the invite screen
+      final emailField = find.byType(TextFormField).first;
+      await tester.enterText(emailField, partnerEmail);
+      await settleWithTimeout(tester, timeout: const Duration(seconds: 1));
+
+      // Scroll to make "Send Invitation" button visible if needed
+      final sendButton = find.widgetWithText(ElevatedButton, 'Send Invitation');
+      await tester.dragUntilVisible(
+        sendButton,
+        find.byType(SingleChildScrollView),
+        const Offset(0, -100),
+      );
+      await settleWithTimeout(tester, timeout: const Duration(seconds: 1));
+
+      // Tap send
+      await tester.tap(sendButton);
+
+      // ============================================
+      // STEP 4: Verify navigation back to waiting room
+      // ============================================
+      print('\n🔄 Step 4: Verify redirect to waiting room after invite');
+
+      // The invite screen should disappear and we should land on waiting room
+      // with a pending invitation indicator
+      final inviteScreenGone = await pumpUntilGone(
+        tester,
+        find.text('Invite Your Partner'),  // AppBar title on invite screen
+        timeout: const Duration(seconds: 10),
+      );
+
+      // Wait for the waiting room or pending invitation info to appear
+      final backOnWaitingRoom = await pumpUntilFound(
+        tester,
+        find.textContaining(partnerEmail),
+        timeout: const Duration(seconds: 10),
+      );
+
+      // Verify we're NOT still on the invite screen
+      final stillOnInvite = find.widgetWithText(ElevatedButton, 'Send Invitation');
+      expect(stillOnInvite, findsNothing,
+          reason: 'Should have navigated away from invite screen after sending');
+
+      expect(backOnWaitingRoom, isTrue,
+          reason: 'Should be back on waiting room showing pending invitation for $partnerEmail');
+      print('   ✅ Navigated back to waiting room with pending invitation');
+
+      // Verify invitation email was sent
+      final inviteEmail = await testHelper.waitForEmail(
+        to: partnerEmail,
+        type: 'invitation',
+        timeout: const Duration(seconds: 5),
+      );
+      expect(inviteEmail, isNotNull, reason: 'Invitation email should be sent');
+      print('   ✅ Invitation email sent to $partnerEmail');
+
+      print('\n🎉 Invite UI Navigation Test PASSED');
+      print('✅ Invite form submits successfully');
+      print('✅ User redirected to waiting room after invite');
+      print('✅ Pending invitation shown with partner email');
+      print('✅ Invitation email sent');
+      print('');
+    });
   });
 
   group('Language Change E2E Test', () {
