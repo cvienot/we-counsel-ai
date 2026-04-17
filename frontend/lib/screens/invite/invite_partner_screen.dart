@@ -31,34 +31,16 @@ class _InvitePartnerScreenState extends ConsumerState<InvitePartnerScreen> {
     if (_formKey.currentState!.validate()) {
       try {
         final l10n = AppLocalizations.of(context)!;
+        final email = _emailController.text.trim();
         
         await ref.read(authProvider.notifier).invitePartner(
-          email: _emailController.text.trim(),
+          email: email,
           message: _messageController.text.trim(),
         );
         
         if (mounted) {
-          final email = _emailController.text.trim();
-          final outerContext = context; // Capture the page context
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (dialogContext) => AlertDialog(
-              title: Text(l10n.invitationSent),
-              content: Text(
-                l10n.invitationSentMessage(email),
-              ),
-              actions: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(dialogContext).pop();
-                    outerContext.go('/main-thread');
-                  },
-                  child: Text(l10n.ok),
-                ),
-              ],
-            ),
-          );
+          showSuccessSnackBar(context, l10n.invitationSentMessage(email));
+          context.go('/main-thread');
         }
       } catch (e) {
         if (mounted) {

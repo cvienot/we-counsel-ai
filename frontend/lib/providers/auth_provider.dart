@@ -256,8 +256,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
     required String email,
     String? message,
   }) async {
-    state = state.copyWith(isLoading: true, error: null);
-    
     try {
       await _apiService.invitePartner(
         email: email,
@@ -266,13 +264,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       
       // Refresh user data to get pendingInvitation info
       await getCurrentUser();
-      
-      state = state.copyWith(isLoading: false);
     } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      );
       rethrow;
     }
   }
