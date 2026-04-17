@@ -288,7 +288,7 @@ class MentionSyntax extends md.InlineSyntax {
   }
 }
 
-/// Renders `mention` elements as highlighted chips with different colors
+/// Renders `mention` elements as inline highlighted chips with different colors
 /// for the current user vs. partner, similar to Slack.
 class MentionBuilder extends MarkdownElementBuilder {
   final String? currentUserName;
@@ -304,6 +304,11 @@ class MentionBuilder extends MarkdownElementBuilder {
     this.partnerName,
     this.baseTextColor = Colors.black,
   });
+
+  @override
+  void visitElementBefore(md.Element element) {
+    // Prevent default text handling — we handle it in visitElementAfterWithContext
+  }
 
   @override
   Widget visitElementAfterWithContext(
@@ -333,17 +338,23 @@ class MentionBuilder extends MarkdownElementBuilder {
       textColor = Colors.grey.shade700;
     }
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-      decoration: BoxDecoration(
-        color: chipColor.withOpacity(0.15),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Text(
-        fullText,
-        style: (preferredStyle ?? const TextStyle()).copyWith(
-          color: textColor,
-          fontWeight: FontWeight.w600,
+    // Use RichText with WidgetSpan to keep the mention inline
+    return RichText(
+      text: WidgetSpan(
+        alignment: PlaceholderAlignment.middle,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+          decoration: BoxDecoration(
+            color: chipColor.withOpacity(0.15),
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Text(
+            fullText,
+            style: (preferredStyle ?? const TextStyle()).copyWith(
+              color: textColor,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ),
       ),
     );
