@@ -76,10 +76,22 @@
         <span class="logo-text">We Connect</span>
       </a>
       <div class="nav-links" id="navLinks">
-        <a href="#features">Features</a>
-        <a href="#how-it-works">How It Works</a>
-        <a href="#pricing">Pricing</a>
-        <a href="https://app.we-connect-app.com" class="btn btn-sm btn-primary">Open App</a>
+        <a href="#features" data-i18n="nav.features">Features</a>
+        <a href="#how-it-works" data-i18n="nav.howItWorks">How It Works</a>
+        <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
+        <a href="https://app.we-connect-app.com" class="btn btn-sm btn-primary" data-i18n="nav.openApp">Open App</a>
+        <div class="lang-switcher" id="langSwitcher">
+          <button class="lang-btn" id="langBtn" aria-label="Change language">
+            <span class="lang-flag" id="langFlag">🇬🇧</span>
+            <span class="lang-code" id="langCode">EN</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="lang-dropdown" id="langDropdown">
+            <button class="lang-option" data-lang="en"><span>🇬🇧</span> English</button>
+            <button class="lang-option" data-lang="fr"><span>🇫🇷</span> Français</button>
+            <button class="lang-option" data-lang="es"><span>🇪🇸</span> Español</button>
+          </div>
+        </div>
       </div>
       <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
         <span></span>
@@ -94,18 +106,18 @@
   <section class="hero">
     <div class="hero-bg"></div>
     <div class="container hero-content">
-      <div class="hero-badge" data-animate>Your AI Relationship Coach</div>
-      <h1 data-animate>Strengthen Your<br>Relationship <span class="gradient-text">Together</span></h1>
-      <p class="hero-subtitle" data-animate>
+      <div class="hero-badge" data-animate data-i18n="hero.badge">Your AI Relationship Coach</div>
+      <h1 data-animate data-i18n-html="hero.title">Strengthen Your<br>Relationship <span class="gradient-text">Together</span></h1>
+      <p class="hero-subtitle" data-animate data-i18n="hero.subtitle">
         Communicate better, resolve conflicts, and grow closer with guided exercises
         and a personal AI coach — right from your phone.
       </p>
       <div class="hero-actions" data-animate>
         <a href="https://app.we-connect-app.com" class="btn btn-primary btn-lg">
-          Get Started Free
+          <span data-i18n="hero.cta">Get Started Free</span>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
-        <a href="#how-it-works" class="btn btn-outline btn-lg">See How It Works</a>
+        <a href="#how-it-works" class="btn btn-outline btn-lg" data-i18n="hero.secondary">See How It Works</a>
       </div>
       <div class="hero-social-proof" data-animate>
         <div class="avatars">
@@ -114,7 +126,7 @@
           <div class="avatar" style="background: #4ECDC4">J</div>
           <div class="avatar" style="background: #FFB347">S</div>
         </div>
-        <span>Join couples building stronger relationships</span>
+        <span data-i18n="hero.social">Join couples building stronger relationships</span>
       </div>
     </div>
     <div class="hero-visual" data-animate>
@@ -123,19 +135,19 @@
           <div class="mock-header">
             <div class="mock-avatar">🤖</div>
             <div>
-              <div class="mock-name">AI Coach</div>
-              <div class="mock-status">Online</div>
+            <div class="mock-name" data-i18n="mock.name">AI Coach</div>
+            <div class="mock-status" data-i18n="mock.status">Online</div>
             </div>
           </div>
           <div class="mock-messages">
             <div class="mock-msg mock-msg-ai">
-              <p>It sounds like you both care deeply about this. Let's explore what each of you needs to feel heard.</p>
+              <p data-i18n="mock.msg1">It sounds like you both care deeply about this. Let's explore what each of you needs to feel heard.</p>
             </div>
             <div class="mock-msg mock-msg-user">
-              <p>I just want us to be better at talking things through.</p>
+              <p data-i18n="mock.msg2">I just want us to be better at talking things through.</p>
             </div>
             <div class="mock-msg mock-msg-ai">
-              <p>That's a wonderful goal! Here's an exercise that can help you practice active listening together. 💜</p>
+              <p data-i18n="mock.msg3">That's a wonderful goal! Here's an exercise that can help you practice active listening together. 💜</p>
             </div>
           </div>
         </div>
@@ -147,40 +159,40 @@
   <section class="features" id="features">
     <div class="container">
       <div class="section-header" data-animate>
-        <span class="section-label">Features</span>
-        <h2>Everything you need to<br><span class="gradient-text">grow together</span></h2>
-        <p>Tools designed by relationship experts, powered by AI, built for real couples.</p>
+        <span class="section-label" data-i18n="features.label">Features</span>
+        <h2 data-i18n-html="features.title">Everything you need to<br><span class="gradient-text">grow together</span></h2>
+        <p data-i18n="features.subtitle">Tools designed by relationship experts, powered by AI, built for real couples.</p>
       </div>
       <div class="features-grid">
         <div class="feature-card" data-animate>
           <div class="feature-icon">🧠</div>
-          <h3>AI Relationship Coach</h3>
-          <p>Get personalized guidance from an AI trained on proven relationship therapy techniques. Available 24/7, judgment-free.</p>
+          <h3 data-i18n="feature.ai.title">AI Relationship Coach</h3>
+          <p data-i18n="feature.ai.desc">Get personalized guidance from an AI trained on proven relationship therapy techniques. Available 24/7, judgment-free.</p>
         </div>
         <div class="feature-card" data-animate>
           <div class="feature-icon">💬</div>
-          <h3>Partner Messaging</h3>
-          <p>A private, safe space to communicate with your partner. Share thoughts, feelings, and work through challenges together.</p>
+          <h3 data-i18n="feature.messaging.title">Partner Messaging</h3>
+          <p data-i18n="feature.messaging.desc">A private, safe space to communicate with your partner. Share thoughts, feelings, and work through challenges together.</p>
         </div>
         <div class="feature-card" data-animate>
           <div class="feature-icon">🎯</div>
-          <h3>Guided Exercises</h3>
-          <p>Interactive exercises designed to build communication skills, deepen empathy, and strengthen your connection.</p>
+          <h3 data-i18n="feature.exercises.title">Guided Exercises</h3>
+          <p data-i18n="feature.exercises.desc">Interactive exercises designed to build communication skills, deepen empathy, and strengthen your connection.</p>
         </div>
         <div class="feature-card" data-animate>
           <div class="feature-icon">📊</div>
-          <h3>Progress Dashboard</h3>
-          <p>Track your growth as a couple. See your streaks, completed exercises, and relationship health score over time.</p>
+          <h3 data-i18n="feature.dashboard.title">Progress Dashboard</h3>
+          <p data-i18n="feature.dashboard.desc">Track your growth as a couple. See your streaks, completed exercises, and relationship health score over time.</p>
         </div>
         <div class="feature-card" data-animate>
           <div class="feature-icon">🌍</div>
-          <h3>Multilingual</h3>
-          <p>Available in English, French, and Spanish — so you can connect in the language most comfortable for you.</p>
+          <h3 data-i18n="feature.multilingual.title">Multilingual</h3>
+          <p data-i18n="feature.multilingual.desc">Available in English, French, and Spanish — so you can connect in the language most comfortable for you.</p>
         </div>
         <div class="feature-card" data-animate>
           <div class="feature-icon">🔒</div>
-          <h3>Private &amp; Secure</h3>
-          <p>Your conversations are encrypted and private. We never share your data. Your relationship, your business.</p>
+          <h3 data-i18n="feature.privacy.title">Private &amp; Secure</h3>
+          <p data-i18n="feature.privacy.desc">Your conversations are encrypted and private. We never share your data. Your relationship, your business.</p>
         </div>
       </div>
     </div>
@@ -190,32 +202,32 @@
   <section class="how-it-works" id="how-it-works">
     <div class="container">
       <div class="section-header" data-animate>
-        <span class="section-label">How It Works</span>
-        <h2>Start in <span class="gradient-text">3 simple steps</span></h2>
-        <p>Getting started takes less than 2 minutes.</p>
+        <span class="section-label" data-i18n="howItWorks.label">How It Works</span>
+        <h2 data-i18n-html="howItWorks.title">Start in <span class="gradient-text">3 simple steps</span></h2>
+        <p data-i18n="howItWorks.subtitle">Getting started takes less than 2 minutes.</p>
       </div>
       <div class="steps">
         <div class="step" data-animate>
           <div class="step-number">1</div>
           <div class="step-content">
-            <h3>Create Your Account</h3>
-            <p>Sign up for free in seconds. No credit card required. Start exploring right away.</p>
+            <h3 data-i18n="step1.title">Create Your Account</h3>
+            <p data-i18n="step1.desc">Sign up for free in seconds. No credit card required. Start exploring right away.</p>
           </div>
         </div>
         <div class="step-connector" data-animate></div>
         <div class="step" data-animate>
           <div class="step-number">2</div>
           <div class="step-content">
-            <h3>Invite Your Partner</h3>
-            <p>Send a simple email invitation. Your partner creates their account and you're automatically connected.</p>
+            <h3 data-i18n="step2.title">Invite Your Partner</h3>
+            <p data-i18n="step2.desc">Send a simple email invitation. Your partner creates their account and you're automatically connected.</p>
           </div>
         </div>
         <div class="step-connector" data-animate></div>
         <div class="step" data-animate>
           <div class="step-number">3</div>
           <div class="step-content">
-            <h3>Start Growing Together</h3>
-            <p>Chat with your AI coach, try guided exercises, and message your partner — all in one place.</p>
+            <h3 data-i18n="step3.title">Start Growing Together</h3>
+            <p data-i18n="step3.desc">Chat with your AI coach, try guided exercises, and message your partner — all in one place.</p>
           </div>
         </div>
       </div>
@@ -226,75 +238,75 @@
   <section class="pricing" id="pricing">
     <div class="container">
       <div class="section-header" data-animate>
-        <span class="section-label">Pricing</span>
-        <h2>Plans that <span class="gradient-text">grow with you</span></h2>
-        <p>Start free, upgrade when you're ready. Cancel anytime.</p>
+        <span class="section-label" data-i18n="pricing.label">Pricing</span>
+        <h2 data-i18n-html="pricing.title">Plans that <span class="gradient-text">grow with you</span></h2>
+        <p data-i18n="pricing.subtitle">Start free, upgrade when you're ready. Cancel anytime.</p>
       </div>
       <div class="billing-toggle" data-animate>
-        <span class="billing-label" id="monthlyLabel">Monthly</span>
+        <span class="billing-label" id="monthlyLabel" data-i18n="pricing.monthly">Monthly</span>
         <button class="toggle" id="billingToggle" aria-label="Toggle annual billing">
           <span class="toggle-thumb"></span>
         </button>
         <span class="billing-label" id="annualLabel">
-          Annual
-          <span class="billing-badge">Save 20%</span>
+          <span data-i18n="pricing.annual">Annual</span>
+          <span class="billing-badge" data-i18n="pricing.save">Save 20%</span>
         </span>
       </div>
       <div class="pricing-grid">
         <div class="pricing-card" data-animate>
           <div class="pricing-header">
-            <h3>Free</h3>
+            <h3 data-i18n="plan.free.name">Free</h3>
             <div class="pricing-price">
               <span class="price">€0</span>
-              <span class="period">/month</span>
+              <span class="period" data-i18n="pricing.month">/month</span>
             </div>
-            <p class="pricing-desc">Perfect for trying things out</p>
+            <p class="pricing-desc" data-i18n="plan.free.desc">Perfect for trying things out</p>
           </div>
           <ul class="pricing-features">
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> 10 AI coach messages/month</li>
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Unlimited partner messaging</li>
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Basic exercises</li>
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Progress dashboard</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="plan.free.f1">10 AI coach messages/month</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="plan.free.f2">Unlimited partner messaging</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="plan.free.f3">Basic exercises</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="plan.free.f4">Progress dashboard</span></li>
           </ul>
-          <a href="https://app.we-connect-app.com" class="btn btn-outline btn-block">Get Started</a>
+          <a href="https://app.we-connect-app.com" class="btn btn-outline btn-block" data-i18n="plan.free.cta">Get Started</a>
         </div>
         <div class="pricing-card pricing-card-featured" data-animate>
-          <div class="pricing-popular">Most Popular</div>
+          <div class="pricing-popular" data-i18n="plan.essential.popular">Most Popular</div>
           <div class="pricing-header">
-            <h3>Essential</h3>
+            <h3 data-i18n="plan.essential.name">Essential</h3>
             <div class="pricing-price">
               <span class="price" data-monthly="9.99" data-annual="7.99">€9.99</span>
-              <span class="period">/month</span>
+              <span class="period" data-i18n="pricing.month">/month</span>
             </div>
-            <p class="pricing-desc">For couples getting serious</p>
+            <p class="pricing-desc" data-i18n="plan.essential.desc">For couples getting serious</p>
           </div>
           <ul class="pricing-features">
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> 100 AI coach messages/month</li>
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Unlimited partner messaging</li>
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> All guided exercises</li>
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Progress dashboard</li>
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Conversation summaries</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="plan.essential.f1">100 AI coach messages/month</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="plan.essential.f2">Unlimited partner messaging</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="plan.essential.f3">All guided exercises</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="plan.essential.f4">Progress dashboard</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="plan.essential.f5">Conversation summaries</span></li>
           </ul>
-          <a href="https://app.we-connect-app.com" class="btn btn-primary btn-block">Start Free Trial</a>
+          <a href="https://app.we-connect-app.com" class="btn btn-primary btn-block" data-i18n="plan.essential.cta">Start Free Trial</a>
         </div>
         <div class="pricing-card" data-animate>
           <div class="pricing-header">
-            <h3>Premium</h3>
+            <h3 data-i18n="plan.premium.name">Premium</h3>
             <div class="pricing-price">
               <span class="price" data-monthly="19.99" data-annual="15.99">€19.99</span>
-              <span class="period">/month</span>
+              <span class="period" data-i18n="pricing.month">/month</span>
             </div>
-            <p class="pricing-desc">Unlimited coaching power</p>
+            <p class="pricing-desc" data-i18n="plan.premium.desc">Unlimited coaching power</p>
           </div>
           <ul class="pricing-features">
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <strong>Unlimited</strong> AI messages</li>
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Unlimited partner messaging</li>
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> All guided exercises</li>
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Progress dashboard</li>
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Conversation summaries</li>
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Priority support</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n-html="plan.premium.f1"><strong>Unlimited</strong> AI messages</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="plan.premium.f2">Unlimited partner messaging</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="plan.premium.f3">All guided exercises</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="plan.premium.f4">Progress dashboard</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="plan.premium.f5">Conversation summaries</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="plan.premium.f6">Priority support</span></li>
           </ul>
-          <a href="https://app.we-connect-app.com" class="btn btn-outline btn-block">Start Free Trial</a>
+          <a href="https://app.we-connect-app.com" class="btn btn-outline btn-block" data-i18n="plan.premium.cta">Start Free Trial</a>
         </div>
       </div>
     </div>
@@ -304,29 +316,29 @@
   <section class="faq" id="faq">
     <div class="container">
       <div class="section-header" data-animate>
-        <span class="section-label">FAQ</span>
-        <h2>Frequently asked <span class="gradient-text">questions</span></h2>
+        <span class="section-label" data-i18n="faq.label">FAQ</span>
+        <h2 data-i18n-html="faq.title">Frequently asked <span class="gradient-text">questions</span></h2>
       </div>
       <div class="faq-list" data-animate>
         <details class="faq-item">
-          <summary>Is We Connect a replacement for couples therapy?</summary>
-          <p>No. We Connect is a coaching tool designed to help couples improve communication and strengthen their relationship. It complements professional therapy but is not a substitute for it. If you're dealing with serious issues, we recommend consulting a licensed therapist.</p>
+          <summary data-i18n="faq.q1">Is We Connect a replacement for couples therapy?</summary>
+          <p data-i18n="faq.a1">No. We Connect is a coaching tool designed to help couples improve communication and strengthen their relationship. It complements professional therapy but is not a substitute for it. If you're dealing with serious issues, we recommend consulting a licensed therapist.</p>
         </details>
         <details class="faq-item">
-          <summary>How does the AI coach work?</summary>
-          <p>Our AI coach is trained on proven relationship therapy techniques including Gottman Method and Emotionally Focused Therapy. It provides personalized guidance, suggests exercises, and helps facilitate productive conversations between partners — available 24/7.</p>
+          <summary data-i18n="faq.q2">How does the AI coach work?</summary>
+          <p data-i18n="faq.a2">Our AI coach is trained on proven relationship therapy techniques including Gottman Method and Emotionally Focused Therapy. It provides personalized guidance, suggests exercises, and helps facilitate productive conversations between partners — available 24/7.</p>
         </details>
         <details class="faq-item">
-          <summary>Is my data private and secure?</summary>
-          <p>Absolutely. All conversations are encrypted and stored securely. We never sell or share your personal data. Your relationship is your business — we just provide the tools to help it grow.</p>
+          <summary data-i18n="faq.q3">Is my data private and secure?</summary>
+          <p data-i18n="faq.a3">Absolutely. All conversations are encrypted and stored securely. We never sell or share your personal data. Your relationship is your business — we just provide the tools to help it grow.</p>
         </details>
         <details class="faq-item">
-          <summary>Can I try it for free?</summary>
-          <p>Yes! The Free plan includes 10 AI coach messages per month, unlimited partner messaging, and access to basic exercises. No credit card required to get started.</p>
+          <summary data-i18n="faq.q4">Can I try it for free?</summary>
+          <p data-i18n="faq.a4">Yes! The Free plan includes 10 AI coach messages per month, unlimited partner messaging, and access to basic exercises. No credit card required to get started.</p>
         </details>
         <details class="faq-item">
-          <summary>What languages are supported?</summary>
-          <p>We Connect is available in English, French, and Spanish. The AI coach can respond in the language you choose, and the entire interface is translated.</p>
+          <summary data-i18n="faq.q5">What languages are supported?</summary>
+          <p data-i18n="faq.a5">We Connect is available in English, French, and Spanish. The AI coach can respond in the language you choose, and the entire interface is translated.</p>
         </details>
       </div>
     </div>
@@ -385,10 +397,10 @@
   <section class="cta">
     <div class="container">
       <div class="cta-content" data-animate>
-        <h2>Ready to build a stronger relationship?</h2>
-        <p>Join thousands of couples who are communicating better, resolving conflicts, and growing closer — with a little help from AI.</p>
+        <h2 data-i18n="cta.title">Ready to build a stronger relationship?</h2>
+        <p data-i18n="cta.subtitle">Join thousands of couples who are communicating better, resolving conflicts, and growing closer — with a little help from AI.</p>
         <a href="https://app.we-connect-app.com" class="btn btn-white btn-lg">
-          Get Started Free
+          <span data-i18n="cta.button">Get Started Free</span>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
       </div>
@@ -405,31 +417,32 @@
             <span class="logo-icon">💜</span>
             <span class="logo-text">We Connect</span>
           </a>
-          <p>AI-powered couples coaching to help you build a stronger, healthier relationship.</p>
+          <p data-i18n="footer.desc">AI-powered couples coaching to help you build a stronger, healthier relationship.</p>
         </div>
         <div class="footer-links">
-          <h4>Product</h4>
-          <a href="#features">Features</a>
-          <a href="#pricing">Pricing</a>
-          <a href="#how-it-works">How It Works</a>
-          <a href="https://app.we-connect-app.com">Open App</a>
+          <h4 data-i18n="footer.product">Product</h4>
+          <a href="#features" data-i18n="nav.features">Features</a>
+          <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
+          <a href="#how-it-works" data-i18n="nav.howItWorks">How It Works</a>
+          <a href="https://app.we-connect-app.com" data-i18n="nav.openApp">Open App</a>
         </div>
         <div class="footer-links">
-          <h4>Legal</h4>
-          <a href="https://app.we-connect-app.com/terms">Terms of Service</a>
-          <a href="https://app.we-connect-app.com/terms">Privacy Policy</a>
+          <h4 data-i18n="footer.legal">Legal</h4>
+          <a href="https://app.we-connect-app.com/terms" data-i18n="footer.terms">Terms of Service</a>
+          <a href="https://app.we-connect-app.com/terms" data-i18n="footer.privacy">Privacy Policy</a>
         </div>
         <div class="footer-links">
-          <h4>Support</h4>
-          <a href="mailto:support@we-connect-app.com">Contact Us</a>
+          <h4 data-i18n="footer.support">Support</h4>
+          <a href="mailto:support@we-connect-app.com" data-i18n="footer.contact">Contact Us</a>
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2026 We Connect. All rights reserved.</p>
+        <p data-i18n="footer.copyright">&copy; 2026 We Connect. All rights reserved.</p>
       </div>
     </div>
   </footer>
 
+  <script src="i18n.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

@@ -148,6 +148,107 @@ img {
   transition: var(--transition);
 }
 
+/* ========== Language Switcher ========== */
+.lang-switcher {
+  position: relative;
+  margin-left: 8px;
+}
+
+.lang-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-family: var(--font);
+  font-weight: 500;
+  color: var(--text);
+  transition: var(--transition);
+}
+
+.lang-btn:hover {
+  border-color: var(--primary);
+  background: var(--bg);
+}
+
+.lang-flag {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.lang-code {
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+}
+
+.lang-btn svg {
+  opacity: 0.5;
+  transition: var(--transition);
+}
+
+.lang-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  min-width: 140px;
+  z-index: 200;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+}
+
+.lang-dropdown.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.lang-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-family: var(--font);
+  color: var(--text);
+  transition: background 0.15s;
+}
+
+.lang-option:first-child {
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.lang-option:last-child {
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+
+.lang-option:hover {
+  background: rgba(107, 115, 255, 0.08);
+}
+
+.lang-option.active {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.lang-option span {
+  font-size: 1.1rem;
+}
+
 /* ========== Buttons ========== */
 .btn {
   display: inline-flex;
@@ -886,6 +987,16 @@ img {
 
   .nav-toggle {
     display: flex;
+  }
+
+  .lang-switcher {
+    margin-left: 0;
+    align-self: flex-start;
+  }
+
+  .lang-dropdown {
+    left: 0;
+    right: auto;
   }
 
   .hero {
