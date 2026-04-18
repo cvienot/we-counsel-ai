@@ -139,7 +139,7 @@ const translations = {
     "mock.name": "Coach IA",
     "mock.status": "En ligne",
     "mock.msg1": "On dirait que vous tenez tous les deux beaucoup à cela. Explorons ce dont chacun de vous a besoin pour se sentir entendu.",
-    "mock.msg2": "Je veux juste qu'on soit meilleurs pour discuter ensemble.",
+    "mock.msg2": "J'aimerais juste qu'on arrive à mieux se parler au quotidien.",
     "mock.msg3": "C'est un merveilleux objectif ! Voici un exercice qui peut vous aider à pratiquer l'écoute active ensemble. 💜",
 
     "features.label": "Fonctionnalités",
