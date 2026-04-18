@@ -936,8 +936,8 @@ void main() {
         body: jsonEncode({'email': user2Email}),
       );
       expect(inviteResp.statusCode, 201);
-      final invitationId = jsonDecode(inviteResp.body)['invitationId'];
-      print('   ✅ Invitation sent');
+      final invitationId = jsonDecode(inviteResp.body)['invitation']['invitationId'];
+      print('   ✅ Invitation sent (id: $invitationId)');
 
       // ============================================
       // STEP 3: Register User2 with free plan (no subscriptionTier)
