@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://we-connect-app.com/sitemap.xml
