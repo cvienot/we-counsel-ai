@@ -240,16 +240,20 @@ router.post('/accept-invitation/:invitationId', authenticateToken, async (req, r
     const nextResetDate = new Date();
     nextResetDate.setMonth(nextResetDate.getMonth() + 1, 1); // First day of next month
     
-    // Get the higher subscription tier from both users (if they selected during registration)
-    // For now, default to free tier when couple is created
+    // Get the higher subscription tier from both users' registration choices
+    const tierRank = { free: 0, essential: 1, premium: 2 };
+    const inviterPlan = inviter.selectedPlan || 'free';
+    const accepterPlan = req.user.selectedPlan || 'free';
+    const coupleTier = (tierRank[inviterPlan] || 0) >= (tierRank[accepterPlan] || 0) ? inviterPlan : accepterPlan;
+
     const coupleData = {
       coupleId,
       partner1Id: invitation.inviterId,
       partner2Id: userId,
       createdAt: currentTimestamp,
       isActive: true,
-      // Initialize subscription for the couple
-      subscriptionTier: 'free',
+      // Initialize subscription for the couple with the highest tier either partner selected
+      subscriptionTier: coupleTier,
       subscriptionStatus: 'active',
       subscriptionStartDate: currentTimestamp,
       aiMessagesUsed: 0,

@@ -875,6 +875,143 @@ void main() {
       print('');
     });
 
+    testWidgets('Couple inherits highest plan selected at registration',
+        (WidgetTester tester) async {
+      // Launch app (required by integration test framework)
+      app.main();
+      await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
+
+      final ts = DateTime.now().millisecondsSinceEpoch;
+      final user1Email = 'plan-inherit1-$ts@test.com';
+      final user2Email = 'plan-inherit2-$ts@test.com';
+      final password = 'Test123!';
+
+      print('🧪 Starting Plan Inheritance Test');
+      print('   User1 (premium): $user1Email');
+      print('   User2 (free): $user2Email');
+
+      // ============================================
+      // STEP 1: Register User1 with premium plan
+      // ============================================
+      print('\n📝 Step 1: Register User1 with premium plan');
+
+      final reg1 = await http.post(
+        Uri.parse('$apiUrl/api/auth/register'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'email': user1Email,
+          'password': password,
+          'firstName': 'Alice',
+          'lastName': 'Premium',
+          'language': 'en',
+          'termsAccepted': true,
+          'subscriptionTier': 'premium',
+        }),
+      );
+      expect(reg1.statusCode, 201, reason: 'User1 registration should succeed');
+      final user1Token = jsonDecode(reg1.body)['token'];
+      print('   ✅ User1 registered with premium selection');
+
+      // Verify selectedPlan is stored
+      final me1 = await http.get(
+        Uri.parse('$apiUrl/api/auth/me'),
+        headers: {'Authorization': 'Bearer $user1Token'},
+      );
+      final me1Data = jsonDecode(me1.body)['user'];
+      expect(me1Data['selectedPlan'], 'premium',
+          reason: 'User1 should have selectedPlan=premium stored');
+      print('   ✅ selectedPlan=premium stored on user');
+
+      // ============================================
+      // STEP 2: User1 invites User2
+      // ============================================
+      print('\n📧 Step 2: User1 invites User2');
+
+      final inviteResp = await http.post(
+        Uri.parse('$apiUrl/api/auth/invite-partner'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $user1Token',
+        },
+        body: jsonEncode({'email': user2Email}),
+      );
+      expect(inviteResp.statusCode, 201);
+      final invitationId = jsonDecode(inviteResp.body)['invitationId'];
+      print('   ✅ Invitation sent');
+
+      // ============================================
+      // STEP 3: Register User2 with free plan (no subscriptionTier)
+      // ============================================
+      print('\n📝 Step 3: Register User2 with free plan');
+
+      final reg2 = await http.post(
+        Uri.parse('$apiUrl/api/auth/register'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'email': user2Email,
+          'password': password,
+          'firstName': 'Bob',
+          'lastName': 'Free',
+          'language': 'en',
+          'termsAccepted': true,
+        }),
+      );
+      expect(reg2.statusCode, 201, reason: 'User2 registration should succeed');
+      final user2Token = jsonDecode(reg2.body)['token'];
+      print('   ✅ User2 registered (free/default)');
+
+      // ============================================
+      // STEP 4: User2 accepts invitation
+      // ============================================
+      print('\n🤝 Step 4: User2 accepts invitation');
+
+      final acceptResp = await http.post(
+        Uri.parse('$apiUrl/api/users/accept-invitation/$invitationId'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $user2Token',
+        },
+      );
+      expect(acceptResp.statusCode, 200, reason: 'Invitation should be accepted');
+      print('   ✅ Invitation accepted, couple formed');
+
+      // ============================================
+      // STEP 5: Verify couple has premium tier
+      // ============================================
+      print('\n🔍 Step 5: Verify couple inherited premium tier');
+
+      final usage1 = await http.get(
+        Uri.parse('$apiUrl/api/subscriptions/usage'),
+        headers: {'Authorization': 'Bearer $user1Token'},
+      );
+      expect(usage1.statusCode, 200);
+      final usage1Data = jsonDecode(usage1.body);
+      expect(usage1Data['usage']['tier'], 'premium',
+          reason: 'Couple should have premium tier from User1 selection');
+      print('   ✅ User1 sees premium tier: ${usage1Data['usage']['tier']}');
+
+      final usage2 = await http.get(
+        Uri.parse('$apiUrl/api/subscriptions/usage'),
+        headers: {'Authorization': 'Bearer $user2Token'},
+      );
+      expect(usage2.statusCode, 200);
+      final usage2Data = jsonDecode(usage2.body);
+      expect(usage2Data['usage']['tier'], 'premium',
+          reason: 'User2 should also see premium tier (couple-level)');
+      print('   ✅ User2 sees premium tier: ${usage2Data['usage']['tier']}');
+
+      print('\n🎉 ═══════════════════════════════════════════════════════');
+      print('🎉  PLAN INHERITANCE TEST PASSED!');
+      print('🎉 ═══════════════════════════════════════════════════════');
+      print('');
+      print('✅ User1 registered with premium selection');
+      print('✅ User2 registered with free (default)');
+      print('✅ Couple formed via invitation');
+      print('✅ Couple inherited premium (highest tier)');
+      print('✅ Both partners see premium tier');
+      print('');
+    });
+
     testWidgets('Guided exercise: two partners complete an exercise together',
         (WidgetTester tester) async {
 

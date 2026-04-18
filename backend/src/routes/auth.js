@@ -21,7 +21,7 @@ const generateToken = (userId) => {
 // @access  Public
 router.post('/register', async (req, res) => {
   try {
-    const { email, password, firstName, lastName, language, termsAccepted } = req.body;
+    const { email, password, firstName, lastName, language, termsAccepted, subscriptionTier } = req.body;
 
     // Validation
     if (!email || !password || !firstName || !lastName) {
@@ -84,9 +84,10 @@ router.post('/register', async (req, res) => {
       createdAt: currentTimestamp,
       isActive: true,
       termsAcceptedAt: currentTimestamp,
-      termsAcceptedVersion: `1.0.0-${userLanguage}` // Include language in version for tracking
+      termsAcceptedVersion: `1.0.0-${userLanguage}`, // Include language in version for tracking
+      ...(subscriptionTier && subscriptionTier !== 'free' ? { selectedPlan: subscriptionTier } : {})
       // Note: partnerId and coupleId are omitted (not set to null) for AWS SDK v3 compatibility
-      // Note: subscriptionTier is now on the couple, not the user
+      // Note: subscriptionTier is on the couple, selectedPlan is kept temporarily until couple is formed
     };
 
     const params = {
