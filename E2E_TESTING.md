@@ -15,9 +15,15 @@ This single command will:
 1. Start DynamoDB Local on port 8000
 2. Create database tables
 3. Start API on port 3001 with mocks enabled
-4. Build and serve Flutter web on port 8080
+4. Run the Flutter macOS integration test app
 5. Run integration tests
 6. Clean up everything
+
+## Window Visibility
+
+The UI test currently runs with `flutter test ... -d macos`, so Flutter launches a real macOS app window. Keep that window visible while the suite runs. Minimizing it or forcing it off-screen can stall the Flutter integration driver because the app may stop producing frames for `WidgetTester`.
+
+For less disruption during local runs, use a separate macOS Space or monitor. A headless Chrome/web runner would need to be implemented and verified separately from the current macOS test path.
 
 ## Architecture
 
@@ -28,8 +34,8 @@ This single command will:
 │                                                  │
 │  ┌──────────────┐    ┌──────────────┐           │
 │  │   Flutter    │───▶│   Backend    │           │
-│  │  localhost   │    │   localhost  │           │
-│  │    :8080     │    │    :3001     │           │
+│  │ macOS app    │    │   localhost  │           │
+│  │              │    │    :3001     │           │
 │  └──────────────┘    └───────┬──────┘           │
 │                              │                   │
 │                    ┌─────────┴─────────┐         │
@@ -206,7 +212,8 @@ NODE_ENV=test
 JWT_SECRET=test-secret-{timestamp}
 FRONTEND_URL=http://localhost:8080
 
-# Flutter
+# Flutter dart-defines
+API_BASE_URL=http://localhost:3001/api
 API_URL=http://localhost:3001
 ```
 
@@ -230,15 +237,11 @@ DYNAMODB_ENDPOINT=http://localhost:8000 \
   PORT=3001 \
   npm start
 
-# 4. In another terminal, build and serve Flutter
+# 4. In another terminal, run the Flutter macOS integration test app
 cd frontend
-flutter build web --dart-define=API_URL=http://localhost:3001
-cd build/web
-python3 -m http.server 8080
-
-# 5. Run tests
-cd ../..
-flutter test integration_test \
+flutter test integration_test/complete_journey_test.dart \
+  -d macos \
+  --dart-define=API_BASE_URL=http://localhost:3001/api \
   --dart-define=API_URL=http://localhost:3001
 ```
 
