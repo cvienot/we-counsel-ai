@@ -111,6 +111,19 @@ function validateSecrets() {
     'EMAIL_FROM'       // From environment variables
   ];
 
+  const productionRequired = [
+    'STRIPE_SECRET_KEY',
+    'STRIPE_WEBHOOK_SECRET',
+    'STRIPE_PRICE_ESSENTIAL_MONTHLY',
+    'STRIPE_PRICE_ESSENTIAL_ANNUAL',
+    'STRIPE_PRICE_PREMIUM_MONTHLY',
+    'STRIPE_PRICE_PREMIUM_ANNUAL'
+  ];
+
+  if (process.env.NODE_ENV === 'production') {
+    required.push(...productionRequired);
+  }
+
   const missing = required.filter(key => !process.env[key]);
 
   if (missing.length > 0) {
@@ -119,9 +132,52 @@ function validateSecrets() {
     throw new Error(`Missing required configuration: ${missing.join(', ')}`);
   }
 
+  if (process.env.NODE_ENV === 'production') {
+    validateProductionSafety();
+  }
+
   console.log('✅ All required configuration is present');
   console.log('   📦 Non-sensitive: AWS_REGION, DYNAMODB_REGION, EMAIL_FROM, FRONTEND_URL, NODE_ENV');
-  console.log('   🔒 Sensitive (from Secrets Manager): JWT_SECRET, OPENAI_API_KEY');
+  console.log('   🔒 Sensitive (from Secrets Manager): JWT_SECRET, OPENAI_API_KEY, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET');
+  console.log('   💳 Stripe price IDs configured for Essential and Premium monthly/annual plans');
+}
+
+function validateProductionSafety() {
+  const unsafeFlags = [
+    'ENABLE_TEST_ENDPOINTS',
+    'MOCK_STRIPE',
+    'MOCK_EMAIL',
+    'MOCK_AI',
+    'USE_MOCK_EMAIL',
+    'USE_MOCK_AI'
+  ].filter(key => process.env[key] === 'true');
+
+  if (unsafeFlags.length > 0) {
+    throw new Error(`Unsafe production flags enabled: ${unsafeFlags.join(', ')}`);
+  }
+
+  if (!process.env.FRONTEND_URL || process.env.FRONTEND_URL.includes('localhost')) {
+    throw new Error('FRONTEND_URL must be set to the production app URL in production');
+  }
+
+  if (!process.env.STRIPE_SECRET_KEY.startsWith('sk_live_') && !process.env.STRIPE_SECRET_KEY.startsWith('rk_live_')) {
+    throw new Error('STRIPE_SECRET_KEY must be a live Stripe secret or restricted key in production');
+  }
+
+  if (!process.env.STRIPE_WEBHOOK_SECRET.startsWith('whsec_')) {
+    throw new Error('STRIPE_WEBHOOK_SECRET must be a Stripe webhook signing secret');
+  }
+
+  [
+    'STRIPE_PRICE_ESSENTIAL_MONTHLY',
+    'STRIPE_PRICE_ESSENTIAL_ANNUAL',
+    'STRIPE_PRICE_PREMIUM_MONTHLY',
+    'STRIPE_PRICE_PREMIUM_ANNUAL'
+  ].forEach(key => {
+    if (!process.env[key].startsWith('price_')) {
+      throw new Error(`${key} must be a Stripe price ID`);
+    }
+  });
 }
 
 module.exports = {

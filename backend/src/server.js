@@ -32,13 +32,18 @@ async function startServer() {
 
 // Security middleware
 app.use(helmet());
+
+const allowedOrigins = process.env.NODE_ENV === 'production'
+  ? [process.env.FRONTEND_URL].filter(Boolean)
+  : [
+      'http://localhost:3000',
+      'http://localhost:8080',
+      'http://localhost:8081',
+      process.env.FRONTEND_URL
+    ].filter(Boolean);
+
 app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'http://localhost:8080',  // Flutter web dev server (primary)
-    'http://localhost:8081',  // Flutter web dev server (secondary for testing)
-    process.env.FRONTEND_URL
-  ].filter(Boolean),
+  origin: allowedOrigins,
   credentials: true
 }));
 
@@ -56,7 +61,7 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/health', (req, res) => {
   res.status(200).json({
     status: 'OK',
-    message: 'We Coach API is running',
+    message: 'We Connect API is running',
     timestamp: new Date().toISOString()
   });
 });
@@ -316,7 +321,7 @@ streamingService.on('newMessage', async ({ conversationId, senderUserId, message
 
     // Start server
     app.listen(PORT, () => {
-      console.log(`🚀 We Coach API server running on port ${PORT}`);
+      console.log(`🚀 We Connect API server running on port ${PORT}`);
       console.log(`📊 Environment: ${process.env.NODE_ENV}`);
       console.log(`🔗 Health check: http://localhost:${PORT}/health`);
       console.log(`📡 Streaming service initialized`);

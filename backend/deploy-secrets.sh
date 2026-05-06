@@ -8,7 +8,7 @@ REGION="eu-west-3"
 STACK_NAME="we-counsel-secrets"
 
 echo "===================================="
-echo "We Coach - Secrets Deployment"
+echo "We Connect - Secrets Deployment"
 echo "===================================="
 echo ""
 
@@ -39,6 +39,30 @@ echo "Enter OPENAI_API_KEY:"
 read -s OPENAI_API_KEY
 echo ""
 
+echo "Enter STRIPE_SECRET_KEY (live sk_live_ or rk_live_):"
+read -s STRIPE_SECRET_KEY
+echo ""
+
+echo "Enter STRIPE_WEBHOOK_SECRET (live whsec_ for production endpoint):"
+read -s STRIPE_WEBHOOK_SECRET
+echo ""
+
+echo "Enter STRIPE_PRICE_ESSENTIAL_MONTHLY:"
+read STRIPE_PRICE_ESSENTIAL_MONTHLY
+echo ""
+
+echo "Enter STRIPE_PRICE_ESSENTIAL_ANNUAL:"
+read STRIPE_PRICE_ESSENTIAL_ANNUAL
+echo ""
+
+echo "Enter STRIPE_PRICE_PREMIUM_MONTHLY:"
+read STRIPE_PRICE_PREMIUM_MONTHLY
+echo ""
+
+echo "Enter STRIPE_PRICE_PREMIUM_ANNUAL:"
+read STRIPE_PRICE_PREMIUM_ANNUAL
+echo ""
+
 echo "ℹ️  Non-sensitive config (AWS_REGION, EMAIL_FROM, FRONTEND_URL) is stored in apprunner.yaml"
 echo ""
 
@@ -52,6 +76,12 @@ aws cloudformation deploy \
     --parameter-overrides \
         JWTSecret="$JWT_SECRET" \
         OpenAIAPIKey="$OPENAI_API_KEY" \
+        StripeSecretKey="$STRIPE_SECRET_KEY" \
+        StripeWebhookSecret="$STRIPE_WEBHOOK_SECRET" \
+        StripePriceEssentialMonthly="$STRIPE_PRICE_ESSENTIAL_MONTHLY" \
+        StripePriceEssentialAnnual="$STRIPE_PRICE_ESSENTIAL_ANNUAL" \
+        StripePricePremiumMonthly="$STRIPE_PRICE_PREMIUM_MONTHLY" \
+        StripePricePremiumAnnual="$STRIPE_PRICE_PREMIUM_ANNUAL" \
     --capabilities CAPABILITY_NAMED_IAM \
     --region $REGION
 
