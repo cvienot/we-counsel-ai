@@ -23,7 +23,13 @@ This single command will:
 
 The UI test currently runs with `flutter test ... -d macos`, so Flutter launches a real macOS app window. Keep that window visible while the suite runs. Minimizing it or forcing it off-screen can stall the Flutter integration driver because the app may stop producing frames for `WidgetTester`.
 
-For less disruption during local runs, use a separate macOS Space or monitor. A headless Chrome/web runner would need to be implemented and verified separately from the current macOS test path.
+For less disruption during local runs, use a separate macOS Space or monitor. You can also keep your current app focused while leaving the Flutter test window visible:
+
+```bash
+E2E_KEEP_FOCUS=1 npm run test:e2e
+```
+
+This starts a small macOS focus restorer that reactivates the last non-test app when the `we_counsel` test app comes to the foreground. It does not minimize or hide the Flutter window, so the integration driver can continue producing frames. A headless Chrome/web runner would need to be implemented and verified separately from the current macOS test path.
 
 ## Architecture
 

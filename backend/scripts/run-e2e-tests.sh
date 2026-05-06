@@ -33,11 +33,65 @@ mkdir -p "$PID_DIR"
 DYNAMODB_PID_FILE="$PID_DIR/dynamodb-e2e.pid"
 API_PID_FILE="$PID_DIR/api-e2e.pid"
 FLUTTER_PID_FILE="$PID_DIR/flutter-e2e.pid"
+FOCUS_RESTORER_PID=""
+
+stop_focus_restorer() {
+    if [ -n "$FOCUS_RESTORER_PID" ] && ps -p "$FOCUS_RESTORER_PID" > /dev/null 2>&1; then
+        echo "  Stopping focus restorer (PID: $FOCUS_RESTORER_PID)"
+        kill "$FOCUS_RESTORER_PID" 2>/dev/null || true
+        wait "$FOCUS_RESTORER_PID" 2>/dev/null || true
+    fi
+}
+
+start_focus_restorer() {
+    if [ "${E2E_KEEP_FOCUS:-0}" != "1" ]; then
+        return
+    fi
+
+    if [ "$(uname -s)" != "Darwin" ]; then
+        echo -e "  ${YELLOW}⚠️  E2E_KEEP_FOCUS is only supported on macOS${NC}"
+        return
+    fi
+
+    local restore_app
+    restore_app=$(osascript -e 'tell application "System Events" to get name of first application process whose frontmost is true' 2>/dev/null || true)
+
+    if [ -z "$restore_app" ]; then
+        echo -e "  ${YELLOW}⚠️  Could not detect current frontmost app; focus restorer disabled${NC}"
+        return
+    fi
+
+    local test_app_pattern="${E2E_FOCUS_TEST_APP_PATTERN:-^(we_counsel|Runner)$}"
+    local interval="${E2E_KEEP_FOCUS_INTERVAL:-0.7}"
+
+    (
+        last_non_test_app="$restore_app"
+        while true; do
+            front_app=$(osascript -e 'tell application "System Events" to get name of first application process whose frontmost is true' 2>/dev/null || true)
+
+            if [[ "$front_app" =~ $test_app_pattern ]]; then
+                if [ -n "$last_non_test_app" ]; then
+                    osascript -e "tell application \"$last_non_test_app\" to activate" >/dev/null 2>&1 || true
+                fi
+            elif [ -n "$front_app" ]; then
+                last_non_test_app="$front_app"
+            fi
+
+            sleep "$interval"
+        done
+    ) &
+
+    FOCUS_RESTORER_PID=$!
+    echo -e "  ${GREEN}✅ Focus restorer enabled; returning focus to '$restore_app' when the Flutter test app activates${NC}"
+}
 
 # Cleanup function
 cleanup() {
     echo -e "\n${YELLOW}🧹 Cleaning up...${NC}"
     
+    # Stop optional macOS focus restorer
+    stop_focus_restorer
+
     # No Flutter server to stop (integration tests launch app directly)
     
     # Stop API
@@ -218,6 +272,7 @@ fi
 # caffeinate -i prevents App Nap from throttling the test app when unfocused
 echo -e "\n${YELLOW}Running UI integration test...${NC}"
 cd "$FRONTEND_DIR"
+start_focus_restorer
 caffeinate -i flutter test integration_test/complete_journey_test.dart \
     -d macos \
     --dart-define=API_BASE_URL=http://localhost:$API_PORT/api
