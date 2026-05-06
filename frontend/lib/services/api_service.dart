@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/foundation.dart';
 import '../config/environment.dart';
+import 'auth_service.dart';
 
 class ApiService {
   late final Dio _dio;
@@ -11,9 +12,13 @@ class ApiService {
 
   // In-memory fallback when Keychain/SecureStorage is unavailable (e.g. macOS integration tests)
   static String? _memoryToken;
+  static bool _secureStorageAvailable = true;
 
   /// Clear in-memory token state. Used by integration tests between test cases.
-  static void resetMemoryToken() => _memoryToken = null;
+  static void resetMemoryToken() {
+    _memoryToken = null;
+    AuthService.cacheToken(null);
+  }
 
   // Toggle for detailed API logging
   static bool enableDetailedLogging = !Environment.isProduction;
@@ -104,20 +109,34 @@ class ApiService {
 
   // Token management
   Future<String?> getToken() async {
+    if (!_secureStorageAvailable) {
+      return _memoryToken;
+    }
+
     try {
       final token = await _storage.read(key: _tokenKey);
-      if (token != null) return token;
+      if (token != null) {
+        _memoryToken = token;
+        AuthService.cacheToken(token);
+        return token;
+      }
     } catch (e) {
-      // FlutterSecureStorage unavailable (e.g. macOS Keychain entitlement missing)
+      _secureStorageAvailable = false;
     }
     return _memoryToken;
   }
 
   Future<void> setToken(String token) async {
     _memoryToken = token;
+    AuthService.cacheToken(token);
+    if (!_secureStorageAvailable) {
+      return;
+    }
+
     try {
       await _storage.write(key: _tokenKey, value: token);
     } catch (e) {
+      _secureStorageAvailable = false;
       print(
         '⚠️ Failed to store token in secure storage, using in-memory fallback: $e',
       );
@@ -126,9 +145,15 @@ class ApiService {
 
   Future<void> clearToken() async {
     _memoryToken = null;
+    AuthService.cacheToken(null);
+    if (!_secureStorageAvailable) {
+      return;
+    }
+
     try {
       await _storage.delete(key: _tokenKey);
     } catch (e) {
+      _secureStorageAvailable = false;
       print('⚠️ Failed to clear token from secure storage: $e');
     }
   }

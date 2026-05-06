@@ -7,31 +7,56 @@ class AuthService {
   AuthService._internal();
 
   static const _storage = FlutterSecureStorage();
+  static bool _secureStorageAvailable = true;
+  static String? _memoryToken;
+
+  static void cacheToken(String? token) {
+    _memoryToken = token;
+  }
 
   // Get authentication token
   Future<String?> getToken() async {
+    if (!_secureStorageAvailable) {
+      return _memoryToken;
+    }
+
     try {
-      return await _storage.read(key: Constants.authTokenKey);
+      final token = await _storage.read(key: Constants.authTokenKey);
+      if (token != null) {
+        _memoryToken = token;
+      }
+      return token ?? _memoryToken;
     } catch (e) {
-      return null;
+      _secureStorageAvailable = false;
+      return _memoryToken;
     }
   }
 
   // Save authentication token
   Future<void> saveToken(String token) async {
+    _memoryToken = token;
+    if (!_secureStorageAvailable) {
+      return;
+    }
+
     try {
       await _storage.write(key: Constants.authTokenKey, value: token);
     } catch (e) {
-      // Handle error silently
+      _secureStorageAvailable = false;
     }
   }
 
   // Remove authentication token
   Future<void> removeToken() async {
+    _memoryToken = null;
+    if (!_secureStorageAvailable) {
+      return;
+    }
+
     try {
       await _storage.delete(key: Constants.authTokenKey);
     } catch (e) {
-      // Handle error silently
+      _secureStorageAvailable = false;
     }
   }
 

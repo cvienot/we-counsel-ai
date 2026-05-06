@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:we_counsel/services/api_service.dart';
+import 'package:we_counsel/services/realtime_service.dart';
 
 import 'e2e_test_helper.dart';
 
@@ -61,14 +62,17 @@ Future<void> settleWithTimeout(
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  
-  const apiUrl = String.fromEnvironment('API_URL', defaultValue: 'http://localhost:3001');
+
+  const apiUrl = String.fromEnvironment(
+    'API_URL',
+    defaultValue: 'http://localhost:3001',
+  );
   late E2ETestHelper testHelper;
-  
+
   setUpAll(() {
     testHelper = E2ETestHelper(apiUrl);
   });
-  
+
   setUp(() async {
     await testHelper.resetMocks();
     // Clear SharedPreferences to ensure tests start with default English locale
@@ -76,60 +80,71 @@ void main() {
     await prefs.clear();
     // Clear in-memory token fallback so previous test's auth doesn't leak
     ApiService.resetMemoryToken();
+    // RealtimeService is a singleton; disconnect between test users.
+    RealtimeService().disconnect();
     // Reset cached GoRouter so each test starts from splash
     app.WeCounselApp.resetRouter();
   });
 
   group('Complete User Journey E2E Test', () {
-    testWidgets('User1 signs up, invites partner, User2 accepts, they exchange messages', 
-        (WidgetTester tester) async {
-      
+    testWidgets('User1 signs up, invites partner, User2 accepts, they exchange messages', (
+      WidgetTester tester,
+    ) async {
       // Launch the app
       app.main();
-      
+
       // Use pump loop instead of pumpAndSettle – the app has async auth init
       // that may never fully "settle" if background timers/SSE are involved.
       await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
-      
+
       // Test data
-      final user1Email = 'user1-${DateTime.now().millisecondsSinceEpoch}@test.com';
-      final user2Email = 'user2-${DateTime.now().millisecondsSinceEpoch}@test.com';
+      final user1Email =
+          'user1-${DateTime.now().millisecondsSinceEpoch}@test.com';
+      final user2Email =
+          'user2-${DateTime.now().millisecondsSinceEpoch}@test.com';
       final user1Password = 'Test123!';
       final user2Password = 'Test456!';
-      
+
       print('🧪 Starting E2E test with:');
       print('   User1: $user1Email');
       print('   User2: $user2Email');
-      
+
       // ============================================
       // STEP 1: User1 Registration via UI
       // ============================================
       print('\n📝 Step 1: User1 Registration via UI');
-      
+
       // Wait for the login screen to appear (splash → login redirect)
       final foundLogin = await pumpUntilFound(
         tester,
         find.text('Don\'t have an account? Sign up'),
         timeout: const Duration(seconds: 10),
       );
-      expect(foundLogin, isTrue, reason: 'Login screen should appear after splash');
-      
-      // Navigate to register screen  
+      expect(
+        foundLogin,
+        isTrue,
+        reason: 'Login screen should appear after splash',
+      );
+
+      // Navigate to register screen
       final signUpLink = find.text('Don\'t have an account? Sign up');
       expect(signUpLink, findsOneWidget);
       await tester.tap(signUpLink);
       await settleWithTimeout(tester, timeout: const Duration(seconds: 2));
-      
+
       print('   📝 Filling registration form...');
-      
+
       // Fill registration form by field order (First Name, Last Name, Email, Password, Confirm Password)
       final allFields = find.byType(TextFormField);
-      await tester.enterText(allFields.at(0), 'Alice');        // First Name
-      await tester.enterText(allFields.at(1), 'Smith');        // Last Name  
-      await tester.enterText(allFields.at(2), user1Email);     // Email
-      await tester.enterText(allFields.at(3), user1Password);  // Password
-      await tester.enterText(allFields.at(4), user1Password);  // Confirm Password
-      
+      await tester.enterText(allFields.at(0), 'Alice'); // First Name
+      await tester.enterText(allFields.at(1), 'Smith'); // Last Name
+      await tester.enterText(allFields.at(2), user1Email); // Email
+      await tester.enterText(allFields.at(3), user1Password); // Password
+      await tester.enterText(
+        allFields.at(4),
+        user1Password,
+      ); // Confirm Password
+
       // Scroll to make terms checkbox visible (disclaimer banner may have pushed it down)
       await tester.dragUntilVisible(
         find.byType(Checkbox),
@@ -137,12 +152,12 @@ void main() {
         const Offset(0, -100),
       );
       await settleWithTimeout(tester, timeout: const Duration(seconds: 1));
-      
+
       // Accept terms
       final termsCheckbox = find.byType(Checkbox);
       await tester.tap(termsCheckbox);
       await settleWithTimeout(tester, timeout: const Duration(seconds: 1));
-      
+
       // Scroll to make submit button visible
       await tester.dragUntilVisible(
         find.widgetWithText(ElevatedButton, 'Create Account'),
@@ -150,11 +165,14 @@ void main() {
         const Offset(0, -100),
       );
       await settleWithTimeout(tester, timeout: const Duration(seconds: 1));
-      
+
       // Submit – this opens PlanSelectionScreen via Navigator.push
-      final createButton = find.widgetWithText(ElevatedButton, 'Create Account');
+      final createButton = find.widgetWithText(
+        ElevatedButton,
+        'Create Account',
+      );
       await tester.tap(createButton);
-      
+
       // Wait for plan selection screen to appear
       // PlanSelectionScreen calls _loadCurrentSubscription which may take a moment
       print('   📋 Waiting for plan selection screen...');
@@ -163,7 +181,7 @@ void main() {
         find.text('Continue with Free'),
         timeout: const Duration(seconds: 10),
       );
-      
+
       if (foundPlan) {
         print('   ✅ Plan selection screen appeared');
         await tester.tap(find.text('Continue with Free'));
@@ -172,13 +190,13 @@ void main() {
         // connection which means pumpAndSettle will hang. Use pump loop instead.
         await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
       }
-      
+
       // Wait for the registration API call to complete and auth state to update.
       // The router will redirect to /main-thread once isAuthenticated becomes true.
       // Since user has no partner yet, they'll see the "Get Started" waiting room.
       // NOTE: pumpAndSettle() would hang here because the SSE stream is open.
       print('   ⏳ Waiting for registration & navigation...');
-      
+
       // Wait for register screen to go away (same pattern as plan switching test)
       await pumpUntilGone(
         tester,
@@ -186,7 +204,7 @@ void main() {
         timeout: const Duration(seconds: 15),
       );
       await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
-      
+
       // We should now be on the waiting room (no partner) or home equivalent
       // Check for waiting room indicators
       final onWaitingRoom = await pumpUntilFound(
@@ -194,7 +212,7 @@ void main() {
         find.text('Invite Your Partner'),
         timeout: const Duration(seconds: 10),
       );
-      
+
       if (!onWaitingRoom) {
         // Fallback: check for app title (we're on main-thread screen somehow)
         final altCheck = await pumpUntilFound(
@@ -202,21 +220,30 @@ void main() {
           find.text('We Connect'),
           timeout: const Duration(seconds: 5),
         );
-        expect(altCheck, isTrue, reason: 'Should navigate away from register screen after registration');
+        expect(
+          altCheck,
+          isTrue,
+          reason:
+              'Should navigate away from register screen after registration',
+        );
       }
-      
+
       print('   ✅ User1 registered via UI');
-      
+
       // Verify welcome email was sent
       final welcomeEmail = await testHelper.waitForEmail(
         to: user1Email,
         type: 'welcome',
         timeout: const Duration(seconds: 5),
       );
-      expect(welcomeEmail, isNotNull, reason: 'Welcome email should be sent to User1');
+      expect(
+        welcomeEmail,
+        isNotNull,
+        reason: 'Welcome email should be sent to User1',
+      );
       expect(welcomeEmail['to'], user1Email);
       print('   ✅ Welcome email sent to $user1Email');
-      
+
       // Get token for API operations (login to get token)
       final loginResponse = await http.post(
         Uri.parse('$apiUrl/api/auth/login'),
@@ -225,12 +252,12 @@ void main() {
       );
       final user1Token = jsonDecode(loginResponse.body)['token'];
       print('   ✅ Got user token for API calls');
-      
+
       // ============================================
       // STEP 2: User1 sends partner invitation
       // ============================================
       print('\n📧 Step 2: User1 sends partner invitation');
-      
+
       // Send invitation via API (UI validated in Step 1)
       final inviteResponse = await http.post(
         Uri.parse('$apiUrl/api/auth/invite-partner'),
@@ -238,22 +265,25 @@ void main() {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $user1Token',
         },
-        body: jsonEncode({
-          'email': user2Email,
-        }),
+        body: jsonEncode({'email': user2Email}),
       );
-      
+
       if (inviteResponse.statusCode != 201) {
-        print('   ❌ Invite failed: ${inviteResponse.statusCode} - ${inviteResponse.body}');
+        print(
+          '   ❌ Invite failed: ${inviteResponse.statusCode} - ${inviteResponse.body}',
+        );
       }
-      expect(inviteResponse.statusCode, 201, 
-        reason: 'Invitation should be sent successfully');
-      
+      expect(
+        inviteResponse.statusCode,
+        201,
+        reason: 'Invitation should be sent successfully',
+      );
+
       final inviteData = jsonDecode(inviteResponse.body);
       final invitationId = inviteData['invitation']['invitationId'];
-      
+
       print('   ✅ Invitation sent');
-      
+
       // Verify invitation email was sent
       final inviteEmail = await testHelper.waitForEmail(
         to: user2Email,
@@ -264,7 +294,7 @@ void main() {
       expect(inviteEmail['to'], user2Email);
       expect(inviteEmail['invitationId'], invitationId);
       print('   ✅ Invitation email sent to $user2Email');
-      
+
       // Verify pending invitation shows in user data
       final meAfterInvite = await http.get(
         Uri.parse('$apiUrl/api/auth/me'),
@@ -272,16 +302,22 @@ void main() {
       );
       expect(meAfterInvite.statusCode, 200);
       final meData = jsonDecode(meAfterInvite.body);
-      expect(meData['user']['pendingInvitation'], isNotNull,
-        reason: 'User should have pendingInvitation after sending invite');
-      expect(meData['user']['pendingInvitation']['email'], user2Email.toLowerCase());
+      expect(
+        meData['user']['pendingInvitation'],
+        isNotNull,
+        reason: 'User should have pendingInvitation after sending invite',
+      );
+      expect(
+        meData['user']['pendingInvitation']['email'],
+        user2Email.toLowerCase(),
+      );
       print('   ✅ Pending invitation reflected in /me endpoint');
-      
+
       // ============================================
-      // STEP 3: User2 registers  
+      // STEP 3: User2 registers
       // ============================================
       print('\n✅ Step 3: User2 registers');
-      
+
       final user2RegisterResponse = await http.post(
         Uri.parse('$apiUrl/api/auth/register'),
         headers: {'Content-Type': 'application/json'},
@@ -294,30 +330,37 @@ void main() {
           'termsAccepted': true,
         }),
       );
-      
-      expect(user2RegisterResponse.statusCode, 201, 
-        reason: 'User2 registration should succeed');
-      
+
+      expect(
+        user2RegisterResponse.statusCode,
+        201,
+        reason: 'User2 registration should succeed',
+      );
+
       final user2Data = jsonDecode(user2RegisterResponse.body);
       final user2Token = user2Data['token'];
-      
+
       print('   ✅ User2 registered');
-      
+
       // Verify welcome email was sent to User2
       final welcomeEmail2 = await testHelper.waitForEmail(
         to: user2Email,
         type: 'welcome',
         timeout: const Duration(seconds: 5),
       );
-      expect(welcomeEmail2, isNotNull, reason: 'Welcome email should be sent to User2');
+      expect(
+        welcomeEmail2,
+        isNotNull,
+        reason: 'Welcome email should be sent to User2',
+      );
       expect(welcomeEmail2['to'], user2Email);
       print('   ✅ Welcome email sent to $user2Email');
-      
+
       // ============================================
       // STEP 4: User2 accepts invitation
       // ============================================
       print('\n🤝 Step 4: User2 accepts invitation');
-      
+
       final acceptResponse = await http.post(
         Uri.parse('$apiUrl/api/users/accept-invitation/$invitationId'),
         headers: {
@@ -325,46 +368,56 @@ void main() {
           'Authorization': 'Bearer $user2Token',
         },
       );
-      
-      expect(acceptResponse.statusCode, 200, 
-        reason: 'Invitation acceptance should succeed');
-      
+
+      expect(
+        acceptResponse.statusCode,
+        200,
+        reason: 'Invitation acceptance should succeed',
+      );
+
       print('   ✅ Invitation accepted');
-      
+
       // ============================================
       // STEP 5: Verify partner connection
       // ============================================
       print('\n🔗 Step 5: Verifying partner connection');
-      
+
       final user2ProfileResponse = await http.get(
         Uri.parse('$apiUrl/api/auth/me'),
         headers: {'Authorization': 'Bearer $user2Token'},
       );
-      
+
       expect(user2ProfileResponse.statusCode, 200);
       final user2ProfileData = jsonDecode(user2ProfileResponse.body);
       final user2Profile = user2ProfileData['user'];
-      expect(user2Profile['coupleId'], isNotNull, 
-        reason: 'User2 should be in a couple');
-      expect(user2Profile['partner'], isNotNull,
-        reason: 'User2 should have a partner');
-      
+      expect(
+        user2Profile['coupleId'],
+        isNotNull,
+        reason: 'User2 should be in a couple',
+      );
+      expect(
+        user2Profile['partner'],
+        isNotNull,
+        reason: 'User2 should have a partner',
+      );
+
       print('   ✅ Partner connection verified');
-      
+
       // ============================================
       // STEP 6: Get or create main conversation
       // ============================================
       print('\n💬 Step 6: Getting main conversation');
-      
+
       final conversationsResponse = await http.get(
         Uri.parse('$apiUrl/api/conversations'),
         headers: {'Authorization': 'Bearer $user1Token'},
       );
-      
+
       expect(conversationsResponse.statusCode, 200);
       final conversationsData = jsonDecode(conversationsResponse.body);
-      final conversations = (conversationsData['conversations'] ?? conversationsData) as List;
-      
+      final conversations =
+          (conversationsData['conversations'] ?? conversationsData) as List;
+
       String conversationId;
       if (conversations.isEmpty) {
         // Create main conversation
@@ -374,12 +427,9 @@ void main() {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer $user1Token',
           },
-          body: jsonEncode({
-            'title': 'Main Thread',
-            'type': 'main',
-          }),
+          body: jsonEncode({'title': 'Main Thread', 'type': 'main'}),
         );
-        
+
         expect(createConvResponse.statusCode, 201);
         final convData = jsonDecode(createConvResponse.body);
         conversationId = convData['conversation']['conversationId'];
@@ -388,12 +438,12 @@ void main() {
         conversationId = conversations.first['conversationId'];
         print('   ✅ Found existing conversation');
       }
-      
+
       // ============================================
       // STEP 7: User1 sends a message
       // ============================================
       print('\n💬 Step 7: User1 sends a message');
-      
+
       final messageContent = 'Hi Bob, how are you feeling today?';
       final sendMessageResponse = await http.post(
         Uri.parse('$apiUrl/api/messages/$conversationId/ai-stream'),
@@ -403,79 +453,90 @@ void main() {
         },
         body: jsonEncode({'content': messageContent}),
       );
-      
-      expect(sendMessageResponse.statusCode, 201, 
-        reason: 'Message should be sent successfully');
-      
+
+      expect(
+        sendMessageResponse.statusCode,
+        201,
+        reason: 'Message should be sent successfully',
+      );
+
       print('   ✅ Message sent: "$messageContent"');
-      
+
       // ============================================
       // STEP 8: Verify message notification email
       // ============================================
       print('\n📧 Step 8: Verifying message notification');
-      
+
       final notificationEmail = await testHelper.waitForEmail(
         to: user2Email,
         type: 'messageNotification',
         timeout: const Duration(seconds: 5),
       );
-      expect(notificationEmail, isNotNull, 
-        reason: 'Message notification email should be sent');
-      expect(notificationEmail['to'], user2Email,
-        reason: 'Notification should be sent to partner');
-      
+      expect(
+        notificationEmail,
+        isNotNull,
+        reason: 'Message notification email should be sent',
+      );
+      expect(
+        notificationEmail['to'],
+        user2Email,
+        reason: 'Notification should be sent to partner',
+      );
+
       print('   ✅ Message notification sent to partner');
-      
+
       // ============================================
       // STEP 9: Verify AI response
       // ============================================
       print('\n🤖 Step 9: Verifying AI counselor response');
-      
+
       final aiResponse = await testHelper.waitForAIResponse(
         timeout: const Duration(seconds: 10),
       );
-      expect(aiResponse, isNotNull, 
-        reason: 'AI should generate a response');
-      
+      expect(aiResponse, isNotNull, reason: 'AI should generate a response');
+
       print('   ✅ AI counselor responded');
       print('   AI said: "${aiResponse['response']}"');
-      
+
       // ============================================
       // STEP 10: Verify User2 can see messages
       // ============================================
       print('\n💬 Step 10: User2 retrieves messages');
-      
+
       // Small delay to let the async AI response be stored in DynamoDB
       await Future.delayed(const Duration(seconds: 2));
-      
+
       final messagesResponse = await http.get(
         Uri.parse('$apiUrl/api/messages/$conversationId'),
         headers: {'Authorization': 'Bearer $user2Token'},
       );
-      
+
       expect(messagesResponse.statusCode, 200);
       final messagesData = jsonDecode(messagesResponse.body);
       final messages = (messagesData['messages'] ?? messagesData) as List;
-      expect(messages.length, greaterThanOrEqualTo(2), 
-        reason: 'Should have at least User1 message + AI response');
-      
+      expect(
+        messages.length,
+        greaterThanOrEqualTo(2),
+        reason: 'Should have at least User1 message + AI response',
+      );
+
       // Verify User1's message is there
       final user1Message = messages.firstWhere(
         (m) => m['content'] == messageContent,
         orElse: () => throw Exception('User1 message not found'),
       );
       expect(user1Message, isNotNull);
-      
+
       // Verify AI response is there
       final aiMessage = messages.firstWhere(
         (m) => m['senderType'] == 'ai',
         orElse: () => throw Exception('AI message not found'),
       );
       expect(aiMessage, isNotNull);
-      
+
       print('   ✅ User2 can see all messages');
       print('   ✅ Found ${messages.length} messages in conversation');
-      
+
       // ============================================
       // TEST COMPLETE
       // ============================================
@@ -495,17 +556,19 @@ void main() {
       print('');
     });
 
-    testWidgets('AI conversation summarization works after 20+ messages', 
-        (WidgetTester tester) async {
-      
+    testWidgets('AI conversation summarization works after 20+ messages', (
+      WidgetTester tester,
+    ) async {
       print('\n📊 Testing AI Conversation Summarization');
-      
+
       // Create test users directly via API for faster setup
-      final testEmail1 = 'summary-user1-${DateTime.now().millisecondsSinceEpoch}@test.com';
-      final testEmail2 = 'summary-user2-${DateTime.now().millisecondsSinceEpoch}@test.com';
-      
+      final testEmail1 =
+          'summary-user1-${DateTime.now().millisecondsSinceEpoch}@test.com';
+      final testEmail2 =
+          'summary-user2-${DateTime.now().millisecondsSinceEpoch}@test.com';
+
       print('   📝 Creating test users...');
-      
+
       // Register User1 with premium tier for unlimited AI messages
       final user1Response = await http.post(
         Uri.parse('$apiUrl/api/auth/register'),
@@ -523,7 +586,7 @@ void main() {
       final user1Data = jsonDecode(user1Response.body);
       final user1Token = user1Data['token'];
       final user1Id = user1Data['user']['userId'];
-      
+
       // Register User2 with premium tier for unlimited AI messages
       final user2Response = await http.post(
         Uri.parse('$apiUrl/api/auth/register'),
@@ -541,9 +604,9 @@ void main() {
       final user2Data = jsonDecode(user2Response.body);
       final user2Token = user2Data['token'];
       final user2Id = user2Data['user']['userId'];
-      
+
       print('   ✅ Test users created');
-      
+
       // Connect users as partners directly via database with premium tier
       print('   🤝 Connecting partners...');
       final connectResponse = await http.post(
@@ -556,9 +619,9 @@ void main() {
         }),
       );
       expect(connectResponse.statusCode, 200);
-      
+
       print('   ✅ Partners connected');
-      
+
       // Create conversation
       print('   💬 Creating conversation...');
       final convResponse = await http.post(
@@ -575,9 +638,9 @@ void main() {
       expect(convResponse.statusCode, 201);
       final convData = jsonDecode(convResponse.body);
       final conversationId = convData['conversation']['conversationId'];
-      
+
       print('   ✅ Conversation created: $conversationId');
-      
+
       // Send 25 messages to trigger summarization (threshold is 20)
       print('   📤 Sending 25 messages to trigger summarization...');
       for (int i = 1; i <= 25; i++) {
@@ -592,21 +655,23 @@ void main() {
             'recipientType': 'both',
           }),
         );
-        
+
         if (i % 5 == 0) {
           print('   ... sent $i messages');
         }
-        
+
         // Small delay to avoid overwhelming the API
         await Future.delayed(const Duration(milliseconds: 100));
       }
-      
+
       print('   ✅ All 25 messages sent');
-      
+
       // Fetch conversation to check if summary was generated
       print('   🔍 Checking for conversation summary...');
-      await Future.delayed(const Duration(seconds: 2)); // Give time for summary generation
-      
+      await Future.delayed(
+        const Duration(seconds: 2),
+      ); // Give time for summary generation
+
       final convCheckResponse = await http.get(
         Uri.parse('$apiUrl/api/conversations/$conversationId'),
         headers: {'Authorization': 'Bearer $user1Token'},
@@ -614,19 +679,30 @@ void main() {
       expect(convCheckResponse.statusCode, 200);
       final convCheckData = jsonDecode(convCheckResponse.body);
       final conversation = convCheckData['conversation'];
-      
+
       // Verify summary fields exist
-      expect(conversation['summary'], isNotNull,
-        reason: 'Summary should be generated after 20+ messages');
-      expect(conversation['lastSummarizedAt'], isNotNull,
-        reason: 'Last summarized timestamp should be set');
-      expect(conversation['summarizedMessageCount'], greaterThan(0),
-        reason: 'Summarized message count should be greater than 0');
-      
+      expect(
+        conversation['summary'],
+        isNotNull,
+        reason: 'Summary should be generated after 20+ messages',
+      );
+      expect(
+        conversation['lastSummarizedAt'],
+        isNotNull,
+        reason: 'Last summarized timestamp should be set',
+      );
+      expect(
+        conversation['summarizedMessageCount'],
+        greaterThan(0),
+        reason: 'Summarized message count should be greater than 0',
+      );
+
       print('   ✅ Conversation summary generated!');
       print('   📊 Summary: ${conversation['summary']?.substring(0, 100)}...');
-      print('   📊 Summarized messages: ${conversation['summarizedMessageCount']}');
-      
+      print(
+        '   📊 Summarized messages: ${conversation['summarizedMessageCount']}',
+      );
+
       // Send one more message and verify AI gets context with summary
       print('   💬 Sending final message to verify AI context...');
       final finalMessageResponse = await http.post(
@@ -641,17 +717,20 @@ void main() {
         }),
       );
       expect(finalMessageResponse.statusCode, 201);
-      
+
       // Wait for AI response
       await Future.delayed(const Duration(seconds: 3));
-      
+
       // Verify AI response was generated
       final aiResponse = await testHelper.waitForAIResponse(
         timeout: const Duration(seconds: 5),
       );
-      expect(aiResponse, isNotNull, 
-        reason: 'AI should respond using summarized context');
-      
+      expect(
+        aiResponse,
+        isNotNull,
+        reason: 'AI should respond using summarized context',
+      );
+
       print('   ✅ AI responded with summarized context');
       print('');
       print('🎉 ═══════════════════════════════════════════════════════');
@@ -664,37 +743,38 @@ void main() {
       print('');
     });
 
-    testWidgets('User can switch subscription plan', 
-        (WidgetTester tester) async {
-      
+    testWidgets('User can switch subscription plan', (
+      WidgetTester tester,
+    ) async {
       // Launch the app
       app.main();
       await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
-      
+
       // Test data
-      final userEmail = 'plan-test-${DateTime.now().millisecondsSinceEpoch}@test.com';
+      final userEmail =
+          'plan-test-${DateTime.now().millisecondsSinceEpoch}@test.com';
       final userPassword = 'Test123!';
-      
+
       print('🧪 Starting Plan Switching Test with: $userEmail');
-      
+
       // ============================================
       // STEP 1: Register user with free plan
       // ============================================
       print('\n📝 Step 1: Register user with free plan');
-      
+
       // Wait for login screen
       await pumpUntilFound(
         tester,
         find.text('Don\'t have an account? Sign up'),
         timeout: const Duration(seconds: 10),
       );
-      
-      // Navigate to register screen  
+
+      // Navigate to register screen
       final signUpLink = find.text('Don\'t have an account? Sign up');
       expect(signUpLink, findsOneWidget);
       await tester.tap(signUpLink);
       await settleWithTimeout(tester, timeout: const Duration(seconds: 2));
-      
+
       // Fill registration form
       final allFields = find.byType(TextFormField);
       await tester.enterText(allFields.at(0), 'TestUser');
@@ -702,7 +782,7 @@ void main() {
       await tester.enterText(allFields.at(2), userEmail);
       await tester.enterText(allFields.at(3), userPassword);
       await tester.enterText(allFields.at(4), userPassword);
-      
+
       // Scroll to terms checkbox
       await tester.dragUntilVisible(
         find.byType(Checkbox),
@@ -710,11 +790,11 @@ void main() {
         const Offset(0, -100),
       );
       await settleWithTimeout(tester, timeout: const Duration(seconds: 1));
-      
+
       // Accept terms
       await tester.tap(find.byType(Checkbox));
       await settleWithTimeout(tester, timeout: const Duration(seconds: 1));
-      
+
       // Scroll to submit button
       await tester.dragUntilVisible(
         find.widgetWithText(ElevatedButton, 'Create Account'),
@@ -722,10 +802,10 @@ void main() {
         const Offset(0, -100),
       );
       await settleWithTimeout(tester, timeout: const Duration(seconds: 1));
-      
+
       // Submit registration
       await tester.tap(find.widgetWithText(ElevatedButton, 'Create Account'));
-      
+
       // Select free plan
       print('   📋 Selecting free plan...');
       final foundPlan = await pumpUntilFound(
@@ -736,7 +816,7 @@ void main() {
       expect(foundPlan, isTrue, reason: 'Free plan button should be visible');
       await tester.tap(find.text('Continue with Free'));
       await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
-      
+
       // Wait for navigation to complete
       print('   ⏳ Waiting for registration...');
       await pumpUntilGone(
@@ -745,14 +825,14 @@ void main() {
         timeout: const Duration(seconds: 15),
       );
       await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
-      
+
       print('   ✅ User registered with free plan');
-      
+
       // ============================================
       // STEP 2: Verify initial subscription
       // ============================================
       print('\n🔍 Step 2: Verify initial free subscription');
-      
+
       // Get token for API calls
       final loginResponse = await http.post(
         Uri.parse('$apiUrl/api/auth/login'),
@@ -761,7 +841,7 @@ void main() {
       );
       final userToken = jsonDecode(loginResponse.body)['token'];
       final userId = jsonDecode(loginResponse.body)['user']['userId'];
-      
+
       // Check initial subscription
       final initialSubResponse = await http.get(
         Uri.parse('$apiUrl/api/subscriptions/usage'),
@@ -771,20 +851,22 @@ void main() {
       final initialSubData = jsonDecode(initialSubResponse.body);
       expect(initialSubData['usage']['tier'], 'free');
       expect(initialSubData['usage']['limit'], 10);
-      
-      print('   ✅ Confirmed free tier: ${initialSubData['usage']['tier']} (limit: ${initialSubData['usage']['limit']})');
-      
+
+      print(
+        '   ✅ Confirmed free tier: ${initialSubData['usage']['tier']} (limit: ${initialSubData['usage']['limit']})',
+      );
+
       // ============================================
       // STEP 3: Navigate to plan selection in UI
       // ============================================
       print('\n📱 Step 3: Navigate to plan selection screen');
-      
+
       // Look for profile or settings icon
       final profileIcon = find.byIcon(Icons.person);
       if (profileIcon.evaluate().isNotEmpty) {
         await tester.tap(profileIcon);
         await settleWithTimeout(tester, timeout: const Duration(seconds: 2));
-        
+
         // Find upgrade/subscription button
         final upgradeButton = find.text('Manage Subscription');
         if (upgradeButton.evaluate().isNotEmpty) {
@@ -792,19 +874,20 @@ void main() {
           await settleWithTimeout(tester, timeout: const Duration(seconds: 2));
         }
       }
-      
+
       // Alternative: directly navigate if we can't find UI elements
       // For now, we'll simulate the upgrade via API since UI navigation is complex
-      
+
       print('   ✅ Ready for subscription upgrade');
-      
+
       // ============================================
       // STEP 4: Simulate subscription upgrade via test endpoint
       // ============================================
       print('\n💳 Step 4: Simulating subscription upgrade to Premium');
-      
+
       // First, create a couple for this user (needed for subscription)
-      final partnerEmail = 'partner-${DateTime.now().millisecondsSinceEpoch}@test.com';
+      final partnerEmail =
+          'partner-${DateTime.now().millisecondsSinceEpoch}@test.com';
       final partnerRegResponse = await http.post(
         Uri.parse('$apiUrl/api/auth/register'),
         headers: {'Content-Type': 'application/json'},
@@ -818,7 +901,7 @@ void main() {
         }),
       );
       final partnerId = jsonDecode(partnerRegResponse.body)['user']['userId'];
-      
+
       // Connect partners
       await http.post(
         Uri.parse('$apiUrl/api/test/connect-partners'),
@@ -829,9 +912,9 @@ void main() {
           'subscriptionTier': 'free', // Start with free
         }),
       );
-      
+
       print('   ✅ Test couple created');
-      
+
       // Simulate subscription upgrade using test endpoint
       final upgradeResponse = await http.post(
         Uri.parse('$apiUrl/api/test/simulate-subscription-upgrade'),
@@ -843,14 +926,14 @@ void main() {
         }),
       );
       expect(upgradeResponse.statusCode, 200);
-      
+
       print('   ✅ Subscription upgraded to Premium');
-      
+
       // ============================================
       // STEP 5: Verify subscription changed
       // ============================================
       print('\n✅ Step 5: Verify subscription change');
-      
+
       // Check updated subscription
       final updatedSubResponse = await http.get(
         Uri.parse('$apiUrl/api/subscriptions/usage'),
@@ -859,10 +942,15 @@ void main() {
       expect(updatedSubResponse.statusCode, 200);
       final updatedSubData = jsonDecode(updatedSubResponse.body);
       expect(updatedSubData['usage']['tier'], 'premium');
-      expect(updatedSubData['usage']['limit'], 'unlimited'); // API returns 'unlimited' string for premium
-      
-      print('   ✅ Confirmed premium tier: ${updatedSubData['usage']['tier']} (${updatedSubData['usage']['limit']})');
-      
+      expect(
+        updatedSubData['usage']['limit'],
+        'unlimited',
+      ); // API returns 'unlimited' string for premium
+
+      print(
+        '   ✅ Confirmed premium tier: ${updatedSubData['usage']['tier']} (${updatedSubData['usage']['limit']})',
+      );
+
       print('');
       print('🎉 ═══════════════════════════════════════════════════════');
       print('🎉  PLAN SWITCHING TEST PASSED!');
@@ -875,8 +963,9 @@ void main() {
       print('');
     });
 
-    testWidgets('Couple inherits highest plan selected at registration',
-        (WidgetTester tester) async {
+    testWidgets('Couple inherits highest plan selected at registration', (
+      WidgetTester tester,
+    ) async {
       // Launch app (required by integration test framework)
       app.main();
       await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
@@ -918,8 +1007,11 @@ void main() {
         headers: {'Authorization': 'Bearer $user1Token'},
       );
       final me1Data = jsonDecode(me1.body)['user'];
-      expect(me1Data['selectedPlan'], 'premium',
-          reason: 'User1 should have selectedPlan=premium stored');
+      expect(
+        me1Data['selectedPlan'],
+        'premium',
+        reason: 'User1 should have selectedPlan=premium stored',
+      );
       print('   ✅ selectedPlan=premium stored on user');
 
       // ============================================
@@ -936,7 +1028,9 @@ void main() {
         body: jsonEncode({'email': user2Email}),
       );
       expect(inviteResp.statusCode, 201);
-      final invitationId = jsonDecode(inviteResp.body)['invitation']['invitationId'];
+      final invitationId = jsonDecode(
+        inviteResp.body,
+      )['invitation']['invitationId'];
       print('   ✅ Invitation sent (id: $invitationId)');
 
       // ============================================
@@ -972,7 +1066,11 @@ void main() {
           'Authorization': 'Bearer $user2Token',
         },
       );
-      expect(acceptResp.statusCode, 200, reason: 'Invitation should be accepted');
+      expect(
+        acceptResp.statusCode,
+        200,
+        reason: 'Invitation should be accepted',
+      );
       print('   ✅ Invitation accepted, couple formed');
 
       // ============================================
@@ -986,8 +1084,11 @@ void main() {
       );
       expect(usage1.statusCode, 200);
       final usage1Data = jsonDecode(usage1.body);
-      expect(usage1Data['usage']['tier'], 'premium',
-          reason: 'Couple should have premium tier from User1 selection');
+      expect(
+        usage1Data['usage']['tier'],
+        'premium',
+        reason: 'Couple should have premium tier from User1 selection',
+      );
       print('   ✅ User1 sees premium tier: ${usage1Data['usage']['tier']}');
 
       final usage2 = await http.get(
@@ -996,8 +1097,11 @@ void main() {
       );
       expect(usage2.statusCode, 200);
       final usage2Data = jsonDecode(usage2.body);
-      expect(usage2Data['usage']['tier'], 'premium',
-          reason: 'User2 should also see premium tier (couple-level)');
+      expect(
+        usage2Data['usage']['tier'],
+        'premium',
+        reason: 'User2 should also see premium tier (couple-level)',
+      );
       print('   ✅ User2 sees premium tier: ${usage2Data['usage']['tier']}');
 
       print('\n🎉 ═══════════════════════════════════════════════════════');
@@ -1012,9 +1116,9 @@ void main() {
       print('');
     });
 
-    testWidgets('Guided exercise: two partners complete an exercise together',
-        (WidgetTester tester) async {
-
+    testWidgets('Guided exercise: two partners complete an exercise together', (
+      WidgetTester tester,
+    ) async {
       print('\n🧘 Testing Guided Exercise Flow');
 
       final ts = DateTime.now().millisecondsSinceEpoch;
@@ -1110,8 +1214,11 @@ void main() {
       expect(listRes.statusCode, 200);
       final listData = jsonDecode(listRes.body);
       final exercises = listData['exercises'] as List;
-      expect(exercises.length, greaterThanOrEqualTo(3),
-          reason: 'Should have at least 3 exercise templates');
+      expect(
+        exercises.length,
+        greaterThanOrEqualTo(3),
+        reason: 'Should have at least 3 exercise templates',
+      );
 
       final exerciseIds = exercises.map((e) => e['exerciseId']).toList();
       expect(exerciseIds, contains('appreciation-share'));
@@ -1147,10 +1254,16 @@ void main() {
 
       expect(session['status'], 'active');
       expect(session['currentStep'], 1);
-      expect(firstStep['prompt'], contains('Alex'),
-          reason: 'First step prompt should contain partner1 name (Alex)');
-      expect(firstStep['prompt'], contains('Emma'),
-          reason: 'First step prompt should contain partner2 name (Emma)');
+      expect(
+        firstStep['prompt'],
+        contains('Alex'),
+        reason: 'First step prompt should contain partner1 name (Alex)',
+      );
+      expect(
+        firstStep['prompt'],
+        contains('Emma'),
+        reason: 'First step prompt should contain partner2 name (Emma)',
+      );
 
       print('   ✅ Exercise started – session $sessionId');
       print('   📌 Step 1 prompt: ${firstStep['prompt']}');
@@ -1166,8 +1279,11 @@ void main() {
       );
       expect(activeRes.statusCode, 200);
       final activeData = jsonDecode(activeRes.body);
-      expect(activeData['session'], isNotNull,
-          reason: 'Active session should exist');
+      expect(
+        activeData['session'],
+        isNotNull,
+        reason: 'Active session should exist',
+      );
       expect(activeData['session']['sessionId'], sessionId);
       expect(activeData['session']['status'], 'active');
 
@@ -1187,17 +1303,20 @@ void main() {
       final stepResponses = [
         {
           'token': u1Token,
-          'response': 'I really appreciate how Emma always makes time to listen to me after a long day.',
+          'response':
+              'I really appreciate how Emma always makes time to listen to me after a long day.',
           'who': 'Alex (partner1)',
         },
         {
           'token': u2Token,
-          'response': 'That means a lot to me. It feels good to know you value our evenings together.',
+          'response':
+              'That means a lot to me. It feels good to know you value our evenings together.',
           'who': 'Emma (partner2)',
         },
         {
           'token': u2Token,
-          'response': 'I appreciate how Alex always surprises me with little notes and remembers the small things.',
+          'response':
+              'I appreciate how Alex always surprises me with little notes and remembers the small things.',
           'who': 'Emma (partner2)',
         },
         {
@@ -1222,27 +1341,42 @@ void main() {
           },
           body: jsonEncode({'response': step['response']}),
         );
-        expect(progressRes.statusCode, 200,
-            reason: 'Step $stepNum progress should succeed');
+        expect(
+          progressRes.statusCode,
+          200,
+          reason: 'Step $stepNum progress should succeed',
+        );
         final progressData = jsonDecode(progressRes.body);
         expect(progressData['success'], true);
 
         if (isLast) {
-          expect(progressData['completed'], true,
-              reason: 'Last step should mark exercise as completed');
+          expect(
+            progressData['completed'],
+            true,
+            reason: 'Last step should mark exercise as completed',
+          );
           expect(progressData['session']['status'], 'completed');
           print('   ✅ Step $stepNum completed – exercise finished!');
         } else {
           expect(progressData['completed'], false);
-          expect(progressData['nextStep'], isNotNull,
-              reason: 'Non-last steps should return nextStep');
+          expect(
+            progressData['nextStep'],
+            isNotNull,
+            reason: 'Non-last steps should return nextStep',
+          );
           // Verify next step is personalized with names
           final nextPrompt = progressData['nextStep']['prompt'] as String;
           final mentionsAlex = nextPrompt.contains('Alex');
           final mentionsEmma = nextPrompt.contains('Emma');
-          expect(mentionsAlex || mentionsEmma, isTrue,
-              reason: 'Next step prompt should be personalized with partner names');
-          print('   ✅ Step $stepNum done → next: "${nextPrompt.substring(0, nextPrompt.length.clamp(0, 60))}..."');
+          expect(
+            mentionsAlex || mentionsEmma,
+            isTrue,
+            reason:
+                'Next step prompt should be personalized with partner names',
+          );
+          print(
+            '   ✅ Step $stepNum done → next: "${nextPrompt.substring(0, nextPrompt.length.clamp(0, 60))}..."',
+          );
         }
       }
 
@@ -1262,10 +1396,15 @@ void main() {
       final summaryData = jsonDecode(summaryRes.body);
       expect(summaryData['success'], true);
       expect(summaryData['summary'], isNotNull);
-      expect((summaryData['summary'] as String).length, greaterThan(50),
-          reason: 'Summary should be a meaningful paragraph');
+      expect(
+        (summaryData['summary'] as String).length,
+        greaterThan(50),
+        reason: 'Summary should be a meaningful paragraph',
+      );
 
-      print('   ✅ Summary generated (${(summaryData['summary'] as String).length} chars)');
+      print(
+        '   ✅ Summary generated (${(summaryData['summary'] as String).length} chars)',
+      );
       print('   📄 ${(summaryData['summary'] as String).substring(0, 120)}...');
 
       // ============================================
@@ -1281,11 +1420,17 @@ void main() {
       final msgsData = jsonDecode(msgsRes.body);
       final messages = (msgsData['messages'] ?? msgsData) as List;
 
-      final summaryMessage = messages.where((m) =>
-          m['senderType'] == 'ai' &&
-          (m['content'] as String).contains('Exercise Completed'));
-      expect(summaryMessage.isNotEmpty, isTrue,
-          reason: 'Exercise summary should be posted as an AI message in the conversation');
+      final summaryMessage = messages.where(
+        (m) =>
+            m['senderType'] == 'ai' &&
+            (m['content'] as String).contains('Exercise Completed'),
+      );
+      expect(
+        summaryMessage.isNotEmpty,
+        isTrue,
+        reason:
+            'Exercise summary should be posted as an AI message in the conversation',
+      );
 
       print('   ✅ Summary message found in conversation');
 
@@ -1359,12 +1504,17 @@ void main() {
       expect(newStartRes.statusCode, 200);
       final newStartData = jsonDecode(newStartRes.body);
       expect(newStartData['success'], true);
-      expect(newStartData['session']['sessionId'], isNot(equals(sessionId)),
-          reason: 'New exercise should have a different session ID');
+      expect(
+        newStartData['session']['sessionId'],
+        isNot(equals(sessionId)),
+        reason: 'New exercise should have a different session ID',
+      );
       expect(newStartData['session']['status'], 'active');
       expect(newStartData['session']['exerciseId'], 'active-listening');
 
-      print('   ✅ New exercise started successfully (session: ${newStartData['session']['sessionId']})');
+      print(
+        '   ✅ New exercise started successfully (session: ${newStartData['session']['sessionId']})',
+      );
 
       // ============================================
       // STEP 13: Session resume – re-starting same exercise returns existing active session
@@ -1385,8 +1535,11 @@ void main() {
       );
       expect(resumeRes.statusCode, 200);
       final resumeData = jsonDecode(resumeRes.body);
-      expect(resumeData['session']['sessionId'], newSessionId,
-          reason: 'Starting the same exercise should resume the active session');
+      expect(
+        resumeData['session']['sessionId'],
+        newSessionId,
+        reason: 'Starting the same exercise should resume the active session',
+      );
 
       print('   ✅ Session resumed correctly (same sessionId)');
 
@@ -1410,9 +1563,9 @@ void main() {
       print('');
     });
 
-    testWidgets('Progress dashboard displays correct stats after activity',
-        (WidgetTester tester) async {
-
+    testWidgets('Progress dashboard displays correct stats after activity', (
+      WidgetTester tester,
+    ) async {
       print('\n📊 Testing Progress Dashboard');
 
       final ts = DateTime.now().millisecondsSinceEpoch;
@@ -1512,8 +1665,9 @@ void main() {
         body: jsonEncode({'title': 'Progress Test Conversation'}),
       );
       expect(convRes.statusCode, 201);
-      final conversationId =
-          jsonDecode(convRes.body)['conversation']['conversationId'];
+      final conversationId = jsonDecode(
+        convRes.body,
+      )['conversation']['conversationId'];
 
       // Send 5 messages (alternating users)
       for (int i = 1; i <= 5; i++) {
@@ -1592,39 +1746,68 @@ void main() {
       final dash = jsonDecode(dashRes.body);
 
       // Health score should increase with activity
-      expect(dash['healthScore'], greaterThan(0),
-          reason: 'Health score should be > 0 after conversations & exercise');
+      expect(
+        dash['healthScore'],
+        greaterThan(0),
+        reason: 'Health score should be > 0 after conversations & exercise',
+      );
 
       // Exercise stats
-      expect(dash['exerciseStats']['total'], greaterThanOrEqualTo(1),
-          reason: 'Should have at least 1 exercise session');
-      expect(dash['exerciseStats']['completed'], greaterThanOrEqualTo(1),
-          reason: 'Should have at least 1 completed exercise');
+      expect(
+        dash['exerciseStats']['total'],
+        greaterThanOrEqualTo(1),
+        reason: 'Should have at least 1 exercise session',
+      );
+      expect(
+        dash['exerciseStats']['completed'],
+        greaterThanOrEqualTo(1),
+        reason: 'Should have at least 1 completed exercise',
+      );
       expect(dash['exerciseStats']['completionRate'], greaterThan(0));
 
       // Conversation stats should reflect our messages
       // (5 user messages + AI responses)
-      expect(dash['conversationStats']['totalMessages'], greaterThanOrEqualTo(5),
-          reason: 'Should have at least 5 messages');
-      expect(dash['conversationStats']['totalConversations'], greaterThanOrEqualTo(1));
+      expect(
+        dash['conversationStats']['totalMessages'],
+        greaterThanOrEqualTo(5),
+        reason: 'Should have at least 5 messages',
+      );
+      expect(
+        dash['conversationStats']['totalConversations'],
+        greaterThanOrEqualTo(1),
+      );
 
       // Activity streak should be at least 1 (today)
-      expect(dash['activityStreak']['currentStreak'], greaterThanOrEqualTo(1),
-          reason: 'Should have a streak of at least 1 day after activity today');
-      expect(dash['activityStreak']['totalActiveDays'], greaterThanOrEqualTo(1));
+      expect(
+        dash['activityStreak']['currentStreak'],
+        greaterThanOrEqualTo(1),
+        reason: 'Should have a streak of at least 1 day after activity today',
+      );
+      expect(
+        dash['activityStreak']['totalActiveDays'],
+        greaterThanOrEqualTo(1),
+      );
 
       // Weekly activity should have 7 entries
       expect(dash['weeklyActivity'], isA<List>());
-      expect((dash['weeklyActivity'] as List).length, 7,
-          reason: 'Weekly activity should always return 7 days');
+      expect(
+        (dash['weeklyActivity'] as List).length,
+        7,
+        reason: 'Weekly activity should always return 7 days',
+      );
 
       // Today should show some messages
       final today = (dash['weeklyActivity'] as List).last;
-      expect(today['messages'], greaterThanOrEqualTo(5),
-          reason: 'Today should have at least 5 user messages');
+      expect(
+        today['messages'],
+        greaterThanOrEqualTo(5),
+        reason: 'Today should have at least 5 user messages',
+      );
 
       print('   ✅ Health Score: ${dash['healthScore']}');
-      print('   ✅ Exercises: ${dash['exerciseStats']['completed']} completed / ${dash['exerciseStats']['total']} total');
+      print(
+        '   ✅ Exercises: ${dash['exerciseStats']['completed']} completed / ${dash['exerciseStats']['total']} total',
+      );
       print('   ✅ Messages: ${dash['conversationStats']['totalMessages']}');
       print('   ✅ Streak: ${dash['activityStreak']['currentStreak']} days');
       print('   ✅ Weekly activity: 7 days returned');
@@ -1669,14 +1852,21 @@ void main() {
       expect(dash2Res.statusCode, 200);
       final dash2 = jsonDecode(dash2Res.body);
 
-      expect(dash2['healthScore'], dash['healthScore'],
-          reason: 'Both partners should see the same health score');
-      expect(dash2['exerciseStats']['completed'],
-          dash['exerciseStats']['completed'],
-          reason: 'Both partners should see the same exercise stats');
-      expect(dash2['conversationStats']['totalMessages'],
-          dash['conversationStats']['totalMessages'],
-          reason: 'Both partners should see the same message count');
+      expect(
+        dash2['healthScore'],
+        dash['healthScore'],
+        reason: 'Both partners should see the same health score',
+      );
+      expect(
+        dash2['exerciseStats']['completed'],
+        dash['exerciseStats']['completed'],
+        reason: 'Both partners should see the same exercise stats',
+      );
+      expect(
+        dash2['conversationStats']['totalMessages'],
+        dash['conversationStats']['totalMessages'],
+        reason: 'Both partners should see the same message count',
+      );
 
       print('   ✅ Partner2 dashboard matches Partner1');
 
@@ -1688,8 +1878,11 @@ void main() {
       final noAuthRes = await http.get(
         Uri.parse('$apiUrl/api/progress/dashboard'),
       );
-      expect(noAuthRes.statusCode, 401,
-          reason: 'Dashboard should require authentication');
+      expect(
+        noAuthRes.statusCode,
+        401,
+        reason: 'Dashboard should require authentication',
+      );
 
       print('   ✅ Unauthenticated request returns 401');
 
@@ -1736,8 +1929,12 @@ void main() {
           timeout: const Duration(seconds: 5),
         );
         if (!altHome) {
-          print('   ⚠️ Could not reach home screen (SSE/auth timing in integration test)');
-          print('   ℹ️ API tests (steps 1-8) all passed — UI auth timing is a known integration test limitation');
+          print(
+            '   ⚠️ Could not reach home screen (SSE/auth timing in integration test)',
+          );
+          print(
+            '   ℹ️ API tests (steps 1-8) all passed — UI auth timing is a known integration test limitation',
+          );
           print('');
           print('🎉 ═══════════════════════════════════════════════════════');
           print('🎉  PROGRESS DASHBOARD TEST PASSED!');
@@ -1786,8 +1983,11 @@ void main() {
 
           // Check that health score is displayed
           final scoreText = find.textContaining(RegExp(r'^\d+$'));
-          expect(scoreText, findsWidgets,
-              reason: 'Health score number should be displayed');
+          expect(
+            scoreText,
+            findsWidgets,
+            reason: 'Health score number should be displayed',
+          );
 
           // Check for activity streak section
           final streakFound = await pumpUntilFound(
@@ -1795,8 +1995,11 @@ void main() {
             find.text('Activity Streak'),
             timeout: const Duration(seconds: 3),
           );
-          expect(streakFound, isTrue,
-              reason: 'Activity Streak section should be visible');
+          expect(
+            streakFound,
+            isTrue,
+            reason: 'Activity Streak section should be visible',
+          );
 
           // Look for weekly activity section (may need scrolling)
           await tester.dragUntilVisible(
@@ -1811,8 +2014,11 @@ void main() {
             find.text('Weekly Activity'),
             timeout: const Duration(seconds: 3),
           );
-          expect(weeklyFound, isTrue,
-              reason: 'Weekly Activity section should be visible');
+          expect(
+            weeklyFound,
+            isTrue,
+            reason: 'Weekly Activity section should be visible',
+          );
 
           // Look for exercise progress section
           await tester.dragUntilVisible(
@@ -1827,15 +2033,20 @@ void main() {
             find.text('Exercise Progress'),
             timeout: const Duration(seconds: 3),
           );
-          expect(exerciseProgressFound, isTrue,
-              reason: 'Exercise Progress section should be visible');
+          expect(
+            exerciseProgressFound,
+            isTrue,
+            reason: 'Exercise Progress section should be visible',
+          );
 
           print('   ✅ All dashboard sections rendered correctly');
         } else {
           print('   ⚠️ Dashboard content did not load (may be API timing)');
         }
       } else {
-        print('   ⚠️ View Progress card not found on home screen (partner link may be missing)');
+        print(
+          '   ⚠️ View Progress card not found on home screen (partner link may be missing)',
+        );
       }
 
       // ============================================
@@ -1858,15 +2069,18 @@ void main() {
       print('');
     });
 
-    testWidgets('Invite partner via UI navigates to waiting room on success',
-        (WidgetTester tester) async {
+    testWidgets('Invite partner via UI navigates to waiting room on success', (
+      WidgetTester tester,
+    ) async {
       // Launch the app
       app.main();
       await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
 
       // Test data
-      final userEmail = 'invite-ui-${DateTime.now().millisecondsSinceEpoch}@test.com';
-      final partnerEmail = 'partner-ui-${DateTime.now().millisecondsSinceEpoch}@test.com';
+      final userEmail =
+          'invite-ui-${DateTime.now().millisecondsSinceEpoch}@test.com';
+      final partnerEmail =
+          'partner-ui-${DateTime.now().millisecondsSinceEpoch}@test.com';
       final userPassword = 'Test123!';
 
       print('🧪 Starting Invite UI Navigation Test');
@@ -1874,9 +2088,28 @@ void main() {
       print('   Partner: $partnerEmail');
 
       // ============================================
-      // STEP 1: Register user via UI
+      // STEP 1: Create user and log in via UI
       // ============================================
-      print('\n📝 Step 1: Register user via UI');
+      print('\n📝 Step 1: Create user and log in via UI');
+
+      final registerResponse = await http.post(
+        Uri.parse('$apiUrl/api/auth/register'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'email': userEmail,
+          'password': userPassword,
+          'firstName': 'InviteTest',
+          'lastName': 'User',
+          'language': 'en',
+          'termsAccepted': true,
+          'subscriptionTier': 'free',
+        }),
+      );
+      expect(
+        registerResponse.statusCode,
+        201,
+        reason: 'Test user should be created before invite UI flow',
+      );
 
       final foundLogin = await pumpUntilFound(
         tester,
@@ -1885,44 +2118,11 @@ void main() {
       );
       expect(foundLogin, isTrue, reason: 'Login screen should appear');
 
-      await tester.tap(find.text('Don\'t have an account? Sign up'));
-      await settleWithTimeout(tester, timeout: const Duration(seconds: 2));
-
-      final allFields = find.byType(TextFormField);
-      await tester.enterText(allFields.at(0), 'InviteTest');
-      await tester.enterText(allFields.at(1), 'User');
-      await tester.enterText(allFields.at(2), userEmail);
-      await tester.enterText(allFields.at(3), userPassword);
-      await tester.enterText(allFields.at(4), userPassword);
-
-      await tester.dragUntilVisible(
-        find.byType(Checkbox),
-        find.byType(SingleChildScrollView),
-        const Offset(0, -100),
-      );
-      await settleWithTimeout(tester, timeout: const Duration(seconds: 1));
-
-      await tester.tap(find.byType(Checkbox));
-      await settleWithTimeout(tester, timeout: const Duration(seconds: 1));
-
-      await tester.dragUntilVisible(
-        find.widgetWithText(ElevatedButton, 'Create Account'),
-        find.byType(SingleChildScrollView),
-        const Offset(0, -100),
-      );
-      await settleWithTimeout(tester, timeout: const Duration(seconds: 1));
-
-      await tester.tap(find.widgetWithText(ElevatedButton, 'Create Account'));
-
-      final foundPlan = await pumpUntilFound(
-        tester,
-        find.text('Continue with Free'),
-        timeout: const Duration(seconds: 10),
-      );
-      if (foundPlan) {
-        await tester.tap(find.text('Continue with Free'));
-        await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
-      }
+      final loginFields = find.byType(TextFormField);
+      await tester.enterText(loginFields.at(0), userEmail);
+      await tester.enterText(loginFields.at(1), userPassword);
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Sign In'));
+      await settleWithTimeout(tester, timeout: const Duration(seconds: 5));
 
       // Wait for waiting room (no partner yet)
       final onWaitingRoom = await pumpUntilFound(
@@ -1930,8 +2130,12 @@ void main() {
         find.text('Invite Your Partner'),
         timeout: const Duration(seconds: 15),
       );
-      expect(onWaitingRoom, isTrue, reason: 'Should be on waiting room after registration');
-      print('   ✅ User registered, on waiting room');
+      expect(
+        onWaitingRoom,
+        isTrue,
+        reason: 'Should be on waiting room after login',
+      );
+      print('   ✅ User logged in, on waiting room');
 
       // ============================================
       // STEP 2: Tap "Invite Your Partner" button
@@ -1947,7 +2151,11 @@ void main() {
         find.text('Send Invitation'),
         timeout: const Duration(seconds: 5),
       );
-      expect(onInviteScreen, isTrue, reason: 'Should navigate to invite partner screen');
+      expect(
+        onInviteScreen,
+        isTrue,
+        reason: 'Should navigate to invite partner screen',
+      );
       print('   ✅ On invite partner screen');
 
       // ============================================
@@ -1981,7 +2189,7 @@ void main() {
       // with a pending invitation indicator
       final inviteScreenGone = await pumpUntilGone(
         tester,
-        find.text('Invite Your Partner'),  // AppBar title on invite screen
+        find.text('Invite Your Partner'), // AppBar title on invite screen
         timeout: const Duration(seconds: 10),
       );
 
@@ -1993,12 +2201,22 @@ void main() {
       );
 
       // Verify we're NOT still on the invite screen
-      final stillOnInvite = find.widgetWithText(ElevatedButton, 'Send Invitation');
-      expect(stillOnInvite, findsNothing,
-          reason: 'Should have navigated away from invite screen after sending');
+      final stillOnInvite = find.widgetWithText(
+        ElevatedButton,
+        'Send Invitation',
+      );
+      expect(
+        stillOnInvite,
+        findsNothing,
+        reason: 'Should have navigated away from invite screen after sending',
+      );
 
-      expect(backOnWaitingRoom, isTrue,
-          reason: 'Should be back on waiting room showing pending invitation for $partnerEmail');
+      expect(
+        backOnWaitingRoom,
+        isTrue,
+        reason:
+            'Should be back on waiting room showing pending invitation for $partnerEmail',
+      );
       print('   ✅ Navigated back to waiting room with pending invitation');
 
       // Verify invitation email was sent
@@ -2020,8 +2238,9 @@ void main() {
   });
 
   group('Language Change E2E Test', () {
-    testWidgets('User can change language from English to French and back',
-        (WidgetTester tester) async {
+    testWidgets('User can change language from English to French and back', (
+      WidgetTester tester,
+    ) async {
       // Launch the app
       app.main();
       await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
@@ -2032,7 +2251,8 @@ void main() {
       print('\n🌐 Language Change Test');
       print('📝 Step 1: Register user');
 
-      final testEmail = 'lang-${DateTime.now().millisecondsSinceEpoch}@test.com';
+      final testEmail =
+          'lang-${DateTime.now().millisecondsSinceEpoch}@test.com';
       const testPassword = 'Test123!';
 
       // Wait for login screen
@@ -2049,11 +2269,11 @@ void main() {
 
       // Fill registration form
       final allFields = find.byType(TextFormField);
-      await tester.enterText(allFields.at(0), 'LangTest');     // First Name
-      await tester.enterText(allFields.at(1), 'User');          // Last Name
-      await tester.enterText(allFields.at(2), testEmail);       // Email
-      await tester.enterText(allFields.at(3), testPassword);    // Password
-      await tester.enterText(allFields.at(4), testPassword);    // Confirm Password
+      await tester.enterText(allFields.at(0), 'LangTest'); // First Name
+      await tester.enterText(allFields.at(1), 'User'); // Last Name
+      await tester.enterText(allFields.at(2), testEmail); // Email
+      await tester.enterText(allFields.at(3), testPassword); // Password
+      await tester.enterText(allFields.at(4), testPassword); // Confirm Password
 
       // Accept terms
       await tester.dragUntilVisible(
@@ -2085,14 +2305,18 @@ void main() {
         await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
       }
 
-      // Wait for main conversation screen (waiting room since no partner)
-      final onHome = await pumpUntilFound(
+      // Wait for waiting room since this test user has no partner yet.
+      final onWaitingRoom = await pumpUntilFound(
         tester,
-        find.text('We Coach'),
+        find.text('Invite Your Partner'),
         timeout: const Duration(seconds: 15),
       );
-      expect(onHome, isTrue, reason: 'Should be on conversation screen after registration');
-      print('   ✅ User registered and on home screen');
+      expect(
+        onWaitingRoom,
+        isTrue,
+        reason: 'Should be on waiting room after registration',
+      );
+      print('   ✅ User registered and on waiting room');
 
       // ============================================
       // STEP 2: Open popup menu and navigate to language screen
@@ -2107,7 +2331,11 @@ void main() {
 
       // Verify Language option is visible in popup
       final languageOption = find.text('Language');
-      expect(languageOption, findsOneWidget, reason: 'Language option should be in popup menu');
+      expect(
+        languageOption,
+        findsOneWidget,
+        reason: 'Language option should be in popup menu',
+      );
 
       // Tap Language
       await tester.tap(languageOption);
@@ -2119,7 +2347,11 @@ void main() {
         find.text('Select Language'),
         timeout: const Duration(seconds: 5),
       );
-      expect(foundSelectLanguage, isTrue, reason: 'Language selection screen should appear');
+      expect(
+        foundSelectLanguage,
+        isTrue,
+        reason: 'Language selection screen should appear',
+      );
       print('   ✅ Language selection screen is displayed');
 
       // Verify English is currently selected (check icon)
@@ -2145,11 +2377,19 @@ void main() {
       if (!foundFrenchTitle) {
         // Fallback: verify language was changed by checking the selection indicator
         // The Français ListTile should now show a check_circle icon
-        print('   ⚠️ French title not found, checking language was actually changed...');
+        print(
+          '   ⚠️ French title not found, checking language was actually changed...',
+        );
         // If we're still on the language screen, the selection should have changed
         final stillOnLangScreen = find.text('Français').evaluate().isNotEmpty;
-        expect(stillOnLangScreen, isTrue, reason: 'Should still be on language selection screen');
-        print('   ✅ Language selection confirmed (localization delegate may be slow in tests)');
+        expect(
+          stillOnLangScreen,
+          isTrue,
+          reason: 'Should still be on language selection screen',
+        );
+        print(
+          '   ✅ Language selection confirmed (localization delegate may be slow in tests)',
+        );
       } else {
         print('   ✅ Screen title changed to "Sélectionner la Langue"');
       }
@@ -2209,7 +2449,11 @@ void main() {
         find.text('English'),
         timeout: const Duration(seconds: 5),
       );
-      expect(onLangScreen, isTrue, reason: 'Language selection screen should show languages');
+      expect(
+        onLangScreen,
+        isTrue,
+        reason: 'Language selection screen should show languages',
+      );
 
       // Tap English
       await tester.tap(find.text('English').first);
@@ -2222,10 +2466,18 @@ void main() {
         timeout: const Duration(seconds: 15),
       );
       if (!foundEnglishTitle) {
-        print('   ⚠️ English title not found, verifying language was changed...');
+        print(
+          '   ⚠️ English title not found, verifying language was changed...',
+        );
         final stillOnScreen = find.text('English').evaluate().isNotEmpty;
-        expect(stillOnScreen, isTrue, reason: 'Should still be on language selection screen');
-        print('   ✅ Language change confirmed (localization delegate may be slow in tests)');
+        expect(
+          stillOnScreen,
+          isTrue,
+          reason: 'Should still be on language selection screen',
+        );
+        print(
+          '   ✅ Language change confirmed (localization delegate may be slow in tests)',
+        );
       } else {
         print('   ✅ Successfully switched back to English');
       }
