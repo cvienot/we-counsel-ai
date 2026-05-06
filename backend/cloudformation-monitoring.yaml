@@ -1,0 +1,950 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Launch monitoring, dashboard, and alerts for We Connect production'
+
+Parameters:
+  AlertEmail:
+    Type: String
+    Description: Email address that receives launch CloudWatch and budget alerts
+    AllowedPattern: '^[^@\s]+@[^@\s]+\.[^@\s]+$'
+
+  AppRunnerServiceName:
+    Type: String
+    Default: we-counsel-backend
+    Description: App Runner service name
+
+  MonthlyBudgetUsd:
+    Type: Number
+    Default: 100
+    MinValue: 1
+    Description: Monthly AWS budget alert threshold in USD
+
+  FourXxThreshold:
+    Type: Number
+    Default: 20
+    MinValue: 1
+    Description: Alarm if App Runner 4xx responses reach this count in 5 minutes
+
+  LatencyThresholdMs:
+    Type: Number
+    Default: 5000
+    MinValue: 1
+    Description: Alarm if average request latency reaches this many milliseconds
+
+Resources:
+  LaunchAlertsTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: we-connect-prod-alerts
+      DisplayName: We Connect production launch alerts
+      Tags:
+        - Key: Application
+          Value: WeConnect
+        - Key: Environment
+          Value: Production
+
+  LaunchAlertsEmailSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref LaunchAlertsTopic
+      Protocol: email
+      Endpoint: !Ref AlertEmail
+
+  AwsMonthlyBudget:
+    Type: AWS::Budgets::Budget
+    Properties:
+      Budget:
+        BudgetName: we-connect-prod-monthly-aws-budget
+        BudgetLimit:
+          Amount: !Ref MonthlyBudgetUsd
+          Unit: USD
+        TimeUnit: MONTHLY
+        BudgetType: COST
+      NotificationsWithSubscribers:
+        - Notification:
+            NotificationType: ACTUAL
+            ComparisonOperator: GREATER_THAN
+            Threshold: 80
+            ThresholdType: PERCENTAGE
+          Subscribers:
+            - SubscriptionType: EMAIL
+              Address: !Ref AlertEmail
+        - Notification:
+            NotificationType: FORECASTED
+            ComparisonOperator: GREATER_THAN
+            Threshold: 100
+            ThresholdType: PERCENTAGE
+          Subscribers:
+            - SubscriptionType: EMAIL
+              Address: !Ref AlertEmail
+
+  Backend5xxAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: we-connect-prod-apprunner-5xx
+      AlarmDescription: App Runner returned at least one 5xx response.
+      Namespace: AWS/AppRunner
+      MetricName: 5xxStatusResponses
+      Dimensions:
+        - Name: ServiceName
+          Value: !Ref AppRunnerServiceName
+        - Name: ServiceID
+          Value: !ImportValue WeCounsel-BackendId
+      Statistic: Sum
+      Period: 60
+      EvaluationPeriods: 2
+      DatapointsToAlarm: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LaunchAlertsTopic
+      OKActions:
+        - !Ref LaunchAlertsTopic
+
+  Backend4xxAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: we-connect-prod-apprunner-4xx-spike
+      AlarmDescription: App Runner 4xx responses spiked above the launch threshold.
+      Namespace: AWS/AppRunner
+      MetricName: 4xxStatusResponses
+      Dimensions:
+        - Name: ServiceName
+          Value: !Ref AppRunnerServiceName
+        - Name: ServiceID
+          Value: !ImportValue WeCounsel-BackendId
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: !Ref FourXxThreshold
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LaunchAlertsTopic
+      OKActions:
+        - !Ref LaunchAlertsTopic
+
+  BackendLatencyAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: we-connect-prod-apprunner-high-latency
+      AlarmDescription: App Runner average request latency is above the launch threshold.
+      Namespace: AWS/AppRunner
+      MetricName: RequestLatency
+      Dimensions:
+        - Name: ServiceName
+          Value: !Ref AppRunnerServiceName
+        - Name: ServiceID
+          Value: !ImportValue WeCounsel-BackendId
+      Statistic: Average
+      Period: 60
+      EvaluationPeriods: 5
+      DatapointsToAlarm: 3
+      Threshold: !Ref LatencyThresholdMs
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LaunchAlertsTopic
+      OKActions:
+        - !Ref LaunchAlertsTopic
+
+  BackendCpuAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: we-connect-prod-apprunner-high-cpu
+      AlarmDescription: App Runner CPU utilization is sustained above 85 percent.
+      Namespace: AWS/AppRunner
+      MetricName: CPUUtilization
+      Dimensions:
+        - Name: ServiceName
+          Value: !Ref AppRunnerServiceName
+        - Name: ServiceID
+          Value: !ImportValue WeCounsel-BackendId
+      Statistic: Average
+      Period: 60
+      EvaluationPeriods: 5
+      DatapointsToAlarm: 3
+      Threshold: 85
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LaunchAlertsTopic
+      OKActions:
+        - !Ref LaunchAlertsTopic
+
+  BackendMemoryAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: we-connect-prod-apprunner-high-memory
+      AlarmDescription: App Runner memory utilization is sustained above 85 percent.
+      Namespace: AWS/AppRunner
+      MetricName: MemoryUtilization
+      Dimensions:
+        - Name: ServiceName
+          Value: !Ref AppRunnerServiceName
+        - Name: ServiceID
+          Value: !ImportValue WeCounsel-BackendId
+      Statistic: Average
+      Period: 60
+      EvaluationPeriods: 5
+      DatapointsToAlarm: 3
+      Threshold: 85
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LaunchAlertsTopic
+      OKActions:
+        - !Ref LaunchAlertsTopic
+
+  AppRunnerDeploymentFailureMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName:
+        Fn::Sub:
+          - '/aws/apprunner/${ServiceName}/${ServiceId}/service'
+          - ServiceName: !Ref AppRunnerServiceName
+            ServiceId: !ImportValue WeCounsel-BackendId
+      FilterName: we-connect-apprunner-service-failures
+      FilterPattern: '"Failed"'
+      MetricTransformations:
+        - MetricNamespace: WeConnect/Launch
+          MetricName: AppRunnerServiceFailures
+          MetricValue: '1'
+          DefaultValue: 0
+
+  AppRunnerDeploymentFailureAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: we-connect-prod-apprunner-service-failures
+      AlarmDescription: App Runner service log contains a failure event.
+      Namespace: WeConnect/Launch
+      MetricName: AppRunnerServiceFailures
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LaunchAlertsTopic
+      OKActions:
+        - !Ref LaunchAlertsTopic
+
+  ServerErrorMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName:
+        Fn::Sub:
+          - '/aws/apprunner/${ServiceName}/${ServiceId}/application'
+          - ServiceName: !Ref AppRunnerServiceName
+            ServiceId: !ImportValue WeCounsel-BackendId
+      FilterName: we-connect-server-errors
+      FilterPattern: '"Server error"'
+      MetricTransformations:
+        - MetricNamespace: WeConnect/Launch
+          MetricName: ServerErrors
+          MetricValue: '1'
+          DefaultValue: 0
+
+  WebhookSignatureFailureMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName:
+        Fn::Sub:
+          - '/aws/apprunner/${ServiceName}/${ServiceId}/application'
+          - ServiceName: !Ref AppRunnerServiceName
+            ServiceId: !ImportValue WeCounsel-BackendId
+      FilterName: we-connect-webhook-signature-failures
+      FilterPattern: '"Webhook signature verification failed"'
+      MetricTransformations:
+        - MetricNamespace: WeConnect/Launch
+          MetricName: StripeWebhookSignatureFailures
+          MetricValue: '1'
+          DefaultValue: 0
+
+  WebhookErrorMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName:
+        Fn::Sub:
+          - '/aws/apprunner/${ServiceName}/${ServiceId}/application'
+          - ServiceName: !Ref AppRunnerServiceName
+            ServiceId: !ImportValue WeCounsel-BackendId
+      FilterName: we-connect-webhook-errors
+      FilterPattern: '"Webhook error"'
+      MetricTransformations:
+        - MetricNamespace: WeConnect/Launch
+          MetricName: StripeWebhookErrors
+          MetricValue: '1'
+          DefaultValue: 0
+
+  CheckoutErrorMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName:
+        Fn::Sub:
+          - '/aws/apprunner/${ServiceName}/${ServiceId}/application'
+          - ServiceName: !Ref AppRunnerServiceName
+            ServiceId: !ImportValue WeCounsel-BackendId
+      FilterName: we-connect-checkout-errors
+      FilterPattern: '"Error creating checkout session"'
+      MetricTransformations:
+        - MetricNamespace: WeConnect/Launch
+          MetricName: StripeCheckoutErrors
+          MetricValue: '1'
+          DefaultValue: 0
+
+  PaymentFailedMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName:
+        Fn::Sub:
+          - '/aws/apprunner/${ServiceName}/${ServiceId}/application'
+          - ServiceName: !Ref AppRunnerServiceName
+            ServiceId: !ImportValue WeCounsel-BackendId
+      FilterName: we-connect-payment-failures
+      FilterPattern: '"Payment failed"'
+      MetricTransformations:
+        - MetricNamespace: WeConnect/Launch
+          MetricName: StripePaymentFailures
+          MetricValue: '1'
+          DefaultValue: 0
+
+  MissingConfigMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName:
+        Fn::Sub:
+          - '/aws/apprunner/${ServiceName}/${ServiceId}/application'
+          - ServiceName: !Ref AppRunnerServiceName
+            ServiceId: !ImportValue WeCounsel-BackendId
+      FilterName: we-connect-missing-configuration
+      FilterPattern: '"Missing required configuration"'
+      MetricTransformations:
+        - MetricNamespace: WeConnect/Launch
+          MetricName: MissingConfigurationErrors
+          MetricValue: '1'
+          DefaultValue: 0
+
+  MessageSummaryErrorMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName:
+        Fn::Sub:
+          - '/aws/apprunner/${ServiceName}/${ServiceId}/application'
+          - ServiceName: !Ref AppRunnerServiceName
+            ServiceId: !ImportValue WeCounsel-BackendId
+      FilterName: we-connect-message-summary-errors
+      FilterPattern: '"Error generating summary"'
+      MetricTransformations:
+        - MetricNamespace: WeConnect/Launch
+          MetricName: MessageSummaryErrors
+          MetricValue: '1'
+          DefaultValue: 0
+
+  GetMessagesErrorMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName:
+        Fn::Sub:
+          - '/aws/apprunner/${ServiceName}/${ServiceId}/application'
+          - ServiceName: !Ref AppRunnerServiceName
+            ServiceId: !ImportValue WeCounsel-BackendId
+      FilterName: we-connect-get-messages-errors
+      FilterPattern: '"Get messages error"'
+      MetricTransformations:
+        - MetricNamespace: WeConnect/Launch
+          MetricName: GetMessagesErrors
+          MetricValue: '1'
+          DefaultValue: 0
+
+  OpenAISummaryErrorMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName:
+        Fn::Sub:
+          - '/aws/apprunner/${ServiceName}/${ServiceId}/application'
+          - ServiceName: !Ref AppRunnerServiceName
+            ServiceId: !ImportValue WeCounsel-BackendId
+      FilterName: we-connect-openai-summary-errors
+      FilterPattern: '"OpenAI summary error"'
+      MetricTransformations:
+        - MetricNamespace: WeConnect/Launch
+          MetricName: OpenAISummaryErrors
+          MetricValue: '1'
+          DefaultValue: 0
+
+  OpenAIStreamingErrorMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName:
+        Fn::Sub:
+          - '/aws/apprunner/${ServiceName}/${ServiceId}/application'
+          - ServiceName: !Ref AppRunnerServiceName
+            ServiceId: !ImportValue WeCounsel-BackendId
+      FilterName: we-connect-openai-streaming-errors
+      FilterPattern: '"OpenAI Streaming API error"'
+      MetricTransformations:
+        - MetricNamespace: WeConnect/Launch
+          MetricName: OpenAIStreamingErrors
+          MetricValue: '1'
+          DefaultValue: 0
+
+  Auth401MetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName:
+        Fn::Sub:
+          - '/aws/apprunner/${ServiceName}/${ServiceId}/application'
+          - ServiceName: !Ref AppRunnerServiceName
+            ServiceId: !ImportValue WeCounsel-BackendId
+      FilterName: we-connect-auth-401-responses
+      FilterPattern: '[ip, identity, user, timestamp, request, status_code = 401, size, referrer, user_agent]'
+      MetricTransformations:
+        - MetricNamespace: WeConnect/Launch
+          MetricName: Auth401Responses
+          MetricValue: '1'
+          DefaultValue: 0
+
+  ApplicationErrorAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: we-connect-prod-application-errors
+      AlarmDescription: Backend application logged an error matched by launch metric filters.
+      Metrics:
+        - Id: server_errors
+          MetricStat:
+            Metric:
+              Namespace: WeConnect/Launch
+              MetricName: ServerErrors
+            Period: 300
+            Stat: Sum
+          ReturnData: false
+        - Id: webhook_signature_failures
+          MetricStat:
+            Metric:
+              Namespace: WeConnect/Launch
+              MetricName: StripeWebhookSignatureFailures
+            Period: 300
+            Stat: Sum
+          ReturnData: false
+        - Id: webhook_errors
+          MetricStat:
+            Metric:
+              Namespace: WeConnect/Launch
+              MetricName: StripeWebhookErrors
+            Period: 300
+            Stat: Sum
+          ReturnData: false
+        - Id: checkout_errors
+          MetricStat:
+            Metric:
+              Namespace: WeConnect/Launch
+              MetricName: StripeCheckoutErrors
+            Period: 300
+            Stat: Sum
+          ReturnData: false
+        - Id: missing_configuration_errors
+          MetricStat:
+            Metric:
+              Namespace: WeConnect/Launch
+              MetricName: MissingConfigurationErrors
+            Period: 300
+            Stat: Sum
+          ReturnData: false
+        - Id: message_summary_errors
+          MetricStat:
+            Metric:
+              Namespace: WeConnect/Launch
+              MetricName: MessageSummaryErrors
+            Period: 300
+            Stat: Sum
+          ReturnData: false
+        - Id: get_messages_errors
+          MetricStat:
+            Metric:
+              Namespace: WeConnect/Launch
+              MetricName: GetMessagesErrors
+            Period: 300
+            Stat: Sum
+          ReturnData: false
+        - Id: openai_summary_errors
+          MetricStat:
+            Metric:
+              Namespace: WeConnect/Launch
+              MetricName: OpenAISummaryErrors
+            Period: 300
+            Stat: Sum
+          ReturnData: false
+        - Id: openai_streaming_errors
+          MetricStat:
+            Metric:
+              Namespace: WeConnect/Launch
+              MetricName: OpenAIStreamingErrors
+            Period: 300
+            Stat: Sum
+          ReturnData: false
+        - Id: total_errors
+          Expression: server_errors + webhook_signature_failures + webhook_errors + checkout_errors + missing_configuration_errors + message_summary_errors + get_messages_errors + openai_summary_errors + openai_streaming_errors
+          Label: Total application errors
+          ReturnData: true
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LaunchAlertsTopic
+      OKActions:
+        - !Ref LaunchAlertsTopic
+
+  StripePaymentFailureAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: we-connect-prod-stripe-payment-failures
+      AlarmDescription: Stripe webhook logged at least one failed payment.
+      Namespace: WeConnect/Launch
+      MetricName: StripePaymentFailures
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LaunchAlertsTopic
+      OKActions:
+        - !Ref LaunchAlertsTopic
+
+  Auth401SpikeAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: we-connect-prod-auth-401-spike
+      AlarmDescription: Backend access logs show repeated 401 responses.
+      Namespace: WeConnect/Launch
+      MetricName: Auth401Responses
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 20
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LaunchAlertsTopic
+      OKActions:
+        - !Ref LaunchAlertsTopic
+
+  UsersThrottleAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: we-connect-prod-dynamodb-users-throttles
+      AlarmDescription: DynamoDB users table has throttled requests.
+      Namespace: AWS/DynamoDB
+      MetricName: ThrottledRequests
+      Dimensions:
+        - Name: TableName
+          Value: !ImportValue WeCounsel-UsersTable
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LaunchAlertsTopic
+      OKActions:
+        - !Ref LaunchAlertsTopic
+
+  CouplesThrottleAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: we-connect-prod-dynamodb-couples-throttles
+      AlarmDescription: DynamoDB couples table has throttled requests.
+      Namespace: AWS/DynamoDB
+      MetricName: ThrottledRequests
+      Dimensions:
+        - Name: TableName
+          Value: !ImportValue WeCounsel-CouplesTable
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LaunchAlertsTopic
+      OKActions:
+        - !Ref LaunchAlertsTopic
+
+  InvitationsThrottleAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: we-connect-prod-dynamodb-invitations-throttles
+      AlarmDescription: DynamoDB invitations table has throttled requests.
+      Namespace: AWS/DynamoDB
+      MetricName: ThrottledRequests
+      Dimensions:
+        - Name: TableName
+          Value: !ImportValue WeCounsel-InvitationsTable
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LaunchAlertsTopic
+      OKActions:
+        - !Ref LaunchAlertsTopic
+
+  ConversationsThrottleAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: we-connect-prod-dynamodb-conversations-throttles
+      AlarmDescription: DynamoDB conversations table has throttled requests.
+      Namespace: AWS/DynamoDB
+      MetricName: ThrottledRequests
+      Dimensions:
+        - Name: TableName
+          Value: !ImportValue WeCounsel-ConversationsTable
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LaunchAlertsTopic
+      OKActions:
+        - !Ref LaunchAlertsTopic
+
+  MessagesThrottleAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: we-connect-prod-dynamodb-messages-throttles
+      AlarmDescription: DynamoDB messages table has throttled requests.
+      Namespace: AWS/DynamoDB
+      MetricName: ThrottledRequests
+      Dimensions:
+        - Name: TableName
+          Value: !ImportValue WeCounsel-MessagesTable
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LaunchAlertsTopic
+      OKActions:
+        - !Ref LaunchAlertsTopic
+
+  SubscriptionsThrottleAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: we-connect-prod-dynamodb-subscriptions-throttles
+      AlarmDescription: DynamoDB subscriptions table has throttled requests.
+      Namespace: AWS/DynamoDB
+      MetricName: ThrottledRequests
+      Dimensions:
+        - Name: TableName
+          Value: !ImportValue WeCounsel-SubscriptionsTable
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LaunchAlertsTopic
+      OKActions:
+        - !Ref LaunchAlertsTopic
+
+  ExercisesThrottleAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: we-connect-prod-dynamodb-exercises-throttles
+      AlarmDescription: DynamoDB exercises table has throttled requests.
+      Namespace: AWS/DynamoDB
+      MetricName: ThrottledRequests
+      Dimensions:
+        - Name: TableName
+          Value: !ImportValue WeCounsel-ExercisesTable
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LaunchAlertsTopic
+      OKActions:
+        - !Ref LaunchAlertsTopic
+
+  ExerciseSessionsThrottleAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: we-connect-prod-dynamodb-exercise-sessions-throttles
+      AlarmDescription: DynamoDB exercise sessions table has throttled requests.
+      Namespace: AWS/DynamoDB
+      MetricName: ThrottledRequests
+      Dimensions:
+        - Name: TableName
+          Value: !ImportValue WeCounsel-ExerciseSessionsTable
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LaunchAlertsTopic
+      OKActions:
+        - !Ref LaunchAlertsTopic
+
+  SesBounceAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: we-connect-prod-ses-bounces
+      AlarmDescription: SES emitted at least one bounce event.
+      Namespace: AWS/SES
+      MetricName: Bounce
+      Statistic: Sum
+      Period: 3600
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LaunchAlertsTopic
+      OKActions:
+        - !Ref LaunchAlertsTopic
+
+  SesComplaintAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: we-connect-prod-ses-complaints
+      AlarmDescription: SES emitted at least one complaint event.
+      Namespace: AWS/SES
+      MetricName: Complaint
+      Statistic: Sum
+      Period: 3600
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LaunchAlertsTopic
+      OKActions:
+        - !Ref LaunchAlertsTopic
+
+  SesRejectAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: we-connect-prod-ses-rejects
+      AlarmDescription: SES emitted at least one reject event.
+      Namespace: AWS/SES
+      MetricName: Reject
+      Statistic: Sum
+      Period: 3600
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref LaunchAlertsTopic
+      OKActions:
+        - !Ref LaunchAlertsTopic
+
+  LaunchDashboard:
+    Type: AWS::CloudWatch::Dashboard
+    Properties:
+      DashboardName: we-connect-prod-launch
+      DashboardBody:
+        Fn::Sub:
+          - |
+            {
+              "widgets": [
+                {
+                  "type": "text",
+                  "x": 0,
+                  "y": 0,
+                  "width": 24,
+                  "height": 2,
+                  "properties": {
+                    "markdown": "# We Connect Production Launch\\nWatch App Runner traffic/errors, backend application error filters, DynamoDB throttles, SES reputation events, and AWS spend during launch."
+                  }
+                },
+                {
+                  "type": "metric",
+                  "x": 0,
+                  "y": 2,
+                  "width": 12,
+                  "height": 6,
+                  "properties": {
+                    "title": "App Runner requests and status",
+                    "region": "${AWS::Region}",
+                    "view": "timeSeries",
+                    "stacked": false,
+                    "stat": "Sum",
+                    "period": 60,
+                    "metrics": [
+                      [ "AWS/AppRunner", "Requests", "ServiceName", "${ServiceName}", "ServiceID", "${ServiceId}", { "label": "Requests" } ],
+                      [ "AWS/AppRunner", "4xxStatusResponses", "ServiceName", "${ServiceName}", "ServiceID", "${ServiceId}", { "label": "4xx" } ],
+                      [ "AWS/AppRunner", "5xxStatusResponses", "ServiceName", "${ServiceName}", "ServiceID", "${ServiceId}", { "label": "5xx" } ]
+                    ]
+                  }
+                },
+                {
+                  "type": "metric",
+                  "x": 12,
+                  "y": 2,
+                  "width": 12,
+                  "height": 6,
+                  "properties": {
+                    "title": "App Runner latency and saturation",
+                    "region": "${AWS::Region}",
+                    "view": "timeSeries",
+                    "stacked": false,
+                    "period": 60,
+                    "metrics": [
+                      [ "AWS/AppRunner", "RequestLatency", "ServiceName", "${ServiceName}", "ServiceID", "${ServiceId}", { "stat": "Average", "label": "Latency ms", "yAxis": "left" } ],
+                      [ "AWS/AppRunner", "CPUUtilization", "ServiceName", "${ServiceName}", "ServiceID", "${ServiceId}", { "stat": "Average", "label": "CPU %", "yAxis": "right" } ],
+                      [ "AWS/AppRunner", "MemoryUtilization", "ServiceName", "${ServiceName}", "ServiceID", "${ServiceId}", { "stat": "Average", "label": "Memory %", "yAxis": "right" } ],
+                      [ "AWS/AppRunner", "Concurrency", "ServiceName", "${ServiceName}", "ServiceID", "${ServiceId}", { "stat": "Average", "label": "Concurrency", "yAxis": "left" } ],
+                      [ "AWS/AppRunner", "ActiveInstances", "ServiceName", "${ServiceName}", "ServiceID", "${ServiceId}", { "stat": "Average", "label": "Active instances", "yAxis": "left" } ]
+                    ]
+                  }
+                },
+                {
+                  "type": "metric",
+                  "x": 0,
+                  "y": 8,
+                  "width": 12,
+                  "height": 6,
+                  "properties": {
+                    "title": "Backend application error filters",
+                    "region": "${AWS::Region}",
+                    "view": "timeSeries",
+                    "stacked": false,
+                    "stat": "Sum",
+                    "period": 300,
+                    "metrics": [
+                      [ "WeConnect/Launch", "ServerErrors", { "label": "Server errors" } ],
+                      [ "WeConnect/Launch", "StripeWebhookSignatureFailures", { "label": "Webhook signature" } ],
+                      [ "WeConnect/Launch", "StripeWebhookErrors", { "label": "Webhook errors" } ],
+                      [ "WeConnect/Launch", "StripeCheckoutErrors", { "label": "Checkout errors" } ],
+                      [ "WeConnect/Launch", "StripePaymentFailures", { "label": "Payment failed" } ],
+                      [ "WeConnect/Launch", "MissingConfigurationErrors", { "label": "Missing config" } ],
+                      [ "WeConnect/Launch", "OpenAIStreamingErrors", { "label": "OpenAI streaming" } ],
+                      [ "WeConnect/Launch", "OpenAISummaryErrors", { "label": "OpenAI summary" } ],
+                      [ "WeConnect/Launch", "Auth401Responses", { "label": "401 responses" } ]
+                    ]
+                  }
+                },
+                {
+                  "type": "metric",
+                  "x": 12,
+                  "y": 8,
+                  "width": 12,
+                  "height": 6,
+                  "properties": {
+                    "title": "DynamoDB throttled requests",
+                    "region": "${AWS::Region}",
+                    "view": "timeSeries",
+                    "stacked": false,
+                    "stat": "Sum",
+                    "period": 300,
+                    "metrics": [
+                      [ "AWS/DynamoDB", "ThrottledRequests", "TableName", "${UsersTable}", { "label": "Users" } ],
+                      [ "AWS/DynamoDB", "ThrottledRequests", "TableName", "${CouplesTable}", { "label": "Couples" } ],
+                      [ "AWS/DynamoDB", "ThrottledRequests", "TableName", "${InvitationsTable}", { "label": "Invitations" } ],
+                      [ "AWS/DynamoDB", "ThrottledRequests", "TableName", "${ConversationsTable}", { "label": "Conversations" } ],
+                      [ "AWS/DynamoDB", "ThrottledRequests", "TableName", "${MessagesTable}", { "label": "Messages" } ],
+                      [ "AWS/DynamoDB", "ThrottledRequests", "TableName", "${SubscriptionsTable}", { "label": "Subscriptions" } ],
+                      [ "AWS/DynamoDB", "ThrottledRequests", "TableName", "${ExercisesTable}", { "label": "Exercises" } ],
+                      [ "AWS/DynamoDB", "ThrottledRequests", "TableName", "${ExerciseSessionsTable}", { "label": "Exercise sessions" } ]
+                    ]
+                  }
+                },
+                {
+                  "type": "metric",
+                  "x": 0,
+                  "y": 14,
+                  "width": 12,
+                  "height": 6,
+                  "properties": {
+                    "title": "DynamoDB consumed capacity",
+                    "region": "${AWS::Region}",
+                    "view": "timeSeries",
+                    "stacked": false,
+                    "stat": "Sum",
+                    "period": 300,
+                    "metrics": [
+                      [ "AWS/DynamoDB", "ConsumedReadCapacityUnits", "TableName", "${UsersTable}", { "label": "Users read" } ],
+                      [ "AWS/DynamoDB", "ConsumedWriteCapacityUnits", "TableName", "${UsersTable}", { "label": "Users write" } ],
+                      [ "AWS/DynamoDB", "ConsumedReadCapacityUnits", "TableName", "${MessagesTable}", { "label": "Messages read" } ],
+                      [ "AWS/DynamoDB", "ConsumedWriteCapacityUnits", "TableName", "${MessagesTable}", { "label": "Messages write" } ],
+                      [ "AWS/DynamoDB", "ConsumedReadCapacityUnits", "TableName", "${ConversationsTable}", { "label": "Conversations read" } ],
+                      [ "AWS/DynamoDB", "ConsumedWriteCapacityUnits", "TableName", "${ConversationsTable}", { "label": "Conversations write" } ]
+                    ]
+                  }
+                },
+                {
+                  "type": "metric",
+                  "x": 12,
+                  "y": 14,
+                  "width": 12,
+                  "height": 6,
+                  "properties": {
+                    "title": "SES transactional email events",
+                    "region": "${AWS::Region}",
+                    "view": "timeSeries",
+                    "stacked": false,
+                    "stat": "Sum",
+                    "period": 3600,
+                    "metrics": [
+                      [ "AWS/SES", "Send", { "label": "Send" } ],
+                      [ "AWS/SES", "Bounce", { "label": "Bounce" } ],
+                      [ "AWS/SES", "Complaint", { "label": "Complaint" } ],
+                      [ "AWS/SES", "Reject", { "label": "Reject" } ]
+                    ]
+                  }
+                },
+                {
+                  "type": "log",
+                  "x": 0,
+                  "y": 20,
+                  "width": 24,
+                  "height": 6,
+                  "properties": {
+                    "title": "Recent backend errors",
+                    "region": "${AWS::Region}",
+                    "query": "SOURCE '/aws/apprunner/${ServiceName}/${ServiceId}/application' | fields @timestamp, @message | filter @message like /error|Error|failed|Failed|Webhook|OpenAI|Stripe/ | sort @timestamp desc | limit 50",
+                    "view": "table"
+                  }
+                }
+              ]
+            }
+          - ServiceName: !Ref AppRunnerServiceName
+            ServiceId: !ImportValue WeCounsel-BackendId
+            UsersTable: !ImportValue WeCounsel-UsersTable
+            CouplesTable: !ImportValue WeCounsel-CouplesTable
+            InvitationsTable: !ImportValue WeCounsel-InvitationsTable
+            ConversationsTable: !ImportValue WeCounsel-ConversationsTable
+            MessagesTable: !ImportValue WeCounsel-MessagesTable
+            SubscriptionsTable: !ImportValue WeCounsel-SubscriptionsTable
+            ExercisesTable: !ImportValue WeCounsel-ExercisesTable
+            ExerciseSessionsTable: !ImportValue WeCounsel-ExerciseSessionsTable
+
+Outputs:
+  AlertsTopicArn:
+    Description: SNS topic ARN for launch alerts
+    Value: !Ref LaunchAlertsTopic
+    Export:
+      Name: WeConnect-LaunchAlertsTopicArn
+
+  DashboardName:
+    Description: CloudWatch dashboard name
+    Value: !Ref LaunchDashboard
+    Export:
+      Name: WeConnect-LaunchDashboardName

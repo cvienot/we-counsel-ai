@@ -19,6 +19,7 @@
     "db:create": "node scripts/db.js create",
     "db:reset": "node scripts/db.js reset",
     "db:export": "node scripts/db.js export",
+    "metrics:launch": "node scripts/launch-metrics.js",
     "test:e2e": "./scripts/run-e2e-tests.sh",
     "dynamodb": "node scripts/start-dynamodb.js",
     "setup:db": "node scripts/db.js sync",
