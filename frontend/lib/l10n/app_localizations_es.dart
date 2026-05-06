@@ -196,7 +196,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get invitePartnerMessage =>
-      'Comparta esta invitación con su pareja para comenzar su viaje de consejería juntos.';
+      'Comparta esta invitación con su pareja para comenzar su camino de comunicación relacional juntos.';
 
   @override
   String get createNewConversation => 'Crear Nueva Conversación';
@@ -239,18 +239,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mainConversationTopic => 'Su camino juntos';
 
   @override
-  String get aiCounsellor => 'Consejero IA';
+  String get aiCounsellor => 'Coach IA';
 
   @override
   String get drSarahAiCounsellor => 'Coach Sarah (Coach IA)';
 
   @override
   String get startFirstConversationMessage =>
-      'Comience su primera conversación con su pareja y reciba orientación de nuestro consejero IA.';
+      'Comience su primera conversación con su pareja y reciba orientación de nuestro coach relacional IA.';
 
   @override
   String get partnerInvitationMessage =>
-      'Una vez que su pareja acepte la invitación y cree su cuenta, ambos tendrán acceso a su conversación donde pueden comenzar a compartir y recibir orientación de nuestro consejero IA.';
+      'Una vez que su pareja acepte la invitación y cree su cuenta, ambos tendrán acceso a su conversación donde pueden comenzar a compartir y recibir orientación de nuestro coach relacional IA.';
 
   @override
   String exerciseStepProgress(int current, int total) {
@@ -356,7 +356,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get invitePartnerPrompt =>
-      'Invita a tu pareja para comenzar su viaje de consejería juntos';
+      'Invita a tu pareja para comenzar su camino de comunicación relacional juntos';
 
   @override
   String get pendingInvitationTitle => 'Invitación pendiente';

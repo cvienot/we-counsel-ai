@@ -16,10 +16,10 @@ This is not legal advice. The legal/privacy section should be reviewed by counse
   - Updated the marketing footer so Privacy Policy points to `https://app.we-connect-app.com/privacy`.
   - Aligned user-facing launch surfaces from "We Coach" to "We Connect".
 
-- [ ] Confirm governing law and venue before public launch.
-  - The old placeholder wording was removed from Terms.
-  - Current Terms explicitly block launch until the governing law and competent venue are confirmed by the owner or legal counsel.
-  - Once confirmed, update section 11 in `TERMS_OF_SERVICE.md` and all localized files under `frontend/assets/terms/`.
+- [x] Confirm governing law and venue before public launch.
+  - Terms now use French law with consumer-safe jurisdiction wording and no mandatory consumer arbitration.
+  - Updated section 11 and consumer mediation wording in `TERMS_OF_SERVICE.md` and all localized files under `frontend/assets/terms/`.
+  - Legal counsel review is still recommended before scaling paid traffic.
 
 - [x] Fix or substantiate the marketing encryption claim.
   - Updated `marketing/index.html` and `marketing/i18n.js` to avoid message-level or end-to-end encryption claims.
@@ -207,10 +207,11 @@ Metrics currently reported:
 
 - [ ] Update Terms of Service.
   - [x] Align "We Coach" vs "We Connect".
-  - [ ] Fill governing law and dispute venue.
+  - [x] Fill governing law and dispute venue.
   - [x] Add paid subscription, renewal, cancellation, refunds, trials, taxes, and chargeback terms.
   - [x] Add clear AI limitations and crisis/emergency disclaimer.
   - [x] Add age gate and account deletion flow references.
+  - [x] Add consumer mediation contact details after the mediation contract was signed.
 
 - [ ] Confirm consent capture.
   - Registration requires terms acceptance and stores `termsAcceptedAt` and `termsAcceptedVersion`.

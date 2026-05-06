@@ -196,7 +196,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get invitePartnerMessage =>
-      'Partagez cette invitation avec votre partenaire pour commencer votre parcours de conseil ensemble.';
+      'Partagez cette invitation avec votre partenaire pour commencer votre parcours de communication relationnelle ensemble.';
 
   @override
   String get createNewConversation => 'Créer Nouvelle Conversation';
@@ -239,18 +239,18 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mainConversationTopic => 'Votre parcours ensemble';
 
   @override
-  String get aiCounsellor => 'Conseiller IA';
+  String get aiCounsellor => 'Coach IA';
 
   @override
   String get drSarahAiCounsellor => 'Coach Sarah (Coach IA)';
 
   @override
   String get startFirstConversationMessage =>
-      'Commencez votre première conversation avec votre partenaire et recevez des conseils de notre conseiller IA.';
+      'Commencez votre première conversation avec votre partenaire et recevez l\'accompagnement de notre coach relationnel IA.';
 
   @override
   String get partnerInvitationMessage =>
-      'Une fois que votre partenaire accepte l\'invitation et crée son compte, vous aurez tous les deux accès à votre conversation où vous pourrez commencer à partager et recevoir des conseils de notre conseiller IA.';
+      'Une fois que votre partenaire accepte l\'invitation et crée son compte, vous aurez tous les deux accès à votre conversation où vous pourrez commencer à partager et recevoir l\'accompagnement de notre coach relationnel IA.';
 
   @override
   String exerciseStepProgress(int current, int total) {
@@ -357,7 +357,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get invitePartnerPrompt =>
-      'Invitez votre partenaire pour commencer votre parcours de conseil ensemble';
+      'Invitez votre partenaire pour commencer votre parcours de communication relationnelle ensemble';
 
   @override
   String get pendingInvitationTitle => 'Invitation en attente';

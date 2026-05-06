@@ -30,7 +30,7 @@ const translations = {
     "features.title": "Everything you need to<br><span class=\"gradient-text\">grow together</span>",
     "features.subtitle": "Tools designed by relationship experts, powered by AI, built for real couples.",
     "feature.ai.title": "AI Relationship Coach",
-    "feature.ai.desc": "Get personalized guidance from an AI trained on proven relationship therapy techniques. Available 24/7, judgment-free.",
+    "feature.ai.desc": "Get personalized relationship communication guidance from an AI coach designed around practical conflict-resolution and listening frameworks. Available 24/7, judgment-free.",
     "feature.messaging.title": "Partner Messaging",
     "feature.messaging.desc": "A private, safe space to communicate with your partner. Share thoughts, feelings, and work through challenges together.",
     "feature.exercises.title": "Guided Exercises",
@@ -93,10 +93,10 @@ const translations = {
     // FAQ
     "faq.label": "FAQ",
     "faq.title": "Frequently asked <span class=\"gradient-text\">questions</span>",
-    "faq.q1": "Is We Connect a replacement for couples therapy?",
-    "faq.a1": "No. We Connect is a coaching tool designed to help couples improve communication and strengthen their relationship. It complements professional therapy but is not a substitute for it. If you're dealing with serious issues, we recommend consulting a licensed therapist.",
+    "faq.q1": "Is We Connect therapy?",
+    "faq.a1": "No. We Connect is a coaching tool for communication practice and relationship reflection. It is not therapy, medical advice, or a substitute for a licensed professional. If you are dealing with serious issues, crisis, abuse, or mental health concerns, contact qualified support.",
     "faq.q2": "How does the AI coach work?",
-    "faq.a2": "Our AI coach is trained on proven relationship therapy techniques including Gottman Method and Emotionally Focused Therapy. It provides personalized guidance, suggests exercises, and helps facilitate productive conversations between partners — available 24/7.",
+    "faq.a2": "The AI coach uses conversation context to suggest communication prompts, reflection questions, and guided exercises. It is designed to facilitate productive conversations between partners, not to diagnose, treat, or replace professional support.",
     "faq.q3": "Is my data private and secure?",
     "faq.a3": "We use HTTPS in transit, secure cloud storage, and access controls. We never sell your personal data. Your relationship is your business — we just provide the tools to help it grow.",
     "faq.q4": "Can I try it for free?",
@@ -115,9 +115,11 @@ const translations = {
     "footer.legal": "Legal",
     "footer.terms": "Terms of Service",
     "footer.privacy": "Privacy Policy",
+    "footer.mediation": "Consumer Mediation",
     "footer.support": "Support",
     "footer.contact": "Contact Us",
-    "footer.copyright": "© 2026 We Connect. All rights reserved."
+    "footer.copyright": "© 2026 We Connect. All rights reserved.",
+    "footer.mediator": "Consumer mediator: Société Médiation Professionnelle, Alteritae, 5 rue Salvaing, 12000 Rodez, France."
   },
 
   fr: {
@@ -146,7 +148,7 @@ const translations = {
     "features.title": "Tout ce dont vous avez besoin pour<br><span class=\"gradient-text\">grandir ensemble</span>",
     "features.subtitle": "Des outils conçus par des experts en relations, propulsés par l'IA, faits pour les vrais couples.",
     "feature.ai.title": "Coach Relationnel IA",
-    "feature.ai.desc": "Recevez des conseils personnalisés d'une IA formée aux techniques éprouvées de thérapie de couple. Disponible 24h/24, sans jugement.",
+    "feature.ai.desc": "Recevez un accompagnement personnalisé en communication relationnelle avec un coach IA conçu autour de cadres pratiques de résolution de conflit et d'écoute. Disponible 24h/24, sans jugement.",
     "feature.messaging.title": "Messagerie Partenaire",
     "feature.messaging.desc": "Un espace privé et sécurisé pour communiquer avec votre partenaire. Partagez vos pensées, vos sentiments et surmontez les défis ensemble.",
     "feature.exercises.title": "Exercices Guidés",
@@ -206,10 +208,10 @@ const translations = {
 
     "faq.label": "FAQ",
     "faq.title": "Questions <span class=\"gradient-text\">fréquentes</span>",
-    "faq.q1": "We Connect remplace-t-il la thérapie de couple ?",
-    "faq.a1": "Non. We Connect est un outil de coaching conçu pour aider les couples à améliorer leur communication et renforcer leur relation. Il complète la thérapie professionnelle mais ne la remplace pas. Si vous traversez des difficultés sérieuses, nous recommandons de consulter un thérapeute agréé.",
+    "faq.q1": "We Connect est-il une thérapie ?",
+    "faq.a1": "Non. We Connect est un outil de coaching pour pratiquer la communication et réfléchir à sa relation. Ce n'est ni une thérapie, ni un conseil médical, ni un substitut à un professionnel qualifié. En cas de difficultés graves, de crise, de violence ou de problème de santé mentale, contactez une aide qualifiée.",
     "faq.q2": "Comment fonctionne le coach IA ?",
-    "faq.a2": "Notre coach IA est formé aux techniques éprouvées de thérapie relationnelle, notamment la méthode Gottman et la Thérapie Centrée sur les Émotions. Il fournit des conseils personnalisés, suggère des exercices et facilite les conversations productives entre partenaires — disponible 24h/24.",
+    "faq.a2": "Le coach IA utilise le contexte de conversation pour proposer des pistes de communication, des questions de réflexion et des exercices guidés. Il est conçu pour faciliter des échanges productifs entre partenaires, pas pour diagnostiquer, traiter ou remplacer un accompagnement professionnel.",
     "faq.q3": "Mes données sont-elles privées et sécurisées ?",
     "faq.a3": "Nous utilisons HTTPS pendant la transmission, un stockage cloud sécurisé et des contrôles d'accès. Nous ne vendons jamais vos données personnelles. Votre relation, vos affaires — nous fournissons simplement les outils pour l'aider à grandir.",
     "faq.q4": "Puis-je essayer gratuitement ?",
@@ -226,9 +228,11 @@ const translations = {
     "footer.legal": "Mentions Légales",
     "footer.terms": "Conditions d'Utilisation",
     "footer.privacy": "Politique de Confidentialité",
+    "footer.mediation": "Médiation de la consommation",
     "footer.support": "Support",
     "footer.contact": "Nous Contacter",
-    "footer.copyright": "© 2026 We Connect. Tous droits réservés."
+    "footer.copyright": "© 2026 We Connect. Tous droits réservés.",
+    "footer.mediator": "Médiateur de la consommation : Société Médiation Professionnelle, Alteritae, 5 rue Salvaing, 12000 Rodez, France."
   },
 
   es: {
@@ -257,7 +261,7 @@ const translations = {
     "features.title": "Todo lo que necesitas para<br><span class=\"gradient-text\">crecer juntos</span>",
     "features.subtitle": "Herramientas diseñadas por expertos en relaciones, impulsadas por IA, hechas para parejas reales.",
     "feature.ai.title": "Coach de Relaciones IA",
-    "feature.ai.desc": "Recibe orientación personalizada de una IA entrenada en técnicas probadas de terapia de pareja. Disponible 24/7, sin juicios.",
+    "feature.ai.desc": "Recibe orientación personalizada sobre comunicación relacional con un coach de IA diseñado en torno a marcos prácticos de resolución de conflictos y escucha. Disponible 24/7, sin juicios.",
     "feature.messaging.title": "Mensajería de Pareja",
     "feature.messaging.desc": "Un espacio privado y seguro para comunicarte con tu pareja. Comparte pensamientos, sentimientos y superen desafíos juntos.",
     "feature.exercises.title": "Ejercicios Guiados",
@@ -317,10 +321,10 @@ const translations = {
 
     "faq.label": "FAQ",
     "faq.title": "Preguntas <span class=\"gradient-text\">frecuentes</span>",
-    "faq.q1": "¿We Connect reemplaza la terapia de pareja?",
-    "faq.a1": "No. We Connect es una herramienta de coaching diseñada para ayudar a las parejas a mejorar la comunicación y fortalecer su relación. Complementa la terapia profesional pero no la sustituye. Si estás lidiando con problemas serios, recomendamos consultar a un terapeuta licenciado.",
+    "faq.q1": "¿We Connect es terapia?",
+    "faq.a1": "No. We Connect es una herramienta de coaching para practicar la comunicación y reflexionar sobre la relación. No es terapia, asesoramiento médico ni un sustituto de un profesional autorizado. Si enfrentas problemas graves, una crisis, abuso o preocupaciones de salud mental, contacta con apoyo cualificado.",
     "faq.q2": "¿Cómo funciona el coach IA?",
-    "faq.a2": "Nuestro coach IA está entrenado en técnicas probadas de terapia relacional, incluyendo el Método Gottman y la Terapia Centrada en las Emociones. Proporciona orientación personalizada, sugiere ejercicios y facilita conversaciones productivas entre parejas — disponible 24/7.",
+    "faq.a2": "El coach de IA usa el contexto de la conversación para sugerir pautas de comunicación, preguntas de reflexión y ejercicios guiados. Está diseñado para facilitar conversaciones productivas entre parejas, no para diagnosticar, tratar ni reemplazar el apoyo profesional.",
     "faq.q3": "¿Mis datos son privados y seguros?",
     "faq.a3": "Usamos HTTPS durante la transmisión, almacenamiento seguro en la nube y controles de acceso. Nunca vendemos tus datos personales. Tu relación es tu asunto — nosotros solo proporcionamos las herramientas para ayudarla a crecer.",
     "faq.q4": "¿Puedo probarlo gratis?",
@@ -337,8 +341,10 @@ const translations = {
     "footer.legal": "Legal",
     "footer.terms": "Términos de Servicio",
     "footer.privacy": "Política de Privacidad",
+    "footer.mediation": "Mediación de consumo",
     "footer.support": "Soporte",
     "footer.contact": "Contáctanos",
-    "footer.copyright": "© 2026 We Connect. Todos los derechos reservados."
+    "footer.copyright": "© 2026 We Connect. Todos los derechos reservados.",
+    "footer.mediator": "Mediador de consumo: Société Médiation Professionnelle, Alteritae, 5 rue Salvaing, 12000 Rodez, Francia."
   }
 };

@@ -62,7 +62,7 @@
   "getStartedExplanation": "Envoyez une invitation à votre partenaire par e-mail. Une fois son compte créé et l'invitation acceptée, vous serez connectés et pourrez commencer vos séances de coaching ensemble.",
   "invitePartnerButton": "Inviter votre partenaire",
   "pendingInvitationInfo": "Une invitation a été envoyée à {email}. Une fois son compte créé et accepté, vous serez connectés.",
-  "invitePartnerMessage": "Partagez cette invitation avec votre partenaire pour commencer votre parcours de conseil ensemble.",
+  "invitePartnerMessage": "Partagez cette invitation avec votre partenaire pour commencer votre parcours de communication relationnelle ensemble.",
 
   "createNewConversation": "Créer Nouvelle Conversation",
   "conversationTitle": "Titre de la Conversation",
@@ -79,10 +79,10 @@
   "selectLanguage": "Sélectionner la Langue",
   "mainConversationTitle": "Conversation",
   "mainConversationTopic": "Votre parcours ensemble",
-  "aiCounsellor": "Conseiller IA",
+  "aiCounsellor": "Coach IA",
   "drSarahAiCounsellor": "Coach Sarah (Coach IA)",
-  "startFirstConversationMessage": "Commencez votre première conversation avec votre partenaire et recevez des conseils de notre conseiller IA.",
-  "partnerInvitationMessage": "Une fois que votre partenaire accepte l'invitation et crée son compte, vous aurez tous les deux accès à votre conversation où vous pourrez commencer à partager et recevoir des conseils de notre conseiller IA.",
+  "startFirstConversationMessage": "Commencez votre première conversation avec votre partenaire et recevez l'accompagnement de notre coach relationnel IA.",
+  "partnerInvitationMessage": "Une fois que votre partenaire accepte l'invitation et crée son compte, vous aurez tous les deux accès à votre conversation où vous pourrez commencer à partager et recevoir l'accompagnement de notre coach relationnel IA.",
   "exerciseStepProgress": "Étape {current}/{total}",
   "@exerciseStepProgress": {
     "placeholders": {
@@ -127,7 +127,7 @@
 
   "welcomeBack": "Bienvenue, {name} !",
   "connectedWith": "Vous êtes connecté(e) avec {name}",
-  "invitePartnerPrompt": "Invitez votre partenaire pour commencer votre parcours de conseil ensemble",
+  "invitePartnerPrompt": "Invitez votre partenaire pour commencer votre parcours de communication relationnelle ensemble",
   "pendingInvitationTitle": "Invitation en attente",
   "pendingInvitationMessage": "Vous avez envoyé une invitation à {email}. Nous attendons qu'il/elle accepte.",
   "resendInvitation": "Renvoyer l'invitation",

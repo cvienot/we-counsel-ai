@@ -1,6 +1,6 @@
 # Conditions d'utilisation
 
-**Dernière mise à jour :** 12 décembre 2025
+**Dernière mise à jour :** 6 mai 2026
 
 ## 1. Acceptation des conditions
 
@@ -8,9 +8,9 @@ En créant un compte et en utilisant We Connect (« le Service »), vous accepte
 
 ## 2. Description du Service
 
-We Connect est une application de conseil conçue pour faciliter la communication entre les couples. Le Service fournit :
+We Connect est une application de coaching conçue pour faciliter la communication entre les couples. Le Service fournit :
 - Des espaces de conversation privés pour les couples
-- Un soutien de conseil assisté par IA
+- Un accompagnement relationnel assisté par IA
 - Des outils de messagerie et de communication sécurisés
 - Des fonctionnalités de connexion et d'invitation de partenaire
 
@@ -59,11 +59,11 @@ Vous acceptez de ne pas :
 - Vous nous accordez une licence pour utiliser, stocker et afficher votre contenu afin de fournir le Service
 - Vous déclarez avoir le droit de partager tout le contenu que vous publiez
 
-## 7. Fonctionnalités de conseil par IA
+## 7. Fonctionnalités de coaching par IA
 
 ### 7.1 Nature du service
-- La fonctionnalité de conseil par IA fournit un soutien et des suggestions automatisés
-- Les conseils générés par l'IA ne remplacent pas les services de santé mentale professionnels
+- La fonctionnalité de coaching par IA fournit un soutien et des suggestions automatisés
+- Les suggestions générées par l'IA ne remplacent pas les services de santé mentale professionnels
 - Nous ne garantissons pas l'exactitude ou la pertinence du contenu généré par l'IA
 
 ### 7.2 Aide professionnelle
@@ -99,18 +99,30 @@ Vous acceptez d'indemniser et de dégager de toute responsabilité We Connect et
 - Votre violation de ces Conditions
 - Votre violation des droits d'une autre partie
 
-## 11. Droit applicable
+## 11. Droit applicable et juridiction
 
-Ces Conditions doivent identifier le droit applicable et le tribunal compétent approuvés pour le lancement public. Ne lancez pas le Service publiquement tant que cette juridiction n'est pas confirmée et que cette section n'est pas finalisée par le propriétaire du Service ou un conseil juridique.
+Ces Conditions sont régies par le droit français, sans préjudice des protections impératives du consommateur qui peuvent s'appliquer dans votre pays de résidence.
 
-## 12. Résolution des différends
+Si vous êtes consommateur, vous pouvez saisir toute juridiction compétente en application des règles de protection des consommateurs et de procédure civile applicables. Si vous utilisez le Service en tant que professionnel ou utilisateur professionnel, et sauf règle impérative contraire, les litiges relatifs à ces Conditions seront soumis aux tribunaux compétents de Lyon, France.
+
+## 12. Résolution des différends et médiation de la consommation
 
 ### 12.1 Résolution informelle
-- Avant de déposer une réclamation formelle, vous acceptez de tenter de résoudre les différends de manière informelle en nous contactant
+- Avant de déposer une réclamation formelle, veuillez nous contacter à support@we-connect-app.com afin que nous puissions tenter de résoudre le problème à l'amiable.
 
-### 12.2 Arbitrage
-- Tout différend non résolu de manière informelle sera réglé par arbitrage exécutoire
-- Vous renoncez à votre droit de participer à des recours collectifs ou à des arbitrages collectifs
+### 12.2 Médiation de la consommation
+
+Si vous êtes consommateur et qu'un litige avec nous n'a pas été résolu après une réclamation écrite préalable, vous pouvez recourir gratuitement au service de médiation de la consommation suivant :
+
+- **Société Médiation Professionnelle - Médiateur de la consommation**
+- Adresse : Alteritae, 5 rue Salvaing, 12000 Rodez, France
+- Site : https://www.mediateur-consommation-smp.fr
+
+La médiation est volontaire et n'empêche pas l'une ou l'autre des parties de saisir une juridiction compétente.
+
+### 12.3 Absence d'arbitrage obligatoire pour les consommateurs
+
+Aucune disposition de ces Conditions n'impose à un consommateur de recourir à un arbitrage obligatoire ou de renoncer à des droits lorsque la loi impérative de protection des consommateurs préserve ces droits.
 
 ## 13. Modifications des conditions
 

@@ -82,7 +82,7 @@
       "email": { "type": "String" }
     }
   },
-  "invitePartnerMessage": "Share this invitation with your partner to start your counselling journey together.",
+  "invitePartnerMessage": "Share this invitation with your partner to start your relationship communication journey together.",
 
   "createNewConversation": "Create New Conversation",
   "conversationTitle": "Conversation Title",
@@ -99,10 +99,10 @@
   "selectLanguage": "Select Language",
   "mainConversationTitle": "Conversation",
   "mainConversationTopic": "Your journey together",
-  "aiCounsellor": "AI Counsellor",
+  "aiCounsellor": "AI Coach",
   "drSarahAiCounsellor": "Coach Sarah (AI Coach)",
-  "startFirstConversationMessage": "Start your first conversation with your partner and get guidance from our AI counsellor.",
-  "partnerInvitationMessage": "Once your partner accepts the invitation and creates their account, you'll both have access to your conversation where you can start sharing and receiving guidance from our AI counsellor.",
+  "startFirstConversationMessage": "Start your first conversation with your partner and get guidance from our AI relationship coach.",
+  "partnerInvitationMessage": "Once your partner accepts the invitation and creates their account, you'll both have access to your conversation where you can start sharing and receiving guidance from our AI relationship coach.",
   "exerciseStepProgress": "Step {current}/{total}",
   "@exerciseStepProgress": {
     "placeholders": {
@@ -157,7 +157,7 @@
       "name": { "type": "String" }
     }
   },
-  "invitePartnerPrompt": "Invite your partner to start your counselling journey together",
+  "invitePartnerPrompt": "Invite your partner to start your relationship communication journey together",
   "pendingInvitationTitle": "Invitation Pending",
   "pendingInvitationMessage": "You've sent an invitation to {email}. We're waiting for them to accept.",
   "@pendingInvitationMessage": {
@@ -166,7 +166,7 @@
     }
   },
   "resendInvitation": "Resend Invitation",
-  "sendInvitationSubtitle": "Send an invitation to start counselling together",
+  "sendInvitationSubtitle": "Send an invitation to start coaching together",
   "getStarted": "Get Started",
   "mainThread": "Conversation",
   "continueMainConversation": "Continue your conversation with your partner",

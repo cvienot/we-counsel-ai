@@ -1,6 +1,6 @@
 # Terms of Service
 
-**Last Updated:** December 12, 2025
+**Last Updated:** May 6, 2026
 
 ## 1. Acceptance of Terms
 
@@ -99,18 +99,30 @@ You agree to indemnify and hold harmless We Connect and its affiliates from any 
 - Your violation of these Terms
 - Your violation of any rights of another party
 
-## 11. Governing Law
+## 11. Governing Law and Jurisdiction
 
-These Terms must identify the governing law and competent venue approved for public launch. Do not launch the Service publicly until this jurisdiction is confirmed and this section is finalized by the Service owner or legal counsel.
+These Terms are governed by French law, without prejudice to mandatory consumer protections that may apply in your country of residence.
 
-## 12. Dispute Resolution
+If you are a consumer, you may bring claims before any court that is competent under applicable consumer protection and civil procedure rules. If you use the Service as a professional or business user, and no mandatory rule provides otherwise, disputes relating to these Terms will be submitted to the competent courts of Lyon, France.
+
+## 12. Dispute Resolution and Consumer Mediation
 
 ### 12.1 Informal Resolution
-- Before filing a formal claim, you agree to attempt to resolve disputes informally by contacting us
+- Before filing a formal claim, please contact us at support@we-connect-app.com so we can try to resolve the issue informally.
 
-### 12.2 Arbitration
-- Any disputes not resolved informally shall be settled through binding arbitration
-- You waive your right to participate in class actions or class arbitrations
+### 12.2 Consumer Mediation
+
+If you are a consumer and a dispute with us has not been resolved after a prior written complaint, you may use the following consumer mediation service free of charge:
+
+- **Société Médiation Professionnelle - Médiateur de la consommation**
+- Address: Alteritae, 5 rue Salvaing, 12000 Rodez, France
+- Website: https://www.mediateur-consommation-smp.fr
+
+Mediation is voluntary and does not prevent either party from bringing the matter before a competent court.
+
+### 12.3 No Mandatory Arbitration for Consumers
+
+Nothing in these Terms requires a consumer to use binding arbitration or waive legal rights where mandatory consumer protection law preserves those rights.
 
 ## 13. Changes to Terms
 

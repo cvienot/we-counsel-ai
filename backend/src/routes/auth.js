@@ -8,6 +8,7 @@ const { sendInvitationEmail, sendWelcomeEmail, sendPasswordResetEmail } = emailS
 const { authenticateToken } = require('../middleware/authMiddleware');
 
 const router = express.Router();
+const TERMS_VERSION = '1.0.1';
 
 // Generate JWT token
 const generateToken = (userId) => {
@@ -134,7 +135,7 @@ router.post('/register', async (req, res) => {
       createdAt: currentTimestamp,
       isActive: true,
       termsAcceptedAt: currentTimestamp,
-      termsAcceptedVersion: `1.0.0-${userLanguage}`, // Include language in version for tracking
+      termsAcceptedVersion: `${TERMS_VERSION}-${userLanguage}`, // Include language in version for tracking
       ...sanitizedAttribution,
       ...(subscriptionTier && subscriptionTier !== 'free' ? { selectedPlan: subscriptionTier } : {})
       // Note: partnerId and coupleId are omitted (not set to null) for AWS SDK v3 compatibility

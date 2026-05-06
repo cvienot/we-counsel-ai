@@ -192,7 +192,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get invitePartnerMessage =>
-      'Share this invitation with your partner to start your counselling journey together.';
+      'Share this invitation with your partner to start your relationship communication journey together.';
 
   @override
   String get createNewConversation => 'Create New Conversation';
@@ -235,18 +235,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mainConversationTopic => 'Your journey together';
 
   @override
-  String get aiCounsellor => 'AI Counsellor';
+  String get aiCounsellor => 'AI Coach';
 
   @override
   String get drSarahAiCounsellor => 'Coach Sarah (AI Coach)';
 
   @override
   String get startFirstConversationMessage =>
-      'Start your first conversation with your partner and get guidance from our AI counsellor.';
+      'Start your first conversation with your partner and get guidance from our AI relationship coach.';
 
   @override
   String get partnerInvitationMessage =>
-      'Once your partner accepts the invitation and creates their account, you\'ll both have access to your conversation where you can start sharing and receiving guidance from our AI counsellor.';
+      'Once your partner accepts the invitation and creates their account, you\'ll both have access to your conversation where you can start sharing and receiving guidance from our AI relationship coach.';
 
   @override
   String exerciseStepProgress(int current, int total) {
@@ -352,7 +352,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get invitePartnerPrompt =>
-      'Invite your partner to start your counselling journey together';
+      'Invite your partner to start your relationship communication journey together';
 
   @override
   String get pendingInvitationTitle => 'Invitation Pending';
@@ -367,7 +367,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sendInvitationSubtitle =>
-      'Send an invitation to start counselling together';
+      'Send an invitation to start coaching together';
 
   @override
   String get getStarted => 'Get Started';

@@ -4,13 +4,13 @@ const emailTranslations = {
     invitation: {
       subject: (inviterName) => `${inviterName} has invited you to join We Connect`,
       title: 'We Connect',
-      subtitle: 'Couples Counselling App',
+      subtitle: 'Couples Communication App',
       heading: "You've been invited!",
-      body: (inviterName) => `<strong>${inviterName}</strong> has invited you to join them on We Connect, a couples counselling app that helps strengthen relationships.`,
+      body: (inviterName) => `<strong>${inviterName}</strong> has invited you to join them on We Connect, a couples communication app that helps strengthen relationships.`,
       personalMessage: 'Personal message:',
       features: 'We Connect provides:',
       feature1: 'Private conversations between you and your partner',
-      feature2: 'AI-powered counselling guidance',
+      feature2: 'AI-powered relationship communication guidance',
       feature3: 'Safe space to communicate and grow together',
       button: 'Accept Invitation',
       expiry: 'This invitation will expire in 7 days.',
@@ -20,7 +20,7 @@ const emailTranslations = {
       plainBody: (inviterName) => `You've been invited by ${inviterName} to join them on We Connect!`,
       plainFeatures: `We Connect helps couples strengthen their relationships through:
 - Private conversations between partners
-- AI-powered counselling guidance  
+- AI-powered relationship communication guidance
 - Safe space to communicate and grow together`,
       plainAccept: 'Accept your invitation:',
       plainExpiry: 'This invitation expires in 7 days.'
@@ -32,7 +32,7 @@ const emailTranslations = {
       nextSteps: 'Next steps:',
       step1: 'Invite your partner to join you on the app',
       step2: 'Start your first conversation together',
-      step3: 'Let our AI counsellor guide you through meaningful discussions',
+      step3: 'Let our AI relationship coach guide you through meaningful discussions',
       closing: 'Remember, We Connect is here to support you both on your journey together.',
       footer: 'We Connect - Strengthening relationships through guided communication',
       // Plain text version
@@ -40,7 +40,7 @@ const emailTranslations = {
       plainSteps: `Next steps:
 1. Invite your partner to join you on the app
 2. Start your first conversation together  
-3. Let our AI counsellor guide you through meaningful discussions`,
+3. Let our AI relationship coach guide you through meaningful discussions`,
       plainClosing: 'Remember, We Connect is here to support you both on your journey together.'
     },
     passwordReset: {
@@ -72,13 +72,13 @@ const emailTranslations = {
     invitation: {
       subject: (inviterName) => `${inviterName} vous a invité(e) à rejoindre We Connect`,
       title: 'We Connect',
-      subtitle: 'Application de conseil de couple',
+      subtitle: 'Application de communication de couple',
       heading: 'Vous avez été invité(e) !',
-      body: (inviterName) => `<strong>${inviterName}</strong> vous a invité(e) à les rejoindre sur We Connect, une application de conseil de couple qui aide à renforcer les relations.`,
+      body: (inviterName) => `<strong>${inviterName}</strong> vous a invité(e) à les rejoindre sur We Connect, une application de communication de couple qui aide à renforcer les relations.`,
       personalMessage: 'Message personnel :',
       features: 'We Connect propose :',
       feature1: 'Conversations privées entre vous et votre partenaire',
-      feature2: 'Conseils guidés par IA',
+      feature2: 'Guidance relationnelle assistée par IA',
       feature3: 'Espace sûr pour communiquer et grandir ensemble',
       button: 'Accepter l\'invitation',
       expiry: 'Cette invitation expirera dans 7 jours.',
@@ -88,7 +88,7 @@ const emailTranslations = {
       plainBody: (inviterName) => `Vous avez été invité(e) par ${inviterName} à les rejoindre sur We Connect !`,
       plainFeatures: `We Connect aide les couples à renforcer leurs relations grâce à :
 - Conversations privées entre partenaires
-- Conseils guidés par IA
+- Guidance relationnelle assistée par IA
 - Espace sûr pour communiquer et grandir ensemble`,
       plainAccept: 'Acceptez votre invitation :',
       plainExpiry: 'Cette invitation expire dans 7 jours.'
@@ -100,7 +100,7 @@ const emailTranslations = {
       nextSteps: 'Prochaines étapes :',
       step1: 'Invitez votre partenaire à vous rejoindre sur l\'application',
       step2: 'Commencez votre première conversation ensemble',
-      step3: 'Laissez notre conseiller IA vous guider dans des discussions significatives',
+      step3: 'Laissez notre coach relationnel IA vous guider dans des discussions significatives',
       closing: 'N\'oubliez pas, We Connect est là pour vous soutenir tous les deux dans votre cheminement.',
       footer: 'We Connect - Renforcer les relations par une communication guidée',
       // Plain text version
@@ -108,7 +108,7 @@ const emailTranslations = {
       plainSteps: `Prochaines étapes :
 1. Invitez votre partenaire à vous rejoindre sur l'application
 2. Commencez votre première conversation ensemble
-3. Laissez notre conseiller IA vous guider dans des discussions significatives`,
+3. Laissez notre coach relationnel IA vous guider dans des discussions significatives`,
       plainClosing: 'N\'oubliez pas, We Connect est là pour vous soutenir tous les deux dans votre cheminement.'
     },
     passwordReset: {
@@ -140,13 +140,13 @@ const emailTranslations = {
     invitation: {
       subject: (inviterName) => `${inviterName} te ha invitado a unirte a We Connect`,
       title: 'We Connect',
-      subtitle: 'Aplicación de consejería de parejas',
+      subtitle: 'Aplicación de comunicación para parejas',
       heading: '¡Has sido invitado!',
-      body: (inviterName) => `<strong>${inviterName}</strong> te ha invitado a unirte a We Connect, una aplicación de consejería de parejas que ayuda a fortalecer las relaciones.`,
+      body: (inviterName) => `<strong>${inviterName}</strong> te ha invitado a unirte a We Connect, una aplicación de comunicación para parejas que ayuda a fortalecer las relaciones.`,
       personalMessage: 'Mensaje personal:',
       features: 'We Connect ofrece:',
       feature1: 'Conversaciones privadas entre tú y tu pareja',
-      feature2: 'Orientación de consejería impulsada por IA',
+      feature2: 'Orientación de comunicación relacional impulsada por IA',
       feature3: 'Espacio seguro para comunicarse y crecer juntos',
       button: 'Aceptar invitación',
       expiry: 'Esta invitación expirará en 7 días.',
@@ -156,7 +156,7 @@ const emailTranslations = {
       plainBody: (inviterName) => `¡${inviterName} te ha invitado a unirte a We Connect!`,
       plainFeatures: `We Connect ayuda a las parejas a fortalecer sus relaciones a través de:
 - Conversaciones privadas entre parejas
-- Orientación de consejería impulsada por IA
+- Orientación de comunicación relacional impulsada por IA
 - Espacio seguro para comunicarse y crecer juntos`,
       plainAccept: 'Acepta tu invitación:',
       plainExpiry: 'Esta invitación expira en 7 días.'
@@ -168,7 +168,7 @@ const emailTranslations = {
       nextSteps: 'Próximos pasos:',
       step1: 'Invita a tu pareja a unirse a la aplicación',
       step2: 'Comienza tu primera conversación juntos',
-      step3: 'Deja que nuestro consejero de IA te guíe en discusiones significativas',
+      step3: 'Deja que nuestro coach relacional de IA te guíe en conversaciones significativas',
       closing: 'Recuerda, We Connect está aquí para apoyarlos a ambos en su camino juntos.',
       footer: 'We Connect - Fortaleciendo relaciones a través de la comunicación guiada',
       // Plain text version
@@ -176,7 +176,7 @@ const emailTranslations = {
       plainSteps: `Próximos pasos:
 1. Invita a tu pareja a unirse a la aplicación
 2. Comienza tu primera conversación juntos
-3. Deja que nuestro consejero de IA te guíe en discusiones significativas`,
+3. Deja que nuestro coach relacional de IA te guíe en conversaciones significativas`,
       plainClosing: 'Recuerda, We Connect está aquí para apoyarlos a ambos en su camino juntos.'
     },
     passwordReset: {

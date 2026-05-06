@@ -62,7 +62,7 @@
   "getStartedExplanation": "Envíe una invitación a su pareja por correo electrónico. Una vez que cree su cuenta y acepte, estarán conectados y podrán comenzar sus sesiones de coaching juntos.",
   "invitePartnerButton": "Invitar a su pareja",
   "pendingInvitationInfo": "Se envió una invitación a {email}. Una vez que cree su cuenta y acepte, estarán conectados.",
-  "invitePartnerMessage": "Comparta esta invitación con su pareja para comenzar su viaje de consejería juntos.",
+  "invitePartnerMessage": "Comparta esta invitación con su pareja para comenzar su camino de comunicación relacional juntos.",
 
   "createNewConversation": "Crear Nueva Conversación",
   "conversationTitle": "Título de la Conversación",
@@ -79,10 +79,10 @@
   "selectLanguage": "Seleccionar Idioma",
   "mainConversationTitle": "Conversación",
   "mainConversationTopic": "Su camino juntos",
-  "aiCounsellor": "Consejero IA",
+  "aiCounsellor": "Coach IA",
   "drSarahAiCounsellor": "Coach Sarah (Coach IA)",
-  "startFirstConversationMessage": "Comience su primera conversación con su pareja y reciba orientación de nuestro consejero IA.",
-  "partnerInvitationMessage": "Una vez que su pareja acepte la invitación y cree su cuenta, ambos tendrán acceso a su conversación donde pueden comenzar a compartir y recibir orientación de nuestro consejero IA.",
+  "startFirstConversationMessage": "Comience su primera conversación con su pareja y reciba orientación de nuestro coach relacional IA.",
+  "partnerInvitationMessage": "Una vez que su pareja acepte la invitación y cree su cuenta, ambos tendrán acceso a su conversación donde pueden comenzar a compartir y recibir orientación de nuestro coach relacional IA.",
   "exerciseStepProgress": "Paso {current}/{total}",
   "@exerciseStepProgress": {
     "placeholders": {
@@ -127,7 +127,7 @@
 
   "welcomeBack": "¡Bienvenido/a de nuevo, {name}!",
   "connectedWith": "Estás conectado/a con {name}",
-  "invitePartnerPrompt": "Invita a tu pareja para comenzar su viaje de consejería juntos",
+  "invitePartnerPrompt": "Invita a tu pareja para comenzar su camino de comunicación relacional juntos",
   "pendingInvitationTitle": "Invitación pendiente",
   "pendingInvitationMessage": "Has enviado una invitación a {email}. Estamos esperando a que la acepte.",
   "resendInvitation": "Reenviar invitación",

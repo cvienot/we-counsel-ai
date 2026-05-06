@@ -1,6 +1,6 @@
 # Términos de Servicio
 
-**Última actualización:** 12 de diciembre de 2025
+**Última actualización:** 6 de mayo de 2026
 
 ## 1. Aceptación de los términos
 
@@ -8,9 +8,9 @@ Al crear una cuenta y utilizar We Connect ("el Servicio"), usted acepta estar su
 
 ## 2. Descripción del Servicio
 
-We Connect es una aplicación de asesoramiento diseñada para facilitar la comunicación entre parejas. El Servicio proporciona:
+We Connect es una aplicación de coaching diseñada para facilitar la comunicación entre parejas. El Servicio proporciona:
 - Espacios de conversación privados para parejas
-- Soporte de asesoramiento asistido por IA
+- Apoyo de comunicación relacional asistido por IA
 - Herramientas de mensajería y comunicación seguras
 - Funciones de conexión e invitación de pareja
 
@@ -59,11 +59,11 @@ Usted acepta no:
 - Nos otorga una licencia para usar, almacenar y mostrar su contenido para proporcionar el Servicio
 - Usted declara que tiene el derecho de compartir todo el contenido que publique
 
-## 7. Funciones de asesoramiento por IA
+## 7. Funciones de coaching por IA
 
 ### 7.1 Naturaleza del servicio
-- La función de asesoramiento por IA proporciona soporte y sugerencias automatizadas
-- El asesoramiento generado por IA no sustituye a los servicios profesionales de salud mental
+- La función de coaching por IA proporciona apoyo y sugerencias automatizadas
+- Las sugerencias generadas por IA no sustituyen a los servicios profesionales de salud mental
 - No garantizamos la precisión o idoneidad del contenido generado por IA
 
 ### 7.2 Ayuda profesional
@@ -99,18 +99,30 @@ Usted acepta indemnizar y eximir de responsabilidad a We Connect y sus afiliados
 - Su violación de estos Términos
 - Su violación de los derechos de otra parte
 
-## 11. Ley aplicable
+## 11. Ley aplicable y jurisdicción
 
-Estos Términos deben identificar la ley aplicable y el tribunal competente aprobados para el lanzamiento público. No lance el Servicio públicamente hasta que esta jurisdicción esté confirmada y esta sección sea finalizada por el propietario del Servicio o asesoría legal.
+Estos Términos se rigen por la ley francesa, sin perjuicio de las protecciones obligatorias del consumidor que puedan aplicarse en su país de residencia.
 
-## 12. Resolución de disputas
+Si usted es consumidor, puede presentar reclamaciones ante cualquier tribunal competente conforme a las normas aplicables de protección del consumidor y procedimiento civil. Si utiliza el Servicio como profesional o usuario empresarial, y ninguna norma obligatoria dispone lo contrario, las disputas relacionadas con estos Términos se someterán a los tribunales competentes de Lyon, Francia.
+
+## 12. Resolución de disputas y mediación de consumo
 
 ### 12.1 Resolución informal
-- Antes de presentar un reclamo formal, usted acepta intentar resolver las disputas de manera informal contactándonos
+- Antes de presentar una reclamación formal, póngase en contacto con nosotros en support@we-connect-app.com para que podamos intentar resolver el problema de manera informal.
 
-### 12.2 Arbitraje
-- Cualquier disputa no resuelta de manera informal se resolverá mediante arbitraje vinculante
-- Usted renuncia a su derecho de participar en acciones colectivas o arbitrajes colectivos
+### 12.2 Mediación de consumo
+
+Si usted es consumidor y una disputa con nosotros no se ha resuelto después de una reclamación escrita previa, puede utilizar gratuitamente el siguiente servicio de mediación de consumo:
+
+- **Société Médiation Professionnelle - Médiateur de la consommation**
+- Dirección: Alteritae, 5 rue Salvaing, 12000 Rodez, Francia
+- Sitio web: https://www.mediateur-consommation-smp.fr
+
+La mediación es voluntaria y no impide que cualquiera de las partes acuda a un tribunal competente.
+
+### 12.3 Sin arbitraje obligatorio para consumidores
+
+Nada en estos Términos exige que un consumidor utilice arbitraje vinculante o renuncie a derechos legales cuando la legislación obligatoria de protección del consumidor conserva esos derechos.
 
 ## 13. Cambios en los términos
 

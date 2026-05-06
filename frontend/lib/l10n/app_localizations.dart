@@ -439,7 +439,7 @@ abstract class AppLocalizations {
   /// No description provided for @invitePartnerMessage.
   ///
   /// In en, this message translates to:
-  /// **'Share this invitation with your partner to start your counselling journey together.'**
+  /// **'Share this invitation with your partner to start your relationship communication journey together.'**
   String get invitePartnerMessage;
 
   /// No description provided for @createNewConversation.
@@ -523,7 +523,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiCounsellor.
   ///
   /// In en, this message translates to:
-  /// **'AI Counsellor'**
+  /// **'AI Coach'**
   String get aiCounsellor;
 
   /// No description provided for @drSarahAiCounsellor.
@@ -535,13 +535,13 @@ abstract class AppLocalizations {
   /// No description provided for @startFirstConversationMessage.
   ///
   /// In en, this message translates to:
-  /// **'Start your first conversation with your partner and get guidance from our AI counsellor.'**
+  /// **'Start your first conversation with your partner and get guidance from our AI relationship coach.'**
   String get startFirstConversationMessage;
 
   /// No description provided for @partnerInvitationMessage.
   ///
   /// In en, this message translates to:
-  /// **'Once your partner accepts the invitation and creates their account, you\'ll both have access to your conversation where you can start sharing and receiving guidance from our AI counsellor.'**
+  /// **'Once your partner accepts the invitation and creates their account, you\'ll both have access to your conversation where you can start sharing and receiving guidance from our AI relationship coach.'**
   String get partnerInvitationMessage;
 
   /// No description provided for @exerciseStepProgress.
@@ -733,7 +733,7 @@ abstract class AppLocalizations {
   /// No description provided for @invitePartnerPrompt.
   ///
   /// In en, this message translates to:
-  /// **'Invite your partner to start your counselling journey together'**
+  /// **'Invite your partner to start your relationship communication journey together'**
   String get invitePartnerPrompt;
 
   /// No description provided for @pendingInvitationTitle.
@@ -757,7 +757,7 @@ abstract class AppLocalizations {
   /// No description provided for @sendInvitationSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Send an invitation to start counselling together'**
+  /// **'Send an invitation to start coaching together'**
   String get sendInvitationSubtitle;
 
   /// No description provided for @getStarted.
