@@ -1,5 +1,5 @@
 name: we_counsel
-description: "We Coach - Couples coaching app with AI guidance"
+description: "We Connect - Couples coaching app with AI guidance"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -100,6 +100,9 @@ flutter:
     - assets/terms/terms_en.md
     - assets/terms/terms_fr.md
     - assets/terms/terms_es.md
+    - assets/privacy/privacy_en.md
+    - assets/privacy/privacy_fr.md
+    - assets/privacy/privacy_es.md
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -16,12 +16,61 @@ const generateToken = (userId) => {
   });
 };
 
+const truncateString = (value, maxLength) => {
+  if (typeof value !== 'string') return undefined;
+  const trimmed = value.trim();
+  if (!trimmed) return undefined;
+  return trimmed.length > maxLength ? trimmed.substring(0, maxLength) : trimmed;
+};
+
+const sanitizeUtmParams = (value) => {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return undefined;
+
+  const sanitized = {};
+  for (const [key, rawValue] of Object.entries(value)) {
+    if (!key.startsWith('utm_')) continue;
+    const safeKey = truncateString(key, 128);
+    const safeValue = truncateString(rawValue, 512);
+
+    if (safeKey && safeValue) {
+      sanitized[safeKey] = safeValue;
+    }
+  }
+
+  return Object.keys(sanitized).length > 0 ? sanitized : undefined;
+};
+
+const sanitizeAttribution = (attribution, fallbackTimestamp) => {
+  if (!attribution || typeof attribution !== 'object' || Array.isArray(attribution)) {
+    return {};
+  }
+
+  const firstTouchUtm = sanitizeUtmParams(attribution.firstTouchUtm);
+  const lastTouchUtm = sanitizeUtmParams(attribution.lastTouchUtm);
+  const landingPage = truncateString(attribution.landingPage, 2048);
+  const referrer = truncateString(attribution.referrer, 2048);
+  const campaignCapturedAt = truncateString(attribution.campaignCapturedAt, 64);
+
+  const sanitized = {
+    ...(firstTouchUtm ? { firstTouchUtm } : {}),
+    ...(lastTouchUtm ? { lastTouchUtm } : {}),
+    ...(landingPage ? { landingPage } : {}),
+    ...(referrer ? { referrer } : {}),
+  };
+
+  if (Object.keys(sanitized).length > 0) {
+    sanitized.campaignCapturedAt = campaignCapturedAt || fallbackTimestamp;
+  }
+
+  return sanitized;
+};
+
 // @route   POST /api/auth/register
 // @desc    Register a new user
 // @access  Public
 router.post('/register', async (req, res) => {
   try {
-    const { email, password, firstName, lastName, language, termsAccepted, subscriptionTier } = req.body;
+    const { email, password, firstName, lastName, language, termsAccepted, subscriptionTier, attribution } = req.body;
 
     // Validation
     if (!email || !password || !firstName || !lastName) {
@@ -73,6 +122,7 @@ router.post('/register', async (req, res) => {
     const userId = randomUUID();
     const currentTimestamp = new Date().toISOString();
     const userLanguage = language || 'en';
+    const sanitizedAttribution = sanitizeAttribution(attribution, currentTimestamp);
     
     const userData = {
       userId,
@@ -85,6 +135,7 @@ router.post('/register', async (req, res) => {
       isActive: true,
       termsAcceptedAt: currentTimestamp,
       termsAcceptedVersion: `1.0.0-${userLanguage}`, // Include language in version for tracking
+      ...sanitizedAttribution,
       ...(subscriptionTier && subscriptionTier !== 'free' ? { selectedPlan: subscriptionTier } : {})
       // Note: partnerId and coupleId are omitted (not set to null) for AWS SDK v3 compatibility
       // Note: subscriptionTier is on the couple, selectedPlan is kept temporarily until couple is formed

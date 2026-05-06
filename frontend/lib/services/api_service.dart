@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -15,82 +14,92 @@ class ApiService {
 
   /// Clear in-memory token state. Used by integration tests between test cases.
   static void resetMemoryToken() => _memoryToken = null;
-  
+
   // Toggle for detailed API logging
   static bool enableDetailedLogging = !Environment.isProduction;
 
   ApiService() {
-    _dio = Dio(BaseOptions(
-      baseUrl: _baseUrl,
-      connectTimeout: Duration(milliseconds: 10000),
-      receiveTimeout: Duration(milliseconds: 10000),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    ));
+    _dio = Dio(
+      BaseOptions(
+        baseUrl: _baseUrl,
+        connectTimeout: Duration(milliseconds: 10000),
+        receiveTimeout: Duration(milliseconds: 10000),
+        headers: {'Content-Type': 'application/json'},
+      ),
+    );
 
     // Add logging interceptor for development
     if (kDebugMode) {
-      _dio.interceptors.add(LogInterceptor(
-        requestHeader: true,
-        requestBody: true,
-        responseHeader: true,
-        responseBody: true,
-        error: true,
-        logPrint: (object) {
-          // Use a more prominent prefix for API logs
-          print('🌐 API: $object');
-        },
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestHeader: true,
+          requestBody: true,
+          responseHeader: true,
+          responseBody: true,
+          error: true,
+          logPrint: (object) {
+            // Use a more prominent prefix for API logs
+            print('🌐 API: $object');
+          },
+        ),
+      );
     }
 
     // Add interceptor for auth token
-    _dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) async {
-        final token = await getToken();
-        if (token != null) {
-          options.headers['Authorization'] = 'Bearer $token';
-        }
-        
-        // Additional request logging in debug mode
-        if (kDebugMode && enableDetailedLogging) {
-          print('🚀 REQUEST: ${options.method} ${options.baseUrl}${options.path}');
-          if (options.data != null) {
-            print('📤 REQUEST BODY: ${options.data}');
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) async {
+          final token = await getToken();
+          if (token != null) {
+            options.headers['Authorization'] = 'Bearer $token';
           }
-          if (options.queryParameters.isNotEmpty) {
-            print('🔍 QUERY PARAMS: ${options.queryParameters}');
+
+          // Additional request logging in debug mode
+          if (kDebugMode && enableDetailedLogging) {
+            print(
+              '🚀 REQUEST: ${options.method} ${options.baseUrl}${options.path}',
+            );
+            if (options.data != null) {
+              print('📤 REQUEST BODY: ${options.data}');
+            }
+            if (options.queryParameters.isNotEmpty) {
+              print('🔍 QUERY PARAMS: ${options.queryParameters}');
+            }
           }
-        }
-        
-        handler.next(options);
-      },
-      onResponse: (response, handler) async {
-        // Custom response logging in debug mode
-        if (kDebugMode && enableDetailedLogging) {
-          print('✅ RESPONSE: ${response.statusCode} ${response.requestOptions.method} ${response.requestOptions.path}');
-          print('📥 RESPONSE BODY: ${response.data}');
-        }
-        handler.next(response);
-      },
-      onError: (error, handler) async {
-        // Enhanced error logging in debug mode
-        if (kDebugMode && enableDetailedLogging) {
-          print('❌ ERROR: ${error.response?.statusCode} ${error.requestOptions.method} ${error.requestOptions.path}');
-          if (error.response?.data != null) {
-            print('💥 ERROR BODY: ${error.response?.data}');
+
+          handler.next(options);
+        },
+        onResponse: (response, handler) async {
+          // Custom response logging in debug mode
+          if (kDebugMode && enableDetailedLogging) {
+            print(
+              '✅ RESPONSE: ${response.statusCode} ${response.requestOptions.method} ${response.requestOptions.path}',
+            );
+            print('📥 RESPONSE BODY: ${response.data}');
           }
-          print('🔥 ERROR MESSAGE: ${error.message}');
-        }
-        
-        // Handle token expiration
-        if (error.response?.statusCode == 401) {
-          await clearToken();
-          // Could trigger navigation to login here
-        }
-        handler.next(error);
-      },
-    ));
+          handler.next(response);
+        },
+        onError: (error, handler) async {
+          // Enhanced error logging in debug mode
+          if (kDebugMode && enableDetailedLogging) {
+            print(
+              '❌ ERROR: ${error.response?.statusCode} ${error.requestOptions.method} ${error.requestOptions.path}',
+            );
+            if (error.response?.data != null) {
+              print('💥 ERROR BODY: ${error.response?.data}');
+            }
+            print('🔥 ERROR MESSAGE: ${error.message}');
+          }
+
+          // Handle token expiration
+          if (error.response?.statusCode == 401) {
+            await clearToken();
+            // Could trigger navigation to login here
+          }
+          handler.next(error);
+        },
+      ),
+    );
   }
 
   // Token management
@@ -109,7 +118,9 @@ class ApiService {
     try {
       await _storage.write(key: _tokenKey, value: token);
     } catch (e) {
-      print('⚠️ Failed to store token in secure storage, using in-memory fallback: $e');
+      print(
+        '⚠️ Failed to store token in secure storage, using in-memory fallback: $e',
+      );
     }
   }
 
@@ -188,22 +199,28 @@ class ApiService {
     String? language,
     bool termsAccepted = false,
     String? subscriptionTier,
+    Map<String, dynamic>? attribution,
   }) async {
     try {
-      final response = await _dio.post('/auth/register', data: {
-        'email': email,
-        'password': password,
-        'firstName': firstName,
-        'lastName': lastName,
-        if (language != null) 'language': language,
-        'termsAccepted': termsAccepted,
-        if (subscriptionTier != null) 'subscriptionTier': subscriptionTier,
-      });
-      
+      final response = await _dio.post(
+        '/auth/register',
+        data: {
+          'email': email,
+          'password': password,
+          'firstName': firstName,
+          'lastName': lastName,
+          if (language != null) 'language': language,
+          'termsAccepted': termsAccepted,
+          if (subscriptionTier != null) 'subscriptionTier': subscriptionTier,
+          if (attribution != null && attribution.isNotEmpty)
+            'attribution': attribution,
+        },
+      );
+
       if (response.data['token'] != null) {
         await setToken(response.data['token']);
       }
-      
+
       return response.data;
     } on DioException catch (e) {
       throw Exception(_extractErrorMessage(e));
@@ -215,15 +232,15 @@ class ApiService {
     required String password,
   }) async {
     try {
-      final response = await _dio.post('/auth/login', data: {
-        'email': email,
-        'password': password,
-      });
-      
+      final response = await _dio.post(
+        '/auth/login',
+        data: {'email': email, 'password': password},
+      );
+
       if (response.data['token'] != null) {
         await setToken(response.data['token']);
       }
-      
+
       return response.data;
     } on DioException catch (e) {
       throw Exception(_extractErrorMessage(e));
@@ -241,9 +258,10 @@ class ApiService {
 
   Future<Map<String, dynamic>> forgotPassword({required String email}) async {
     try {
-      final response = await _dio.post('/auth/forgot-password', data: {
-        'email': email,
-      });
+      final response = await _dio.post(
+        '/auth/forgot-password',
+        data: {'email': email},
+      );
       return response.data;
     } on DioException catch (e) {
       throw Exception(_extractErrorMessage(e));
@@ -255,10 +273,10 @@ class ApiService {
     required String newPassword,
   }) async {
     try {
-      final response = await _dio.post('/auth/reset-password', data: {
-        'token': token,
-        'newPassword': newPassword,
-      });
+      final response = await _dio.post(
+        '/auth/reset-password',
+        data: {'token': token, 'newPassword': newPassword},
+      );
       return response.data;
     } on DioException catch (e) {
       throw Exception(_extractErrorMessage(e));
@@ -270,10 +288,10 @@ class ApiService {
     String? message,
   }) async {
     try {
-      final response = await _dio.post('/auth/invite-partner', data: {
-        'email': email,
-        'message': message,
-      });
+      final response = await _dio.post(
+        '/auth/invite-partner',
+        data: {'email': email, 'message': message},
+      );
       return response.data;
     } on DioException catch (e) {
       throw Exception(_extractErrorMessage(e));
@@ -300,7 +318,7 @@ class ApiService {
       if (firstName != null) data['firstName'] = firstName;
       if (lastName != null) data['lastName'] = lastName;
       if (language != null) data['language'] = language;
-      
+
       final response = await _dio.put('/users/profile', data: data);
       return response.data;
     } on DioException catch (e) {
@@ -310,9 +328,10 @@ class ApiService {
 
   Future<Map<String, dynamic>> updateLanguage(String language) async {
     try {
-      final response = await _dio.put('/users/profile', data: {
-        'language': language,
-      });
+      final response = await _dio.put(
+        '/users/profile',
+        data: {'language': language},
+      );
       return response.data;
     } on DioException catch (e) {
       throw Exception(_extractErrorMessage(e));
@@ -330,7 +349,9 @@ class ApiService {
 
   Future<Map<String, dynamic>> acceptInvitation(String invitationId) async {
     try {
-      final response = await _dio.post('/users/accept-invitation/$invitationId');
+      final response = await _dio.post(
+        '/users/accept-invitation/$invitationId',
+      );
       return response.data;
     } on DioException catch (e) {
       throw Exception(_extractErrorMessage(e));
@@ -361,10 +382,10 @@ class ApiService {
     String? topic,
   }) async {
     try {
-      final response = await _dio.post('/conversations', data: {
-        'title': title,
-        'topic': topic,
-      });
+      final response = await _dio.post(
+        '/conversations',
+        data: {'title': title, 'topic': topic},
+      );
       return response.data;
     } on DioException catch (e) {
       throw Exception(_extractErrorMessage(e));
@@ -386,10 +407,10 @@ class ApiService {
     String? topic,
   }) async {
     try {
-      final response = await _dio.put('/conversations/$conversationId', data: {
-        'title': title,
-        'topic': topic,
-      });
+      final response = await _dio.put(
+        '/conversations/$conversationId',
+        data: {'title': title, 'topic': topic},
+      );
       return response.data;
     } on DioException catch (e) {
       throw Exception(_extractErrorMessage(e));
@@ -406,15 +427,19 @@ class ApiService {
   }
 
   // Message endpoints
-  Future<Map<String, dynamic>> getMessages(String conversationId, {
+  Future<Map<String, dynamic>> getMessages(
+    String conversationId, {
     int limit = 50,
     String? lastMessageId,
   }) async {
     try {
-      final response = await _dio.get('/messages/$conversationId', queryParameters: {
-        'limit': limit,
-        if (lastMessageId != null) 'lastMessageId': lastMessageId,
-      });
+      final response = await _dio.get(
+        '/messages/$conversationId',
+        queryParameters: {
+          'limit': limit,
+          if (lastMessageId != null) 'lastMessageId': lastMessageId,
+        },
+      );
       return response.data;
     } on DioException catch (e) {
       throw Exception(_extractErrorMessage(e));
@@ -427,10 +452,10 @@ class ApiService {
     String recipientType = 'both',
   }) async {
     try {
-      final response = await _dio.post('/messages/$conversationId', data: {
-        'content': content,
-        'recipientType': recipientType,
-      });
+      final response = await _dio.post(
+        '/messages/$conversationId',
+        data: {'content': content, 'recipientType': recipientType},
+      );
       return response.data;
     } on DioException catch (e) {
       throw Exception(_extractErrorMessage(e));
@@ -442,9 +467,10 @@ class ApiService {
     required String content,
   }) async {
     try {
-      final response = await _dio.put('/messages/$messageId', data: {
-        'content': content,
-      });
+      final response = await _dio.put(
+        '/messages/$messageId',
+        data: {'content': content},
+      );
       return response.data;
     } on DioException catch (e) {
       throw Exception(_extractErrorMessage(e));
@@ -459,5 +485,4 @@ class ApiService {
       throw Exception(_extractErrorMessage(e));
     }
   }
-
 }

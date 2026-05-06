@@ -23,17 +23,14 @@ class WeCounselApp extends ConsumerWidget {
     final router = _createRouter(ref);
 
     return MaterialApp.router(
-      title: 'We Coach',
+      title: 'We Connect',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xFF6B73FF),
           brightness: Brightness.light,
         ),
         useMaterial3: true,
-        appBarTheme: const AppBarTheme(
-          elevation: 0,
-          centerTitle: true,
-        ),
+        appBarTheme: const AppBarTheme(elevation: 0, centerTitle: true),
         cardTheme: const CardThemeData(
           elevation: 2,
           shape: RoundedRectangleBorder(
@@ -49,9 +46,7 @@ class WeCounselApp extends ConsumerWidget {
           ),
         ),
         inputDecorationTheme: InputDecorationTheme(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
           filled: true,
           fillColor: Colors.grey.shade50,
         ),
@@ -89,10 +84,7 @@ class WeCounselApp extends ConsumerWidget {
           path: '/register',
           builder: (context, state) => const RegisterScreen(),
         ),
-        GoRoute(
-          path: '/home',
-          builder: (context, state) => const HomeScreen(),
-        ),
+        GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
         GoRoute(
           path: '/conversations',
           builder: (context, state) => const ConversationListScreen(),

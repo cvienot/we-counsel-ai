@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'We Coach';
+  String get appTitle => 'We Connect';
 
   @override
   String get appSubtitle => 'Your relationship journey together';
@@ -158,7 +158,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String waitingRoomGreeting(String name) {
-    return 'Hi $name! Your coaching journey will begin once your partner joins you on We Coach.';
+    return 'Hi $name! Your coaching journey will begin once your partner joins you on We Connect.';
   }
 
   @override
@@ -172,7 +172,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String getStartedGreeting(String name) {
-    return 'Hi $name! To begin your coaching journey, invite your partner to join you on We Coach.';
+    return 'Hi $name! To begin your coaching journey, invite your partner to join you on We Connect.';
   }
 
   @override
@@ -440,7 +440,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get upgradeOrChangeSubscription => 'Upgrade or change subscription';
 
   @override
-  String get welcomeToApp => 'Welcome to We Coach';
+  String get welcomeToApp => 'Welcome to We Connect';
 
   @override
   String get strengthenRelationship => 'Strengthen your relationship together';
@@ -468,7 +468,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createAccount => 'Create Account';
 
   @override
-  String get joinApp => 'Join We Coach';
+  String get joinApp => 'Join We Connect';
 
   @override
   String get startJourneyBetterComm =>
@@ -522,7 +522,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get partnerInvitedYou =>
-      'Your partner has invited you to join We Coach. Create an account or sign in to start your relationship coaching journey together.';
+      'Your partner has invited you to join We Connect. Create an account or sign in to start your relationship coaching journey together.';
 
   @override
   String get alreadySignedInAccept =>

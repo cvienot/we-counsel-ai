@@ -40,7 +40,7 @@ const translations = {
     "feature.multilingual.title": "Multilingual",
     "feature.multilingual.desc": "Available in English, French, and Spanish — so you can connect in the language most comfortable for you.",
     "feature.privacy.title": "Private & Secure",
-    "feature.privacy.desc": "Your conversations are encrypted and private. We never share your data. Your relationship, your business.",
+    "feature.privacy.desc": "Messages are transmitted securely and stored with access controls. We never sell your personal data. Your relationship, your business.",
 
     // How It Works
     "howItWorks.label": "How It Works",
@@ -98,7 +98,7 @@ const translations = {
     "faq.q2": "How does the AI coach work?",
     "faq.a2": "Our AI coach is trained on proven relationship therapy techniques including Gottman Method and Emotionally Focused Therapy. It provides personalized guidance, suggests exercises, and helps facilitate productive conversations between partners — available 24/7.",
     "faq.q3": "Is my data private and secure?",
-    "faq.a3": "Absolutely. All conversations are encrypted and stored securely. We never sell or share your personal data. Your relationship is your business — we just provide the tools to help it grow.",
+    "faq.a3": "We use HTTPS in transit, secure cloud storage, and access controls. We never sell your personal data. Your relationship is your business — we just provide the tools to help it grow.",
     "faq.q4": "Can I try it for free?",
     "faq.a4": "Yes! The Free plan includes 10 AI coach messages per month, unlimited partner messaging, and access to basic exercises. No credit card required to get started.",
     "faq.q5": "What languages are supported?",
@@ -156,7 +156,7 @@ const translations = {
     "feature.multilingual.title": "Multilingue",
     "feature.multilingual.desc": "Disponible en anglais, français et espagnol — pour communiquer dans la langue qui vous convient le mieux.",
     "feature.privacy.title": "Privé et Sécurisé",
-    "feature.privacy.desc": "Vos conversations sont chiffrées et privées. Nous ne partageons jamais vos données. Votre relation, vos affaires.",
+    "feature.privacy.desc": "Les messages sont transmis de manière sécurisée et stockés avec des contrôles d'accès. Nous ne vendons jamais vos données personnelles. Votre relation, vos affaires.",
 
     "howItWorks.label": "Comment ça marche",
     "howItWorks.title": "Commencez en <span class=\"gradient-text\">3 étapes simples</span>",
@@ -211,7 +211,7 @@ const translations = {
     "faq.q2": "Comment fonctionne le coach IA ?",
     "faq.a2": "Notre coach IA est formé aux techniques éprouvées de thérapie relationnelle, notamment la méthode Gottman et la Thérapie Centrée sur les Émotions. Il fournit des conseils personnalisés, suggère des exercices et facilite les conversations productives entre partenaires — disponible 24h/24.",
     "faq.q3": "Mes données sont-elles privées et sécurisées ?",
-    "faq.a3": "Absolument. Toutes les conversations sont chiffrées et stockées en sécurité. Nous ne vendons ni ne partageons jamais vos données personnelles. Votre relation, vos affaires — nous fournissons simplement les outils pour l'aider à grandir.",
+    "faq.a3": "Nous utilisons HTTPS pendant la transmission, un stockage cloud sécurisé et des contrôles d'accès. Nous ne vendons jamais vos données personnelles. Votre relation, vos affaires — nous fournissons simplement les outils pour l'aider à grandir.",
     "faq.q4": "Puis-je essayer gratuitement ?",
     "faq.a4": "Oui ! Le forfait Gratuit inclut 10 messages coach IA par mois, la messagerie partenaire illimitée et l'accès aux exercices de base. Aucune carte bancaire requise pour commencer.",
     "faq.q5": "Quelles langues sont prises en charge ?",
@@ -267,7 +267,7 @@ const translations = {
     "feature.multilingual.title": "Multilingüe",
     "feature.multilingual.desc": "Disponible en inglés, francés y español — para que puedas conectar en el idioma más cómodo para ti.",
     "feature.privacy.title": "Privado y Seguro",
-    "feature.privacy.desc": "Tus conversaciones están cifradas y son privadas. Nunca compartimos tus datos. Tu relación, tu asunto.",
+    "feature.privacy.desc": "Los mensajes se transmiten de forma segura y se almacenan con controles de acceso. Nunca vendemos tus datos personales. Tu relación es tu asunto.",
 
     "howItWorks.label": "Cómo Funciona",
     "howItWorks.title": "Empieza en <span class=\"gradient-text\">3 simples pasos</span>",
@@ -322,7 +322,7 @@ const translations = {
     "faq.q2": "¿Cómo funciona el coach IA?",
     "faq.a2": "Nuestro coach IA está entrenado en técnicas probadas de terapia relacional, incluyendo el Método Gottman y la Terapia Centrada en las Emociones. Proporciona orientación personalizada, sugiere ejercicios y facilita conversaciones productivas entre parejas — disponible 24/7.",
     "faq.q3": "¿Mis datos son privados y seguros?",
-    "faq.a3": "Absolutamente. Todas las conversaciones están cifradas y almacenadas de forma segura. Nunca vendemos ni compartimos tus datos personales. Tu relación es tu asunto — nosotros solo proporcionamos las herramientas para ayudarla a crecer.",
+    "faq.a3": "Usamos HTTPS durante la transmisión, almacenamiento seguro en la nube y controles de acceso. Nunca vendemos tus datos personales. Tu relación es tu asunto — nosotros solo proporcionamos las herramientas para ayudarla a crecer.",
     "faq.q4": "¿Puedo probarlo gratis?",
     "faq.a4": "¡Sí! El plan Gratis incluye 10 mensajes del coach IA por mes, mensajería de pareja ilimitada y acceso a ejercicios básicos. No se requiere tarjeta de crédito para empezar.",
     "faq.q5": "¿Qué idiomas están disponibles?",

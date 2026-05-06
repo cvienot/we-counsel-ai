@@ -4,11 +4,11 @@
 
 ## 1. Acceptance of Terms
 
-By creating an account and using We Coach ("the Service"), you agree to be bound by these Terms of Service. If you do not agree to these terms, you may not use the Service.
+By creating an account and using We Connect ("the Service"), you agree to be bound by these Terms of Service. If you do not agree to these terms, you may not use the Service.
 
 ## 2. Description of Service
 
-We Coach is a coaching application designed to facilitate communication between couples. The Service provides:
+We Connect is a coaching application designed to facilitate communication between couples. The Service provides:
 - Private conversation spaces for couples
 - AI-assisted coaching support
 - Secure messaging and communication tools
@@ -51,7 +51,7 @@ You agree not to:
 ## 6. Intellectual Property
 
 ### 6.1 Service Content
-- All content, features, and functionality of the Service are owned by We Coach
+- All content, features, and functionality of the Service are owned by We Connect
 - You may not copy, modify, distribute, or create derivative works without permission
 
 ### 6.2 User Content
@@ -94,14 +94,14 @@ You agree not to:
 
 ## 10. Indemnification
 
-You agree to indemnify and hold harmless We Coach and its affiliates from any claims, losses, or damages arising from:
+You agree to indemnify and hold harmless We Connect and its affiliates from any claims, losses, or damages arising from:
 - Your use of the Service
 - Your violation of these Terms
 - Your violation of any rights of another party
 
 ## 11. Governing Law
 
-These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which We Coach operates, without regard to conflict of law provisions.
+These Terms must identify the governing law and competent venue approved for public launch. Do not launch the Service publicly until this jurisdiction is confirmed and this section is finalized by the Service owner or legal counsel.
 
 ## 12. Dispute Resolution
 
@@ -120,18 +120,32 @@ We reserve the right to modify these Terms at any time. We will notify users of 
 
 Your continued use of the Service after changes constitutes acceptance of the modified Terms.
 
-## 14. Contact Information
+## 14. Paid Subscriptions, Billing, and Cancellation
+
+- Paid plans, billing periods, prices, included features, usage limits, and trial terms are shown before checkout.
+- Payments, invoices, payment methods, renewals, cancellations, taxes, and payment disputes are handled through Stripe.
+- Subscriptions renew automatically unless cancelled before the next billing period.
+- You can manage billing through the Stripe customer portal when available.
+- Cancellation stops future renewal but does not automatically refund past charges unless required by law or stated in the applicable checkout terms.
+- If a payment fails, access to paid features may be limited, suspended, or downgraded.
+- We may change prices or plan features with reasonable notice where required by law.
+
+## 15. Account Deletion and Data Requests
+
+You may request account deletion or data export by contacting support@we-connect-app.com. Some records may be retained when required for security, legal, tax, accounting, dispute, fraud prevention, or backup purposes.
+
+## 16. Contact Information
 
 If you have questions about these Terms, please contact us at:
 - Email: support@we-connect-app.com
 
-## 15. Severability
+## 17. Severability
 
 If any provision of these Terms is found to be unenforceable or invalid, that provision shall be limited or eliminated to the minimum extent necessary, and the remaining provisions shall remain in full force and effect.
 
-## 16. Entire Agreement
+## 18. Entire Agreement
 
-These Terms, together with our Privacy Policy, constitute the entire agreement between you and We Coach regarding the Service.
+These Terms, together with our Privacy Policy, constitute the entire agreement between you and We Connect regarding the Service.
 
 ---
 

@@ -4,49 +4,45 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import '../../providers/language_provider.dart';
 
-class TermsOfServiceScreen extends ConsumerStatefulWidget {
-  const TermsOfServiceScreen({super.key});
+class PrivacyPolicyScreen extends ConsumerStatefulWidget {
+  const PrivacyPolicyScreen({super.key});
 
   @override
-  ConsumerState<TermsOfServiceScreen> createState() =>
-      _TermsOfServiceScreenState();
+  ConsumerState<PrivacyPolicyScreen> createState() =>
+      _PrivacyPolicyScreenState();
 }
 
-class _TermsOfServiceScreenState extends ConsumerState<TermsOfServiceScreen> {
-  String? _termsContent;
+class _PrivacyPolicyScreenState extends ConsumerState<PrivacyPolicyScreen> {
+  String? _privacyContent;
   bool _isLoading = true;
   String? _error;
 
   @override
   void initState() {
     super.initState();
-    _loadTerms();
+    _loadPrivacyPolicy();
   }
 
-  Future<void> _loadTerms() async {
+  Future<void> _loadPrivacyPolicy() async {
     try {
       final locale = ref.read(currentLocaleProvider);
       final languageCode = locale.languageCode;
+      final fileName = 'assets/privacy/privacy_$languageCode.md';
 
-      // Map language code to file name
-      final fileName = 'assets/terms/terms_$languageCode.md';
-
-      // Try to load the language-specific terms, fallback to English if not found
       String content;
       try {
         content = await rootBundle.loadString(fileName);
       } catch (e) {
-        // Fallback to English if the language file doesn't exist
-        content = await rootBundle.loadString('assets/terms/terms_en.md');
+        content = await rootBundle.loadString('assets/privacy/privacy_en.md');
       }
 
       setState(() {
-        _termsContent = content;
+        _privacyContent = content;
         _isLoading = false;
       });
     } catch (e) {
       setState(() {
-        _error = 'Failed to load Terms of Service';
+        _error = 'Failed to load Privacy Policy';
         _isLoading = false;
       });
     }
@@ -55,7 +51,7 @@ class _TermsOfServiceScreenState extends ConsumerState<TermsOfServiceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Terms of Service')),
+      appBar: AppBar(title: const Text('Privacy Policy')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _error != null
@@ -63,17 +59,20 @@ class _TermsOfServiceScreenState extends ConsumerState<TermsOfServiceScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.error_outline, size: 48, color: Colors.red),
-                  SizedBox(height: 16),
+                  const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                  const SizedBox(height: 16),
                   Text(_error!),
-                  SizedBox(height: 16),
-                  ElevatedButton(onPressed: _loadTerms, child: Text('Retry')),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: _loadPrivacyPolicy,
+                    child: const Text('Retry'),
+                  ),
                 ],
               ),
             )
           : SafeArea(
               child: Markdown(
-                data: _termsContent!,
+                data: _privacyContent!,
                 padding: const EdgeInsets.all(24.0),
                 styleSheet: MarkdownStyleSheet(
                   h1: Theme.of(context).textTheme.headlineMedium,

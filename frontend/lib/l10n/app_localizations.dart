@@ -103,7 +103,7 @@ abstract class AppLocalizations {
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:
-  /// **'We Coach'**
+  /// **'We Connect'**
   String get appTitle;
 
   /// No description provided for @appSubtitle.
@@ -385,7 +385,7 @@ abstract class AppLocalizations {
   /// No description provided for @waitingRoomGreeting.
   ///
   /// In en, this message translates to:
-  /// **'Hi {name}! Your coaching journey will begin once your partner joins you on We Coach.'**
+  /// **'Hi {name}! Your coaching journey will begin once your partner joins you on We Connect.'**
   String waitingRoomGreeting(String name);
 
   /// No description provided for @whatHappensNext.
@@ -409,7 +409,7 @@ abstract class AppLocalizations {
   /// No description provided for @getStartedGreeting.
   ///
   /// In en, this message translates to:
-  /// **'Hi {name}! To begin your coaching journey, invite your partner to join you on We Coach.'**
+  /// **'Hi {name}! To begin your coaching journey, invite your partner to join you on We Connect.'**
   String getStartedGreeting(String name);
 
   /// No description provided for @howItWorks.
@@ -901,7 +901,7 @@ abstract class AppLocalizations {
   /// No description provided for @welcomeToApp.
   ///
   /// In en, this message translates to:
-  /// **'Welcome to We Coach'**
+  /// **'Welcome to We Connect'**
   String get welcomeToApp;
 
   /// No description provided for @strengthenRelationship.
@@ -955,7 +955,7 @@ abstract class AppLocalizations {
   /// No description provided for @joinApp.
   ///
   /// In en, this message translates to:
-  /// **'Join We Coach'**
+  /// **'Join We Connect'**
   String get joinApp;
 
   /// No description provided for @startJourneyBetterComm.
@@ -1051,7 +1051,7 @@ abstract class AppLocalizations {
   /// No description provided for @partnerInvitedYou.
   ///
   /// In en, this message translates to:
-  /// **'Your partner has invited you to join We Coach. Create an account or sign in to start your relationship coaching journey together.'**
+  /// **'Your partner has invited you to join We Connect. Create an account or sign in to start your relationship coaching journey together.'**
   String get partnerInvitedYou;
 
   /// No description provided for @alreadySignedInAccept.

@@ -12,6 +12,8 @@ import 'screens/auth/register_screen.dart';
 import 'screens/auth/invitation_screen.dart';
 import 'screens/auth/forgot_password_screen.dart';
 import 'screens/auth/reset_password_screen.dart';
+import 'screens/auth/terms_of_service_screen.dart';
+import 'screens/auth/privacy_policy_screen.dart';
 import 'screens/home/home_screen.dart';
 import 'screens/main_thread/main_thread_screen.dart';
 import 'screens/conversations/conversation_list_screen.dart';
@@ -27,13 +29,17 @@ import 'screens/exercises/exercise_loader_screen.dart';
 import 'screens/exercises/exercise_history_screen.dart';
 import 'screens/progress/progress_dashboard_screen.dart';
 import 'config/environment.dart';
+import 'services/attribution_service.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   // Print environment config for debugging
   Environment.printConfig();
-  
+
   // Use path-based routing instead of hash-based routing
   setPathUrlStrategy();
+  await AttributionService().captureCurrentUri();
   runApp(const ProviderScope(child: WeCounselApp()));
 }
 
@@ -52,7 +58,7 @@ class WeCounselApp extends ConsumerWidget {
     final currentLocale = ref.watch(currentLocaleProvider);
 
     return MaterialApp.router(
-      title: 'We Coach',
+      title: 'We Connect',
       locale: currentLocale,
       localizationsDelegates: const [
         AppLocalizations.delegate,
@@ -71,10 +77,7 @@ class WeCounselApp extends ConsumerWidget {
           brightness: Brightness.light,
         ),
         useMaterial3: true,
-        appBarTheme: const AppBarTheme(
-          elevation: 0,
-          centerTitle: true,
-        ),
+        appBarTheme: const AppBarTheme(elevation: 0, centerTitle: true),
         cardTheme: CardThemeData(
           elevation: 2,
           shape: RoundedRectangleBorder(
@@ -90,9 +93,7 @@ class WeCounselApp extends ConsumerWidget {
           ),
         ),
         inputDecorationTheme: InputDecorationTheme(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
           filled: true,
           fillColor: Colors.grey.shade50,
         ),
@@ -114,30 +115,46 @@ class WeCounselApp extends ConsumerWidget {
         final isInvitationRoute = location.startsWith('/invitation/');
         final isForgotPasswordRoute = location == '/forgot-password';
         final isResetPasswordRoute = location.startsWith('/reset-password/');
+        final isLegalRoute = location == '/terms' || location == '/privacy';
         final isSplashRoute = location == '/splash';
 
-        print('🔀 ROUTER: Redirect check - location: $location, isAuth: ${authState.isAuthenticated}, isLoading: ${authState.isLoading}');
+        print(
+          '🔀 ROUTER: Redirect check - location: $location, isAuth: ${authState.isAuthenticated}, isLoading: ${authState.isLoading}',
+        );
 
         // Allow invitation and password reset routes without authentication
-        if (isInvitationRoute || isForgotPasswordRoute || isResetPasswordRoute) {
+        if (isInvitationRoute ||
+            isForgotPasswordRoute ||
+            isResetPasswordRoute ||
+            isLegalRoute) {
           print('🔀 ROUTER: Allowing invitation route');
           return null;
         }
 
         // If still loading auth state, stay on splash (but don't redirect away from auth routes)
-        if (authState.isLoading && !isSplashRoute && !isLoginRoute && !isRegisterRoute) {
+        if (authState.isLoading &&
+            !isSplashRoute &&
+            !isLoginRoute &&
+            !isRegisterRoute) {
           print('🔀 ROUTER: Still loading, redirect to /splash');
           return '/splash';
         }
 
         // If done loading and not authenticated, go to login (unless already there)
-        if (!authState.isLoading && !authState.isAuthenticated && !isLoginRoute && !isRegisterRoute && !isForgotPasswordRoute && !isResetPasswordRoute) {
+        if (!authState.isLoading &&
+            !authState.isAuthenticated &&
+            !isLoginRoute &&
+            !isRegisterRoute &&
+            !isForgotPasswordRoute &&
+            !isResetPasswordRoute &&
+            !isLegalRoute) {
           print('🔀 ROUTER: Not authenticated, redirect to /login');
           return '/login';
         }
 
         // If authenticated and on auth/splash routes, redirect to main conversation
-        if (authState.isAuthenticated && (isLoginRoute || isRegisterRoute || isSplashRoute)) {
+        if (authState.isAuthenticated &&
+            (isLoginRoute || isRegisterRoute || isSplashRoute)) {
           print('🔀 ROUTER: Authenticated, redirect to /main-thread');
           return '/main-thread';
         }
@@ -177,9 +194,14 @@ class WeCounselApp extends ConsumerWidget {
           },
         ),
         GoRoute(
-          path: '/home',
-          builder: (context, state) => const HomeScreen(),
+          path: '/terms',
+          builder: (context, state) => const TermsOfServiceScreen(),
         ),
+        GoRoute(
+          path: '/privacy',
+          builder: (context, state) => const PrivacyPolicyScreen(),
+        ),
+        GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
         GoRoute(
           path: '/main-thread',
           builder: (context, state) => const MainThreadScreen(),
@@ -241,7 +263,7 @@ class WeCounselApp extends ConsumerWidget {
             final args = state.extra as Map<String, dynamic>?;
             final conversationId = args?['conversationId'] as String?;
             final exerciseId = args?['exerciseId'] as String?;
-            
+
             if (conversationId == null || exerciseId == null) {
               // Redirect to conversation if required parameters are missing
               WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -251,7 +273,7 @@ class WeCounselApp extends ConsumerWidget {
                 body: Center(child: CircularProgressIndicator()),
               );
             }
-            
+
             return ExerciseLoaderScreen(
               conversationId: conversationId,
               exerciseId: exerciseId,
@@ -268,7 +290,9 @@ class _AuthStateNotifier extends ChangeNotifier {
 
   _AuthStateNotifier(this._ref) {
     _ref.listen<AuthState>(authProvider, (previous, next) {
-      print('🔔 AUTH STATE CHANGED: isAuth: ${next.isAuthenticated}, isLoading: ${next.isLoading}');
+      print(
+        '🔔 AUTH STATE CHANGED: isAuth: ${next.isAuthenticated}, isLoading: ${next.isLoading}',
+      );
       notifyListeners();
     });
   }
@@ -292,14 +316,10 @@ class SplashScreen extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.favorite,
-              size: 80,
-              color: Colors.white,
-            ),
+            Icon(Icons.favorite, size: 80, color: Colors.white),
             const SizedBox(height: 24),
             Text(
-              AppLocalizations.of(context)?.appTitle ?? 'We Coach',
+              AppLocalizations.of(context)?.appTitle ?? 'We Connect',
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -307,7 +327,8 @@ class SplashScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              AppLocalizations.of(context)?.appSubtitle ?? 'Your relationship journey together',
+              AppLocalizations.of(context)?.appSubtitle ??
+                  'Your relationship journey together',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Colors.white.withOpacity(0.9),
               ),

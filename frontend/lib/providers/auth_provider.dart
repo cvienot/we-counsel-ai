@@ -44,11 +44,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> _initializeAuth() async {
     print('🔐 AUTH: Starting auth initialization...');
     state = state.copyWith(isLoading: true);
-    
+
     try {
       final token = await _apiService.getToken();
-      print('🔐 AUTH: Token check - ${token != null ? "Token found" : "No token"}');
-      
+      print(
+        '🔐 AUTH: Token check - ${token != null ? "Token found" : "No token"}',
+      );
+
       if (token != null && token.isNotEmpty) {
         // Token exists, verify it's still valid by getting current user
         print('🔐 AUTH: Verifying token with server...');
@@ -57,10 +59,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       } else {
         // No token, user is not authenticated
         print('🔐 AUTH: No token found, user not authenticated');
-        state = state.copyWith(
-          isLoading: false,
-          isAuthenticated: false,
-        );
+        state = state.copyWith(isLoading: false, isAuthenticated: false);
       }
     } catch (e) {
       // Token is invalid or expired, clear it and logout
@@ -73,7 +72,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
         isAuthenticated: false,
         error: null,
       );
-      print('🔐 AUTH: State updated - isAuthenticated: ${state.isAuthenticated}, isLoading: ${state.isLoading}');
+      print(
+        '🔐 AUTH: State updated - isAuthenticated: ${state.isAuthenticated}, isLoading: ${state.isLoading}',
+      );
     }
   }
 
@@ -90,9 +91,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
     String? language,
     bool termsAccepted = false,
     String? subscriptionTier,
+    Map<String, dynamic>? attribution,
   }) async {
     state = state.copyWith(isLoading: true, error: null);
-    
+
     try {
       final response = await _apiService.register(
         email: email,
@@ -102,11 +104,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
         language: language,
         termsAccepted: termsAccepted,
         subscriptionTier: subscriptionTier,
+        attribution: attribution,
       );
-      
+
       print('🔵 AUTH: Register response: ${response.toString()}');
-      print('🔵 AUTH: success=${response['success']}, user=${response['user'] != null}');
-      
+      print(
+        '🔵 AUTH: success=${response['success']}, user=${response['user'] != null}',
+      );
+
       if (response['success'] == true && response['user'] != null) {
         final user = User.fromJson(response['user']);
         print('🔵 AUTH: Setting auth state - isAuthenticated: true');
@@ -116,17 +121,19 @@ class AuthNotifier extends StateNotifier<AuthState> {
           isAuthenticated: true,
         );
         print('🔵 AUTH: State updated - isAuth: ${state.isAuthenticated}');
-        
+
         // Connect to realtime service after successful registration
         try {
           print('🔵 AUTH: Connecting to realtime service...');
           await _realtimeService.connect();
           print('🔵 AUTH: Realtime service connected');
         } catch (e) {
-          print('🔵 AUTH: Realtime service connection failed: $e (non-critical)');
+          print(
+            '🔵 AUTH: Realtime service connection failed: $e (non-critical)',
+          );
           // Don't fail registration if realtime connection fails
         }
-        
+
         // If there's a pending invitation, accept it automatically
         if (invitationId != null) {
           try {
@@ -138,10 +145,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         }
       }
     } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      );
+      state = state.copyWith(isLoading: false, error: e.toString());
       rethrow;
     }
   }
@@ -152,13 +156,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
     String? invitationId,
   }) async {
     state = state.copyWith(isLoading: true, error: null);
-    
+
     try {
       final response = await _apiService.login(
         email: email,
         password: password,
       );
-      
+
       if (response['success'] == true && response['user'] != null) {
         final user = User.fromJson(response['user']);
         state = state.copyWith(
@@ -166,10 +170,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
           isLoading: false,
           isAuthenticated: true,
         );
-        
+
         // Connect to realtime service after successful login
         await _realtimeService.connect();
-        
+
         // If there's a pending invitation, accept it automatically
         if (invitationId != null) {
           try {
@@ -181,10 +185,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         }
       }
     } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      );
+      state = state.copyWith(isLoading: false, error: e.toString());
       rethrow;
     }
   }
@@ -192,7 +193,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> getCurrentUser() async {
     try {
       final response = await _apiService.getCurrentUser();
-      
+
       if (response['success'] == true && response['user'] != null) {
         final user = User.fromJson(response['user']);
         state = state.copyWith(
@@ -201,7 +202,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
           isLoading: false,
           error: null,
         );
-        
+
         // Connect to realtime service if not connected
         await _realtimeService.connect();
       } else {
@@ -229,39 +230,27 @@ class AuthNotifier extends StateNotifier<AuthState> {
     required String lastName,
   }) async {
     state = state.copyWith(isLoading: true, error: null);
-    
+
     try {
       final response = await _apiService.updateProfile(
         firstName: firstName,
         lastName: lastName,
       );
-      
+
       if (response['success'] == true && response['user'] != null) {
         final updatedUser = User.fromJson(response['user']);
-        state = state.copyWith(
-          user: updatedUser,
-          isLoading: false,
-        );
+        state = state.copyWith(user: updatedUser, isLoading: false);
       }
     } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      );
+      state = state.copyWith(isLoading: false, error: e.toString());
       rethrow;
     }
   }
 
-  Future<void> invitePartner({
-    required String email,
-    String? message,
-  }) async {
+  Future<void> invitePartner({required String email, String? message}) async {
     try {
-      await _apiService.invitePartner(
-        email: email,
-        message: message,
-      );
-      
+      await _apiService.invitePartner(email: email, message: message);
+
       // Refresh user data to get pendingInvitation info
       await getCurrentUser();
     } catch (e) {
@@ -271,19 +260,16 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   Future<void> acceptInvitation(String invitationId) async {
     state = state.copyWith(isLoading: true, error: null);
-    
+
     try {
       await _apiService.acceptInvitation(invitationId);
-      
+
       // Refresh user data to get updated partner info
       await getCurrentUser();
-      
+
       state = state.copyWith(isLoading: false);
     } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      );
+      state = state.copyWith(isLoading: false, error: e.toString());
       rethrow;
     }
   }

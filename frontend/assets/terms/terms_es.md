@@ -4,11 +4,11 @@
 
 ## 1. Aceptación de los términos
 
-Al crear una cuenta y utilizar We Coach ("el Servicio"), usted acepta estar sujeto a estos Términos de Servicio. Si no está de acuerdo con estos términos, no puede utilizar el Servicio.
+Al crear una cuenta y utilizar We Connect ("el Servicio"), usted acepta estar sujeto a estos Términos de Servicio. Si no está de acuerdo con estos términos, no puede utilizar el Servicio.
 
 ## 2. Descripción del Servicio
 
-We Coach es una aplicación de asesoramiento diseñada para facilitar la comunicación entre parejas. El Servicio proporciona:
+We Connect es una aplicación de asesoramiento diseñada para facilitar la comunicación entre parejas. El Servicio proporciona:
 - Espacios de conversación privados para parejas
 - Soporte de asesoramiento asistido por IA
 - Herramientas de mensajería y comunicación seguras
@@ -51,7 +51,7 @@ Usted acepta no:
 ## 6. Propiedad intelectual
 
 ### 6.1 Contenido del servicio
-- Todo el contenido, características y funcionalidad del Servicio son propiedad de We Coach
+- Todo el contenido, características y funcionalidad del Servicio son propiedad de We Connect
 - No puede copiar, modificar, distribuir o crear obras derivadas sin permiso
 
 ### 6.2 Contenido del usuario
@@ -94,14 +94,14 @@ Usted acepta no:
 
 ## 10. Indemnización
 
-Usted acepta indemnizar y eximir de responsabilidad a We Coach y sus afiliados de cualquier reclamo, pérdida o daño que surja de:
+Usted acepta indemnizar y eximir de responsabilidad a We Connect y sus afiliados de cualquier reclamo, pérdida o daño que surja de:
 - Su uso del Servicio
 - Su violación de estos Términos
 - Su violación de los derechos de otra parte
 
 ## 11. Ley aplicable
 
-Estos Términos se regirán e interpretarán de acuerdo con las leyes de la jurisdicción en la que opera We Coach, sin tener en cuenta las disposiciones sobre conflictos de leyes.
+Estos Términos deben identificar la ley aplicable y el tribunal competente aprobados para el lanzamiento público. No lance el Servicio públicamente hasta que esta jurisdicción esté confirmada y esta sección sea finalizada por el propietario del Servicio o asesoría legal.
 
 ## 12. Resolución de disputas
 
@@ -120,18 +120,32 @@ Nos reservamos el derecho de modificar estos Términos en cualquier momento. Not
 
 Su uso continuado del Servicio después de los cambios constituye la aceptación de los Términos modificados.
 
-## 14. Información de contacto
+## 14. Suscripciones pagas, facturación y cancelación
+
+- Los planes pagos, períodos de facturación, precios, funciones incluidas, límites de uso y condiciones de prueba se muestran antes del pago.
+- Los pagos, facturas, métodos de pago, renovaciones, cancelaciones, impuestos y disputas de pago se gestionan a través de Stripe.
+- Las suscripciones se renuevan automáticamente salvo cancelación antes del siguiente período de facturación.
+- Puede gestionar la facturación a través del portal de clientes de Stripe cuando esté disponible.
+- La cancelación detiene renovaciones futuras pero no reembolsa automáticamente cargos anteriores salvo que lo exija la ley o se indique en las condiciones de pago aplicables.
+- Si un pago falla, el acceso a funciones pagas puede limitarse, suspenderse o degradarse.
+- Podemos cambiar precios o funciones de los planes con aviso razonable cuando la ley lo requiera.
+
+## 15. Eliminación de cuenta y solicitudes de datos
+
+Puede solicitar la eliminación de su cuenta o la exportación de sus datos contactando a support@we-connect-app.com. Algunos registros pueden conservarse cuando sea necesario por seguridad, obligaciones legales, fiscales o contables, disputas, prevención de fraude o copias de seguridad.
+
+## 16. Información de contacto
 
 Si tiene preguntas sobre estos Términos, contáctenos en:
 - Correo electrónico: support@we-connect-app.com
 
-## 15. Divisibilidad
+## 17. Divisibilidad
 
 Si alguna disposición de estos Términos se considera inaplicable o inválida, esa disposición se limitará o eliminará en la medida mínima necesaria, y las disposiciones restantes permanecerán en pleno vigor y efecto.
 
-## 16. Acuerdo completo
+## 18. Acuerdo completo
 
-Estos Términos, junto con nuestra Política de Privacidad, constituyen el acuerdo completo entre usted y We Coach con respecto al Servicio.
+Estos Términos, junto con nuestra Política de Privacidad, constituyen el acuerdo completo entre usted y We Connect con respecto al Servicio.
 
 ---
 

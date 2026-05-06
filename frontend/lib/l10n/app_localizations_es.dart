@@ -9,7 +9,7 @@ class AppLocalizationsEs extends AppLocalizations {
   AppLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
-  String get appTitle => 'We Coach';
+  String get appTitle => 'We Connect';
 
   @override
   String get appSubtitle => 'Su viaje de relación juntos';
@@ -108,7 +108,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get invitePartnerDescription =>
-      'Invita a tu pareja a unirse a ti en We Coach. Recibirá un correo electrónico con instrucciones para crear su cuenta y conectarse contigo.';
+      'Invita a tu pareja a unirse a ti en We Connect. Recibirá un correo electrónico con instrucciones para crear su cuenta y conectarse contigo.';
 
   @override
   String get partnerEmailAddress =>
@@ -162,7 +162,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String waitingRoomGreeting(String name) {
-    return '¡Hola $name! Su viaje de coaching comenzará una vez que su pareja se una a usted en We Coach.';
+    return '¡Hola $name! Su viaje de coaching comenzará una vez que su pareja se una a usted en We Connect.';
   }
 
   @override
@@ -176,7 +176,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String getStartedGreeting(String name) {
-    return '¡Hola $name! Para comenzar su viaje de coaching, invite a su pareja a unirse en We Coach.';
+    return '¡Hola $name! Para comenzar su viaje de coaching, invite a su pareja a unirse en We Connect.';
   }
 
   @override
@@ -446,7 +446,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get upgradeOrChangeSubscription => 'Mejorar o cambiar suscripción';
 
   @override
-  String get welcomeToApp => 'Bienvenido a We Coach';
+  String get welcomeToApp => 'Bienvenido a We Connect';
 
   @override
   String get strengthenRelationship => 'Fortalece tu relación juntos';
@@ -473,7 +473,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get createAccount => 'Crear Cuenta';
 
   @override
-  String get joinApp => 'Únete a We Coach';
+  String get joinApp => 'Únete a We Connect';
 
   @override
   String get startJourneyBetterComm =>
@@ -528,7 +528,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get partnerInvitedYou =>
-      'Tu pareja te ha invitado a unirte a We Coach. Crea una cuenta o inicia sesión para comenzar tu viaje de coaching relacional juntos.';
+      'Tu pareja te ha invitado a unirte a We Connect. Crea una cuenta o inicia sesión para comenzar tu viaje de coaching relacional juntos.';
 
   @override
   String get alreadySignedInAccept =>

@@ -1,6 +1,6 @@
 {
   "@@locale": "es",
-  "appTitle": "We Coach",
+  "appTitle": "We Connect",
   "appSubtitle": "Su viaje de relación juntos",
 
   "login": "Iniciar Sesión",
@@ -38,7 +38,7 @@
   "invitePartner": "Invitar Pareja",
   "inviteYourPartner": "Invita a tu pareja",
   "sendInvitation": "Enviar invitación",
-  "invitePartnerDescription": "Invita a tu pareja a unirse a ti en We Coach. Recibirá un correo electrónico con instrucciones para crear su cuenta y conectarse contigo.",
+  "invitePartnerDescription": "Invita a tu pareja a unirse a ti en We Connect. Recibirá un correo electrónico con instrucciones para crear su cuenta y conectarse contigo.",
   "partnerEmailAddress": "Dirección de correo electrónico de la pareja",
   "enterPartnerEmail": "Ingresa la dirección de correo electrónico de tu pareja",
   "pleaseEnterPartnerEmail": "Por favor, ingresa el correo electrónico de tu pareja",
@@ -53,11 +53,11 @@
   "ok": "OK",
   "waitingForPartner": "Esperando a su pareja...",
   "waitingForPartnerTitle": "Esperando a su pareja",
-  "waitingRoomGreeting": "¡Hola {name}! Su viaje de coaching comenzará una vez que su pareja se una a usted en We Coach.",
+  "waitingRoomGreeting": "¡Hola {name}! Su viaje de coaching comenzará una vez que su pareja se una a usted en We Connect.",
   "whatHappensNext": "¿Qué sucede después?",
   "sendAnotherInvitation": "Enviar otra invitación",
   "getStartedTitle": "Para empezar",
-  "getStartedGreeting": "¡Hola {name}! Para comenzar su viaje de coaching, invite a su pareja a unirse en We Coach.",
+  "getStartedGreeting": "¡Hola {name}! Para comenzar su viaje de coaching, invite a su pareja a unirse en We Connect.",
   "howItWorks": "Cómo funciona",
   "getStartedExplanation": "Envíe una invitación a su pareja por correo electrónico. Una vez que cree su cuenta y acepte, estarán conectados y podrán comenzar sus sesiones de coaching juntos.",
   "invitePartnerButton": "Invitar a su pareja",
@@ -157,7 +157,7 @@
   "changePlan": "Cambiar Plan",
   "upgradeOrChangeSubscription": "Mejorar o cambiar suscripción",
 
-  "welcomeToApp": "Bienvenido a We Coach",
+  "welcomeToApp": "Bienvenido a We Connect",
   "strengthenRelationship": "Fortalece tu relación juntos",
   "pleaseEnterEmail": "Por favor, ingresa tu correo electrónico",
   "pleaseEnterPassword": "Por favor, ingresa tu contraseña",
@@ -167,7 +167,7 @@
   "loginFailed": "Error de inicio de sesión",
 
   "createAccount": "Crear Cuenta",
-  "joinApp": "Únete a We Coach",
+  "joinApp": "Únete a We Connect",
   "startJourneyBetterComm": "Comienza tu viaje hacia una mejor comunicación",
   "pleaseEnterAPassword": "Por favor, ingresa una contraseña",
   "passwordMinLength": "La contraseña debe tener al menos 6 caracteres",
@@ -184,7 +184,7 @@
 
   "joinYourPartner": "Únete a tu Pareja",
   "youveBeenInvited": "¡Has sido invitado/a!",
-  "partnerInvitedYou": "Tu pareja te ha invitado a unirte a We Coach. Crea una cuenta o inicia sesión para comenzar tu viaje de coaching relacional juntos.",
+  "partnerInvitedYou": "Tu pareja te ha invitado a unirte a We Connect. Crea una cuenta o inicia sesión para comenzar tu viaje de coaching relacional juntos.",
   "alreadySignedInAccept": "Ya has iniciado sesión. Haz clic abajo para aceptar la invitación.",
   "acceptInvitation": "Aceptar Invitación",
   "invitationInfoSteps": "• Si ya tienes una cuenta, inicia sesión para conectarte con tu pareja\n• Si eres nuevo/a, crea una cuenta para comenzar\n• Una vez conectados, pueden iniciar conversaciones juntos",

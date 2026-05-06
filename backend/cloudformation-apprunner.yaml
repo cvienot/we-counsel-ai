@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'App Runner service for We Coach backend with Secrets Manager integration'
+Description: 'App Runner service for We Connect backend with Secrets Manager integration'
 
 Parameters:
   GitHubConnectionArn:

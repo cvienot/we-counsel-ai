@@ -12,7 +12,7 @@ STACK_NAME="we-counsel-apprunner"
 SECRETS_STACK="we-counsel-secrets"
 
 echo "======================================="
-echo "We Coach - App Runner Deployment"
+echo "We Connect - App Runner Deployment"
 echo "======================================="
 echo ""
 

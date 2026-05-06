@@ -74,6 +74,37 @@ function applyTranslations(lang) {
 let currentLang = detectLanguage();
 applyTranslations(currentLang);
 
+// ===== Campaign attribution passthrough =====
+function preserveCampaignParams() {
+  const currentParams = new URLSearchParams(window.location.search);
+  const campaignParams = new URLSearchParams();
+
+  currentParams.forEach((value, key) => {
+    if (key.startsWith('utm_') && value) {
+      campaignParams.set(key, value);
+    }
+  });
+
+  if ([...campaignParams].length === 0) return;
+
+  document.querySelectorAll('a[href^="https://app.we-connect-app.com"]').forEach(link => {
+    const url = new URL(link.href);
+    const isAppEntryLink = url.origin === 'https://app.we-connect-app.com' && url.pathname === '/';
+
+    if (!isAppEntryLink) return;
+
+    campaignParams.forEach((value, key) => {
+      if (!url.searchParams.has(key)) {
+        url.searchParams.set(key, value);
+      }
+    });
+
+    link.href = url.toString();
+  });
+}
+
+preserveCampaignParams();
+
 // Language switcher dropdown
 const langBtn = document.getElementById('langBtn');
 const langDropdown = document.getElementById('langDropdown');

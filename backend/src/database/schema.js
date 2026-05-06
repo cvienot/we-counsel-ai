@@ -26,7 +26,12 @@ const tables = {
       { name: 'partnerId', type: 'S', description: 'Reference to partner user' },
       { name: 'createdAt', type: 'S', description: 'ISO timestamp of creation' },
       { name: 'termsAcceptedAt', type: 'S', description: 'ISO timestamp when user accepted terms of service' },
-      { name: 'termsAcceptedVersion', type: 'S', description: 'Version of terms accepted (e.g., "1.0.0")' }
+      { name: 'termsAcceptedVersion', type: 'S', description: 'Version of terms accepted (e.g., "1.0.0")' },
+      { name: 'firstTouchUtm', type: 'M', description: 'First captured UTM campaign parameters' },
+      { name: 'lastTouchUtm', type: 'M', description: 'Most recent captured UTM campaign parameters before signup' },
+      { name: 'landingPage', type: 'S', description: 'Landing page URL captured with first-touch campaign attribution' },
+      { name: 'referrer', type: 'S', description: 'Optional referring URL captured with campaign attribution' },
+      { name: 'campaignCapturedAt', type: 'S', description: 'ISO timestamp when campaign attribution was captured' }
     ],
     globalSecondaryIndexes: [
       {

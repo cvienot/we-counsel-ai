@@ -4,11 +4,11 @@
 
 ## 1. Acceptation des conditions
 
-En créant un compte et en utilisant We Coach (« le Service »), vous acceptez d'être lié par ces Conditions d'utilisation. Si vous n'acceptez pas ces conditions, vous ne pouvez pas utiliser le Service.
+En créant un compte et en utilisant We Connect (« le Service »), vous acceptez d'être lié par ces Conditions d'utilisation. Si vous n'acceptez pas ces conditions, vous ne pouvez pas utiliser le Service.
 
 ## 2. Description du Service
 
-We Coach est une application de conseil conçue pour faciliter la communication entre les couples. Le Service fournit :
+We Connect est une application de conseil conçue pour faciliter la communication entre les couples. Le Service fournit :
 - Des espaces de conversation privés pour les couples
 - Un soutien de conseil assisté par IA
 - Des outils de messagerie et de communication sécurisés
@@ -51,7 +51,7 @@ Vous acceptez de ne pas :
 ## 6. Propriété intellectuelle
 
 ### 6.1 Contenu du service
-- Tout le contenu, les fonctionnalités et les fonctionnalités du Service sont la propriété de We Coach
+- Tout le contenu, les fonctionnalités et les fonctionnalités du Service sont la propriété de We Connect
 - Vous ne pouvez pas copier, modifier, distribuer ou créer des œuvres dérivées sans autorisation
 
 ### 6.2 Contenu utilisateur
@@ -94,14 +94,14 @@ Vous acceptez de ne pas :
 
 ## 10. Indemnisation
 
-Vous acceptez d'indemniser et de dégager de toute responsabilité We Coach et ses affiliés de toute réclamation, perte ou dommage découlant de :
+Vous acceptez d'indemniser et de dégager de toute responsabilité We Connect et ses affiliés de toute réclamation, perte ou dommage découlant de :
 - Votre utilisation du Service
 - Votre violation de ces Conditions
 - Votre violation des droits d'une autre partie
 
 ## 11. Droit applicable
 
-Ces Conditions seront régies et interprétées conformément aux lois de la juridiction dans laquelle We Coach opère, sans égard aux dispositions relatives aux conflits de lois.
+Ces Conditions doivent identifier le droit applicable et le tribunal compétent approuvés pour le lancement public. Ne lancez pas le Service publiquement tant que cette juridiction n'est pas confirmée et que cette section n'est pas finalisée par le propriétaire du Service ou un conseil juridique.
 
 ## 12. Résolution des différends
 
@@ -120,18 +120,32 @@ Nous nous réservons le droit de modifier ces Conditions à tout moment. Nous in
 
 Votre utilisation continue du Service après les modifications constitue l'acceptation des Conditions modifiées.
 
-## 14. Coordonnées
+## 14. Abonnements payants, facturation et annulation
+
+- Les plans payants, périodes de facturation, prix, fonctionnalités incluses, limites d'utilisation et conditions d'essai sont affichés avant le paiement.
+- Les paiements, factures, moyens de paiement, renouvellements, annulations, taxes et litiges de paiement sont traités via Stripe.
+- Les abonnements se renouvellent automatiquement sauf annulation avant la période de facturation suivante.
+- Vous pouvez gérer la facturation via le portail client Stripe lorsqu'il est disponible.
+- L'annulation arrête le renouvellement futur mais ne rembourse pas automatiquement les frais passés, sauf obligation légale ou mention contraire dans les conditions de paiement applicables.
+- En cas d'échec de paiement, l'accès aux fonctionnalités payantes peut être limité, suspendu ou rétrogradé.
+- Nous pouvons modifier les prix ou les fonctionnalités des plans avec un préavis raisonnable lorsque la loi l'exige.
+
+## 15. Suppression de compte et demandes de données
+
+Vous pouvez demander la suppression de votre compte ou l'export de vos données en contactant support@we-connect-app.com. Certains enregistrements peuvent être conservés lorsque cela est nécessaire pour la sécurité, les obligations légales, fiscales ou comptables, les litiges, la prévention de la fraude ou les sauvegardes.
+
+## 16. Coordonnées
 
 Si vous avez des questions sur ces Conditions, veuillez nous contacter à :
 - E-mail : support@we-connect-app.com
 
-## 15. Divisibilité
+## 17. Divisibilité
 
 Si une disposition de ces Conditions est jugée inapplicable ou invalide, cette disposition sera limitée ou éliminée dans la mesure minimale nécessaire, et les dispositions restantes resteront pleinement en vigueur.
 
-## 16. Accord complet
+## 18. Accord complet
 
-Ces Conditions, ainsi que notre Politique de confidentialité, constituent l'intégralité de l'accord entre vous et We Coach concernant le Service.
+Ces Conditions, ainsi que notre Politique de confidentialité, constituent l'intégralité de l'accord entre vous et We Connect concernant le Service.
 
 ---
 
