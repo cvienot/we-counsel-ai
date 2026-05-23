@@ -1,6 +1,6 @@
 # Terms of Service
 
-**Last Updated:** May 6, 2026
+**Last Updated:** May 23, 2026
 
 ## 1. Acceptance of Terms
 
@@ -139,6 +139,8 @@ Your continued use of the Service after changes constitutes acceptance of the mo
 - Subscriptions renew automatically unless cancelled before the next billing period.
 - You can manage billing through the Stripe customer portal when available.
 - Cancellation stops future renewal but does not automatically refund past charges unless required by law or stated in the applicable checkout terms.
+- If you are a consumer in France, the European Union, or another jurisdiction with a statutory withdrawal right, you may have the right to withdraw from a paid subscription within 14 days of purchase. To exercise this right, contact support@we-connect-app.com with the email address used for the account and the relevant order or invoice information.
+- If you request immediate access to paid digital features before the end of the withdrawal period, you acknowledge that you may be charged for the paid service supplied before withdrawal, where allowed by law. Nothing in these Terms limits mandatory consumer rights.
 - If a payment fails, access to paid features may be limited, suspended, or downgraded.
 - We may change prices or plan features with reasonable notice where required by law.
 
@@ -149,6 +151,7 @@ You may request account deletion or data export by contacting support@we-connect
 ## 16. Contact Information
 
 If you have questions about these Terms, please contact us at:
+- Service operator: Camille Vienot, operating We Connect, SIREN 104281621, registered with the RNE on April 28, 2026
 - Email: support@we-connect-app.com
 
 ## 17. Severability

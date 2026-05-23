@@ -1006,10 +1006,22 @@ abstract class AppLocalizations {
   /// **'Terms of Service'**
   String get termsOfService;
 
+  /// No description provided for @andPrivacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **' and the '**
+  String get andPrivacyPolicy;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicy;
+
   /// No description provided for @mustAcceptTerms.
   ///
   /// In en, this message translates to:
-  /// **'You must accept the Terms of Service to create an account'**
+  /// **'You must accept the Terms of Service and Privacy Policy to create an account'**
   String get mustAcceptTerms;
 
   /// No description provided for @accountCreatedJoinedPartner.

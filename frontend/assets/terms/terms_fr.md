@@ -1,6 +1,6 @@
 # Conditions d'utilisation
 
-**Dernière mise à jour :** 6 mai 2026
+**Dernière mise à jour :** 23 mai 2026
 
 ## 1. Acceptation des conditions
 
@@ -139,6 +139,8 @@ Votre utilisation continue du Service après les modifications constitue l'accep
 - Les abonnements se renouvellent automatiquement sauf annulation avant la période de facturation suivante.
 - Vous pouvez gérer la facturation via le portail client Stripe lorsqu'il est disponible.
 - L'annulation arrête le renouvellement futur mais ne rembourse pas automatiquement les frais passés, sauf obligation légale ou mention contraire dans les conditions de paiement applicables.
+- Si vous êtes consommateur en France, dans l'Union européenne ou dans une juridiction prévoyant un droit légal de rétractation, vous pouvez disposer du droit de vous rétracter d'un abonnement payant dans les 14 jours suivant l'achat. Pour exercer ce droit, contactez support@we-connect-app.com avec l'adresse e-mail utilisée pour le compte et les informations de commande ou de facture concernées.
+- Si vous demandez l'accès immédiat aux fonctionnalités numériques payantes avant la fin du délai de rétractation, vous reconnaissez que le service fourni avant la rétractation peut vous être facturé, lorsque la loi l'autorise. Aucune disposition de ces Conditions ne limite les droits impératifs des consommateurs.
 - En cas d'échec de paiement, l'accès aux fonctionnalités payantes peut être limité, suspendu ou rétrogradé.
 - Nous pouvons modifier les prix ou les fonctionnalités des plans avec un préavis raisonnable lorsque la loi l'exige.
 
@@ -149,6 +151,7 @@ Vous pouvez demander la suppression de votre compte ou l'export de vos données 
 ## 16. Coordonnées
 
 Si vous avez des questions sur ces Conditions, veuillez nous contacter à :
+- Exploitant du Service : Camille Vienot, exploitant We Connect, SIREN 104281621, immatriculé au RNE le 28/04/2026
 - E-mail : support@we-connect-app.com
 
 ## 17. Divisibilité

@@ -189,7 +189,7 @@ Metrics currently reported:
 - [ ] Consent requirement for marketing tags.
   - If adding analytics, retargeting pixels, Meta Pixel, Google Ads tags, or similar non-essential cookies for EU users, add consent management before loading those tags.
   - I did not find existing analytics/pixel tags in the marketing site.
-  - App signup attribution now stores first-party `utm_*` parameters; confirm legal basis, retention, and whether consent UI is needed before paid traffic.
+  - App signup attribution now stores first-party `utm_*` parameters; privacy policy discloses marketing attribution and current cookie posture.
 
 ## Legal And Privacy
 
@@ -200,12 +200,12 @@ Metrics currently reported:
   - Submitted/processed on 2026-05-06 through La Mediation Professionnelle.
   - Used SIREN `104281621` and Date d'immatriculation au RNE `28/04/2026`.
 
-- [ ] Review whether relationship messages and AI coaching content need special handling.
+- [x] Review whether relationship messages and AI coaching content need special handling.
   - The product is not a therapist, but users may disclose sensitive personal data.
   - GDPR still treats encrypted or pseudonymized re-identifiable data as personal data.
-  - Confirm data processing basis and retention policy with counsel.
+  - Privacy policy now warns users not to share unnecessary sensitive information and documents account-active retention plus legal/security/billing exceptions.
 
-- [ ] Update Terms of Service.
+- [x] Update Terms of Service.
   - [x] Align "We Coach" vs "We Connect".
   - [x] Fill governing law and dispute venue.
   - [x] Add paid subscription, renewal, cancellation, refunds, trials, taxes, and chargeback terms.
@@ -213,10 +213,10 @@ Metrics currently reported:
   - [x] Add age gate and account deletion flow references.
   - [x] Add consumer mediation contact details after the mediation contract was signed.
 
-- [ ] Confirm consent capture.
+- [x] Confirm consent capture.
   - Registration requires terms acceptance and stores `termsAcceptedAt` and `termsAcceptedVersion`.
-  - Current backend uses `1.0.0-<language>` in `backend/src/routes/auth.js`.
-  - Add privacy-policy acceptance if required.
+  - Current backend uses `1.0.2-<language>` in `backend/src/routes/auth.js`.
+  - Registration copy now links to both Terms of Service and Privacy Policy before account creation.
   - Add a future terms/privacy re-consent mechanism for version changes.
 
 ## Production Readiness

@@ -497,8 +497,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get termsOfService => 'Terms of Service';
 
   @override
+  String get andPrivacyPolicy => ' and the ';
+
+  @override
+  String get privacyPolicy => 'Privacy Policy';
+
+  @override
   String get mustAcceptTerms =>
-      'You must accept the Terms of Service to create an account';
+      'You must accept the Terms of Service and Privacy Policy to create an account';
 
   @override
   String get accountCreatedJoinedPartner =>

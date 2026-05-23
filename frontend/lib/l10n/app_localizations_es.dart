@@ -503,8 +503,14 @@ class AppLocalizationsEs extends AppLocalizations {
   String get termsOfService => 'Términos de Servicio';
 
   @override
+  String get andPrivacyPolicy => ' y la ';
+
+  @override
+  String get privacyPolicy => 'Política de Privacidad';
+
+  @override
   String get mustAcceptTerms =>
-      'Debes aceptar los Términos de Servicio para crear una cuenta';
+      'Debes aceptar los Términos de Servicio y la Política de Privacidad para crear una cuenta';
 
   @override
   String get accountCreatedJoinedPartner =>

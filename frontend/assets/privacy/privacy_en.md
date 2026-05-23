@@ -1,12 +1,14 @@
 # Privacy Policy
 
-**Last Updated:** May 6, 2026
+**Last Updated:** May 23, 2026
 
 This Privacy Policy explains how We Connect ("the Service", "we", "us", or "our") collects, uses, stores, and shares personal information when you use the Service.
 
 ## 1. Who We Are
 
 We Connect provides an AI-assisted couples coaching and communication service.
+
+Data controller: Camille Vienot, operating We Connect, SIREN 104281621, registered with the RNE on April 28, 2026.
 
 Contact: support@we-connect-app.com
 
@@ -36,7 +38,7 @@ We use personal information to:
 
 ## 4. AI Processing
 
-Conversation content may be sent to OpenAI or another AI provider to generate coaching responses, summaries, and related product features.
+Conversation content may be sent to OpenAI or another AI provider to generate coaching responses, summaries, and related product features. Because relationship conversations can include sensitive information, you should avoid sharing information that is not needed to use the Service.
 
 AI responses may be inaccurate, incomplete, or inappropriate. The Service provides coaching support and is not a substitute for professional therapy, medical care, legal advice, emergency services, or crisis support.
 
@@ -70,17 +72,21 @@ We do not currently claim end-to-end encryption or message-level encryption for 
 
 ## 8. Retention
 
-We retain personal information for as long as needed to provide the Service, comply with legal obligations, resolve disputes, prevent abuse, and maintain security. You may request account deletion or data export by contacting support@we-connect-app.com.
+We retain personal information for as long as needed to provide the Service, comply with legal obligations, resolve disputes, prevent abuse, and maintain security.
+
+Account, partner, couple, conversation, exercise, and AI-interaction data are retained while the account is active. When you request account deletion, we will delete or anonymize personal data that is no longer needed for the Service, subject to records that must be kept for legal, tax, accounting, security, fraud-prevention, dispute, or backup purposes. Billing and payment records may be retained for the legally required retention period. Backups and operational logs may take additional time to expire through normal rotation.
 
 ## 9. Your Rights
 
-Depending on your location, you may have rights to access, correct, delete, restrict, object to processing, withdraw consent, or receive a portable copy of your personal information.
+Depending on your location, you may have rights to access, correct, delete, restrict, object to processing, withdraw consent, or receive a portable copy of your personal information. We may need to verify your identity before processing a request.
 
 To exercise these rights, contact support@we-connect-app.com.
 
+If you are in France or the European Union and believe your request has not been handled properly, you may lodge a complaint with the CNIL or your local data protection authority.
+
 ## 10. Cookies And Analytics
 
-The marketing site may use language preferences and basic technical storage. If analytics, retargeting, advertising pixels, or other non-essential cookies are added, they must be disclosed and, where required, loaded only after consent.
+The marketing site currently uses language preferences and basic technical storage. If analytics, retargeting, advertising pixels, or other non-essential cookies are added, they must be disclosed and, where required, loaded only after consent.
 
 ## 11. International Transfers
 

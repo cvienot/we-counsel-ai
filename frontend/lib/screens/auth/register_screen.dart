@@ -9,6 +9,7 @@ import '../../widgets/ctrl_enter_submit.dart';
 import '../../widgets/responsive_layout.dart';
 import '../../utils/snackbar_utils.dart';
 import '../plan_selection_screen.dart';
+import 'privacy_policy_screen.dart';
 import 'terms_of_service_screen.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
@@ -41,6 +42,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const TermsOfServiceScreen()),
+    );
+  }
+
+  void _showPrivacyPolicy() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const PrivacyPolicyScreen()),
     );
   }
 
@@ -297,6 +305,22 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                         onTap: _showTermsOfService,
                                         child: Text(
                                           l10n.termsOfService,
+                                          style: TextStyle(
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.primary,
+                                            decoration:
+                                                TextDecoration.underline,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    TextSpan(text: l10n.andPrivacyPolicy),
+                                    WidgetSpan(
+                                      child: GestureDetector(
+                                        onTap: _showPrivacyPolicy,
+                                        child: Text(
+                                          l10n.privacyPolicy,
                                           style: TextStyle(
                                             color: Theme.of(
                                               context,

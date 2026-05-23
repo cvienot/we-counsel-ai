@@ -1,14 +1,14 @@
 # Politica de Privacidad
 
-**Ultima actualizacion:** 6 de mayo de 2026
+**Ultima actualizacion:** 23 de mayo de 2026
 
 Esta Politica de Privacidad explica como We Connect ("el Servicio", "nosotros", "nuestro") recopila, usa, almacena y comparte informacion personal cuando usted utiliza el Servicio.
-
-Este documento es un borrador de producto listo para lanzamiento y debe ser revisado por asesoria legal antes del lanzamiento publico.
 
 ## 1. Quienes Somos
 
 We Connect proporciona un servicio de coaching de pareja y comunicacion asistido por IA.
+
+Responsable del tratamiento: Camille Vienot, operando We Connect, SIREN 104281621, inscrito en el RNE el 28/04/2026.
 
 Contacto: support@we-connect-app.com
 
@@ -38,7 +38,7 @@ Usamos informacion personal para:
 
 ## 4. Procesamiento Por IA
 
-El contenido de conversaciones puede enviarse a OpenAI u otro proveedor de IA para generar respuestas de coaching, resumenes y funciones relacionadas.
+El contenido de conversaciones puede enviarse a OpenAI u otro proveedor de IA para generar respuestas de coaching, resumenes y funciones relacionadas. Como las conversaciones de pareja pueden incluir informacion sensible, debe evitar compartir informacion que no sea necesaria para utilizar el Servicio.
 
 Las respuestas de IA pueden ser inexactas, incompletas o inapropiadas. El Servicio proporciona apoyo de coaching y no sustituye terapia profesional, atencion medica, asesoramiento legal, servicios de emergencia o ayuda en crisis.
 
@@ -72,17 +72,21 @@ Actualmente no afirmamos que el contenido de las conversaciones tenga cifrado de
 
 ## 8. Retencion
 
-Conservamos informacion personal durante el tiempo necesario para proporcionar el Servicio, cumplir obligaciones legales, resolver disputas, prevenir abusos y mantener la seguridad. Puede solicitar la eliminacion de su cuenta o la exportacion de sus datos contactando a support@we-connect-app.com.
+Conservamos informacion personal durante el tiempo necesario para proporcionar el Servicio, cumplir obligaciones legales, resolver disputas, prevenir abusos y mantener la seguridad.
+
+Los datos de cuenta, pareja, conversacion, ejercicio e interaccion con IA se conservan mientras la cuenta este activa. Cuando solicita la eliminacion de la cuenta, eliminaremos o anonimizaremos los datos personales que ya no sean necesarios para el Servicio, sujeto a registros que deban conservarse por motivos legales, fiscales, contables, de seguridad, prevencion de fraude, disputas o copias de seguridad. Los registros de facturacion y pago pueden conservarse durante el periodo legalmente requerido. Las copias de seguridad y los registros operativos pueden tardar mas tiempo en expirar por su rotacion normal.
 
 ## 9. Sus Derechos
 
-Segun su ubicacion, puede tener derechos de acceso, correccion, eliminacion, restriccion, oposicion, retirada de consentimiento o portabilidad de su informacion personal.
+Segun su ubicacion, puede tener derechos de acceso, correccion, eliminacion, restriccion, oposicion, retirada de consentimiento o portabilidad de su informacion personal. Podemos necesitar verificar su identidad antes de procesar una solicitud.
 
 Para ejercer estos derechos, contacte support@we-connect-app.com.
 
+Si esta en Francia o en la Union Europea y considera que su solicitud no se ha gestionado correctamente, puede presentar una reclamacion ante la CNIL o ante su autoridad local de proteccion de datos.
+
 ## 10. Cookies Y Analitica
 
-El sitio de marketing puede usar preferencias de idioma y almacenamiento tecnico basico. Si se agregan analitica, retargeting, pixeles publicitarios u otras cookies no esenciales, deben divulgarse y, cuando corresponda, cargarse solo despues del consentimiento.
+El sitio de marketing utiliza actualmente preferencias de idioma y almacenamiento tecnico basico. Si se agregan analitica, retargeting, pixeles publicitarios u otras cookies no esenciales, deben divulgarse y, cuando corresponda, cargarse solo despues del consentimiento.
 
 ## 11. Transferencias Internacionales
 

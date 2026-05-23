@@ -1,14 +1,14 @@
 # Politique de Confidentialite
 
-**Derniere mise a jour :** 6 mai 2026
+**Derniere mise a jour :** 23 mai 2026
 
 Cette Politique de Confidentialite explique comment We Connect ("le Service", "nous", "notre") collecte, utilise, stocke et partage les informations personnelles lorsque vous utilisez le Service.
-
-Ce document est un projet produit pret pour le lancement et doit etre relu par un conseil juridique avant le lancement public.
 
 ## 1. Qui Sommes-Nous
 
 We Connect fournit un service de coaching de couple et de communication assiste par IA.
+
+Responsable du traitement : Camille Vienot, exploitant We Connect, SIREN 104281621, immatricule au RNE le 28/04/2026.
 
 Contact : support@we-connect-app.com
 
@@ -38,7 +38,7 @@ Nous utilisons les informations personnelles pour :
 
 ## 4. Traitement Par IA
 
-Le contenu des conversations peut etre envoye a OpenAI ou a un autre fournisseur d'IA pour generer des reponses de coaching, des resumes et des fonctionnalites associees.
+Le contenu des conversations peut etre envoye a OpenAI ou a un autre fournisseur d'IA pour generer des reponses de coaching, des resumes et des fonctionnalites associees. Les conversations de couple peuvent contenir des informations sensibles ; vous devez eviter de partager des informations qui ne sont pas necessaires a l'utilisation du Service.
 
 Les reponses IA peuvent etre inexactes, incompletes ou inappropriees. Le Service fournit un soutien de coaching et ne remplace pas une therapie professionnelle, un avis medical, un conseil juridique, les services d'urgence ou l'aide en situation de crise.
 
@@ -72,17 +72,21 @@ Nous ne revendiquons pas actuellement de chiffrement de bout en bout ni de chiff
 
 ## 8. Conservation
 
-Nous conservons les informations personnelles aussi longtemps que necessaire pour fournir le Service, respecter nos obligations legales, resoudre les litiges, prevenir les abus et maintenir la securite. Les procedures de suppression de compte, d'export et de conservation doivent etre finalisees avant le lancement public.
+Nous conservons les informations personnelles aussi longtemps que necessaire pour fournir le Service, respecter nos obligations legales, resoudre les litiges, prevenir les abus et maintenir la securite.
+
+Les donnees de compte, partenaire, couple, conversation, exercice et interaction IA sont conservees tant que le compte est actif. Lorsque vous demandez la suppression de votre compte, nous supprimons ou anonymisons les donnees personnelles qui ne sont plus necessaires au Service, sous reserve des enregistrements qui doivent etre conserves pour des raisons legales, fiscales, comptables, de securite, de prevention de la fraude, de litige ou de sauvegarde. Les donnees de facturation et de paiement peuvent etre conservees pendant la duree legalement requise. Les sauvegardes et journaux operationnels peuvent prendre un delai supplementaire pour expirer selon leur rotation normale.
 
 ## 9. Vos Droits
 
-Selon votre localisation, vous pouvez disposer de droits d'acces, de rectification, de suppression, de limitation, d'opposition, de retrait du consentement ou de portabilite de vos informations personnelles.
+Selon votre localisation, vous pouvez disposer de droits d'acces, de rectification, de suppression, de limitation, d'opposition, de retrait du consentement ou de portabilite de vos informations personnelles. Nous pouvons devoir verifier votre identite avant de traiter une demande.
 
 Pour exercer ces droits, contactez support@we-connect-app.com.
 
+Si vous etes en France ou dans l'Union europeenne et estimez que votre demande n'a pas ete traitee correctement, vous pouvez introduire une reclamation aupres de la CNIL ou de votre autorite locale de protection des donnees.
+
 ## 10. Cookies Et Analyses
 
-Le site marketing peut utiliser des preferences de langue et un stockage technique de base. Si des analyses, pixels publicitaires, retargeting ou autres cookies non essentiels sont ajoutes, ils doivent etre divulgues et, lorsque requis, charges uniquement apres consentement.
+Le site marketing utilise actuellement des preferences de langue et un stockage technique de base. Si des analyses, pixels publicitaires, retargeting ou autres cookies non essentiels sont ajoutes, ils doivent etre divulgues et, lorsque requis, charges uniquement apres consentement.
 
 ## 11. Transferts Internationaux
 

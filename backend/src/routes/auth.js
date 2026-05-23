@@ -8,7 +8,7 @@ const { sendInvitationEmail, sendWelcomeEmail, sendPasswordResetEmail } = emailS
 const { authenticateToken } = require('../middleware/authMiddleware');
 
 const router = express.Router();
-const TERMS_VERSION = '1.0.1';
+const TERMS_VERSION = '1.0.2';
 
 // Generate JWT token
 const generateToken = (userId) => {

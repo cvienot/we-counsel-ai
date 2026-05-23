@@ -506,8 +506,14 @@ class AppLocalizationsFr extends AppLocalizations {
   String get termsOfService => 'Conditions d\'Utilisation';
 
   @override
+  String get andPrivacyPolicy => ' et la ';
+
+  @override
+  String get privacyPolicy => 'Politique de Confidentialité';
+
+  @override
   String get mustAcceptTerms =>
-      'Vous devez accepter les Conditions d\'Utilisation pour créer un compte';
+      'Vous devez accepter les Conditions d\'Utilisation et la Politique de Confidentialité pour créer un compte';
 
   @override
   String get accountCreatedJoinedPartner =>
