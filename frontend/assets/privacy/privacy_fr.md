@@ -21,7 +21,7 @@ Nous pouvons collecter :
 - Le contenu des conversations, y compris les messages, interactions avec le coach IA, resumes, reponses aux exercices et horodatages.
 - Les metadonnees d'abonnement et de facturation, comme l'identifiant client Stripe, l'identifiant d'abonnement, le niveau d'abonnement, la periode de facturation, le statut de paiement et les metadonnees de facture. Nous ne stockons pas les numeros complets de carte bancaire.
 - Les informations techniques, comme l'adresse IP, les informations appareil/navigateur, les journaux, les horodatages de requetes, diagnostics d'erreur et evenements de securite.
-- Les informations d'attribution marketing, comme les parametres UTM, page d'arrivee, referent et metadonnees de campagne, si cette fonctionnalite est mise en place.
+- Les informations d'attribution marketing et de consentement, comme les parametres UTM, page d'arrivee, referent, metadonnees de campagne, choix de consentement, horodatage du consentement et evenements optionnels de mesure d'audience ou de pixels publicitaires si cette fonctionnalite est mise en place avec votre accord.
 - Les communications de support que vous nous envoyez.
 
 ## 3. Utilisation Des Informations
@@ -61,6 +61,7 @@ Nous pouvons partager des informations personnelles avec des prestataires qui ai
 - OpenAI, pour la generation de reponses IA et de resumes.
 - Stripe, pour les paiements, abonnements, factures, taxes et prevention de la fraude.
 - Les prestataires d'e-mail et de surveillance utilises pour les transactions et alertes operationnelles.
+- Les prestataires d'analyse ou de publicite, comme les outils de mesure de campagne ou de retargeting, uniquement s'ils sont configures et apres le consentement requis.
 
 Les messages partenaire et les espaces de conversation partages sont visibles par le partenaire connecte selon la conception du produit.
 
@@ -84,9 +85,11 @@ Pour exercer ces droits, contactez support@we-connect-app.com.
 
 Si vous etes en France ou dans l'Union europeenne et estimez que votre demande n'a pas ete traitee correctement, vous pouvez introduire une reclamation aupres de la CNIL ou de votre autorite locale de protection des donnees.
 
-## 10. Cookies Et Analyses
+## 10. Cookies, Pixels Et Consentement
 
-Le site marketing utilise actuellement des preferences de langue et un stockage technique de base. Si des analyses, pixels publicitaires, retargeting ou autres cookies non essentiels sont ajoutes, ils doivent etre divulgues et, lorsque requis, charges uniquement apres consentement.
+Nous utilisons un stockage strictement necessaire pour les preferences de langue, les choix de consentement, la securite, l'authentification et les fonctions essentielles du Service.
+
+Les mesures d'audience optionnelles, le retargeting, les pixels publicitaires ou autres traceurs non essentiels ne sont pas charges sauf si vous donnez votre accord via l'interface de choix de confidentialite. Vous pouvez accepter, refuser ou personnaliser ces choix, puis les modifier plus tard via "Parametres de confidentialite". Le retrait du consentement empeche les futurs chargements de balises et evenements optionnels, mais il peut ne pas supprimer les informations deja traitees par des prestataires tiers avant le retrait.
 
 ## 11. Transferts Internationaux
 

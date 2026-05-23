@@ -21,7 +21,7 @@ Podemos recopilar:
 - Contenido de conversaciones, incluidos mensajes, interacciones con el coach de IA, resumenes, respuestas a ejercicios y marcas de tiempo.
 - Metadatos de suscripcion y facturacion, como ID de cliente de Stripe, ID de suscripcion, plan, periodo de facturacion, estado de pago y metadatos de factura. No almacenamos numeros completos de tarjeta.
 - Informacion tecnica, como direccion IP, informacion de dispositivo/navegador, registros, marcas de tiempo de solicitudes, diagnosticos de error y eventos de seguridad.
-- Informacion de atribucion de marketing, como parametros UTM, pagina de llegada, referente y metadatos de campana, si se implementa.
+- Informacion de atribucion de marketing y consentimiento, como parametros UTM, pagina de llegada, referente, metadatos de campana, opciones de consentimiento, marca de tiempo del consentimiento y eventos opcionales de analitica o pixeles publicitarios si se implementan con su consentimiento.
 - Comunicaciones de soporte que usted nos envie.
 
 ## 3. Como Usamos La Informacion
@@ -61,6 +61,7 @@ Podemos compartir informacion personal con proveedores que ayudan a operar el Se
 - OpenAI, para generacion de respuestas de IA y resumenes.
 - Stripe, para pagos, suscripciones, facturas, impuestos y prevencion de fraude.
 - Proveedores de correo y monitoreo usados para entrega transaccional y alertas operativas.
+- Proveedores de analitica o publicidad, como medicion de campanas o retargeting, solo si estan configurados y despues del consentimiento requerido.
 
 Los mensajes de pareja y espacios de conversacion compartidos son visibles para la pareja conectada segun el diseno del producto.
 
@@ -84,9 +85,11 @@ Para ejercer estos derechos, contacte support@we-connect-app.com.
 
 Si esta en Francia o en la Union Europea y considera que su solicitud no se ha gestionado correctamente, puede presentar una reclamacion ante la CNIL o ante su autoridad local de proteccion de datos.
 
-## 10. Cookies Y Analitica
+## 10. Cookies, Pixeles Y Consentimiento
 
-El sitio de marketing utiliza actualmente preferencias de idioma y almacenamiento tecnico basico. Si se agregan analitica, retargeting, pixeles publicitarios u otras cookies no esenciales, deben divulgarse y, cuando corresponda, cargarse solo despues del consentimiento.
+Usamos almacenamiento estrictamente necesario para preferencias de idioma, opciones de consentimiento, seguridad, autenticacion y funciones esenciales del Servicio.
+
+La analitica opcional, el retargeting, los pixeles publicitarios u otros rastreadores no esenciales no se cargan salvo que usted de su consentimiento mediante la interfaz de opciones de privacidad. Puede aceptar, rechazar o personalizar estas opciones, y modificarlas mas tarde mediante "Configuracion de privacidad". Retirar el consentimiento impide futuras cargas de etiquetas y eventos opcionales, pero puede no eliminar informacion ya procesada por proveedores terceros antes de la retirada.
 
 ## 11. Transferencias Internacionales
 

@@ -68,6 +68,10 @@ function applyTranslations(lang) {
 
   // Persist choice
   localStorage.setItem('we-connect-lang', lang);
+
+  if (window.WeConnectConsent) {
+    window.WeConnectConsent.setLanguage(lang);
+  }
 }
 
 // Initialize language
@@ -104,6 +108,15 @@ function preserveCampaignParams() {
 }
 
 preserveCampaignParams();
+
+const privacySettingsButton = document.getElementById('privacySettingsButton');
+if (privacySettingsButton) {
+  privacySettingsButton.addEventListener('click', () => {
+    if (window.WeConnectConsent) {
+      window.WeConnectConsent.openPreferences();
+    }
+  });
+}
 
 // Language switcher dropdown
 const langBtn = document.getElementById('langBtn');

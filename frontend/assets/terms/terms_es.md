@@ -30,11 +30,12 @@ We Connect es una aplicación de coaching diseñada para facilitar la comunicaci
 
 ### 4.1 Información personal
 - Recopilamos y procesamos información personal como se describe en nuestra Política de Privacidad
-- Al utilizar el Servicio, usted consiente la recopilación y el uso de su información
+- Cierto procesamiento opcional, como pixeles publicitarios o analitica no esencial, depende de su consentimiento previo cuando sea requerido
 - Sus conversaciones y datos personales se almacenan de forma segura
 
 ### 4.2 Intercambio de datos
-- No vendemos ni compartimos su información personal con terceros con fines de marketing
+- No vendemos su informacion personal
+- Los proveedores opcionales de publicidad o analitica se usan solo como se describe en la Politica de Privacidad y despues del consentimiento requerido
 - La información de la pareja se comparte solo con su pareja conectada dentro del Servicio
 - Podemos usar datos anonimizados con fines de mejora del servicio
 

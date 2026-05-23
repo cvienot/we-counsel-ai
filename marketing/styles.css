@@ -915,7 +915,21 @@ img {
   font-size: 0.875rem;
 }
 
-.footer-links a:hover {
+.footer-link-button {
+  align-self: flex-start;
+  background: transparent;
+  border: 0;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 0.875rem;
+  padding: 0;
+  text-align: left;
+  transition: var(--transition);
+}
+
+.footer-links a:hover,
+.footer-link-button:hover {
   color: var(--primary-light);
 }
 

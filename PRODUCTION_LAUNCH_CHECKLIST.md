@@ -186,10 +186,12 @@ Metrics currently reported:
   - Backend registration sanitizes and stores `firstTouchUtm`, `lastTouchUtm`, `landingPage`, optional `referrer`, and `campaignCapturedAt`.
   - Privacy policy already discloses marketing attribution when implemented; retention still needs counsel/product confirmation before paid traffic.
 
-- [ ] Consent requirement for marketing tags.
-  - If adding analytics, retargeting pixels, Meta Pixel, Google Ads tags, or similar non-essential cookies for EU users, add consent management before loading those tags.
-  - I did not find existing analytics/pixel tags in the marketing site.
-  - App signup attribution now stores first-party `utm_*` parameters; privacy policy discloses marketing attribution and current cookie posture.
+- [x] Consent requirement for marketing tags.
+  - Added a standalone consent manager to the marketing site and Flutter web shell: `marketing/consent.js` and `frontend/web/consent.js`.
+  - Non-essential analytics and advertising/retargeting categories default to off; users can accept all, reject all, customize, and reopen Privacy Settings.
+  - Added empty gated pixel loaders in `marketing/pixels.js` and `frontend/web/pixels.js`. Future Meta Pixel, Google Ads, or similar tags must be added there, not directly in HTML.
+  - App signup attribution still stores first-party `utm_*` parameters; privacy policy now discloses consent choices, optional pixels, and withdrawal behavior.
+  - Before enabling real pixel IDs, update the Privacy Policy with the named providers and verify no vendor script loads before consent.
 
 ## Legal And Privacy
 
@@ -215,8 +217,9 @@ Metrics currently reported:
 
 - [x] Confirm consent capture.
   - Registration requires terms acceptance and stores `termsAcceptedAt` and `termsAcceptedVersion`.
-  - Current backend uses `1.0.2-<language>` in `backend/src/routes/auth.js`.
+  - Current backend uses `1.0.3-<language>` in `backend/src/routes/auth.js`.
   - Registration copy now links to both Terms of Service and Privacy Policy before account creation.
+  - Website/app consent manager stores optional analytics and advertising choices locally under `we-connect-consent-v1`.
   - Add a future terms/privacy re-consent mechanism for version changes.
 
 ## Production Readiness

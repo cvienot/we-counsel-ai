@@ -21,7 +21,7 @@ We may collect:
 - Conversation content, including messages, AI coach interactions, summaries, exercise responses, and timestamps.
 - Subscription and billing metadata, such as Stripe customer ID, subscription ID, subscription tier, billing period, payment status, and invoice metadata. We do not store full card numbers.
 - Technical information, such as IP address, device/browser information, logs, request timestamps, error diagnostics, and security events.
-- Marketing attribution information, such as UTM parameters, landing page, referrer, and campaign metadata, if implemented.
+- Marketing attribution and consent information, such as UTM parameters, landing page, referrer, campaign metadata, consent choices, consent timestamp, and optional analytics or advertising pixel events if implemented with your consent.
 - Support communications that you send to us.
 
 ## 3. How We Use Information
@@ -61,6 +61,7 @@ We may share personal information with service providers that help operate the S
 - OpenAI, for AI response generation and summarization.
 - Stripe, for payments, subscriptions, invoices, tax, and fraud prevention.
 - Email and monitoring providers used for transactional service delivery and operational alerting.
+- Analytics or advertising providers, such as campaign measurement or retargeting providers, only if configured and only after required consent.
 
 Partner messages and shared conversation areas are visible to the connected partner according to the product design.
 
@@ -84,9 +85,11 @@ To exercise these rights, contact support@we-connect-app.com.
 
 If you are in France or the European Union and believe your request has not been handled properly, you may lodge a complaint with the CNIL or your local data protection authority.
 
-## 10. Cookies And Analytics
+## 10. Cookies, Pixels, And Consent
 
-The marketing site currently uses language preferences and basic technical storage. If analytics, retargeting, advertising pixels, or other non-essential cookies are added, they must be disclosed and, where required, loaded only after consent.
+We use strictly necessary storage for language preferences, consent choices, security, authentication, and core Service functions.
+
+Optional analytics, retargeting, advertising pixels, or other non-essential trackers are not loaded unless you consent through the privacy choices interface. You can accept, reject, or customize these choices, and you can change them later through "Privacy Settings." Withdrawing consent prevents future optional tag loading and events, but it may not delete information already processed by third-party providers before withdrawal.
 
 ## 11. International Transfers
 

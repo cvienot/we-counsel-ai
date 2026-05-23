@@ -30,11 +30,12 @@ We Connect is a coaching application designed to facilitate communication betwee
 
 ### 4.1 Personal Information
 - We collect and process personal information as described in our Privacy Policy
-- By using the Service, you consent to the collection and use of your information
+- Certain optional processing, such as advertising pixels or non-essential analytics, depends on your prior consent where required
 - Your conversations and personal data are stored securely
 
 ### 4.2 Data Sharing
-- We do not sell or share your personal information with third parties for marketing purposes
+- We do not sell your personal information
+- Optional advertising or analytics providers are used only as described in the Privacy Policy and only after required consent
 - Partner information is shared only with your connected partner within the Service
 - We may use anonymized data for service improvement purposes
 
