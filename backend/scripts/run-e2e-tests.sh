@@ -268,6 +268,15 @@ if [ $QUOTA_EXIT_CODE -ne 0 ]; then
     exit 1
 fi
 
+echo -e "\n${BLUE}Test 2: Consent Management${NC}"
+node "$BACKEND_DIR/test-consent-management.js"
+CONSENT_EXIT_CODE=$?
+
+if [ $CONSENT_EXIT_CODE -ne 0 ]; then
+    echo -e "\n${RED}❌ Consent management tests failed${NC}"
+    exit 1
+fi
+
 # Run UI integration test
 # caffeinate -i prevents App Nap from throttling the test app when unfocused
 echo -e "\n${YELLOW}Running UI integration test...${NC}"
