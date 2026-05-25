@@ -65,8 +65,9 @@ Resources:
           Value: stable
       IAMServiceRole: !GetAtt AmplifyRole.Arn
       CustomRules:
-        # SPA routing - redirect all requests to index.html
-        - Source: '</^[^.]+$|\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|woff2|ttf|map|json)$)([^.]+$)/>'
+        # SPA routing - rewrite history-mode app routes to index.html with HTTP 200.
+        # Keep static assets excluded so missing assets still surface as 404s.
+        - Source: '</^[^.]+$|\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|woff2|ttf|map|json|webp)$)([^.]+$)/>'
           Target: /index.html
           Status: '200'
         # Redirect www to non-www
