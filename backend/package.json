@@ -20,6 +20,7 @@
     "db:reset": "node scripts/db.js reset",
     "db:export": "node scripts/db.js export",
     "metrics:launch": "node scripts/launch-metrics.js",
+    "stripe:branding": "node scripts/configure-stripe-branding.js",
     "test:e2e": "./scripts/run-e2e-tests.sh",
     "test:consent": "node test-consent-management.js",
     "dynamodb": "node scripts/start-dynamodb.js",
