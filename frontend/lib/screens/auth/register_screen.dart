@@ -100,7 +100,12 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
             showSuccessSnackBar(context, l10n.accountCreatedJoinedPartner);
           }
 
-          context.go(postAuthRedirect(GoRouterState.of(context).uri));
+          context.go(
+            postAuthRedirect(
+              GoRouterState.of(context).uri,
+              fallback: '/plan-selection',
+            ),
+          );
         }
       } catch (e) {
         if (mounted) {

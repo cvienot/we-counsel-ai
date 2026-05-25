@@ -23,6 +23,6 @@ String routeWithFrom(String route, String? from) {
   return '$route?from=${Uri.encodeComponent(safeFrom)}';
 }
 
-String postAuthRedirect(Uri uri) {
-  return safeInternalRedirect(uri.queryParameters['from']) ?? '/main-thread';
+String postAuthRedirect(Uri uri, {String fallback = '/main-thread'}) {
+  return safeInternalRedirect(uri.queryParameters['from']) ?? fallback;
 }
