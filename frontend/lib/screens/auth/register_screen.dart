@@ -8,6 +8,7 @@ import '../../services/attribution_service.dart';
 import '../../widgets/ctrl_enter_submit.dart';
 import '../../widgets/responsive_layout.dart';
 import '../../utils/snackbar_utils.dart';
+import '../../utils/navigation_utils.dart';
 import '../plan_selection_screen.dart';
 import 'privacy_policy_screen.dart';
 import 'terms_of_service_screen.dart';
@@ -99,8 +100,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
             showSuccessSnackBar(context, l10n.accountCreatedJoinedPartner);
           }
 
-          // Navigate to the conversation screen
-          context.go('/main-thread');
+          context.go(postAuthRedirect(GoRouterState.of(context).uri));
         }
       } catch (e) {
         if (mounted) {
@@ -352,7 +352,12 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     ),
                     const SizedBox(height: 16),
                     TextButton(
-                      onPressed: () => context.go('/login'),
+                      onPressed: () {
+                        final from = GoRouterState.of(
+                          context,
+                        ).uri.queryParameters['from'];
+                        context.go(routeWithFrom('/login', from));
+                      },
                       child: Text(l10n.alreadyHaveAccountSignIn),
                     ),
                   ],

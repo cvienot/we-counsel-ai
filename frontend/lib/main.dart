@@ -30,6 +30,7 @@ import 'screens/exercises/exercise_history_screen.dart';
 import 'screens/progress/progress_dashboard_screen.dart';
 import 'config/environment.dart';
 import 'services/attribution_service.dart';
+import 'utils/navigation_utils.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -110,13 +111,15 @@ class WeCounselApp extends ConsumerWidget {
       redirect: (context, state) {
         final authState = ref.read(authProvider);
         final location = state.uri.toString();
-        final isLoginRoute = location == '/login';
-        final isRegisterRoute = location == '/register';
-        final isInvitationRoute = location.startsWith('/invitation/');
-        final isForgotPasswordRoute = location == '/forgot-password';
-        final isResetPasswordRoute = location.startsWith('/reset-password/');
-        final isLegalRoute = location == '/terms' || location == '/privacy';
-        final isSplashRoute = location == '/splash';
+        final path = state.uri.path;
+        final from = safeInternalRedirect(state.uri.queryParameters['from']);
+        final isLoginRoute = path == '/login';
+        final isRegisterRoute = path == '/register';
+        final isInvitationRoute = path.startsWith('/invitation/');
+        final isForgotPasswordRoute = path == '/forgot-password';
+        final isResetPasswordRoute = path.startsWith('/reset-password/');
+        final isLegalRoute = path == '/terms' || path == '/privacy';
+        final isSplashRoute = path == '/splash';
 
         Environment.log(
           'ROUTER: Redirect check - location: $location, isAuth: ${authState.isAuthenticated}, isLoading: ${authState.isLoading}',
@@ -131,32 +134,37 @@ class WeCounselApp extends ConsumerWidget {
           return null;
         }
 
+        if (isSplashRoute) {
+          if (authState.isLoading) return null;
+
+          if (authState.isAuthenticated) {
+            Environment.log('ROUTER: Authenticated from splash');
+            return from ?? '/main-thread';
+          }
+
+          Environment.log('ROUTER: Unauthenticated from splash');
+          return routeWithFrom('/login', from);
+        }
+
         // If still loading auth state, stay on splash (but don't redirect away from auth routes)
-        if (authState.isLoading &&
-            !isSplashRoute &&
-            !isLoginRoute &&
-            !isRegisterRoute) {
+        if (authState.isLoading && !isLoginRoute && !isRegisterRoute) {
           Environment.log('ROUTER: Still loading, redirect to /splash');
-          return '/splash';
+          return routeWithFrom('/splash', location);
         }
 
         // If done loading and not authenticated, go to login (unless already there)
         if (!authState.isLoading &&
             !authState.isAuthenticated &&
             !isLoginRoute &&
-            !isRegisterRoute &&
-            !isForgotPasswordRoute &&
-            !isResetPasswordRoute &&
-            !isLegalRoute) {
+            !isRegisterRoute) {
           Environment.log('ROUTER: Not authenticated, redirect to /login');
-          return '/login';
+          return routeWithFrom('/login', location);
         }
 
-        // If authenticated and on auth/splash routes, redirect to main conversation
-        if (authState.isAuthenticated &&
-            (isLoginRoute || isRegisterRoute || isSplashRoute)) {
-          Environment.log('ROUTER: Authenticated, redirect to /main-thread');
-          return '/main-thread';
+        // If authenticated and on auth routes, redirect to the requested page.
+        if (authState.isAuthenticated && (isLoginRoute || isRegisterRoute)) {
+          Environment.log('ROUTER: Authenticated, leaving auth route');
+          return from ?? '/main-thread';
         }
 
         Environment.log('ROUTER: No redirect needed');
