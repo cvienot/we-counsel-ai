@@ -13,10 +13,18 @@ class Environment {
   static bool get isProduction => environment == 'production';
   static bool get isDevelopment => environment == 'development';
 
+  static void log(String message) {
+    if (!isProduction) {
+      print(message);
+    }
+  }
+
   static void printConfig() {
-    print('🔧 Environment Configuration:');
-    print('   Environment: $environment');
-    print('   API Base URL: $apiBaseUrl');
-    print('   Is Production: $isProduction');
+    if (isProduction) return;
+
+    log('🔧 Environment Configuration:');
+    log('   Environment: $environment');
+    log('   API Base URL: $apiBaseUrl');
+    log('   Is Production: $isProduction');
   }
 }

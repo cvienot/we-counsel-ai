@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../config/environment.dart';
 import '../models/user.dart';
 import '../services/api_service.dart';
 import '../services/realtime_service.dart';
@@ -42,28 +43,28 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> _initializeAuth() async {
-    print('🔐 AUTH: Starting auth initialization...');
+    Environment.log('AUTH: Starting auth initialization...');
     state = state.copyWith(isLoading: true);
 
     try {
       final token = await _apiService.getToken();
-      print(
-        '🔐 AUTH: Token check - ${token != null ? "Token found" : "No token"}',
+      Environment.log(
+        'AUTH: Token check - ${token != null ? "Token found" : "No token"}',
       );
 
       if (token != null && token.isNotEmpty) {
         // Token exists, verify it's still valid by getting current user
-        print('🔐 AUTH: Verifying token with server...');
+        Environment.log('AUTH: Verifying token with server...');
         await getCurrentUser();
-        print('🔐 AUTH: Token verified successfully');
+        Environment.log('AUTH: Token verified successfully');
       } else {
         // No token, user is not authenticated
-        print('🔐 AUTH: No token found, user not authenticated');
+        Environment.log('AUTH: No token found, user not authenticated');
         state = state.copyWith(isLoading: false, isAuthenticated: false);
       }
     } catch (e) {
       // Token is invalid or expired, clear it and logout
-      print('🔐 AUTH: Token verification failed: $e');
+      Environment.log('AUTH: Token verification failed: $e');
       await _apiService.clearToken();
       _realtimeService.disconnect();
       state = state.copyWith(
@@ -72,8 +73,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
         isAuthenticated: false,
         error: null,
       );
-      print(
-        '🔐 AUTH: State updated - isAuthenticated: ${state.isAuthenticated}, isLoading: ${state.isLoading}',
+      Environment.log(
+        'AUTH: State updated - isAuthenticated: ${state.isAuthenticated}, isLoading: ${state.isLoading}',
       );
     }
   }
@@ -107,29 +108,30 @@ class AuthNotifier extends StateNotifier<AuthState> {
         attribution: attribution,
       );
 
-      print('🔵 AUTH: Register response: ${response.toString()}');
-      print(
-        '🔵 AUTH: success=${response['success']}, user=${response['user'] != null}',
+      Environment.log(
+        'AUTH: Register result success=${response['success']}, hasUser=${response['user'] != null}',
       );
 
       if (response['success'] == true && response['user'] != null) {
         final user = User.fromJson(response['user']);
-        print('🔵 AUTH: Setting auth state - isAuthenticated: true');
+        Environment.log('AUTH: Setting auth state - isAuthenticated: true');
         state = state.copyWith(
           user: user,
           isLoading: false,
           isAuthenticated: true,
         );
-        print('🔵 AUTH: State updated - isAuth: ${state.isAuthenticated}');
+        Environment.log(
+          'AUTH: State updated - isAuth: ${state.isAuthenticated}',
+        );
 
         // Connect to realtime service after successful registration
         try {
-          print('🔵 AUTH: Connecting to realtime service...');
+          Environment.log('AUTH: Connecting to realtime service...');
           await _realtimeService.connect();
-          print('🔵 AUTH: Realtime service connected');
+          Environment.log('AUTH: Realtime service connected');
         } catch (e) {
-          print(
-            '🔵 AUTH: Realtime service connection failed: $e (non-critical)',
+          Environment.log(
+            'AUTH: Realtime service connection failed: $e (non-critical)',
           );
           // Don't fail registration if realtime connection fails
         }
@@ -140,7 +142,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
             await acceptInvitation(invitationId);
           } catch (e) {
             // Log the error but don't fail the registration
-            print('Failed to auto-accept invitation: $e');
+            Environment.log('Failed to auto-accept invitation: $e');
           }
         }
       }
@@ -180,7 +182,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
             await acceptInvitation(invitationId);
           } catch (e) {
             // Log the error but don't fail the login
-            print('Failed to auto-accept invitation: $e');
+            Environment.log('Failed to auto-accept invitation: $e');
           }
         }
       }

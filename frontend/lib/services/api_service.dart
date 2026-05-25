@@ -34,7 +34,7 @@ class ApiService {
     );
 
     // Add logging interceptor for development
-    if (kDebugMode) {
+    if (kDebugMode && enableDetailedLogging) {
       _dio.interceptors.add(
         LogInterceptor(
           requestHeader: true,
@@ -44,7 +44,7 @@ class ApiService {
           error: true,
           logPrint: (object) {
             // Use a more prominent prefix for API logs
-            print('🌐 API: $object');
+            Environment.log('API: $object');
           },
         ),
       );
@@ -61,14 +61,14 @@ class ApiService {
 
           // Additional request logging in debug mode
           if (kDebugMode && enableDetailedLogging) {
-            print(
-              '🚀 REQUEST: ${options.method} ${options.baseUrl}${options.path}',
+            Environment.log(
+              'REQUEST: ${options.method} ${options.baseUrl}${options.path}',
             );
             if (options.data != null) {
-              print('📤 REQUEST BODY: ${options.data}');
+              Environment.log('REQUEST BODY: ${options.data}');
             }
             if (options.queryParameters.isNotEmpty) {
-              print('🔍 QUERY PARAMS: ${options.queryParameters}');
+              Environment.log('QUERY PARAMS: ${options.queryParameters}');
             }
           }
 
@@ -77,23 +77,23 @@ class ApiService {
         onResponse: (response, handler) async {
           // Custom response logging in debug mode
           if (kDebugMode && enableDetailedLogging) {
-            print(
-              '✅ RESPONSE: ${response.statusCode} ${response.requestOptions.method} ${response.requestOptions.path}',
+            Environment.log(
+              'RESPONSE: ${response.statusCode} ${response.requestOptions.method} ${response.requestOptions.path}',
             );
-            print('📥 RESPONSE BODY: ${response.data}');
+            Environment.log('RESPONSE BODY: ${response.data}');
           }
           handler.next(response);
         },
         onError: (error, handler) async {
           // Enhanced error logging in debug mode
           if (kDebugMode && enableDetailedLogging) {
-            print(
-              '❌ ERROR: ${error.response?.statusCode} ${error.requestOptions.method} ${error.requestOptions.path}',
+            Environment.log(
+              'ERROR: ${error.response?.statusCode} ${error.requestOptions.method} ${error.requestOptions.path}',
             );
             if (error.response?.data != null) {
-              print('💥 ERROR BODY: ${error.response?.data}');
+              Environment.log('ERROR BODY: ${error.response?.data}');
             }
-            print('🔥 ERROR MESSAGE: ${error.message}');
+            Environment.log('ERROR MESSAGE: ${error.message}');
           }
 
           // Handle token expiration
@@ -137,8 +137,8 @@ class ApiService {
       await _storage.write(key: _tokenKey, value: token);
     } catch (e) {
       _secureStorageAvailable = false;
-      print(
-        '⚠️ Failed to store token in secure storage, using in-memory fallback: $e',
+      Environment.log(
+        'Failed to store token in secure storage, using in-memory fallback: $e',
       );
     }
   }
@@ -154,7 +154,7 @@ class ApiService {
       await _storage.delete(key: _tokenKey);
     } catch (e) {
       _secureStorageAvailable = false;
-      print('⚠️ Failed to clear token from secure storage: $e');
+      Environment.log('Failed to clear token from secure storage: $e');
     }
   }
 
@@ -162,14 +162,14 @@ class ApiService {
   static void enableLogging() {
     enableDetailedLogging = true;
     if (kDebugMode) {
-      print('🔧 API detailed logging enabled');
+      Environment.log('API detailed logging enabled');
     }
   }
 
   static void disableLogging() {
     enableDetailedLogging = false;
     if (kDebugMode) {
-      print('🔧 API detailed logging disabled');
+      Environment.log('API detailed logging disabled');
     }
   }
 
@@ -178,12 +178,12 @@ class ApiService {
     try {
       final response = await _dio.get('/health');
       if (kDebugMode) {
-        print('🏥 Health check successful: ${response.data}');
+        Environment.log('Health check successful: ${response.data}');
       }
       return response.statusCode == 200;
     } catch (e) {
       if (kDebugMode) {
-        print('🚨 Health check failed: $e');
+        Environment.log('Health check failed: $e');
       }
       return false;
     }

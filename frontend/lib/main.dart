@@ -105,7 +105,7 @@ class WeCounselApp extends ConsumerWidget {
   GoRouter _createRouter(WidgetRef ref) {
     return GoRouter(
       initialLocation: '/splash', // Start with splash to check auth
-      debugLogDiagnostics: true,
+      debugLogDiagnostics: !Environment.isProduction,
       refreshListenable: _AuthStateNotifier(ref), // Listen to auth changes
       redirect: (context, state) {
         final authState = ref.read(authProvider);
@@ -118,8 +118,8 @@ class WeCounselApp extends ConsumerWidget {
         final isLegalRoute = location == '/terms' || location == '/privacy';
         final isSplashRoute = location == '/splash';
 
-        print(
-          '🔀 ROUTER: Redirect check - location: $location, isAuth: ${authState.isAuthenticated}, isLoading: ${authState.isLoading}',
+        Environment.log(
+          'ROUTER: Redirect check - location: $location, isAuth: ${authState.isAuthenticated}, isLoading: ${authState.isLoading}',
         );
 
         // Allow invitation and password reset routes without authentication
@@ -127,7 +127,7 @@ class WeCounselApp extends ConsumerWidget {
             isForgotPasswordRoute ||
             isResetPasswordRoute ||
             isLegalRoute) {
-          print('🔀 ROUTER: Allowing invitation route');
+          Environment.log('ROUTER: Allowing public route');
           return null;
         }
 
@@ -136,7 +136,7 @@ class WeCounselApp extends ConsumerWidget {
             !isSplashRoute &&
             !isLoginRoute &&
             !isRegisterRoute) {
-          print('🔀 ROUTER: Still loading, redirect to /splash');
+          Environment.log('ROUTER: Still loading, redirect to /splash');
           return '/splash';
         }
 
@@ -148,18 +148,18 @@ class WeCounselApp extends ConsumerWidget {
             !isForgotPasswordRoute &&
             !isResetPasswordRoute &&
             !isLegalRoute) {
-          print('🔀 ROUTER: Not authenticated, redirect to /login');
+          Environment.log('ROUTER: Not authenticated, redirect to /login');
           return '/login';
         }
 
         // If authenticated and on auth/splash routes, redirect to main conversation
         if (authState.isAuthenticated &&
             (isLoginRoute || isRegisterRoute || isSplashRoute)) {
-          print('🔀 ROUTER: Authenticated, redirect to /main-thread');
+          Environment.log('ROUTER: Authenticated, redirect to /main-thread');
           return '/main-thread';
         }
 
-        print('🔀 ROUTER: No redirect needed');
+        Environment.log('ROUTER: No redirect needed');
         return null;
       },
       routes: [
@@ -290,8 +290,8 @@ class _AuthStateNotifier extends ChangeNotifier {
 
   _AuthStateNotifier(this._ref) {
     _ref.listen<AuthState>(authProvider, (previous, next) {
-      print(
-        '🔔 AUTH STATE CHANGED: isAuth: ${next.isAuthenticated}, isLoading: ${next.isLoading}',
+      Environment.log(
+        'AUTH STATE CHANGED: isAuth: ${next.isAuthenticated}, isLoading: ${next.isLoading}',
       );
       notifyListeners();
     });
