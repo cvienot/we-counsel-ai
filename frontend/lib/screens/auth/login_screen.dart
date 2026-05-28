@@ -27,10 +27,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     super.dispose();
   }
 
+  String _postLoginRedirect() {
+    try {
+      return postAuthRedirect(GoRouterState.of(context).uri);
+    } catch (_) {
+      return '/main-thread';
+    }
+  }
+
   Future<void> _handleLogin() async {
     if (_formKey.currentState!.validate()) {
+      final redirectPath = _postLoginRedirect();
+      final pendingInvitation = ref.read(pendingInvitationProvider);
       try {
-        final pendingInvitation = ref.read(pendingInvitationProvider);
         final l10n = AppLocalizations.of(context)!;
 
         await ref
@@ -49,7 +58,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             showSuccessSnackBar(context, l10n.loginJoinedPartner);
           }
 
-          context.go(postAuthRedirect(GoRouterState.of(context).uri));
+          context.go(redirectPath);
         }
       } catch (e) {
         if (mounted) {

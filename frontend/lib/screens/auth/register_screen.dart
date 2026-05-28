@@ -53,6 +53,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     );
   }
 
+  String _postRegisterRedirect() {
+    try {
+      return postAuthRedirect(GoRouterState.of(context).uri);
+    } catch (_) {
+      return '/main-thread';
+    }
+  }
+
   Future<void> _handleRegister() async {
     if (_formKey.currentState!.validate()) {
       if (!_termsAccepted) {
@@ -72,8 +80,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         return;
       }
 
+      final redirectPath = _postRegisterRedirect();
+      final pendingInvitation = ref.read(pendingInvitationProvider);
       try {
-        final pendingInvitation = ref.read(pendingInvitationProvider);
         final currentLanguage = ref.read(currentLocaleProvider).languageCode;
         final attribution = await AttributionService().buildSignupAttribution();
 
@@ -90,18 +99,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               subscriptionTier: selectedPlan,
               attribution: attribution,
             );
-
-        if (mounted) {
-          // Clear the pending invitation
-          ref.read(pendingInvitationProvider.notifier).state = null;
-
-          if (pendingInvitation != null) {
-            final l10n = AppLocalizations.of(context)!;
-            showSuccessSnackBar(context, l10n.accountCreatedJoinedPartner);
-          }
-
-          context.go(postAuthRedirect(GoRouterState.of(context).uri));
-        }
       } catch (e) {
         if (mounted) {
           final l10n = AppLocalizations.of(context)!;
@@ -112,6 +109,19 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
             showErrorSnackBar(context, '${l10n.registrationFailed}: $msg');
           }
         }
+        return;
+      }
+
+      if (mounted) {
+        // Clear the pending invitation
+        ref.read(pendingInvitationProvider.notifier).state = null;
+
+        if (pendingInvitation != null) {
+          final l10n = AppLocalizations.of(context)!;
+          showSuccessSnackBar(context, l10n.accountCreatedJoinedPartner);
+        }
+
+        context.go(redirectPath);
       }
     }
   }
