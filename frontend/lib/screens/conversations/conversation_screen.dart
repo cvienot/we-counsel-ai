@@ -8,6 +8,7 @@ import '../../models/message.dart';
 import '../../services/realtime_service.dart';
 import '../../widgets/message_bubble.dart';
 import '../../widgets/mention_text.dart';
+import '../../widgets/exercise_suggestion_card.dart';
 import '../../widgets/disclaimer_banner.dart';
 import '../../widgets/ctrl_enter_submit.dart';
 import '../../utils/snackbar_utils.dart';
@@ -17,11 +18,8 @@ import 'dart:async';
 
 class ConversationScreen extends ConsumerStatefulWidget {
   final String conversationId;
-  
-  const ConversationScreen({
-    super.key,
-    required this.conversationId,
-  });
+
+  const ConversationScreen({super.key, required this.conversationId});
 
   @override
   ConsumerState<ConversationScreen> createState() => _ConversationScreenState();
@@ -32,7 +30,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
   final _scrollController = ScrollController();
   final _realtimeService = RealtimeService();
   late final FocusNode _messageFocusNode;
-  
+
   StreamSubscription<Map<String, dynamic>>? _typingSubscription;
   Timer? _typingTimer;
   Set<String> _typingUsers = {};
@@ -43,36 +41,48 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
     super.initState();
     _messageFocusNode = CtrlEnterSubmit.createFocusNode(_sendMessage);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await ref.read(messagesProvider(widget.conversationId).notifier).loadMessages();
+      await ref
+          .read(messagesProvider(widget.conversationId).notifier)
+          .loadMessages();
       _scrollToBottom();
     });
-    
+
     // Listen to typing events
     _typingSubscription = _realtimeService.typingStream.listen((data) {
       print('👂 RECEIVED TYPING EVENT: $data');
       if (data['conversationId'] == widget.conversationId) {
         final userId = data['userId'];
         final isTyping = data['isTyping'] == true;
-        
-        print('💬 TYPING UPDATE for conversation ${widget.conversationId}: user $userId is ${isTyping ? "typing" : "not typing"}');
-        
+
+        print(
+          '💬 TYPING UPDATE for conversation ${widget.conversationId}: user $userId is ${isTyping ? "typing" : "not typing"}',
+        );
+
         setState(() {
           if (isTyping) {
             _typingUsers.add(userId);
-            print('✅ Added user $userId to typing users. Current typing users: $_typingUsers');
+            print(
+              '✅ Added user $userId to typing users. Current typing users: $_typingUsers',
+            );
           } else {
             _typingUsers.remove(userId);
-            print('❌ Removed user $userId from typing users. Current typing users: $_typingUsers');
+            print(
+              '❌ Removed user $userId from typing users. Current typing users: $_typingUsers',
+            );
           }
         });
       } else {
-        print('🚫 Typing event for different conversation: ${data['conversationId']} != ${widget.conversationId}');
+        print(
+          '🚫 Typing event for different conversation: ${data['conversationId']} != ${widget.conversationId}',
+        );
       }
     });
-    
+
     // Listen to text changes to send typing status
     _messageController.addListener(() {
-      debugPrint('🎹 Text controller listener triggered - text: "${_messageController.text}"');
+      debugPrint(
+        '🎹 Text controller listener triggered - text: "${_messageController.text}"',
+      );
       _handleTextChange();
     });
   }
@@ -84,20 +94,22 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
     _messageController.dispose();
     _messageFocusNode.dispose();
     _scrollController.dispose();
-    
+
     // Stop typing when leaving the screen
     if (_isTyping) {
       _realtimeService.sendTypingStatus(widget.conversationId, false);
     }
-    
+
     super.dispose();
   }
 
   void _handleTextChange() {
     final hasText = _messageController.text.trim().isNotEmpty;
-    
-    print('🔤 TEXT CHANGE: hasText=$hasText, _isTyping=$_isTyping, text="${_messageController.text}"');
-    
+
+    print(
+      '🔤 TEXT CHANGE: hasText=$hasText, _isTyping=$_isTyping, text="${_messageController.text}"',
+    );
+
     if (hasText && !_isTyping) {
       // Start typing
       _isTyping = true;
@@ -107,17 +119,21 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
       // Text was cleared, stop typing immediately
       _isTyping = false;
       _typingTimer?.cancel();
-      print('⏹️ STOPPING TYPING (text cleared) for conversation: ${widget.conversationId}');
+      print(
+        '⏹️ STOPPING TYPING (text cleared) for conversation: ${widget.conversationId}',
+      );
       _realtimeService.sendTypingStatus(widget.conversationId, false);
       return;
     }
-    
+
     // Reset typing timer
     _typingTimer?.cancel();
     _typingTimer = Timer(const Duration(seconds: 2), () {
       if (_isTyping) {
         _isTyping = false;
-        print('⏱️ STOPPING TYPING (timeout) for conversation: ${widget.conversationId}');
+        print(
+          '⏱️ STOPPING TYPING (timeout) for conversation: ${widget.conversationId}',
+        );
         _realtimeService.sendTypingStatus(widget.conversationId, false);
       }
     });
@@ -128,7 +144,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
     if (content.isEmpty) return;
 
     _messageController.clear();
-    
+
     // Stop typing when sending message
     if (_isTyping) {
       _isTyping = false;
@@ -153,7 +169,10 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
       });
     } catch (e) {
       if (mounted) {
-        showErrorSnackBar(context, AppLocalizations.of(context)!.errorSendingMessage);
+        showErrorSnackBar(
+          context,
+          AppLocalizations.of(context)!.errorSendingMessage,
+        );
       }
     }
   }
@@ -178,7 +197,10 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
     final currentUser = ref.watch(currentUserProvider);
 
     // Auto-scroll when messages are loaded or streaming content arrives
-    ref.listen<MessagesState>(messagesProvider(widget.conversationId), (previous, next) {
+    ref.listen<MessagesState>(messagesProvider(widget.conversationId), (
+      previous,
+      next,
+    ) {
       // Scroll to bottom when messages are first loaded
       if (previous == null && next.messages.isNotEmpty && !next.isLoading) {
         _scrollToBottom();
@@ -188,14 +210,18 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
         _scrollToBottom();
       }
       // Scroll to bottom when new messages are added
-      else if (previous != null && next.messages.length > previous.messages.length) {
+      else if (previous != null &&
+          next.messages.length > previous.messages.length) {
         _scrollToBottom();
       }
     });
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(messagesState.conversationTitle ?? AppLocalizations.of(context)!.conversations),
+        title: Text(
+          messagesState.conversationTitle ??
+              AppLocalizations.of(context)!.conversations,
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.health_and_safety_outlined),
@@ -206,177 +232,209 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
       ),
       body: ResponsiveCenter(
         child: Column(
-        children: [
-          // Messages list
-          Expanded(
-            child: messagesState.isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : messagesState.error != null
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              AppLocalizations.of(context)!.errorLoadingMessages,
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(height: 16),
-                            ElevatedButton(
-                              onPressed: () {
-                                ref
-                                    .read(messagesProvider(widget.conversationId).notifier)
-                                    .loadMessages();
-                              },
-                              child: Text(AppLocalizations.of(context)!.retry),
-                            ),
-                          ],
-                        ),
-                      )
-                    : messagesState.messages.isEmpty
-                        ? Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const DisclaimerBanner(),
-                                Text(AppLocalizations.of(context)!.startConversation),
-                              ],
-                            ),
-                          )
-                        : ListView.builder(
-                            controller: _scrollController,
-                            padding: const EdgeInsets.all(16),
-                            itemCount: messagesState.messages.length + messagesState.streamingMessageIds.length,
-                            itemBuilder: (context, index) {
-                              // Show regular messages first
-                              if (index < messagesState.messages.length) {
-                                final message = messagesState.messages[index];
-                                return MessageBubble(
-                                  message: message,
-                                  isCurrentUser: message.senderId == currentUser?.userId,
-                                  currentUserName: currentUser?.firstName,
-                                  partnerName: currentUser?.partner?.firstName,
-                                  onExerciseSuggestion: (exerciseId) {
-                                    // Navigate to exercise screen
-                                    context.push('/exercise', extra: {
-                                      'conversationId': widget.conversationId,
-                                      'exerciseId': exerciseId,
-                                    });
-                                  },
-                                );
-                              }
-                              
-                              // Show streaming messages
-                              final streamingIndex = index - messagesState.messages.length;
-                              final streamingIds = messagesState.streamingMessageIds.toList();
-                              if (streamingIndex < streamingIds.length) {
-                                final messageId = streamingIds[streamingIndex];
-                                final streamingContent = messagesState.streamingMessages[messageId] ?? '';
-                                
-                                return _StreamingMessageBubble(
-                                  content: streamingContent,
-                                  isStreaming: true,
-                                  currentUserName: currentUser?.firstName,
-                                  partnerName: currentUser?.partner?.firstName,
-                                );
-                              }
-                              
-                              return const SizedBox.shrink();
-                            },
+          children: [
+            // Messages list
+            Expanded(
+              child: messagesState.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : messagesState.error != null
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            AppLocalizations.of(context)!.errorLoadingMessages,
+                            textAlign: TextAlign.center,
                           ),
-          ),
-          
-          // Typing indicator
-          if (_typingUsers.isNotEmpty)
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: () {
+                              ref
+                                  .read(
+                                    messagesProvider(
+                                      widget.conversationId,
+                                    ).notifier,
+                                  )
+                                  .loadMessages();
+                            },
+                            child: Text(AppLocalizations.of(context)!.retry),
+                          ),
+                        ],
+                      ),
+                    )
+                  : messagesState.messages.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const DisclaimerBanner(),
+                          Text(AppLocalizations.of(context)!.startConversation),
+                        ],
+                      ),
+                    )
+                  : ListView.builder(
+                      controller: _scrollController,
+                      padding: const EdgeInsets.all(16),
+                      itemCount:
+                          messagesState.messages.length +
+                          messagesState.streamingMessageIds.length,
+                      itemBuilder: (context, index) {
+                        // Show regular messages first
+                        if (index < messagesState.messages.length) {
+                          final message = messagesState.messages[index];
+                          return MessageBubble(
+                            message: message,
+                            isCurrentUser:
+                                message.senderId == currentUser?.userId,
+                            currentUserName: currentUser?.firstName,
+                            partnerName: currentUser?.partner?.firstName,
+                            onExerciseSuggestion: (exerciseId) {
+                              // Navigate to exercise screen
+                              context.push(
+                                '/exercise',
+                                extra: {
+                                  'conversationId': widget.conversationId,
+                                  'exerciseId': exerciseId,
+                                },
+                              );
+                            },
+                          );
+                        }
+
+                        // Show streaming messages
+                        final streamingIndex =
+                            index - messagesState.messages.length;
+                        final streamingIds = messagesState.streamingMessageIds
+                            .toList();
+                        if (streamingIndex < streamingIds.length) {
+                          final messageId = streamingIds[streamingIndex];
+                          final streamingContent =
+                              messagesState.streamingMessages[messageId] ?? '';
+
+                          return _StreamingMessageBubble(
+                            content: streamingContent,
+                            isStreaming: true,
+                            currentUserName: currentUser?.firstName,
+                            partnerName: currentUser?.partner?.firstName,
+                            onExerciseSuggestion: (exerciseId) {
+                              context.push(
+                                '/exercise',
+                                extra: {
+                                  'conversationId': widget.conversationId,
+                                  'exerciseId': exerciseId,
+                                },
+                              );
+                            },
+                          );
+                        }
+
+                        return const SizedBox.shrink();
+                      },
+                    ),
+            ),
+
+            // Typing indicator
+            if (_typingUsers.isNotEmpty)
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 16,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      child: const Icon(
+                        Icons.person,
+                        size: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.outline.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            '${_typingUsers.length > 1 ? AppLocalizations.of(context)!.partnersTyping : AppLocalizations.of(context)!.partnerTyping}',
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(
+                                  color: Theme.of(context).colorScheme.outline,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                          ),
+                          const SizedBox(width: 8),
+                          const _TypingAnimation(),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+            // Message input
+            if (messagesState.isSending) const LinearProgressIndicator(),
+
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                border: Border(
+                  top: BorderSide(
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.outline.withOpacity(0.2),
+                  ),
+                ),
+              ),
               child: Row(
                 children: [
-                  CircleAvatar(
-                    radius: 16,
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    child: const Icon(
-                      Icons.person,
-                      size: 16,
-                      color: Colors.white,
+                  Expanded(
+                    child: TextField(
+                      controller: _messageController,
+                      focusNode: _messageFocusNode,
+                      decoration: InputDecoration(
+                        hintText: AppLocalizations.of(context)!.typeMessage,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                      ),
+                      maxLines: null,
+                      textCapitalization: TextCapitalization.sentences,
+                      onSubmitted: (_) => _sendMessage(),
+                      onChanged: (text) {
+                        debugPrint('🔤 onChanged triggered: "$text"');
+                        // Don't call _handleTextChange here since the listener should handle it
+                      },
                     ),
                   ),
                   const SizedBox(width: 8),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          '${_typingUsers.length > 1 ? AppLocalizations.of(context)!.partnersTyping : AppLocalizations.of(context)!.partnerTyping}',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Theme.of(context).colorScheme.outline,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        const _TypingAnimation(),
-                      ],
+                  CircleAvatar(
+                    child: IconButton(
+                      onPressed: messagesState.isSending ? null : _sendMessage,
+                      icon: const Icon(Icons.send),
                     ),
                   ),
                 ],
               ),
             ),
-          
-          // Message input
-          if (messagesState.isSending)
-            const LinearProgressIndicator(),
-          
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              border: Border(
-                top: BorderSide(
-                  color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
-                ),
-              ),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _messageController,
-                    focusNode: _messageFocusNode,
-                    decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context)!.typeMessage,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                    ),
-                    maxLines: null,
-                    textCapitalization: TextCapitalization.sentences,
-                    onSubmitted: (_) => _sendMessage(),
-                    onChanged: (text) {
-                      debugPrint('🔤 onChanged triggered: "$text"');
-                      // Don't call _handleTextChange here since the listener should handle it
-                    },
-                  ),
-                ),
-                const SizedBox(width: 8),
-                CircleAvatar(
-                  child: IconButton(
-                    onPressed: messagesState.isSending ? null : _sendMessage,
-                    icon: const Icon(Icons.send),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+          ],
+        ),
       ),
     );
   }
@@ -401,15 +459,11 @@ class _TypingAnimationState extends State<_TypingAnimation>
       duration: const Duration(milliseconds: 1500),
       vsync: this,
     );
-    
-    _animation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
-    
+
+    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
+
     _animationController.repeat();
   }
 
@@ -456,16 +510,21 @@ class _StreamingMessageBubble extends StatelessWidget {
   final bool isStreaming;
   final String? currentUserName;
   final String? partnerName;
+  final Function(String exerciseId)? onExerciseSuggestion;
 
   const _StreamingMessageBubble({
     required this.content,
     required this.isStreaming,
     this.currentUserName,
     this.partnerName,
+    this.onExerciseSuggestion,
   });
 
   @override
   Widget build(BuildContext context) {
+    final suggestion = ExerciseSuggestionCard.parseFromMessage(content);
+    final displayContent = suggestion?.cleanContent ?? content;
+
     return Padding(
       padding: const EdgeInsets.only(
         bottom: 16,
@@ -508,38 +567,57 @@ class _StreamingMessageBubble extends StatelessWidget {
                     vertical: 12,
                   ),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(18).copyWith(
-                      bottomLeft: const Radius.circular(4),
-                    ),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.secondary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(
+                      18,
+                    ).copyWith(bottomLeft: const Radius.circular(4)),
                     border: Border.all(
-                      color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.primary.withOpacity(0.2),
                       width: 1,
                     ),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (content.isNotEmpty)
+                      if (displayContent.isNotEmpty)
                         MentionText(
-                          text: content,
+                          text: displayContent,
                           currentUserName: currentUserName,
                           partnerName: partnerName,
-                          baseStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
+                          baseStyle: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                        ),
+                      if (suggestion != null)
+                        ExerciseSuggestionCard(
+                          exerciseId: suggestion.exerciseId,
+                          exerciseName: suggestion.exerciseName,
+                          onStart: () {
+                            if (onExerciseSuggestion != null) {
+                              onExerciseSuggestion!(suggestion.exerciseId);
+                            }
+                          },
                         ),
                       if (isStreaming) ...[
-                        if (content.isNotEmpty) const SizedBox(height: 8),
+                        if (displayContent.isNotEmpty || suggestion != null)
+                          const SizedBox(height: 8),
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
                               AppLocalizations.of(context)!.typing,
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontStyle: FontStyle.italic,
-                              ),
+                              style: Theme.of(context).textTheme.bodySmall
+                                  ?.copyWith(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
+                                    fontStyle: FontStyle.italic,
+                                  ),
                             ),
                             const SizedBox(width: 8),
                             const _TypingAnimation(),
