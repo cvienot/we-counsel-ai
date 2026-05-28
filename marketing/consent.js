@@ -404,6 +404,7 @@
   function init() {
     injectStyles();
     pushGoogleConsent('default');
+    window.gtag('set', 'ads_data_redaction', true);
 
     if (hasSavedChoice()) {
       renderManageButton();

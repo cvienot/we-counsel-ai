@@ -141,6 +141,21 @@ async function testMarketingConsentFlow(browser, baseUrl) {
   });
   assert.strictEqual(initialConsent.updatedAt, null);
 
+  const sanitizedEvent = await page.evaluate(() => {
+    window.WeConnectTags.event('e2e_sanitized_event', {
+      email: 'person@example.com',
+      message_text: 'private text',
+      plan_tier: 'essential',
+      value: 9.99
+    });
+    return window.dataLayer[window.dataLayer.length - 1];
+  });
+  assert.strictEqual(sanitizedEvent.event, 'e2e_sanitized_event');
+  assert.strictEqual(sanitizedEvent.plan_tier, 'essential');
+  assert.strictEqual(sanitizedEvent.value, 9.99);
+  assert.strictEqual(sanitizedEvent.email, undefined);
+  assert.strictEqual(sanitizedEvent.message_text, undefined);
+
   await page.evaluate(() => {
     window.__consentTestLoads = 0;
     window.__consentTestCleanups = 0;
