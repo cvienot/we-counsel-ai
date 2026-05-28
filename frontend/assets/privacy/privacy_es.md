@@ -1,6 +1,6 @@
 # Politica de Privacidad
 
-**Ultima actualizacion:** 23 de mayo de 2026
+**Ultima actualizacion:** 28 de mayo de 2026
 
 Esta Politica de Privacidad explica como We Connect ("el Servicio", "nosotros", "nuestro") recopila, usa, almacena y comparte informacion personal cuando usted utiliza el Servicio.
 
@@ -61,7 +61,8 @@ Podemos compartir informacion personal con proveedores que ayudan a operar el Se
 - OpenAI, para generacion de respuestas de IA y resumenes.
 - Stripe, para pagos, suscripciones, facturas, impuestos y prevencion de fraude.
 - Proveedores de correo y monitoreo usados para entrega transaccional y alertas operativas.
-- Proveedores de analitica o publicidad, como medicion de campanas o retargeting, solo si estan configurados y despues del consentimiento requerido.
+- Google Analytics y la infraestructura de etiqueta web de Google, para medicion opcional de audiencia, atribucion de campanas y analitica de producto, solo despues del consentimiento requerido.
+- Proveedores de publicidad, como Google Ads o proveedores de retargeting, solo si estan configurados y despues del consentimiento de marketing requerido.
 
 Los mensajes de pareja y espacios de conversacion compartidos son visibles para la pareja conectada segun el diseno del producto.
 
@@ -89,7 +90,7 @@ Si esta en Francia o en la Union Europea y considera que su solicitud no se ha g
 
 Usamos almacenamiento estrictamente necesario para preferencias de idioma, opciones de consentimiento, seguridad, autenticacion y funciones esenciales del Servicio.
 
-La analitica opcional, el retargeting, los pixeles publicitarios u otros rastreadores no esenciales no se cargan salvo que usted de su consentimiento mediante la interfaz de opciones de privacidad. Puede aceptar, rechazar o personalizar estas opciones, y modificarlas mas tarde mediante "Configuracion de privacidad". Retirar el consentimiento impide futuras cargas de etiquetas y eventos opcionales, pero puede no eliminar informacion ya procesada por proveedores terceros antes de la retirada.
+La analitica opcional, el retargeting, los pixeles publicitarios u otros rastreadores no esenciales no se cargan salvo que usted de su consentimiento mediante la interfaz de opciones de privacidad. Si acepta la analitica, la etiqueta web de Google puede cargar Google Analytics para medir visitas, atribucion de campanas, rendimiento de paginas y eventos de producto no sensibles. Si acepta marketing y las etiquetas publicitarias estan configuradas, Google Tag Manager, Google Ads u otros pixeles publicitarios pueden usarse para medicion de campanas o retargeting. Puede aceptar, rechazar o personalizar estas opciones, y modificarlas mas tarde mediante "Configuracion de privacidad". Retirar el consentimiento impide futuras cargas de etiquetas y eventos opcionales, pero puede no eliminar informacion ya procesada por proveedores terceros antes de la retirada.
 
 ## 11. Transferencias Internacionales
 

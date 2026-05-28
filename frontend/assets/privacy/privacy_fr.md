@@ -1,6 +1,6 @@
 # Politique de Confidentialite
 
-**Derniere mise a jour :** 23 mai 2026
+**Derniere mise a jour :** 28 mai 2026
 
 Cette Politique de Confidentialite explique comment We Connect ("le Service", "nous", "notre") collecte, utilise, stocke et partage les informations personnelles lorsque vous utilisez le Service.
 
@@ -61,7 +61,8 @@ Nous pouvons partager des informations personnelles avec des prestataires qui ai
 - OpenAI, pour la generation de reponses IA et de resumes.
 - Stripe, pour les paiements, abonnements, factures, taxes et prevention de la fraude.
 - Les prestataires d'e-mail et de surveillance utilises pour les transactions et alertes operationnelles.
-- Les prestataires d'analyse ou de publicite, comme les outils de mesure de campagne ou de retargeting, uniquement s'ils sont configures et apres le consentement requis.
+- Google Analytics et l'infrastructure de balise web de Google, pour la mesure d'audience optionnelle, l'attribution des campagnes et l'analyse produit, uniquement apres le consentement requis.
+- Les prestataires de publicite, comme Google Ads ou les prestataires de retargeting, uniquement s'ils sont configures et apres le consentement marketing requis.
 
 Les messages partenaire et les espaces de conversation partages sont visibles par le partenaire connecte selon la conception du produit.
 
@@ -89,7 +90,7 @@ Si vous etes en France ou dans l'Union europeenne et estimez que votre demande n
 
 Nous utilisons un stockage strictement necessaire pour les preferences de langue, les choix de consentement, la securite, l'authentification et les fonctions essentielles du Service.
 
-Les mesures d'audience optionnelles, le retargeting, les pixels publicitaires ou autres traceurs non essentiels ne sont pas charges sauf si vous donnez votre accord via l'interface de choix de confidentialite. Vous pouvez accepter, refuser ou personnaliser ces choix, puis les modifier plus tard via "Parametres de confidentialite". Le retrait du consentement empeche les futurs chargements de balises et evenements optionnels, mais il peut ne pas supprimer les informations deja traitees par des prestataires tiers avant le retrait.
+Les mesures d'audience optionnelles, le retargeting, les pixels publicitaires ou autres traceurs non essentiels ne sont pas charges sauf si vous donnez votre accord via l'interface de choix de confidentialite. Si vous acceptez la mesure d'audience, la balise web de Google peut charger Google Analytics pour mesurer les visites, l'attribution des campagnes, la performance des pages et des evenements produit non sensibles. Si vous acceptez le marketing et que des balises publicitaires sont configurees, Google Tag Manager, Google Ads ou d'autres pixels publicitaires peuvent etre utilises pour la mesure des campagnes ou le retargeting. Vous pouvez accepter, refuser ou personnaliser ces choix, puis les modifier plus tard via "Parametres de confidentialite". Le retrait du consentement empeche les futurs chargements de balises et evenements optionnels, mais il peut ne pas supprimer les informations deja traitees par des prestataires tiers avant le retrait.
 
 ## 11. Transferts Internationaux
 

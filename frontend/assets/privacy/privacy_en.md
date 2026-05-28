@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Last Updated:** May 23, 2026
+**Last Updated:** May 28, 2026
 
 This Privacy Policy explains how We Connect ("the Service", "we", "us", or "our") collects, uses, stores, and shares personal information when you use the Service.
 
@@ -61,7 +61,8 @@ We may share personal information with service providers that help operate the S
 - OpenAI, for AI response generation and summarization.
 - Stripe, for payments, subscriptions, invoices, tax, and fraud prevention.
 - Email and monitoring providers used for transactional service delivery and operational alerting.
-- Analytics or advertising providers, such as campaign measurement or retargeting providers, only if configured and only after required consent.
+- Google Analytics and Google's web tag infrastructure, for optional audience measurement, campaign attribution, and product analytics, only after required consent.
+- Advertising providers, such as Google Ads or retargeting providers, only if configured and only after required marketing consent.
 
 Partner messages and shared conversation areas are visible to the connected partner according to the product design.
 
@@ -89,7 +90,7 @@ If you are in France or the European Union and believe your request has not been
 
 We use strictly necessary storage for language preferences, consent choices, security, authentication, and core Service functions.
 
-Optional analytics, retargeting, advertising pixels, or other non-essential trackers are not loaded unless you consent through the privacy choices interface. You can accept, reject, or customize these choices, and you can change them later through "Privacy Settings." Withdrawing consent prevents future optional tag loading and events, but it may not delete information already processed by third-party providers before withdrawal.
+Optional analytics, retargeting, advertising pixels, or other non-essential trackers are not loaded unless you consent through the privacy choices interface. If you consent to analytics, Google's web tag may load Google Analytics to measure visits, campaign attribution, page performance, and non-sensitive product events. If you consent to marketing and advertising tags are configured, Google Tag Manager, Google Ads, or other advertising pixels may be used for campaign measurement or retargeting. You can accept, reject, or customize these choices, and you can change them later through "Privacy Settings." Withdrawing consent prevents future optional tag loading and events, but it may not delete information already processed by third-party providers before withdrawal.
 
 ## 11. International Transfers
 

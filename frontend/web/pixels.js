@@ -4,20 +4,22 @@
   // Keep IDs blank until the provider is named in the Privacy Policy.
   // Add future ad tags here so consent gating remains centralized.
   var tagConfig = {
+    googleAnalyticsId: 'G-V84185KVV0',
     googleTagManagerId: '',
     metaPixelId: ''
   };
+  var loadedGoogleAnalyticsId = null;
 
   if (!window.WeConnectConsent) return;
 
   window.WeConnectTags = window.WeConnectTags || {};
   window.WeConnectTags.event = trackEvent;
 
-  window.WeConnectConsent.register('analytics', syncGoogleTagManager);
+  window.WeConnectConsent.register('analytics', syncGoogleTags);
   window.WeConnectConsent.register('marketing', function () {
     var cleanups = [];
 
-    syncGoogleTagManager(window.WeConnectConsent.get());
+    syncGoogleTags(window.WeConnectConsent.get());
 
     if (tagConfig.metaPixelId) {
       cleanups.push(loadMetaPixel(tagConfig.metaPixelId));
@@ -30,21 +32,31 @@
     };
   });
 
-  function syncGoogleTagManager(consent) {
-    if (!tagConfig.googleTagManagerId) return null;
-
+  function syncGoogleTags(consent) {
     var categories = consent && consent.categories ? consent.categories : {};
     if (!categories.analytics && !categories.marketing) return null;
 
-    loadGoogleTagManager(tagConfig.googleTagManagerId);
+    if (categories.analytics && tagConfig.googleAnalyticsId) {
+      loadGoogleAnalytics(tagConfig.googleAnalyticsId);
+    }
+
+    if (tagConfig.googleTagManagerId) {
+      loadGoogleTagManager(tagConfig.googleTagManagerId);
+    }
+
     return function () {};
   }
 
   function trackEvent(name, parameters) {
     if (!name || typeof name !== 'string') return;
+    if (!window.WeConnectConsent.has('analytics')) return;
 
     window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push(Object.assign({ event: name }, safeParameters(parameters)));
+    var eventParameters = safeParameters(parameters);
+    if (tagConfig.googleAnalyticsId && typeof window.gtag === 'function') {
+      window.gtag('event', name, eventParameters);
+    }
+    window.dataLayer.push(Object.assign({ event: name }, eventParameters));
   }
 
   function safeParameters(parameters) {
@@ -69,6 +81,20 @@
     script.async = true;
     script.src = src;
     document.head.appendChild(script);
+  }
+
+  function loadGoogleAnalytics(id) {
+    if (loadedGoogleAnalyticsId === id) return;
+    loadedGoogleAnalyticsId = id;
+
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = window.gtag || function () {
+      window.dataLayer.push(arguments);
+    };
+
+    loadScript('wc-google-analytics', 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(id));
+    window.gtag('js', new Date());
+    window.gtag('config', id);
   }
 
   function loadGoogleTagManager(id) {

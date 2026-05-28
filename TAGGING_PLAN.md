@@ -2,12 +2,15 @@
 
 ## Tooling
 
-- Google Tag Manager: one web container for `we-connect-app.com` and `app.we-connect-app.com`.
 - Google Analytics 4: one web data stream for product and marketing analytics.
-- Google Ads: add conversion and remarketing tags later in the same GTM container, after ad account setup.
+- Google tag: loaded directly from the consent-gated first-party loader with measurement ID `G-V84185KVV0`.
+- Google Tag Manager: container `GTM-WBVG3S8M` exists for future tag management, but is not active on the site yet.
+- Google Ads: add conversion and remarketing tags later, after ad account setup and after GTM is ready or direct Google Ads tags are reviewed.
 - Non-Google pixels: add through `marketing/pixels.js` and `frontend/web/pixels.js` only when the Privacy Policy names the provider.
 
-Use GTM as the single browser tag entry point. Do not paste vendor snippets directly into HTML or Flutter views.
+Do not paste vendor snippets directly into HTML or Flutter views. Add IDs and loaders only through `marketing/pixels.js` and `frontend/web/pixels.js`.
+
+GTM note: a first-party Google tag added to the new GTM container was immediately shown by GTM with a malware-scan pause warning, so the GTM workspace was reset to zero unpublished changes and the container was not published. GA4 is therefore activated directly for now under the same consent rules.
 
 ## Consent Model
 
@@ -25,7 +28,7 @@ Default state before user choice:
 - `functionality_storage`: granted
 - `security_storage`: granted
 
-Google tags are loaded only after either `analytics` or `marketing` consent is granted. Consent updates are pushed before loaders run. Advertising data redaction stays enabled when ad storage is denied.
+GA4 is loaded only after `analytics` consent is granted. Future marketing tags are loaded only after `marketing` consent is granted. Consent updates are pushed before loaders run. Advertising data redaction stays enabled when ad storage is denied.
 
 ## PII Rules
 
@@ -42,7 +45,7 @@ Allowed event parameters:
 
 | Event | Where | Trigger | Parameters |
 | --- | --- | --- | --- |
-| `page_view` | Marketing + app shell | GA4 enhanced measurement or GTM history trigger | `page_location`, `page_title`, `page_referrer` |
+| `page_view` | Marketing + app shell | Google tag page view after analytics consent | `page_location`, `page_title`, `page_referrer` |
 | `cta_click` | Marketing | User clicks Open App, pricing CTA, or footer CTA | `cta_location`, `cta_label`, `target_path` |
 | `app_open` | App shell | Flutter web app loaded | `language`, `entry_path` |
 | `sign_up_start` | App | Registration screen shown from an anonymous session | `source`, `language` |
@@ -64,18 +67,17 @@ Start with these conversion goals:
 
 Do not optimize ad campaigns on relationship content, free-text behavior, or sensitive in-app conversation events.
 
-## GTM Container Shape
+## Current And Future Tag Shape
 
-- Consent Initialization tag: no vendor network call; consent state is set by the first-party banner before GTM loads.
-- GA4 Google tag: fires on all pages with built-in consent checks.
-- GA4 event tags: map the core events above from `dataLayer` events.
-- Conversion Linker: enabled only with marketing consent.
+- GA4 Google tag: fires after analytics consent through the first-party loader.
+- GA4 events: direct `gtag` events after analytics consent, with matching `dataLayer` events kept for future GTM mapping.
+- Conversion Linker: enable only with marketing consent if GTM is later activated.
 - Google Ads conversion tags: add after Google Ads account and conversion actions are configured.
 - Remarketing tag: add only after privacy copy explicitly names Google Ads remarketing.
 
 ## Implementation Notes
 
 - `marketing/consent.js` and `frontend/web/consent.js` own Consent Mode updates.
-- `marketing/pixels.js` and `frontend/web/pixels.js` own GTM and future pixel loading.
+- `marketing/pixels.js` and `frontend/web/pixels.js` own GA4, GTM, and future pixel loading.
 - Use `window.WeConnectTags.event(name, params)` for browser events.
 - Keep e2e coverage that no tracker host loads before consent.

@@ -141,20 +141,14 @@ async function testMarketingConsentFlow(browser, baseUrl) {
   });
   assert.strictEqual(initialConsent.updatedAt, null);
 
-  const sanitizedEvent = await page.evaluate(() => {
-    window.WeConnectTags.event('e2e_sanitized_event', {
-      email: 'person@example.com',
-      message_text: 'private text',
-      plan_tier: 'essential',
-      value: 9.99
+  const preConsentEventBlocked = await page.evaluate(() => {
+    const before = window.dataLayer.length;
+    window.WeConnectTags.event('e2e_pre_consent_event', {
+      plan_tier: 'essential'
     });
-    return window.dataLayer[window.dataLayer.length - 1];
+    return window.dataLayer.length === before;
   });
-  assert.strictEqual(sanitizedEvent.event, 'e2e_sanitized_event');
-  assert.strictEqual(sanitizedEvent.plan_tier, 'essential');
-  assert.strictEqual(sanitizedEvent.value, 9.99);
-  assert.strictEqual(sanitizedEvent.email, undefined);
-  assert.strictEqual(sanitizedEvent.message_text, undefined);
+  assert.strictEqual(preConsentEventBlocked, true);
 
   await page.evaluate(() => {
     window.__consentTestLoads = 0;
@@ -182,6 +176,27 @@ async function testMarketingConsentFlow(browser, baseUrl) {
   assert.strictEqual(acceptedConsent.categories.marketing, true);
   assert.ok(acceptedConsent.updatedAt, 'accepted consent should have a timestamp');
   assert.strictEqual(await page.evaluate(() => window.__consentTestLoads), 1);
+  await page.waitForSelector('#wc-google-analytics', { state: 'attached', timeout: 10000 });
+  assert.ok(
+    requests.some(url => url.includes('googletagmanager.com/gtag/js?id=G-V84185KVV0')),
+    'GA4 should load after analytics consent'
+  );
+  assert.strictEqual(await page.locator('#wc-google-tag-manager').count(), 0);
+
+  const sanitizedEvent = await page.evaluate(() => {
+    window.WeConnectTags.event('e2e_sanitized_event', {
+      email: 'person@example.com',
+      message_text: 'private text',
+      plan_tier: 'essential',
+      value: 9.99
+    });
+    return window.dataLayer[window.dataLayer.length - 1];
+  });
+  assert.strictEqual(sanitizedEvent.event, 'e2e_sanitized_event');
+  assert.strictEqual(sanitizedEvent.plan_tier, 'essential');
+  assert.strictEqual(sanitizedEvent.value, 9.99);
+  assert.strictEqual(sanitizedEvent.email, undefined);
+  assert.strictEqual(sanitizedEvent.message_text, undefined);
 
   await page.locator('#privacySettingsButton').click();
   await page.waitForSelector('#wc-consent-overlay');
