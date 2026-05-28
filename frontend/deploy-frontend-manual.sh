@@ -23,6 +23,13 @@ flutter build web \
     --dart-define=API_BASE_URL=https://your-app-runner-url.awsapprunner.com/api \
     --dart-define=ENVIRONMENT=production
 
+# Amplify/S3 serves .ttf font assets reliably; keep the Flutter font
+# manifest pointed at that deployed path for Material icons.
+cp build/web/assets/fonts/MaterialIcons-Regular.otf build/web/assets/fonts/MaterialIcons-Regular.ttf
+perl -0pi -e 's/fonts\/MaterialIcons-Regular\.otf/fonts\/MaterialIcons-Regular.ttf/g' \
+    build/web/assets/FontManifest.json \
+    build/web/flutter_service_worker.js
+
 echo ""
 echo "✅ Build complete!"
 echo ""

@@ -18,6 +18,8 @@ applications:
           commands:
             - export PATH="$PATH:/tmp/flutter/bin"
             - flutter build web --release --dart-define=API_BASE_URL=$API_BASE_URL --dart-define=ENVIRONMENT=$ENVIRONMENT
+            - cp build/web/assets/fonts/MaterialIcons-Regular.otf build/web/assets/fonts/MaterialIcons-Regular.ttf
+            - perl -0pi -e 's/fonts\/MaterialIcons-Regular\.otf/fonts\/MaterialIcons-Regular.ttf/g' build/web/assets/FontManifest.json build/web/flutter_service_worker.js
       artifacts:
         baseDirectory: build/web
         files:
