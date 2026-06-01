@@ -369,7 +369,6 @@ const summarizeConversation = async ({ messages, conversationTitle }) => {
         }
       ],
       max_completion_tokens: 300,
-      temperature: 0.5,
     });
 
     return response.choices[0].message.content;

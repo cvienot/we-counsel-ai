@@ -77,7 +77,9 @@ const buildConversationContext = async (conversation, recentMessages) => {
         console.log(`✅ Summary generated and stored`);
       } catch (error) {
         console.error(`❌ Error generating summary:`, error);
-        throw error;
+        console.warn('⚠️ Continuing without a conversation summary for this response');
+        contextMessages = recentMessages;
+        contextPrefix = '';
       }
     } else if (conversation.summary) {
       // Use existing summary
