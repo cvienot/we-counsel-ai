@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../services/exercise_service.dart';
 import '../../services/api_service.dart';
@@ -101,11 +102,21 @@ class _ExerciseHistoryScreenState extends ConsumerState<ExerciseHistoryScreen> {
           ],
         ),
         content: SingleChildScrollView(
-          child: SelectableText(
-            summary ?? l10n.noSummaryAvailable,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  height: 1.6,
-                ),
+          child: MarkdownBody(
+            data: summary ?? l10n.noSummaryAvailable,
+            selectable: true,
+            styleSheet: MarkdownStyleSheet(
+              p: Theme.of(context).textTheme.bodyMedium?.copyWith(height: 1.6),
+              strong: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                height: 1.6,
+                fontWeight: FontWeight.bold,
+              ),
+              em: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                height: 1.6,
+                fontStyle: FontStyle.italic,
+              ),
+              listBullet: Theme.of(context).textTheme.bodyMedium,
+            ),
           ),
         ),
         actions: [
@@ -210,7 +221,7 @@ class _ExerciseHistoryScreenState extends ConsumerState<ExerciseHistoryScreen> {
                                       height: 48,
                                       decoration: BoxDecoration(
                                         color: _statusColor(status)
-                                            .withOpacity(0.1),
+                                            .withValues(alpha: 0.1),
                                         borderRadius:
                                             BorderRadius.circular(12),
                                       ),
