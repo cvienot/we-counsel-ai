@@ -129,6 +129,20 @@ router.post('/start', authenticateToken, async (req, res) => {
       });
     }
 
+    const completedSession = await exerciseService.getCompletedSession({
+      conversationId,
+      exerciseId
+    });
+
+    if (completedSession) {
+      return res.status(409).json({
+        error: 'Exercise already completed',
+        code: 'EXERCISE_ALREADY_COMPLETED',
+        message: 'This exercise has already been completed in this conversation.',
+        session: completedSession
+      });
+    }
+
     // Start a new exercise
     const result = await exerciseService.startExercise({
       coupleId: req.user.coupleId,
@@ -401,6 +415,7 @@ router.get('/history', authenticateToken, async (req, res) => {
       return {
         sessionId: session.sessionId,
         exerciseId: session.exerciseId,
+        conversationId: session.conversationId,
         exerciseName: template?.name || session.exerciseId,
         status: session.status,
         currentStep: session.currentStep,

@@ -47,4 +47,51 @@ void main() {
     await tester.tap(find.text('Tap to start the guided exercise'));
     expect(startedExerciseId, 'active-listening');
   });
+
+  testWidgets('completed AI exercise markers are not actionable', (
+    tester,
+  ) async {
+    String? startedExerciseId;
+
+    final message = Message(
+      messageId: 'message-1',
+      conversationId: 'conversation-1',
+      senderId: 'ai-coach',
+      senderName: 'Coach Sarah (AI Relationship Coach)',
+      senderType: MessageSenderType.ai,
+      content:
+          '@Alice, here is the exercise you completed.\n\n'
+          '[EXERCISE:active-listening] This will help you each reflect back what you heard.',
+      recipientType: MessageRecipientType.both,
+      timestamp: DateTime(2026, 5, 28, 12).millisecondsSinceEpoch,
+      createdAt: DateTime(2026, 5, 28, 12),
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: MessageBubble(
+            message: message,
+            isCurrentUser: false,
+            currentUserName: 'Alice',
+            partnerName: 'Jordan',
+            completedExerciseIds: const {'active-listening'},
+            onExerciseSuggestion: (exerciseId) {
+              startedExerciseId = exerciseId;
+            },
+          ),
+        ),
+      ),
+    );
+
+    expect(find.textContaining('[EXERCISE:'), findsNothing);
+    expect(find.text('Active Listening Practice'), findsOneWidget);
+    expect(find.text('Completed'), findsOneWidget);
+    expect(find.text('Tap to start the guided exercise'), findsNothing);
+
+    await tester.tap(find.text('Completed'));
+    expect(startedExerciseId, isNull);
+  });
 }

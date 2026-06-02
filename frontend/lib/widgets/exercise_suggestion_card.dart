@@ -4,13 +4,15 @@ import '../l10n/app_localizations.dart';
 class ExerciseSuggestionCard extends StatelessWidget {
   final String exerciseId;
   final String exerciseName;
-  final VoidCallback onStart;
+  final VoidCallback? onStart;
+  final bool isCompleted;
 
   const ExerciseSuggestionCard({
     super.key,
     required this.exerciseId,
     required this.exerciseName,
     required this.onStart,
+    this.isCompleted = false,
   });
 
   /// Parse exercise suggestion from AI message
@@ -18,10 +20,10 @@ class ExerciseSuggestionCard extends StatelessWidget {
   static ExerciseSuggestion? parseFromMessage(String content) {
     final regex = RegExp(r'\[EXERCISE:([^\]]+)\]');
     final match = regex.firstMatch(content);
-    
+
     if (match != null) {
       final exerciseId = match.group(1)!;
-      
+
       // Map exercise IDs to display names
       final Map<String, String> exerciseNames = {
         'active-listening': 'Active Listening Practice',
@@ -35,16 +37,16 @@ class ExerciseSuggestionCard extends StatelessWidget {
         'dream-sharing': 'Dream Sharing',
         'gratitude-letter': 'Gratitude Letter',
       };
-      
+
       final exerciseName = exerciseNames[exerciseId] ?? exerciseId;
-      
+
       return ExerciseSuggestion(
         exerciseId: exerciseId,
         exerciseName: exerciseName,
         cleanContent: content.replaceAll(regex, '').trim(),
       );
     }
-    
+
     return null;
   }
 
@@ -104,19 +106,20 @@ class ExerciseSuggestionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = _getExerciseColor(context);
-    
+    final l10n = AppLocalizations.of(context)!;
+    final color = isCompleted ? Colors.green : _getExerciseColor(context);
+
     return Container(
       margin: const EdgeInsets.only(top: 12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.3), width: 2),
+        border: Border.all(color: color.withValues(alpha: 0.3), width: 2),
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: onStart,
+          onTap: isCompleted ? null : onStart,
           borderRadius: BorderRadius.circular(12),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -125,14 +128,10 @@ class ExerciseSuggestionCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.2),
+                    color: color.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Icon(
-                    _getExerciseIcon(),
-                    color: color,
-                    size: 28,
-                  ),
+                  child: Icon(_getExerciseIcon(), color: color, size: 28),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -140,32 +139,31 @@ class ExerciseSuggestionCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        AppLocalizations.of(context)!.guidedExerciseSuggestion,
+                        l10n.guidedExerciseSuggestion,
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                              color: color,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 0.5,
-                            ),
+                          color: color,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.5,
+                        ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         exerciseName,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        AppLocalizations.of(context)!.tapToStartExercise,
+                        isCompleted ? l10n.completed : l10n.tapToStartExercise,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Colors.grey[600],
-                            ),
+                          color: Colors.grey[600],
+                        ),
                       ),
                     ],
                   ),
                 ),
                 Icon(
-                  Icons.play_circle_filled,
+                  isCompleted ? Icons.check_circle : Icons.play_circle_filled,
                   color: color,
                   size: 32,
                 ),

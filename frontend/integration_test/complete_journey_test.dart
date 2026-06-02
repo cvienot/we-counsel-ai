@@ -1485,6 +1485,29 @@ void main() {
 
       print('   ✅ Partner2 can see history and summary');
 
+      final duplicateCompletedStartRes = await http.post(
+        Uri.parse('$apiUrl/api/exercises/start'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $u1Token',
+        },
+        body: jsonEncode({
+          'conversationId': conversationId,
+          'exerciseId': 'appreciation-share',
+        }),
+      );
+      expect(duplicateCompletedStartRes.statusCode, 409);
+      final duplicateCompletedStartData = jsonDecode(
+        duplicateCompletedStartRes.body,
+      );
+      expect(
+        duplicateCompletedStartData['code'],
+        'EXERCISE_ALREADY_COMPLETED',
+        reason: 'Completed exercise cards should not create duplicate sessions',
+      );
+
+      print('   ✅ Completed exercise cannot be restarted from old suggestion');
+
       // ============================================
       // STEP 12: Starting a new exercise after completing one
       // ============================================

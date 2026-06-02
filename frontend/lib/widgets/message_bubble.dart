@@ -12,6 +12,7 @@ class MessageBubble extends StatelessWidget {
   final Function(String exerciseId)? onExerciseSuggestion;
   final String? currentUserName;
   final String? partnerName;
+  final Set<String> completedExerciseIds;
 
   const MessageBubble({
     super.key,
@@ -20,11 +21,12 @@ class MessageBubble extends StatelessWidget {
     this.onExerciseSuggestion,
     this.currentUserName,
     this.partnerName,
+    this.completedExerciseIds = const <String>{},
   });
 
   String _getLocalizedSenderName(BuildContext context) {
     // If it's an AI message and the senderName contains "AI Counsellor", use localized version
-    if (message.senderType == MessageSenderType.ai && 
+    if (message.senderType == MessageSenderType.ai &&
         message.senderName.contains('AI Counsellor')) {
       return AppLocalizations.of(context)!.drSarahAiCounsellor;
     }
@@ -37,7 +39,7 @@ class MessageBubble extends StatelessWidget {
     final isAI = message.senderType == MessageSenderType.ai;
     final alignRight = isCurrentUser && !isAI;
     final theme = Theme.of(context);
-    
+
     return Padding(
       padding: EdgeInsets.only(
         bottom: 16,
@@ -51,10 +53,7 @@ class MessageBubble extends StatelessWidget {
             : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (!alignRight) ...[
-            _buildAvatar(context),
-            const SizedBox(width: 8),
-          ],
+          if (!alignRight) ...[_buildAvatar(context), const SizedBox(width: 8)],
           Flexible(
             child: Column(
               crossAxisAlignment: alignRight
@@ -73,7 +72,9 @@ class MessageBubble extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                             color: isAI
                                 ? theme.colorScheme.secondary
-                                : theme.colorScheme.onSurface.withOpacity(0.7),
+                                : theme.colorScheme.onSurface.withValues(
+                                    alpha: 0.7,
+                                  ),
                           ),
                         ),
                         if (isAI) ...[
@@ -84,7 +85,9 @@ class MessageBubble extends StatelessWidget {
                               vertical: 2,
                             ),
                             decoration: BoxDecoration(
-                              color: theme.colorScheme.secondary.withOpacity(0.15),
+                              color: theme.colorScheme.secondary.withValues(
+                                alpha: 0.15,
+                              ),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
@@ -121,7 +124,9 @@ class MessageBubble extends StatelessWidget {
                     // Add subtle border for AI messages
                     border: isAI
                         ? Border.all(
-                            color: theme.colorScheme.secondary.withOpacity(0.2),
+                            color: theme.colorScheme.secondary.withValues(
+                              alpha: 0.2,
+                            ),
                             width: 1,
                           )
                         : null,
@@ -165,9 +170,14 @@ class MessageBubble extends StatelessWidget {
                         ExerciseSuggestionCard(
                           exerciseId: _getExerciseSuggestion()!.exerciseId,
                           exerciseName: _getExerciseSuggestion()!.exerciseName,
+                          isCompleted: completedExerciseIds.contains(
+                            _getExerciseSuggestion()!.exerciseId,
+                          ),
                           onStart: () {
                             if (onExerciseSuggestion != null) {
-                              onExerciseSuggestion!(_getExerciseSuggestion()!.exerciseId);
+                              onExerciseSuggestion!(
+                                _getExerciseSuggestion()!.exerciseId,
+                              );
                             }
                           },
                         ),
@@ -175,10 +185,12 @@ class MessageBubble extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         DateFormat('HH:mm').format(
-                          DateTime.fromMillisecondsSinceEpoch(message.timestamp),
+                          DateTime.fromMillisecondsSinceEpoch(
+                            message.timestamp,
+                          ),
                         ),
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: _getTextColor(context).withOpacity(0.7),
+                          color: _getTextColor(context).withValues(alpha: 0.7),
                           fontSize: 11,
                         ),
                       ),
@@ -188,10 +200,7 @@ class MessageBubble extends StatelessWidget {
               ],
             ),
           ),
-          if (alignRight) ...[
-            const SizedBox(width: 8),
-            _buildAvatar(context),
-          ],
+          if (alignRight) ...[const SizedBox(width: 8), _buildAvatar(context)],
         ],
       ),
     );
@@ -231,11 +240,11 @@ class MessageBubble extends StatelessWidget {
 
     if (isAI) {
       // Softer, more inviting color for AI messages
-      return theme.colorScheme.secondary.withOpacity(0.08);
+      return theme.colorScheme.secondary.withValues(alpha: 0.08);
     } else if (alignRight) {
       return theme.colorScheme.primary;
     } else {
-      return theme.colorScheme.outline.withOpacity(0.1);
+      return theme.colorScheme.outline.withValues(alpha: 0.1);
     }
   }
 
@@ -255,7 +264,7 @@ class MessageBubble extends StatelessWidget {
   ExerciseSuggestion? _getExerciseSuggestion() {
     final isAI = message.senderType == MessageSenderType.ai;
     if (!isAI) return null;
-    
+
     return ExerciseSuggestionCard.parseFromMessage(message.content);
   }
 
@@ -320,10 +329,11 @@ class MentionBuilder extends MarkdownElementBuilder {
     final name = element.attributes['name'] ?? '';
     final fullText = element.textContent;
 
-    final isCurrentUser = currentUserName != null &&
+    final isCurrentUser =
+        currentUserName != null &&
         name.toLowerCase() == currentUserName!.toLowerCase();
-    final isPartner = partnerName != null &&
-        name.toLowerCase() == partnerName!.toLowerCase();
+    final isPartner =
+        partnerName != null && name.toLowerCase() == partnerName!.toLowerCase();
 
     final Color chipColor;
     final Color textColor;
@@ -345,7 +355,7 @@ class MentionBuilder extends MarkdownElementBuilder {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
           decoration: BoxDecoration(
-            color: chipColor.withOpacity(0.15),
+            color: chipColor.withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(4),
           ),
           child: Text(

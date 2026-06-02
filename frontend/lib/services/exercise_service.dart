@@ -45,7 +45,8 @@ class ExerciseService {
       final data = jsonDecode(response.body);
       return data;
     } else {
-      throw Exception('Failed to start exercise');
+      final data = jsonDecode(response.body);
+      throw Exception(data['message'] ?? 'Failed to start exercise');
     }
   }
 
@@ -61,9 +62,7 @@ class ExerciseService {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
       },
-      body: jsonEncode({
-        'response': response,
-      }),
+      body: jsonEncode({'response': response}),
     );
 
     if (httpResponse.statusCode == 200) {

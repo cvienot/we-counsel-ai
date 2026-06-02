@@ -636,11 +636,39 @@ const getActiveSession = async ({ conversationId }) => {
   return completedResult.Items?.[0] || null;
 };
 
+const getCompletedSession = async ({ conversationId, exerciseId }) => {
+  const result = await docClient.send(new QueryCommand({
+    TableName: TABLES.EXERCISE_SESSIONS,
+    IndexName: 'conversationId-index',
+    KeyConditionExpression: 'conversationId = :conversationId',
+    FilterExpression: '#status = :status AND #exerciseId = :exerciseId',
+    ExpressionAttributeNames: {
+      '#status': 'status',
+      '#exerciseId': 'exerciseId'
+    },
+    ExpressionAttributeValues: {
+      ':conversationId': conversationId,
+      ':exerciseId': exerciseId,
+      ':status': 'completed'
+    }
+  }));
+
+  const sessions = result.Items || [];
+  sessions.sort((a, b) => {
+    const aTime = a.completedAt || a.createdAt || a.startedAt || '';
+    const bTime = b.completedAt || b.createdAt || b.startedAt || '';
+    return bTime.localeCompare(aTime);
+  });
+
+  return sessions[0] || null;
+};
+
 module.exports = {
   EXERCISE_TEMPLATES,
   getExerciseTemplate: (exerciseId) => EXERCISE_TEMPLATES[exerciseId],
   startExercise,
   progressExercise,
   getExercises,
-  getActiveSession
+  getActiveSession,
+  getCompletedSession
 };

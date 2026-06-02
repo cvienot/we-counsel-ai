@@ -34,7 +34,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
   Timer? _typingTimer;
   Timer? _typingHeartbeat;
   Timer? _exercisePollTimer;
-  Set<String> _typingUsers = {};
+  final Set<String> _typingUsers = {};
   bool _isTyping = false;
 
   // Active exercise state
@@ -42,6 +42,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
   Map<String, dynamic>? _activeExerciseData;
   bool _isCurrentUsersTurnForExercise = false;
   String? _exerciseWaitingForName;
+  Set<String> _completedExerciseIds = <String>{};
 
   @override
   void initState() {
@@ -157,7 +158,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
     // Only set a timeout if there's text (as a fallback in case of network issues)
     if (hasText) {
       _typingTimer = Timer(const Duration(seconds: 15), () {
-        if (_isTyping && mainThread != null) {
+        if (_isTyping) {
           _isTyping = false;
           _typingHeartbeat?.cancel();
           debugPrint(
@@ -196,6 +197,8 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
       _scrollToBottom();
       // Check for active exercise
       _checkActiveExercise(mainThread.conversationId);
+      // Mark completed exercise suggestions in the thread as non-startable.
+      _loadCompletedExercises(mainThread.conversationId);
       // Poll for exercise changes every 15 seconds
       _startExercisePolling(mainThread.conversationId);
     }
@@ -241,6 +244,12 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
         // Session is not active (completed/abandoned)
         if (_activeExerciseSession != null) {
           setState(() {
+            if (status == 'completed' && session['exerciseId'] is String) {
+              _completedExerciseIds = {
+                ..._completedExerciseIds,
+                session['exerciseId'] as String,
+              };
+            }
             _activeExerciseSession = null;
             _activeExerciseData = null;
             _isCurrentUsersTurnForExercise = false;
@@ -283,6 +292,54 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
     } catch (e) {
       debugPrint('⚠️ Error checking active exercise: $e');
     }
+  }
+
+  Future<void> _loadCompletedExercises(String conversationId) async {
+    try {
+      final token = await ApiService().getToken();
+      if (token == null || token.isEmpty) return;
+
+      final sessions = await _exerciseService.getExerciseHistory(token);
+      final completed = sessions
+          .where((session) {
+            final status = session['status'] as String?;
+            final exerciseId = session['exerciseId'] as String?;
+            final sessionConversationId = session['conversationId'] as String?;
+
+            return status == 'completed' &&
+                exerciseId != null &&
+                (sessionConversationId == null ||
+                    sessionConversationId == conversationId);
+          })
+          .map((session) => session['exerciseId'] as String)
+          .toSet();
+
+      if (!mounted) return;
+
+      setState(() {
+        _completedExerciseIds = completed;
+      });
+    } catch (e) {
+      debugPrint('⚠️ Error loading completed exercises: $e');
+    }
+  }
+
+  void _openExerciseSuggestion(String conversationId, String exerciseId) {
+    if (_completedExerciseIds.contains(exerciseId)) {
+      context.push('/exercise-history');
+      return;
+    }
+
+    context
+        .push(
+          '/exercise',
+          extra: {'conversationId': conversationId, 'exerciseId': exerciseId},
+        )
+        .then((_) {
+          _checkActiveExercise(conversationId);
+          _loadCompletedExercises(conversationId);
+          ref.read(messagesProvider(conversationId).notifier).loadMessages();
+        });
   }
 
   Future<void> _sendMessage() async {
@@ -542,6 +599,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                       .then((_) {
                         // Refresh exercise state and messages when returning
                         _checkActiveExercise(mainThread.conversationId);
+                        _loadCompletedExercises(mainThread.conversationId);
                         ref
                             .read(
                               messagesProvider(
@@ -625,16 +683,12 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                                 message.senderId == currentUser?.userId,
                             currentUserName: currentUser?.firstName,
                             partnerName: currentUser?.partner?.firstName,
+                            completedExerciseIds: _completedExerciseIds,
                             onExerciseSuggestion: mainThread != null
                                 ? (exerciseId) {
-                                    // Navigate to exercise screen
-                                    context.push(
-                                      '/exercise',
-                                      extra: {
-                                        'conversationId':
-                                            mainThread.conversationId,
-                                        'exerciseId': exerciseId,
-                                      },
+                                    _openExerciseSuggestion(
+                                      mainThread.conversationId,
+                                      exerciseId,
                                     );
                                   }
                                 : null,
@@ -659,15 +713,12 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                             isStreaming: true,
                             currentUserName: currentUser?.firstName,
                             partnerName: currentUser?.partner?.firstName,
+                            completedExerciseIds: _completedExerciseIds,
                             onExerciseSuggestion: mainThread != null
                                 ? (exerciseId) {
-                                    context.push(
-                                      '/exercise',
-                                      extra: {
-                                        'conversationId':
-                                            mainThread.conversationId,
-                                        'exerciseId': exerciseId,
-                                      },
+                                    _openExerciseSuggestion(
+                                      mainThread.conversationId,
+                                      exerciseId,
                                     );
                                   }
                                 : null,
@@ -706,7 +757,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                       decoration: BoxDecoration(
                         color: Theme.of(
                           context,
-                        ).colorScheme.outline.withOpacity(0.1),
+                        ).colorScheme.outline.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Row(
@@ -738,7 +789,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                 color: Theme.of(context).colorScheme.surface,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 4,
                     offset: const Offset(0, -2),
                   ),
@@ -949,7 +1000,7 @@ class _WaitingRoomScreen extends ConsumerWidget {
 }
 
 class _TypingAnimation extends StatefulWidget {
-  const _TypingAnimation({Key? key}) : super(key: key);
+  const _TypingAnimation();
 
   @override
   _TypingAnimationState createState() => _TypingAnimationState();
@@ -1018,6 +1069,7 @@ class _StreamingMessageBubble extends StatelessWidget {
   final bool isStreaming;
   final String? currentUserName;
   final String? partnerName;
+  final Set<String> completedExerciseIds;
   final Function(String exerciseId)? onExerciseSuggestion;
 
   const _StreamingMessageBubble({
@@ -1025,6 +1077,7 @@ class _StreamingMessageBubble extends StatelessWidget {
     required this.isStreaming,
     this.currentUserName,
     this.partnerName,
+    this.completedExerciseIds = const <String>{},
     this.onExerciseSuggestion,
   });
 
@@ -1073,7 +1126,7 @@ class _StreamingMessageBubble extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Theme.of(
                       context,
-                    ).colorScheme.secondary.withOpacity(0.1),
+                    ).colorScheme.secondary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(
                       18,
                     ).copyWith(bottomLeft: const Radius.circular(4)),
@@ -1095,6 +1148,9 @@ class _StreamingMessageBubble extends StatelessWidget {
                         ExerciseSuggestionCard(
                           exerciseId: suggestion.exerciseId,
                           exerciseName: suggestion.exerciseName,
+                          isCompleted: completedExerciseIds.contains(
+                            suggestion.exerciseId,
+                          ),
                           onStart: () {
                             if (onExerciseSuggestion != null) {
                               onExerciseSuggestion!(suggestion.exerciseId);
