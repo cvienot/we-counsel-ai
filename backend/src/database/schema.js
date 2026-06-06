@@ -283,6 +283,47 @@ const tables = {
         description: 'Query sessions by conversation'
       }
     ]
+  },
+
+  commitments: {
+    tableName: 'we-counsel-commitments',
+    description: 'Small relationship practices saved from coach suggestions',
+    primaryKey: {
+      partitionKey: { name: 'commitmentId', type: 'S' }
+    },
+    attributes: [
+      { name: 'commitmentId', type: 'S', description: 'Unique commitment identifier' },
+      { name: 'coupleId', type: 'S', description: 'Couple this commitment belongs to' },
+      { name: 'conversationId', type: 'S', description: 'Conversation where the commitment was created' },
+      { name: 'sourceMessageId', type: 'S', description: 'Coach message that suggested the commitment' },
+      { name: 'createdBy', type: 'S', description: 'User who saved the commitment' },
+      { name: 'title', type: 'S', description: 'Short commitment title' },
+      { name: 'agreement', type: 'S', description: 'The shared agreement or script' },
+      { name: 'practice', type: 'S', description: 'The specific offline action to try' },
+      { name: 'status', type: 'S', description: 'Commitment status (pending, done, skipped)' },
+      { name: 'dueAt', type: 'S', description: 'Optional ISO due date' },
+      { name: 'createdAt', type: 'S', description: 'ISO timestamp of creation' },
+      { name: 'updatedAt', type: 'S', description: 'ISO timestamp of latest update' }
+    ],
+    globalSecondaryIndexes: [
+      {
+        indexName: 'coupleId-createdAt-index',
+        keys: {
+          partitionKey: { name: 'coupleId', type: 'S' },
+          sortKey: { name: 'createdAt', type: 'S' }
+        },
+        projection: 'ALL',
+        description: 'Query saved commitments by couple'
+      },
+      {
+        indexName: 'conversationId-index',
+        keys: {
+          partitionKey: { name: 'conversationId', type: 'S' }
+        },
+        projection: 'ALL',
+        description: 'Query commitments created from a conversation'
+      }
+    ]
   }
 };
 

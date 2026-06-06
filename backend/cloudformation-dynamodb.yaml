@@ -205,6 +205,39 @@ Resources:
           Projection:
             ProjectionType: ALL
 
+  CommitmentsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: we-counsel-commitments
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: commitmentId
+          AttributeType: S
+        - AttributeName: coupleId
+          AttributeType: S
+        - AttributeName: createdAt
+          AttributeType: S
+        - AttributeName: conversationId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: commitmentId
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: coupleId-createdAt-index
+          KeySchema:
+            - AttributeName: coupleId
+              KeyType: HASH
+            - AttributeName: createdAt
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+        - IndexName: conversationId-index
+          KeySchema:
+            - AttributeName: conversationId
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+
 Outputs:
   UsersTableName:
     Description: Name of the Users table
@@ -254,20 +287,8 @@ Outputs:
     Export:
       Name: WeCounsel-ExerciseSessionsTable
 
-  MessagesTableName:
-    Description: Name of the Messages table
-    Value: !Ref MessagesTable
+  CommitmentsTableName:
+    Description: Name of the Commitments table
+    Value: !Ref CommitmentsTable
     Export:
-      Name: WeCounsel-MessagesTable
-
-  CouplesTableName:
-    Description: Name of the Couples table
-    Value: !Ref CouplesTable
-    Export:
-      Name: WeCounsel-CouplesTable
-
-  InvitationsTableName:
-    Description: Name of the Invitations table
-    Value: !Ref InvitationsTable
-    Export:
-      Name: WeCounsel-InvitationsTable
+      Name: WeCounsel-CommitmentsTable

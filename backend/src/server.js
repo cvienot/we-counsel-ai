@@ -89,6 +89,10 @@ app.use('/api/exercises', exerciseRoutes);
 const progressRoutes = require('./routes/progress');
 app.use('/api/progress', progressRoutes);
 
+// Commitment routes
+const commitmentRoutes = require('./routes/commitments');
+app.use('/api/commitments', commitmentRoutes);
+
 // Test routes (only enabled in test mode)
 if (process.env.ENABLE_TEST_ENDPOINTS === 'true') {
   const testRoutes = require('./routes/test');

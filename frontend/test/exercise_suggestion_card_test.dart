@@ -94,4 +94,55 @@ void main() {
     await tester.tap(find.text('Completed'));
     expect(startedExerciseId, isNull);
   });
+
+  testWidgets('AI commitment markers render as action plan cards', (
+    tester,
+  ) async {
+    final message = Message(
+      messageId: 'message-1',
+      conversationId: 'conversation-1',
+      senderId: 'ai-coach',
+      senderName: 'Coach Sarah (AI Relationship Coach)',
+      senderType: MessageSenderType.ai,
+      content:
+          'This sounds ready to practice.\n\n'
+          '[COMMITMENT:pause-reflect-script]\n'
+          'title=Practice the pause-reflect script\n'
+          'agreement=Pause before explaining, reflect the feeling, then discuss facts.\n'
+          'practice=Try the script once this week on a low-stakes topic.\n'
+          'due_days=7',
+      recipientType: MessageRecipientType.both,
+      timestamp: DateTime(2026, 5, 28, 12).millisecondsSinceEpoch,
+      createdAt: DateTime(2026, 5, 28, 12),
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: MessageBubble(
+            message: message,
+            isCurrentUser: false,
+            currentUserName: 'Alice',
+            partnerName: 'Jordan',
+          ),
+        ),
+      ),
+    );
+
+    expect(find.textContaining('[COMMITMENT:'), findsNothing);
+    expect(find.text('This sounds ready to practice.'), findsOneWidget);
+    expect(find.text('Action plan'), findsOneWidget);
+    expect(find.text('Practice the pause-reflect script'), findsOneWidget);
+    expect(
+      find.textContaining('Pause before explaining', findRichText: true),
+      findsOneWidget,
+    );
+    expect(
+      find.textContaining('Try the script once this week', findRichText: true),
+      findsOneWidget,
+    );
+    expect(find.text('Save commitment'), findsOneWidget);
+  });
 }

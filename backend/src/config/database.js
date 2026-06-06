@@ -43,7 +43,8 @@ const TABLES = {
   INVITATIONS: 'we-counsel-invitations',
   SUBSCRIPTIONS: 'we-counsel-subscriptions',
   EXERCISES: 'we-counsel-exercises',
-  EXERCISE_SESSIONS: 'we-counsel-exercise-sessions'
+  EXERCISE_SESSIONS: 'we-counsel-exercise-sessions',
+  COMMITMENTS: 'we-counsel-commitments'
 };
 
 // Create tables if they don't exist (for development)
@@ -156,6 +157,36 @@ const createTables = async () => {
         }
       ],
       BillingMode: 'PAY_PER_REQUEST'
+    },
+    {
+      TableName: TABLES.COMMITMENTS,
+      KeySchema: [
+        { AttributeName: 'commitmentId', KeyType: 'HASH' }
+      ],
+      AttributeDefinitions: [
+        { AttributeName: 'commitmentId', AttributeType: 'S' },
+        { AttributeName: 'coupleId', AttributeType: 'S' },
+        { AttributeName: 'createdAt', AttributeType: 'S' },
+        { AttributeName: 'conversationId', AttributeType: 'S' }
+      ],
+      GlobalSecondaryIndexes: [
+        {
+          IndexName: 'coupleId-createdAt-index',
+          KeySchema: [
+            { AttributeName: 'coupleId', KeyType: 'HASH' },
+            { AttributeName: 'createdAt', KeyType: 'RANGE' }
+          ],
+          Projection: { ProjectionType: 'ALL' }
+        },
+        {
+          IndexName: 'conversationId-index',
+          KeySchema: [
+            { AttributeName: 'conversationId', KeyType: 'HASH' }
+          ],
+          Projection: { ProjectionType: 'ALL' }
+        }
+      ],
+      BillingMode: 'PAY_PER_REQUEST'
     }
   ];
 
@@ -187,4 +218,3 @@ module.exports = {
   ScanCommand: require('@aws-sdk/lib-dynamodb').ScanCommand,
   TransactWriteCommand: require('@aws-sdk/lib-dynamodb').TransactWriteCommand,
 };
-

@@ -442,6 +442,60 @@ class ApiService {
     }
   }
 
+  // Commitment endpoints
+  Future<Map<String, dynamic>> createCommitment({
+    required String conversationId,
+    String? sourceMessageId,
+    required String title,
+    required String agreement,
+    required String practice,
+    String? dueAt,
+  }) async {
+    try {
+      final response = await _dio.post(
+        '/commitments',
+        data: {
+          'conversationId': conversationId,
+          if (sourceMessageId != null) 'sourceMessageId': sourceMessageId,
+          'title': title,
+          'agreement': agreement,
+          'practice': practice,
+          if (dueAt != null) 'dueAt': dueAt,
+        },
+      );
+      return response.data;
+    } on DioException catch (e) {
+      throw Exception(_extractErrorMessage(e));
+    }
+  }
+
+  Future<Map<String, dynamic>> updateCommitmentStatus({
+    required String commitmentId,
+    required String status,
+  }) async {
+    try {
+      final response = await _dio.patch(
+        '/commitments/$commitmentId',
+        data: {'status': status},
+      );
+      return response.data;
+    } on DioException catch (e) {
+      throw Exception(_extractErrorMessage(e));
+    }
+  }
+
+  Future<Map<String, dynamic>> getCommitments({String? status}) async {
+    try {
+      final response = await _dio.get(
+        '/commitments',
+        queryParameters: {if (status != null) 'status': status},
+      );
+      return response.data;
+    } on DioException catch (e) {
+      throw Exception(_extractErrorMessage(e));
+    }
+  }
+
   Future<Map<String, dynamic>> deleteConversation(String conversationId) async {
     try {
       final response = await _dio.delete('/conversations/$conversationId');

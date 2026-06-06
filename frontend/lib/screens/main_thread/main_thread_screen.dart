@@ -6,6 +6,7 @@ import '../../providers/conversation_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../widgets/message_bubble.dart';
 import '../../widgets/mention_text.dart';
+import '../../widgets/commitment_suggestion_card.dart';
 import '../../widgets/exercise_suggestion_card.dart';
 import '../../widgets/active_exercise_banner.dart';
 import '../../services/exercise_service.dart';
@@ -711,6 +712,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                           return _StreamingMessageBubble(
                             content: streamingContent,
                             isStreaming: true,
+                            conversationId: mainThread?.conversationId,
                             currentUserName: currentUser?.firstName,
                             partnerName: currentUser?.partner?.firstName,
                             completedExerciseIds: _completedExerciseIds,
@@ -1067,6 +1069,7 @@ class _TypingAnimationState extends State<_TypingAnimation>
 class _StreamingMessageBubble extends StatelessWidget {
   final String content;
   final bool isStreaming;
+  final String? conversationId;
   final String? currentUserName;
   final String? partnerName;
   final Set<String> completedExerciseIds;
@@ -1075,6 +1078,7 @@ class _StreamingMessageBubble extends StatelessWidget {
   const _StreamingMessageBubble({
     required this.content,
     required this.isStreaming,
+    this.conversationId,
     this.currentUserName,
     this.partnerName,
     this.completedExerciseIds = const <String>{},
@@ -1084,7 +1088,13 @@ class _StreamingMessageBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final suggestion = ExerciseSuggestionCard.parseFromMessage(content);
-    final displayContent = suggestion?.cleanContent ?? content;
+    final commitmentSuggestion = CommitmentSuggestionCard.parseFromMessage(
+      suggestion?.cleanContent ?? content,
+    );
+    final displayContent =
+        commitmentSuggestion?.cleanContent ??
+        suggestion?.cleanContent ??
+        content;
 
     return Padding(
       padding: const EdgeInsets.only(
@@ -1157,8 +1167,16 @@ class _StreamingMessageBubble extends StatelessWidget {
                             }
                           },
                         ),
+                      if (commitmentSuggestion != null &&
+                          conversationId != null)
+                        CommitmentSuggestionCard(
+                          suggestion: commitmentSuggestion,
+                          conversationId: conversationId!,
+                        ),
                       if (isStreaming) ...[
-                        if (displayContent.isNotEmpty || suggestion != null)
+                        if (displayContent.isNotEmpty ||
+                            suggestion != null ||
+                            commitmentSuggestion != null)
                           const SizedBox(height: 8),
                         Row(
                           mainAxisSize: MainAxisSize.min,

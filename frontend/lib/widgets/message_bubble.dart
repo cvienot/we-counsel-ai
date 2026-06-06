@@ -4,6 +4,7 @@ import '../l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:markdown/markdown.dart' as md;
+import 'commitment_suggestion_card.dart';
 import 'exercise_suggestion_card.dart';
 
 class MessageBubble extends StatelessWidget {
@@ -182,6 +183,13 @@ class MessageBubble extends StatelessWidget {
                           },
                         ),
                       ],
+                      if (_getCommitmentSuggestion() != null) ...[
+                        CommitmentSuggestionCard(
+                          suggestion: _getCommitmentSuggestion()!,
+                          conversationId: message.conversationId,
+                          sourceMessageId: message.messageId,
+                        ),
+                      ],
                       const SizedBox(height: 4),
                       Text(
                         DateFormat('HH:mm').format(
@@ -268,13 +276,28 @@ class MessageBubble extends StatelessWidget {
     return ExerciseSuggestionCard.parseFromMessage(message.content);
   }
 
-  /// Get message content with exercise marker removed
+  CommitmentSuggestion? _getCommitmentSuggestion() {
+    final isAI = message.senderType == MessageSenderType.ai;
+    if (!isAI) return null;
+
+    return CommitmentSuggestionCard.parseFromMessage(message.content);
+  }
+
+  /// Get message content with structured action markers removed
   String _getCleanContent() {
-    final suggestion = _getExerciseSuggestion();
-    if (suggestion != null) {
-      return suggestion.cleanContent;
+    var content = message.content;
+    final exerciseSuggestion = ExerciseSuggestionCard.parseFromMessage(content);
+    if (exerciseSuggestion != null) {
+      content = exerciseSuggestion.cleanContent;
     }
-    return message.content;
+
+    final commitmentSuggestion = CommitmentSuggestionCard.parseFromMessage(
+      content,
+    );
+    if (commitmentSuggestion != null) {
+      content = commitmentSuggestion.cleanContent;
+    }
+    return content;
   }
 }
 

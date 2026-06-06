@@ -92,6 +92,19 @@ RESPONSE FORMAT & STYLE:
 - Use Markdown formatting for emphasis: **bold** for key terms, *italic* for emotional nuance
 - FORBIDDEN: Writing numbered step-by-step instructions (use [EXERCISE:id] instead)
 
+WRAP & ACT:
+- When both partners have reached a concrete agreement or repeated the same insight several times after an exercise, stop deepening the same point.
+- Summarize the agreement briefly and propose one small offline practice.
+- If the conversation is ready for action, end with this exact structured marker:
+
+[COMMITMENT:short-slug]
+title=Short action title
+agreement=One sentence describing what they agreed to try
+practice=One small thing to try offline this week
+due_days=7
+
+- Do not use the commitment marker for crisis, active conflict escalation, or vague agreement. Use it only when both partners have participated and the next useful step is practice.
+
 EXAMPLE RESPONSE FORMAT:
 "💭 @Alice, I notice frustration in your words about feeling unheard when you share your day.
 
@@ -175,9 +188,18 @@ NEVER refer to either partner in third person ("he", "she", "your partner") - th
       }
     }
 
+    const shouldSuggestCommitment = detectCommitmentOpportunity(messages, fullResponse, recentExercises);
+    if (shouldSuggestCommitment && !fullResponse.includes('[COMMITMENT:') && !fullResponse.includes('[EXERCISE:')) {
+      const commitmentSuggestion = buildCommitmentSuggestion(messages);
+      console.log(`🧭 Conversation ready for action - injecting commitment ${commitmentSuggestion.slug}`);
+      const marker = `\n\n[COMMITMENT:${commitmentSuggestion.slug}]\ntitle=${commitmentSuggestion.title}\nagreement=${commitmentSuggestion.agreement}\npractice=${commitmentSuggestion.practice}\ndue_days=7`;
+      fullResponse += marker;
+      await onChunk(marker);
+    }
+
     // Fallback: If AI didn't suggest exercise but should have, inject it
     const shouldSuggestExercise = detectExerciseOpportunity(messages, fullResponse, recentExercises);
-    if (shouldSuggestExercise && !fullResponse.includes('[EXERCISE:')) {
+    if (shouldSuggestExercise && !fullResponse.includes('[EXERCISE:') && !fullResponse.includes('[COMMITMENT:')) {
       const exerciseToSuggest = pickBestExercise(messages, recentExercises);
       console.log(`⚠️ AI missed exercise opportunity - injecting ${exerciseToSuggest.id} suggestion`);
       const exerciseSuggestion = `\n\n[EXERCISE:${exerciseToSuggest.id}] ${exerciseToSuggest.suggestion}`;
@@ -193,6 +215,94 @@ NEVER refer to either partner in third person ("he", "she", "your partner") - th
     onError(error);
     throw new Error('Failed to generate coach response');
   }
+};
+
+const detectCommitmentOpportunity = (messages, aiResponse, recentExercises) => {
+  if (!recentExercises || recentExercises.length === 0) return false;
+  if (messages.some(m => String(m.content || '').includes('[COMMITMENT:'))) return false;
+
+  const latestCompletedExercise = recentExercises.find(exercise => exercise.completedAt);
+  if (!latestCompletedExercise) return false;
+
+  const completedAtMs = new Date(latestCompletedExercise.completedAt).getTime();
+  if (!Number.isFinite(completedAtMs)) return false;
+
+  const seenHumanMessages = new Set();
+  const humanMessagesSinceExercise = messages.filter(message => {
+    const timestamp = message.timestamp || new Date(message.createdAt || 0).getTime();
+    if (message.senderType === 'ai' || timestamp <= completedAtMs) return false;
+
+    const key = message.messageId || `${message.senderId || message.senderName}:${timestamp}:${message.content}`;
+    if (seenHumanMessages.has(key)) return false;
+    seenHumanMessages.add(key);
+    return true;
+  });
+
+  if (humanMessagesSinceExercise.length < 4) return false;
+
+  const senders = new Set(
+    humanMessagesSinceExercise
+      .map(message => message.senderId || message.senderName)
+      .filter(Boolean)
+  );
+  if (senders.size < 2) return false;
+
+  const recentText = humanMessagesSinceExercise
+    .slice(-8)
+    .map(message => String(message.content || '').toLowerCase())
+    .join(' ');
+
+  const convergenceSignals = [
+    'i can do that',
+    'that feels workable',
+    'that sounds fair',
+    'let us practice',
+    'let\'s practice',
+    'this week',
+    'script',
+    'try it',
+    'i can promise',
+    'i want us to try',
+    'small topic',
+    'we can',
+    'we could'
+  ];
+
+  const signalCount = convergenceSignals.filter(signal => recentText.includes(signal)).length;
+  if (signalCount < 2) return false;
+
+  const responseText = String(aiResponse || '').toLowerCase();
+  return (
+    responseText.includes('practice') ||
+    responseText.includes('agreement') ||
+    responseText.includes('try') ||
+    responseText.includes('this week') ||
+    signalCount >= 3
+  );
+};
+
+const buildCommitmentSuggestion = (messages) => {
+  const recentText = messages
+    .filter(message => message.senderType !== 'ai')
+    .slice(-8)
+    .map(message => String(message.content || '').toLowerCase())
+    .join(' ');
+
+  if (recentText.includes('pause') || recentText.includes('reflect')) {
+    return {
+      slug: 'pause-reflect-script',
+      title: 'Practice the pause-reflect script',
+      agreement: 'Pause before explaining, reflect the feeling, reassure both sides will be heard, then discuss facts.',
+      practice: 'Try the script once this week on a low-stakes topic and come back with what happened.'
+    };
+  }
+
+  return {
+    slug: 'weekly-small-practice',
+    title: 'Try one small practice this week',
+    agreement: 'Use the shared agreement you just named before continuing the same discussion.',
+    practice: 'Try it once this week in a low-pressure moment and return to reflect on what worked.'
+  };
 };
 
 // Helper function to detect if exercise should be suggested
@@ -428,5 +538,7 @@ module.exports = {
   generateCoachResponse,
   summarizeConversation,
   detectCrisisKeywords,
-  getCrisisResponse
+  getCrisisResponse,
+  detectCommitmentOpportunity,
+  buildCommitmentSuggestion
 };
