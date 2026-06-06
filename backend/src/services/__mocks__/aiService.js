@@ -60,6 +60,10 @@ function generateMockResponse(userMessage) {
   if (lowerMessage.includes('communication')) {
     return "Communication is fundamental to any healthy relationship. I appreciate you bringing this up. Let's explore what effective communication looks like for you both and identify some strategies that might help.";
   }
+
+  if (lowerMessage.includes('commitment e2e')) {
+    return "You have both landed on something concrete enough to practice outside this thread.\n\n[COMMITMENT:pause-reflect-script]\ntitle=Practice the pause-reflect script\nagreement=Pause before explaining, reflect the feeling, reassure both sides will be heard, then discuss facts.\npractice=Try the script once this week on a low-stakes topic and come back with what happened.\ndue_days=7";
+  }
   
   if (lowerMessage.includes('thank')) {
     return "You're welcome! I'm here to support your communication. Remember, working on your relationship is a journey, and you're taking positive steps by being here.";

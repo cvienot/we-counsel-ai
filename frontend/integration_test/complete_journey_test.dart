@@ -1586,6 +1586,256 @@ void main() {
       print('');
     });
 
+    testWidgets('Commitment action card can be saved and marked done', (
+      WidgetTester tester,
+    ) async {
+      print('\n🧭 Testing Commitment Action Card Flow');
+
+      final ts = DateTime.now().millisecondsSinceEpoch;
+      final email1 = 'commit-user1-$ts@test.com';
+      final email2 = 'commit-user2-$ts@test.com';
+      const password = 'Test123!';
+
+      // ============================================
+      // STEP 1: Create two users and connect them
+      // ============================================
+      print('\n📝 Step 1: Creating commitment test couple');
+
+      final u1Res = await http.post(
+        Uri.parse('$apiUrl/api/auth/register'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'email': email1,
+          'password': password,
+          'firstName': 'Mia',
+          'lastName': 'TestCommit',
+          'termsAccepted': true,
+          'subscriptionTier': 'premium',
+        }),
+      );
+      expect(u1Res.statusCode, 201);
+      final u1Data = jsonDecode(u1Res.body);
+      final u1Token = u1Data['token'];
+      final u1Id = u1Data['user']['userId'];
+
+      final u2Res = await http.post(
+        Uri.parse('$apiUrl/api/auth/register'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'email': email2,
+          'password': password,
+          'firstName': 'Noah',
+          'lastName': 'TestCommit',
+          'termsAccepted': true,
+          'subscriptionTier': 'premium',
+        }),
+      );
+      expect(u2Res.statusCode, 201);
+      final u2Data = jsonDecode(u2Res.body);
+      final u2Id = u2Data['user']['userId'];
+
+      final connectRes = await http.post(
+        Uri.parse('$apiUrl/api/test/connect-partners'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'user1Id': u1Id,
+          'user2Id': u2Id,
+          'subscriptionTier': 'premium',
+        }),
+      );
+      expect(connectRes.statusCode, 200);
+      print('   ✅ Commitment test couple connected');
+
+      // ============================================
+      // STEP 2: Seed main thread with a mock commitment suggestion
+      // ============================================
+      print('\n💬 Step 2: Seeding main thread with commitment suggestion');
+
+      final mainThreadRes = await http.get(
+        Uri.parse('$apiUrl/api/conversations/main-thread'),
+        headers: {'Authorization': 'Bearer $u1Token'},
+      );
+      expect([200, 201], contains(mainThreadRes.statusCode));
+      final mainThreadData = jsonDecode(mainThreadRes.body);
+      final conversationId =
+          mainThreadData['mainThread']['conversationId'] as String;
+
+      final messageRes = await http.post(
+        Uri.parse('$apiUrl/api/messages/$conversationId/ai-stream'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $u1Token',
+        },
+        body: jsonEncode({
+          'content': 'commitment e2e trigger',
+          'recipientType': 'both',
+        }),
+      );
+      expect(messageRes.statusCode, 201);
+
+      Map<String, dynamic>? aiCommitmentMessage;
+      for (var attempt = 0; attempt < 40; attempt++) {
+        final messagesRes = await http.get(
+          Uri.parse('$apiUrl/api/messages/$conversationId'),
+          headers: {'Authorization': 'Bearer $u1Token'},
+        );
+        expect(messagesRes.statusCode, 200);
+        final messagesData = jsonDecode(messagesRes.body);
+        final messages = messagesData['messages'] as List;
+        final matches = messages.where(
+          (message) =>
+              message['senderType'] == 'ai' &&
+              (message['content'] as String).contains('[COMMITMENT:'),
+        );
+        if (matches.isNotEmpty) {
+          aiCommitmentMessage = Map<String, dynamic>.from(matches.last as Map);
+          break;
+        }
+        await Future.delayed(const Duration(milliseconds: 500));
+      }
+
+      expect(
+        aiCommitmentMessage,
+        isNotNull,
+        reason: 'Mock AI should persist a commitment marker message',
+      );
+      final sourceMessageId = aiCommitmentMessage!['messageId'] as String;
+      final expectedCommitmentId = 'commitment-$sourceMessageId';
+      print('   ✅ Commitment marker message persisted: $sourceMessageId');
+
+      // ============================================
+      // STEP 3: Log in through the app and verify the card renders
+      // ============================================
+      print('\n📱 Step 3: Verifying commitment card in the UI');
+
+      app.main();
+      await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
+
+      final foundLogin = await pumpUntilFound(
+        tester,
+        find.text('Don\'t have an account? Sign up'),
+        timeout: const Duration(seconds: 10),
+      );
+      expect(foundLogin, isTrue, reason: 'Login screen should appear');
+
+      final loginFields = find.byType(TextFormField);
+      await tester.enterText(loginFields.at(0), email1);
+      await tester.enterText(loginFields.at(1), password);
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Sign In'));
+      await settleWithTimeout(tester, timeout: const Duration(seconds: 8));
+
+      final cardFound = await pumpUntilFound(
+        tester,
+        find.text('Action plan'),
+        timeout: const Duration(seconds: 20),
+      );
+      expect(cardFound, isTrue, reason: 'Commitment card should render');
+      expect(find.textContaining('[COMMITMENT:'), findsNothing);
+      expect(find.text('Practice the pause-reflect script'), findsOneWidget);
+      expect(find.text('Save commitment'), findsOneWidget);
+      print('   ✅ Commitment card rendered and raw marker hidden');
+
+      // ============================================
+      // STEP 4: Save the commitment from the UI
+      // ============================================
+      print('\n💾 Step 4: Saving commitment from the UI');
+
+      await tester.ensureVisible(find.text('Save commitment'));
+      await tester.tap(find.text('Save commitment'));
+      await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
+
+      final savedFound = await pumpUntilFound(
+        tester,
+        find.text('Saved'),
+        timeout: const Duration(seconds: 10),
+      );
+      expect(savedFound, isTrue, reason: 'Save button should show Saved');
+      expect(find.text('Mark done'), findsOneWidget);
+
+      Map<String, dynamic>? savedCommitment;
+      for (var attempt = 0; attempt < 20; attempt++) {
+        final commitmentsRes = await http.get(
+          Uri.parse('$apiUrl/api/commitments?status=pending'),
+          headers: {'Authorization': 'Bearer $u1Token'},
+        );
+        expect(commitmentsRes.statusCode, 200);
+        final commitments =
+            jsonDecode(commitmentsRes.body)['commitments'] as List;
+        final matches = commitments.where(
+          (commitment) => commitment['commitmentId'] == expectedCommitmentId,
+        );
+        if (matches.isNotEmpty) {
+          savedCommitment = Map<String, dynamic>.from(matches.first as Map);
+          break;
+        }
+        await Future.delayed(const Duration(milliseconds: 300));
+      }
+
+      expect(
+        savedCommitment,
+        isNotNull,
+        reason: 'Saved commitment should be available through the API',
+      );
+      expect(savedCommitment!['title'], 'Practice the pause-reflect script');
+      expect(savedCommitment['sourceMessageId'], sourceMessageId);
+      expect(savedCommitment['status'], 'pending');
+      print('   ✅ Commitment saved and visible via API');
+
+      // ============================================
+      // STEP 5: Mark the commitment done from the UI
+      // ============================================
+      print('\n✅ Step 5: Marking commitment done from the UI');
+
+      await tester.ensureVisible(find.text('Mark done'));
+      await tester.tap(find.text('Mark done'));
+      await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
+
+      final doneFound = await pumpUntilFound(
+        tester,
+        find.text('Done'),
+        timeout: const Duration(seconds: 10),
+      );
+      expect(doneFound, isTrue, reason: 'Card should show Done state');
+
+      Map<String, dynamic>? doneCommitment;
+      for (var attempt = 0; attempt < 20; attempt++) {
+        final commitmentsRes = await http.get(
+          Uri.parse('$apiUrl/api/commitments?status=done'),
+          headers: {'Authorization': 'Bearer $u1Token'},
+        );
+        expect(commitmentsRes.statusCode, 200);
+        final commitments =
+            jsonDecode(commitmentsRes.body)['commitments'] as List;
+        final matches = commitments.where(
+          (commitment) => commitment['commitmentId'] == expectedCommitmentId,
+        );
+        if (matches.isNotEmpty) {
+          doneCommitment = Map<String, dynamic>.from(matches.first as Map);
+          break;
+        }
+        await Future.delayed(const Duration(milliseconds: 300));
+      }
+
+      expect(
+        doneCommitment,
+        isNotNull,
+        reason: 'Done commitment should be available through the API',
+      );
+      expect(doneCommitment!['status'], 'done');
+
+      print('');
+      print('🎉 ═══════════════════════════════════════════════════════');
+      print('🎉  COMMITMENT ACTION CARD TEST PASSED!');
+      print('🎉 ═══════════════════════════════════════════════════════');
+      print('');
+      print('✅ Mock AI persisted a structured commitment marker');
+      print('✅ Main thread rendered the marker as an action card');
+      print('✅ Raw marker text was hidden');
+      print('✅ Save button created a pending commitment');
+      print('✅ Mark done updated the commitment status');
+      print('');
+    });
+
     testWidgets('Progress dashboard displays correct stats after activity', (
       WidgetTester tester,
     ) async {
