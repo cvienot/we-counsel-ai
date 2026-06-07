@@ -75,16 +75,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      body: ResponsiveCenter(
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+          child: ResponsiveCenter(
             child: CtrlEnterSubmit(
               onSubmit: _handleLogin,
               child: Form(
                 key: _formKey,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Icon(
@@ -104,7 +103,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       style: Theme.of(context).textTheme.bodyMedium,
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 48),
+                    const SizedBox(height: 28),
+                    const _MotivationSection(),
+                    const SizedBox(height: 32),
                     TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
@@ -172,6 +173,116 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _MotivationSection extends StatelessWidget {
+  const _MotivationSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: colorScheme.primaryContainer.withValues(alpha: 0.24),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: colorScheme.primary.withValues(alpha: 0.18)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.whyAiForCouplesTitle,
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w700,
+              color: colorScheme.onSurface,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            l10n.whyAiForCouplesIntro,
+            style: theme.textTheme.bodyMedium?.copyWith(height: 1.45),
+          ),
+          const SizedBox(height: 16),
+          _MotivationPoint(
+            icon: Icons.groups_2_outlined,
+            title: l10n.whyAiForCouplesSharedSpaceTitle,
+            body: l10n.whyAiForCouplesSharedSpaceText,
+          ),
+          const SizedBox(height: 14),
+          _MotivationPoint(
+            icon: Icons.favorite_border,
+            title: l10n.whyAiForCouplesTechTitle,
+            body: l10n.whyAiForCouplesTechText,
+          ),
+          const SizedBox(height: 14),
+          Text(
+            l10n.whyAiForCouplesSafety,
+            style: theme.textTheme.bodySmall?.copyWith(
+              height: 1.4,
+              color: colorScheme.onSurface.withValues(alpha: 0.72),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MotivationPoint extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String body;
+
+  const _MotivationPoint({
+    required this.icon,
+    required this.title,
+    required this.body,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 34,
+          height: 34,
+          decoration: BoxDecoration(
+            color: colorScheme.primary.withValues(alpha: 0.10),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(icon, size: 19, color: colorScheme.primary),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  height: 1.25,
+                ),
+              ),
+              const SizedBox(height: 3),
+              Text(
+                body,
+                style: theme.textTheme.bodySmall?.copyWith(height: 1.4),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

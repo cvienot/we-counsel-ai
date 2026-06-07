@@ -446,6 +446,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get strengthenRelationship => 'Strengthen your relationship together';
 
   @override
+  String get whyAiForCouplesTitle => 'Why AI for couples?';
+
+  @override
+  String get whyAiForCouplesIntro =>
+      'Technology often pulls partners into separate worlds. We Connect is built for the opposite: a shared space where both voices can be heard.';
+
+  @override
+  String get whyAiForCouplesSharedSpaceTitle => 'Designed around the couple';
+
+  @override
+  String get whyAiForCouplesSharedSpaceText =>
+      'The coach sees the conversation as something you create together. It helps slow down the pattern, reflect both perspectives, and avoid becoming one person\'s echo chamber.';
+
+  @override
+  String get whyAiForCouplesTechTitle => 'Technology that brings you back';
+
+  @override
+  String get whyAiForCouplesTechText =>
+      'Your phone can be more than a distraction. Used intentionally, it can become a place to pause, practice, and return to each other.';
+
+  @override
+  String get whyAiForCouplesSafety =>
+      'AI coaching does not replace therapy and does not take sides. It helps couples talk with more care and turn recurring patterns into small next steps.';
+
+  @override
   String get pleaseEnterEmail => 'Please enter your email';
 
   @override

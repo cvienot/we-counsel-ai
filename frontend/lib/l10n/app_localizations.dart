@@ -910,6 +910,48 @@ abstract class AppLocalizations {
   /// **'Strengthen your relationship together'**
   String get strengthenRelationship;
 
+  /// No description provided for @whyAiForCouplesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Why AI for couples?'**
+  String get whyAiForCouplesTitle;
+
+  /// No description provided for @whyAiForCouplesIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Technology often pulls partners into separate worlds. We Connect is built for the opposite: a shared space where both voices can be heard.'**
+  String get whyAiForCouplesIntro;
+
+  /// No description provided for @whyAiForCouplesSharedSpaceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Designed around the couple'**
+  String get whyAiForCouplesSharedSpaceTitle;
+
+  /// No description provided for @whyAiForCouplesSharedSpaceText.
+  ///
+  /// In en, this message translates to:
+  /// **'The coach sees the conversation as something you create together. It helps slow down the pattern, reflect both perspectives, and avoid becoming one person\'s echo chamber.'**
+  String get whyAiForCouplesSharedSpaceText;
+
+  /// No description provided for @whyAiForCouplesTechTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Technology that brings you back'**
+  String get whyAiForCouplesTechTitle;
+
+  /// No description provided for @whyAiForCouplesTechText.
+  ///
+  /// In en, this message translates to:
+  /// **'Your phone can be more than a distraction. Used intentionally, it can become a place to pause, practice, and return to each other.'**
+  String get whyAiForCouplesTechText;
+
+  /// No description provided for @whyAiForCouplesSafety.
+  ///
+  /// In en, this message translates to:
+  /// **'AI coaching does not replace therapy and does not take sides. It helps couples talk with more care and turn recurring patterns into small next steps.'**
+  String get whyAiForCouplesSafety;
+
   /// No description provided for @pleaseEnterEmail.
   ///
   /// In en, this message translates to:

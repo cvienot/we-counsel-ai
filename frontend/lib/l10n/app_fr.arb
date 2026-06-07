@@ -159,6 +159,13 @@
 
   "welcomeToApp": "Bienvenue sur We Connect",
   "strengthenRelationship": "Renforcez votre relation ensemble",
+  "whyAiForCouplesTitle": "Pourquoi l'IA pour les couples ?",
+  "whyAiForCouplesIntro": "La technologie éloigne souvent les partenaires dans des mondes séparés. We Connect est conçu pour l'inverse : un espace partagé où les deux voix peuvent être entendues.",
+  "whyAiForCouplesSharedSpaceTitle": "Conçu autour du couple",
+  "whyAiForCouplesSharedSpaceText": "Le coach voit la conversation comme quelque chose que vous construisez ensemble. Il aide à ralentir les schémas, refléter les deux points de vue et éviter de devenir l'écho d'une seule personne.",
+  "whyAiForCouplesTechTitle": "Une technologie qui vous rapproche",
+  "whyAiForCouplesTechText": "Votre téléphone peut être autre chose qu'une distraction. Utilisé avec intention, il peut devenir un lieu pour faire une pause, pratiquer et revenir l'un vers l'autre.",
+  "whyAiForCouplesSafety": "Le coaching par IA ne remplace pas une thérapie et ne prend pas parti. Il aide les couples à parler avec plus d'attention et à transformer les schémas récurrents en petites prochaines étapes.",
   "pleaseEnterEmail": "Veuillez entrer votre e-mail",
   "pleaseEnterPassword": "Veuillez entrer votre mot de passe",
   "signIn": "Se Connecter",

@@ -452,6 +452,32 @@ class AppLocalizationsEs extends AppLocalizations {
   String get strengthenRelationship => 'Fortalece tu relación juntos';
 
   @override
+  String get whyAiForCouplesTitle => '¿Por qué IA para parejas?';
+
+  @override
+  String get whyAiForCouplesIntro =>
+      'La tecnología a menudo lleva a cada persona a mundos separados. We Connect está pensado para lo contrario: un espacio compartido donde ambas voces pueden ser escuchadas.';
+
+  @override
+  String get whyAiForCouplesSharedSpaceTitle =>
+      'Diseñado alrededor de la pareja';
+
+  @override
+  String get whyAiForCouplesSharedSpaceText =>
+      'El coach ve la conversación como algo que construyen juntos. Ayuda a bajar el ritmo, reflejar ambas perspectivas y evitar convertirse en la caja de resonancia de una sola persona.';
+
+  @override
+  String get whyAiForCouplesTechTitle => 'Tecnología que vuelve a unir';
+
+  @override
+  String get whyAiForCouplesTechText =>
+      'Tu teléfono puede ser más que una distracción. Usado con intención, puede convertirse en un lugar para pausar, practicar y volver el uno hacia el otro.';
+
+  @override
+  String get whyAiForCouplesSafety =>
+      'El coaching con IA no reemplaza la terapia y no toma partido. Ayuda a las parejas a hablar con más cuidado y convertir patrones repetidos en pequeños próximos pasos.';
+
+  @override
   String get pleaseEnterEmail => 'Por favor, ingresa tu correo electrónico';
 
   @override
