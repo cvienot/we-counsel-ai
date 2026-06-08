@@ -120,11 +120,14 @@ router.post('/create-checkout-session', authenticateToken, async (req, res) => {
 
     // Create checkout session
     const baseUrl = process.env.FRONTEND_URL || 'http://localhost:8080';
+    const successUrl = `${baseUrl}/payment/success?session_id={CHECKOUT_SESSION_ID}` +
+      `&tier=${encodeURIComponent(tier)}` +
+      `&billing_period=${encodeURIComponent(billingPeriod)}`;
     const session = await stripeService.createCheckoutSession({
       customerId,
       priceId,
       coupleId: user.coupleId,
-      successUrl: `${baseUrl}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
+      successUrl,
       cancelUrl: `${baseUrl}/settings/subscription`,
       tier,
       billingPeriod

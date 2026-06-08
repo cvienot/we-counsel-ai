@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/language_provider.dart';
 import '../../l10n/app_localizations.dart';
+import '../../services/analytics_service.dart';
 import '../../services/attribution_service.dart';
 import '../../widgets/ctrl_enter_submit.dart';
 import '../../widgets/responsive_layout.dart';
@@ -99,6 +100,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               subscriptionTier: selectedPlan,
               attribution: attribution,
             );
+
+        AnalyticsService.trackSignUpComplete(
+          method: 'email',
+          language: currentLanguage,
+          planTier: selectedPlan,
+          hasInvitation: pendingInvitation != null,
+        );
       } catch (e) {
         if (mounted) {
           final l10n = AppLocalizations.of(context)!;
