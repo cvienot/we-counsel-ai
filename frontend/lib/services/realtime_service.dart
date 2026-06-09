@@ -40,12 +40,17 @@ class RealtimeService extends ChangeNotifier {
   int _reconnectAttempts = 0;
   static const int _maxReconnectAttempts = 5;
   static const Duration _reconnectDelay = Duration(seconds: 2);
+  static const Duration _connectTimeout = Duration(seconds: 10);
 
   // Stream controllers for different event types
-  final StreamController<Message> _newMessageController = StreamController<Message>.broadcast();
-  final StreamController<Map<String, dynamic>> _typingController = StreamController<Map<String, dynamic>>.broadcast();
-  final StreamController<Map<String, dynamic>> _aiStreamController = StreamController<Map<String, dynamic>>.broadcast();
-  final StreamController<String> _connectionController = StreamController<String>.broadcast();
+  final StreamController<Message> _newMessageController =
+      StreamController<Message>.broadcast();
+  final StreamController<Map<String, dynamic>> _typingController =
+      StreamController<Map<String, dynamic>>.broadcast();
+  final StreamController<Map<String, dynamic>> _aiStreamController =
+      StreamController<Map<String, dynamic>>.broadcast();
+  final StreamController<String> _connectionController =
+      StreamController<String>.broadcast();
 
   // Getters for streams
   Stream<Message> get newMessageStream => _newMessageController.stream;
@@ -72,7 +77,7 @@ class RealtimeService extends ChangeNotifier {
       debugPrint('RealtimeService: Connecting to $uri');
 
       _httpClient = http.Client();
-      
+
       final request = http.Request('GET', uri);
       request.headers.addAll({
         'Authorization': 'Bearer $token',
@@ -81,8 +86,10 @@ class RealtimeService extends ChangeNotifier {
         'Connection': 'keep-alive',
       });
 
-      final response = await _httpClient!.send(request);
-      
+      final response = await _httpClient!
+          .send(request)
+          .timeout(_connectTimeout);
+
       if (response.statusCode == 200) {
         _isConnected = true;
         _reconnectAttempts = 0;
@@ -102,9 +109,10 @@ class RealtimeService extends ChangeNotifier {
       } else {
         throw Exception('Failed to connect: ${response.statusCode}');
       }
-
     } catch (error) {
       debugPrint('RealtimeService: Connection error: $error');
+      _httpClient?.close();
+      _httpClient = null;
       _handleConnectionError();
     }
   }
@@ -138,7 +146,9 @@ class RealtimeService extends ChangeNotifier {
             break;
 
           default:
-            debugPrint('RealtimeService: Unknown event type: ${realtimeEvent.type}');
+            debugPrint(
+              'RealtimeService: Unknown event type: ${realtimeEvent.type}',
+            );
         }
       }
     } catch (error) {
@@ -236,8 +246,10 @@ class RealtimeService extends ChangeNotifier {
   // Helper methods for sending events
   Future<void> sendTypingStatus(String conversationId, bool isTyping) async {
     try {
-      debugPrint('📤 SENDING TYPING STATUS: conversationId=$conversationId, isTyping=$isTyping');
-      
+      debugPrint(
+        '📤 SENDING TYPING STATUS: conversationId=$conversationId, isTyping=$isTyping',
+      );
+
       final token = await AuthService().getToken();
       if (token == null) {
         debugPrint('❌ No auth token available for typing status');
@@ -247,16 +259,16 @@ class RealtimeService extends ChangeNotifier {
       final response = await _makeHttpRequest(
         'POST',
         '/messages/$conversationId/typing',
-        body: {
-          'isTyping': isTyping,
-        },
+        body: {'isTyping': isTyping},
         headers: {'Authorization': 'Bearer $token'},
       );
 
       if (response.statusCode == 200) {
         debugPrint('✅ TYPING STATUS SENT SUCCESSFULLY: ${response.body}');
       } else {
-        debugPrint('❌ FAILED TO SEND TYPING STATUS: ${response.statusCode} - ${response.body}');
+        debugPrint(
+          '❌ FAILED TO SEND TYPING STATUS: ${response.statusCode} - ${response.body}',
+        );
       }
     } catch (error) {
       debugPrint('💥 ERROR SENDING TYPING STATUS: $error');

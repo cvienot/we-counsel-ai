@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../config/environment.dart';
 import '../models/user.dart';
@@ -37,6 +39,7 @@ class AuthState {
 class AuthNotifier extends StateNotifier<AuthState> {
   final ApiService _apiService;
   final RealtimeService _realtimeService = RealtimeService();
+  static const Duration _startupTokenReadTimeout = Duration(seconds: 4);
 
   AuthNotifier(this._apiService) : super(const AuthState()) {
     _initializeAuth();
@@ -47,7 +50,18 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(isLoading: true);
 
     try {
-      final token = await _apiService.getToken();
+      final tokenRead = _apiService.getToken();
+      final token = Environment.isProduction
+          ? await tokenRead.timeout(
+              _startupTokenReadTimeout,
+              onTimeout: () {
+                Environment.log(
+                  'AUTH: Token read timed out, continuing logged out',
+                );
+                return null;
+              },
+            )
+          : await tokenRead;
       Environment.log(
         'AUTH: Token check - ${token != null ? "Token found" : "No token"}',
       );
@@ -124,17 +138,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
           'AUTH: State updated - isAuth: ${state.isAuthenticated}',
         );
 
-        // Connect to realtime service after successful registration
-        try {
-          Environment.log('AUTH: Connecting to realtime service...');
-          await _realtimeService.connect();
-          Environment.log('AUTH: Realtime service connected');
-        } catch (e) {
-          Environment.log(
-            'AUTH: Realtime service connection failed: $e (non-critical)',
-          );
-          // Don't fail registration if realtime connection fails
-        }
+        // Connect to realtime service after successful registration.
+        _connectRealtimeInBackground('registration');
 
         // If there's a pending invitation, accept it automatically
         if (invitationId != null) {
@@ -174,7 +179,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         );
 
         // Connect to realtime service after successful login
-        await _realtimeService.connect();
+        _connectRealtimeInBackground('login');
 
         // If there's a pending invitation, accept it automatically
         if (invitationId != null) {
@@ -206,7 +211,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         );
 
         // Connect to realtime service if not connected
-        await _realtimeService.connect();
+        _connectRealtimeInBackground('auth restore');
       } else {
         // Invalid response, treat as unauthenticated
         state = state.copyWith(
@@ -284,6 +289,16 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   void clearError() {
     state = state.copyWith(error: null);
+  }
+
+  void _connectRealtimeInBackground(String source) {
+    unawaited(
+      _realtimeService.connect().catchError((Object error) {
+        Environment.log(
+          'AUTH: Realtime service connection failed after $source: $error',
+        );
+      }),
+    );
   }
 }
 
