@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>We Connect — Coach IA para parejas | Comuníquense mejor</title>
+  <meta name="description" content="We Connect ayuda a las parejas a comunicarse mejor con conversaciones guiadas por IA, ejercicios prácticos y un espacio privado compartido. Gratis para empezar.">
+  <meta name="keywords" content="couples coaching, relationship coach, relationship communication app, relationship improvement, communication exercises, AI relationship coach, couple communication">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://we-connect-app.com/es/">
+  <link rel="alternate" hreflang="en" href="https://we-connect-app.com/">
+  <link rel="alternate" hreflang="fr" href="https://we-connect-app.com/fr/">
+  <link rel="alternate" hreflang="es" href="https://we-connect-app.com/es/">
+  <link rel="alternate" hreflang="x-default" href="https://we-connect-app.com/">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="We Connect — Coach IA para parejas | Comuníquense mejor">
+  <meta property="og:description" content="We Connect ayuda a las parejas a comunicarse mejor con conversaciones guiadas por IA, ejercicios prácticos y un espacio privado compartido. Gratis para empezar.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://we-connect-app.com/es/">
+  <meta property="og:site_name" content="We Connect">
+  <meta property="og:locale" content="es_ES">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="fr_FR">
+  <meta property="og:image" content="https://we-connect-app.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="We Connect — AI-powered couples coaching app">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="We Connect — Coach IA para parejas | Comuníquense mejor">
+  <meta name="twitter:description" content="We Connect ayuda a las parejas a comunicarse mejor con conversaciones guiadas por IA, ejercicios prácticos y un espacio privado compartido. Gratis para empezar.">
+  <meta name="twitter:image" content="https://we-connect-app.com/og-image.png">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://we-connect-app.com/#organization",
+        "name": "We Connect",
+        "url": "https://we-connect-app.com/",
+        "logo": "https://we-connect-app.com/og-image.png",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "email": "support@we-connect-app.com",
+          "contactType": "customer support",
+          "availableLanguage": ["en", "fr", "es"]
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://we-connect-app.com/#website",
+        "name": "We Connect",
+        "url": "https://we-connect-app.com/",
+        "inLanguage": ["en", "fr", "es"],
+        "publisher": {
+          "@id": "https://we-connect-app.com/#organization"
+        }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://we-connect-app.com/#app",
+        "name": "We Connect",
+        "alternateName": "We Connect AI couples coach",
+        "applicationCategory": "LifestyleApplication",
+        "operatingSystem": "Web",
+        "url": "https://we-connect-app.com/",
+        "description": "A private AI-powered couples coaching app for guided discussions, relationship communication practice, and partner exercises.",
+        "availableLanguage": ["en", "fr", "es"],
+        "publisher": {
+          "@id": "https://we-connect-app.com/#organization"
+        },
+        "offers": {
+          "@type": "AggregateOffer",
+          "priceCurrency": "EUR",
+          "lowPrice": "0",
+          "highPrice": "19.99",
+          "offerCount": "3"
+        }
+      }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💜</text></svg>">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <div class="nav-container">
+      <a href="#" class="nav-logo">
+        <span class="logo-icon">💜</span>
+        <span class="logo-text">We Connect</span>
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="#features" data-i18n="nav.features">Características</a>
+        <a href="#how-it-works" data-i18n="nav.howItWorks">Cómo Funciona</a>
+        <a href="#pricing" data-i18n="nav.pricing">Precios</a>
+        <a href="https://app.we-connect-app.com" class="btn btn-sm btn-primary" data-i18n="nav.openApp">Abrir App</a>
+        <div class="lang-switcher" id="langSwitcher">
+          <button class="lang-btn" id="langBtn" aria-label="Change language">
+            <span class="lang-flag" id="langFlag">🇪🇸</span>
+            <span class="lang-code" id="langCode">ES</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="lang-dropdown" id="langDropdown">
+            <button class="lang-option" data-lang="en"><span>🇬🇧</span> English</button>
+            <button class="lang-option" data-lang="fr"><span>🇫🇷</span> Français</button>
+            <button class="lang-option" data-lang="es"><span>🇪🇸</span> Español</button>
+          </div>
+        </div>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <main>
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="container hero-content">
+      <div class="hero-badge" data-animate data-i18n="hero.badge">Tu Coach de Relaciones con IA</div>
+      <h1 data-animate data-i18n-html="hero.title">Fortalece Tu<br>Relación <span class="gradient-text">Juntos</span></h1>
+      <p class="hero-subtitle" data-animate data-i18n="hero.subtitle">Comunícate mejor, resuelve conflictos y acércate más con ejercicios guiados y un coach de IA personal — directamente desde tu teléfono.</p>
+      <div class="hero-actions" data-animate>
+        <a href="https://app.we-connect-app.com" class="btn btn-primary btn-lg">
+          <span data-i18n="hero.cta">Empezar Gratis</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#how-it-works" class="btn btn-outline btn-lg" data-i18n="hero.secondary">Cómo Funciona</a>
+      </div>
+      <div class="hero-social-proof" data-animate>
+        <div class="avatars">
+          <div class="avatar" style="background: #6B73FF">A</div>
+          <div class="avatar" style="background: #FF6B8A">M</div>
+          <div class="avatar" style="background: #4ECDC4">J</div>
+          <div class="avatar" style="background: #FFB347">S</div>
+        </div>
+        <span data-i18n="hero.social">Únete a parejas que construyen relaciones más fuertes</span>
+      </div>
+    </div>
+    <div class="hero-visual" data-animate>
+      <div class="phone-mockup">
+        <div class="phone-screen">
+          <div class="mock-header">
+            <div class="mock-avatar">🤖</div>
+            <div>
+            <div class="mock-name" data-i18n="mock.name">Coach IA</div>
+            <div class="mock-status" data-i18n="mock.status">En línea</div>
+            </div>
+          </div>
+          <div class="mock-messages">
+            <div class="mock-msg mock-msg-ai">
+              <p data-i18n="mock.msg1">Parece que ambos se preocupan profundamente por esto. Exploremos lo que cada uno necesita para sentirse escuchado.</p>
+            </div>
+            <div class="mock-msg mock-msg-user">
+              <p data-i18n="mock.msg2">Solo quiero que seamos mejores hablando las cosas.</p>
+            </div>
+            <div class="mock-msg mock-msg-ai">
+              <p data-i18n="mock.msg3">¡Es un objetivo maravilloso! Aquí hay un ejercicio que puede ayudarles a practicar la escucha activa juntos. 💜</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-header" data-animate>
+        <span class="section-label" data-i18n="features.label">Características</span>
+        <h2 data-i18n-html="features.title">Todo lo que necesitas para<br><span class="gradient-text">crecer juntos</span></h2>
+        <p data-i18n="features.subtitle">Herramientas diseñadas alrededor de patrones prácticos de comunicación de pareja, impulsadas por IA, hechas para parejas reales.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card" data-animate>
+          <div class="feature-icon">🧠</div>
+          <h3 data-i18n="feature.ai.title">Coach de Relaciones IA</h3>
+          <p data-i18n="feature.ai.desc">Recibe orientación personalizada sobre comunicación relacional con un coach de IA diseñado en torno a marcos prácticos de resolución de conflictos y escucha. Disponible 24/7, sin juicios.</p>
+        </div>
+        <div class="feature-card" data-animate>
+          <div class="feature-icon">💬</div>
+          <h3 data-i18n="feature.messaging.title">Mensajería de Pareja</h3>
+          <p data-i18n="feature.messaging.desc">Un espacio privado y seguro para comunicarte con tu pareja. Comparte pensamientos, sentimientos y superen desafíos juntos.</p>
+        </div>
+        <div class="feature-card" data-animate>
+          <div class="feature-icon">🎯</div>
+          <h3 data-i18n="feature.exercises.title">Ejercicios Guiados</h3>
+          <p data-i18n="feature.exercises.desc">Ejercicios interactivos diseñados para desarrollar habilidades de comunicación, profundizar la empatía y fortalecer tu conexión.</p>
+        </div>
+        <div class="feature-card" data-animate>
+          <div class="feature-icon">📊</div>
+          <h3 data-i18n="feature.dashboard.title">Panel de Progreso</h3>
+          <p data-i18n="feature.dashboard.desc">Sigue tu crecimiento como pareja. Ve tus rachas, ejercicios completados y puntuación de salud relacional a lo largo del tiempo.</p>
+        </div>
+        <div class="feature-card" data-animate>
+          <div class="feature-icon">🌍</div>
+          <h3 data-i18n="feature.multilingual.title">Multilingüe</h3>
+          <p data-i18n="feature.multilingual.desc">Disponible en inglés, francés y español — para que puedas conectar en el idioma más cómodo para ti.</p>
+        </div>
+        <div class="feature-card" data-animate>
+          <div class="feature-icon">🔒</div>
+          <h3 data-i18n="feature.privacy.title">Privado y Seguro</h3>
+          <p data-i18n="feature.privacy.desc">Los mensajes se transmiten de forma segura y se almacenan con controles de acceso. Nunca vendemos tus datos personales. Tu relación es tu asunto.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Situations -->
+  <section class="situations" id="situations">
+    <div class="container">
+      <div class="section-header" data-animate>
+        <span class="section-label" data-i18n="situations.label">Cuándo ayuda</span>
+        <h2 data-i18n-html="situations.title">Para parejas que quieren<br><span class="gradient-text">hablar de otra manera</span></h2>
+        <p data-i18n="situations.subtitle">We Connect está pensado para la comunicación diaria en pareja: discusiones recurrentes, conversaciones difíciles, distancia emocional y momentos en los que ambas personas necesitan una estructura más tranquila.</p>
+      </div>
+      <div class="situations-grid">
+        <article class="situation-card" data-animate>
+          <h3 data-i18n="situation.communication.title">Problemas de comunicación</h3>
+          <p data-i18n="situation.communication.desc">Usa conversaciones guiadas para frenar malentendidos, escuchar sin interrumpir y convertir intercambios tensos en próximos pasos concretos.</p>
+        </article>
+        <article class="situation-card" data-animate>
+          <h3 data-i18n="situation.conflict.title">Discusiones recurrentes</h3>
+          <p data-i18n="situation.conflict.desc">Cuando el mismo conflicto vuelve una y otra vez, el coach IA ayuda a cada persona a nombrar lo importante y pasar del reproche a una comprensión compartida.</p>
+        </article>
+        <article class="situation-card" data-animate>
+          <h3 data-i18n="situation.distance.title">Sentirse distantes</h3>
+          <p data-i18n="situation.distance.desc">Crea un espacio privado para reconectar, hacer mejores preguntas y reconstruir pequeños hábitos de atención antes de que la distancia se instale.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="container">
+      <div class="section-header" data-animate>
+        <span class="section-label" data-i18n="howItWorks.label">Cómo Funciona</span>
+        <h2 data-i18n-html="howItWorks.title">Empieza en <span class="gradient-text">3 simples pasos</span></h2>
+        <p data-i18n="howItWorks.subtitle">Empezar toma menos de 2 minutos.</p>
+      </div>
+      <div class="steps">
+        <div class="step" data-animate>
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3 data-i18n="step1.title">Crea Tu Cuenta</h3>
+            <p data-i18n="step1.desc">Regístrate gratis en segundos. Sin tarjeta de crédito. Empieza a explorar de inmediato.</p>
+          </div>
+        </div>
+        <div class="step-connector" data-animate></div>
+        <div class="step" data-animate>
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3 data-i18n="step2.title">Invita a Tu Pareja</h3>
+            <p data-i18n="step2.desc">Envía una simple invitación por email. Tu pareja crea su cuenta y se conectan automáticamente.</p>
+          </div>
+        </div>
+        <div class="step-connector" data-animate></div>
+        <div class="step" data-animate>
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3 data-i18n="step3.title">Empiecen a Crecer Juntos</h3>
+            <p data-i18n="step3.desc">Habla con tu coach IA, prueba ejercicios guiados y mensajea a tu pareja — todo en un solo lugar.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="pricing" id="pricing">
+    <div class="container">
+      <div class="section-header" data-animate>
+        <span class="section-label" data-i18n="pricing.label">Precios</span>
+        <h2 data-i18n-html="pricing.title">Planes que <span class="gradient-text">crecen contigo</span></h2>
+        <p data-i18n="pricing.subtitle">Empieza gratis, mejora cuando estés listo. Cancela en cualquier momento.</p>
+      </div>
+      <div class="billing-toggle" data-animate>
+        <span class="billing-label" id="monthlyLabel" data-i18n="pricing.monthly">Mensual</span>
+        <button class="toggle" id="billingToggle" aria-label="Toggle annual billing">
+          <span class="toggle-thumb"></span>
+        </button>
+        <span class="billing-label" id="annualLabel">
+          <span data-i18n="pricing.annual">Anual</span>
+          <span class="billing-badge" data-i18n="pricing.save">Ahorra 20%</span>
+        </span>
+      </div>
+      <div class="pricing-grid">
+        <div class="pricing-card" data-animate>
+          <div class="pricing-header">
+            <h3 data-i18n="plan.free.name">Gratis</h3>
+            <div class="pricing-price">
+              <span class="price">€0</span>
+              <span class="period" data-i18n="pricing.month">/mes</span>
+            </div>
+            <p class="pricing-desc" data-i18n="plan.free.desc">Perfecto para probar</p>
+          </div>
+          <ul class="pricing-features">
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="plan.free.f1">10 mensajes coach IA/mes</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="plan.free.f2">Mensajería de pareja ilimitada</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="plan.free.f3">Ejercicios básicos</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="plan.free.f4">Panel de progreso</span></li>
+          </ul>
+          <a href="https://app.we-connect-app.com" class="btn btn-outline btn-block" data-i18n="plan.free.cta">Empezar</a>
+        </div>
+        <div class="pricing-card pricing-card-featured" data-animate>
+          <div class="pricing-popular" data-i18n="plan.essential.popular">Más Popular</div>
+          <div class="pricing-header">
+            <h3 data-i18n="plan.essential.name">Esencial</h3>
+            <div class="pricing-price">
+              <span class="price" data-monthly="9.99" data-annual="7.99">€9.99</span>
+              <span class="period" data-i18n="pricing.month">/mes</span>
+            </div>
+            <p class="pricing-desc" data-i18n="plan.essential.desc">Para parejas que van en serio</p>
+          </div>
+          <ul class="pricing-features">
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="plan.essential.f1">100 mensajes coach IA/mes</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="plan.essential.f2">Mensajería de pareja ilimitada</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="plan.essential.f3">Todos los ejercicios guiados</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="plan.essential.f4">Panel de progreso</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="plan.essential.f5">Resúmenes de conversaciones</span></li>
+          </ul>
+          <a href="https://app.we-connect-app.com" class="btn btn-primary btn-block" data-i18n="plan.essential.cta">Prueba Gratis</a>
+        </div>
+        <div class="pricing-card" data-animate>
+          <div class="pricing-header">
+            <h3 data-i18n="plan.premium.name">Premium</h3>
+            <div class="pricing-price">
+              <span class="price" data-monthly="19.99" data-annual="15.99">€19.99</span>
+              <span class="period" data-i18n="pricing.month">/mes</span>
+            </div>
+            <p class="pricing-desc" data-i18n="plan.premium.desc">Coaching ilimitado</p>
+          </div>
+          <ul class="pricing-features">
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n-html="plan.premium.f1">Mensajes IA <strong>ilimitados</strong></span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="plan.premium.f2">Mensajería de pareja ilimitada</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="plan.premium.f3">Todos los ejercicios guiados</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="plan.premium.f4">Panel de progreso</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="plan.premium.f5">Resúmenes de conversaciones</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> <span data-i18n="plan.premium.f6">Soporte prioritario</span></li>
+          </ul>
+          <a href="https://app.we-connect-app.com" class="btn btn-outline btn-block" data-i18n="plan.premium.cta">Prueba Gratis</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section (SEO rich snippets) -->
+  <section class="faq" id="faq">
+    <div class="container">
+      <div class="section-header" data-animate>
+        <span class="section-label" data-i18n="faq.label">FAQ</span>
+        <h2 data-i18n-html="faq.title">Preguntas <span class="gradient-text">frecuentes</span></h2>
+      </div>
+      <div class="faq-list" data-animate>
+        <details class="faq-item">
+          <summary data-i18n="faq.q1">¿We Connect es terapia?</summary>
+          <p data-i18n="faq.a1">No. We Connect es una herramienta de coaching para practicar la comunicación y reflexionar sobre la relación. No es terapia, asesoramiento médico ni un sustituto de un profesional autorizado. Si enfrentas problemas graves, una crisis, abuso o preocupaciones de salud mental, contacta con apoyo cualificado.</p>
+        </details>
+        <details class="faq-item">
+          <summary data-i18n="faq.q2">¿Cómo funciona el coach IA?</summary>
+          <p data-i18n="faq.a2">El coach de IA usa el contexto de la conversación para sugerir pautas de comunicación, preguntas de reflexión y ejercicios guiados. Está diseñado para facilitar conversaciones productivas entre parejas, no para diagnosticar, tratar ni reemplazar el apoyo profesional.</p>
+        </details>
+        <details class="faq-item">
+          <summary data-i18n="faq.q3">¿Mis datos son privados y seguros?</summary>
+          <p data-i18n="faq.a3">Usamos HTTPS durante la transmisión, almacenamiento seguro en la nube y controles de acceso. Nunca vendemos tus datos personales. Tu relación es tu asunto — nosotros solo proporcionamos las herramientas para ayudarla a crecer.</p>
+        </details>
+        <details class="faq-item">
+          <summary data-i18n="faq.q4">¿Puedo probarlo gratis?</summary>
+          <p data-i18n="faq.a4">¡Sí! El plan Gratis incluye 10 mensajes del coach IA por mes, mensajería de pareja ilimitada y acceso a ejercicios básicos. No se requiere tarjeta de crédito para empezar.</p>
+        </details>
+        <details class="faq-item">
+          <summary data-i18n="faq.q5">¿Qué idiomas están disponibles?</summary>
+          <p data-i18n="faq.a5">We Connect está disponible en inglés, francés y español. El coach IA puede responder en el idioma que elijas, y toda la interfaz está traducida.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿We Connect es terapia?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. We Connect es una herramienta de coaching para practicar la comunicación y reflexionar sobre la relación. No es terapia, asesoramiento médico ni un sustituto de un profesional autorizado. Si enfrentas problemas graves, una crisis, abuso o preocupaciones de salud mental, contacta con apoyo cualificado."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cómo funciona el coach IA?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "El coach de IA usa el contexto de la conversación para sugerir pautas de comunicación, preguntas de reflexión y ejercicios guiados. Está diseñado para facilitar conversaciones productivas entre parejas, no para diagnosticar, tratar ni reemplazar el apoyo profesional."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Mis datos son privados y seguros?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Usamos HTTPS durante la transmisión, almacenamiento seguro en la nube y controles de acceso. Nunca vendemos tus datos personales. Tu relación es tu asunto — nosotros solo proporcionamos las herramientas para ayudarla a crecer."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Puedo probarlo gratis?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "¡Sí! El plan Gratis incluye 10 mensajes del coach IA por mes, mensajería de pareja ilimitada y acceso a ejercicios básicos. No se requiere tarjeta de crédito para empezar."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué idiomas están disponibles?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We Connect está disponible en inglés, francés y español. El coach IA puede responder en el idioma que elijas, y toda la interfaz está traducida."
+      }
+    }
+  ]
+}
+  </script>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="container">
+      <div class="cta-content" data-animate>
+        <h2 data-i18n="cta.title">¿Listos para construir una relación más fuerte?</h2>
+        <p data-i18n="cta.subtitle">Crea un espacio privado donde ambas personas puedan sentirse escuchadas, practicar mejores conversaciones y avanzar juntas paso a paso.</p>
+        <a href="https://app.we-connect-app.com" class="btn btn-white btn-lg">
+          <span data-i18n="cta.button">Empezar Gratis</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="nav-logo">
+            <span class="logo-icon">💜</span>
+            <span class="logo-text">We Connect</span>
+          </a>
+          <p data-i18n="footer.desc">Coaching de pareja con IA para ayudarte a construir una relación más fuerte y saludable.</p>
+        </div>
+        <div class="footer-links">
+          <h4 data-i18n="footer.product">Producto</h4>
+          <a href="#features" data-i18n="nav.features">Características</a>
+          <a href="#pricing" data-i18n="nav.pricing">Precios</a>
+          <a href="#how-it-works" data-i18n="nav.howItWorks">Cómo Funciona</a>
+          <a href="https://app.we-connect-app.com" data-i18n="nav.openApp">Abrir App</a>
+        </div>
+        <div class="footer-links">
+          <h4 data-i18n="footer.legal">Legal</h4>
+          <a href="https://app.we-connect-app.com/terms" data-i18n="footer.terms">Términos de Servicio</a>
+          <a href="https://app.we-connect-app.com/privacy" data-i18n="footer.privacy">Política de Privacidad</a>
+          <button class="footer-link-button" id="privacySettingsButton" type="button" data-i18n="footer.privacySettings">Configuración de privacidad</button>
+          <a href="https://www.mediateur-consommation-smp.fr" data-i18n="footer.mediation">Mediación de consumo</a>
+        </div>
+        <div class="footer-links">
+          <h4 data-i18n="footer.support">Soporte</h4>
+          <a href="mailto:support@we-connect-app.com" data-i18n="footer.contact">Contáctanos</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p data-i18n="footer.copyright">© 2026 We Connect. Todos los derechos reservados.</p>
+        <p data-i18n="footer.mediator">Mediador de consumo: Société Médiation Professionnelle, Alteritae, 5 rue Salvaing, 12000 Rodez, Francia.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/consent.js"></script>
+  <script src="/i18n.js"></script>
+  <script src="/script.js"></script>
+  <script src="/pixels.js"></script>
+</body>
+</html>

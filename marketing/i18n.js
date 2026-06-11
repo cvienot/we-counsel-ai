@@ -1,8 +1,8 @@
 const translations = {
   en: {
     // Meta (handled specially)
-    "meta.title": "We Connect — AI Couples Coaching | Strengthen Your Relationship Together",
-    "meta.description": "AI-powered couples coaching app. Communicate better, resolve conflicts, and grow together with guided exercises and a personal AI relationship coach. Free to start.",
+    "meta.title": "We Connect — AI Couples Coaching App | Communicate Better Together",
+    "meta.description": "We Connect helps couples communicate better with a shared AI coach, guided discussions, and practical exercises. Free to start, private, and available in English, French, and Spanish.",
 
     // Nav
     "nav.features": "Features",
@@ -28,7 +28,7 @@ const translations = {
     // Features
     "features.label": "Features",
     "features.title": "Everything you need to<br><span class=\"gradient-text\">grow together</span>",
-    "features.subtitle": "Tools designed by relationship experts, powered by AI, built for real couples.",
+    "features.subtitle": "Tools designed around practical relationship communication patterns, powered by AI, built for real couples.",
     "feature.ai.title": "AI Relationship Coach",
     "feature.ai.desc": "Get personalized relationship communication guidance from an AI coach designed around practical conflict-resolution and listening frameworks. Available 24/7, judgment-free.",
     "feature.messaging.title": "Partner Messaging",
@@ -41,6 +41,17 @@ const translations = {
     "feature.multilingual.desc": "Available in English, French, and Spanish — so you can connect in the language most comfortable for you.",
     "feature.privacy.title": "Private & Secure",
     "feature.privacy.desc": "Messages are transmitted securely and stored with access controls. We never sell your personal data. Your relationship, your business.",
+
+    // Situations
+    "situations.label": "When it helps",
+    "situations.title": "For couples who want to<br><span class=\"gradient-text\">talk differently</span>",
+    "situations.subtitle": "We Connect is designed for everyday relationship communication: recurring arguments, difficult conversations, emotional distance, and the moments where both partners need a calmer structure.",
+    "situation.communication.title": "Communication problems",
+    "situation.communication.desc": "Use guided discussions to slow down misunderstandings, listen without interrupting, and turn tense conversations into concrete next steps.",
+    "situation.conflict.title": "Recurring arguments",
+    "situation.conflict.desc": "When the same conflict keeps coming back, the AI coach helps each partner name what matters and move from blame to shared understanding.",
+    "situation.distance.title": "Feeling distant",
+    "situation.distance.desc": "Create a private space to reconnect, ask better questions, and rebuild small habits of attention before distance becomes the default.",
 
     // How It Works
     "howItWorks.label": "How It Works",
@@ -106,7 +117,7 @@ const translations = {
 
     // CTA
     "cta.title": "Ready to build a stronger relationship?",
-    "cta.subtitle": "Join thousands of couples who are communicating better, resolving conflicts, and growing closer — with a little help from AI.",
+    "cta.subtitle": "Create a private space where both partners can be heard, practice better conversations, and take small next steps together.",
     "cta.button": "Get Started Free",
 
     // Footer
@@ -124,8 +135,8 @@ const translations = {
   },
 
   fr: {
-    "meta.title": "We Connect — Coaching de Couple IA | Renforcez Votre Relation Ensemble",
-    "meta.description": "Application de coaching de couple propulsée par l'IA. Communiquez mieux, résolvez les conflits et grandissez ensemble avec des exercices guidés et un coach relationnel IA personnel. Gratuit pour commencer.",
+    "meta.title": "We Connect — Coach IA pour couple | Mieux communiquer à deux",
+    "meta.description": "We Connect aide les couples à mieux communiquer avec une discussion guidée par IA, des exercices pratiques et un espace privé à deux. Gratuit pour commencer.",
 
     "nav.features": "Fonctionnalités",
     "nav.howItWorks": "Comment ça marche",
@@ -147,7 +158,7 @@ const translations = {
 
     "features.label": "Fonctionnalités",
     "features.title": "Tout ce dont vous avez besoin pour<br><span class=\"gradient-text\">grandir ensemble</span>",
-    "features.subtitle": "Des outils conçus par des experts en relations, propulsés par l'IA, faits pour les vrais couples.",
+    "features.subtitle": "Des outils conçus autour de situations concrètes de communication de couple, propulsés par l'IA, faits pour les vrais couples.",
     "feature.ai.title": "Coach Relationnel IA",
     "feature.ai.desc": "Recevez un accompagnement personnalisé en communication relationnelle avec un coach IA conçu autour de cadres pratiques de résolution de conflit et d'écoute. Disponible 24h/24, sans jugement.",
     "feature.messaging.title": "Messagerie Partenaire",
@@ -160,6 +171,16 @@ const translations = {
     "feature.multilingual.desc": "Disponible en anglais, français et espagnol — pour communiquer dans la langue qui vous convient le mieux.",
     "feature.privacy.title": "Privé et Sécurisé",
     "feature.privacy.desc": "Les messages sont transmis de manière sécurisée et stockés avec des contrôles d'accès. Nous ne vendons jamais vos données personnelles. Votre relation, vos affaires.",
+
+    "situations.label": "Quand ça aide",
+    "situations.title": "Pour les couples qui veulent<br><span class=\"gradient-text\">se parler autrement</span>",
+    "situations.subtitle": "We Connect est pensé pour la communication de couple au quotidien : disputes qui reviennent, conversations difficiles, distance émotionnelle, relation de couple difficile et moments où chacun a besoin d'un cadre plus calme.",
+    "situation.communication.title": "Problèmes de communication dans le couple",
+    "situation.communication.desc": "Utilisez une discussion guidée pour ralentir les malentendus, écouter sans couper la parole et transformer les échanges tendus en prochaines étapes concrètes.",
+    "situation.conflict.title": "Couple en crise ou disputes récurrentes",
+    "situation.conflict.desc": "Quand le même conflit revient souvent, le coach IA aide chaque partenaire à nommer ce qui compte et à passer du reproche à une compréhension partagée.",
+    "situation.distance.title": "Besoin d'aide pour se reconnecter",
+    "situation.distance.desc": "Créez un espace privé pour renouer le dialogue, poser de meilleures questions et reconstruire de petites habitudes d'attention avant que la distance ne s'installe.",
 
     "howItWorks.label": "Comment ça marche",
     "howItWorks.title": "Commencez en <span class=\"gradient-text\">3 étapes simples</span>",
@@ -221,7 +242,7 @@ const translations = {
     "faq.a5": "We Connect est disponible en anglais, français et espagnol. Le coach IA peut répondre dans la langue de votre choix, et toute l'interface est traduite.",
 
     "cta.title": "Prêts à construire une relation plus forte ?",
-    "cta.subtitle": "Rejoignez des milliers de couples qui communiquent mieux, résolvent les conflits et se rapprochent — avec un petit coup de pouce de l'IA.",
+    "cta.subtitle": "Créez un espace privé où chacun peut être entendu, pratiquer de meilleures conversations et avancer ensemble par petites étapes.",
     "cta.button": "Commencer Gratuitement",
 
     "footer.desc": "Coaching de couple propulsé par l'IA pour vous aider à construire une relation plus forte et plus saine.",
@@ -238,8 +259,8 @@ const translations = {
   },
 
   es: {
-    "meta.title": "We Connect — Coaching de Pareja con IA | Fortalece Tu Relación Juntos",
-    "meta.description": "Aplicación de coaching de pareja con IA. Comunícate mejor, resuelve conflictos y crece junto con ejercicios guiados y un coach de relaciones con IA personal. Gratis para empezar.",
+    "meta.title": "We Connect — Coach IA para parejas | Comuníquense mejor",
+    "meta.description": "We Connect ayuda a las parejas a comunicarse mejor con conversaciones guiadas por IA, ejercicios prácticos y un espacio privado compartido. Gratis para empezar.",
 
     "nav.features": "Características",
     "nav.howItWorks": "Cómo Funciona",
@@ -261,7 +282,7 @@ const translations = {
 
     "features.label": "Características",
     "features.title": "Todo lo que necesitas para<br><span class=\"gradient-text\">crecer juntos</span>",
-    "features.subtitle": "Herramientas diseñadas por expertos en relaciones, impulsadas por IA, hechas para parejas reales.",
+    "features.subtitle": "Herramientas diseñadas alrededor de patrones prácticos de comunicación de pareja, impulsadas por IA, hechas para parejas reales.",
     "feature.ai.title": "Coach de Relaciones IA",
     "feature.ai.desc": "Recibe orientación personalizada sobre comunicación relacional con un coach de IA diseñado en torno a marcos prácticos de resolución de conflictos y escucha. Disponible 24/7, sin juicios.",
     "feature.messaging.title": "Mensajería de Pareja",
@@ -274,6 +295,16 @@ const translations = {
     "feature.multilingual.desc": "Disponible en inglés, francés y español — para que puedas conectar en el idioma más cómodo para ti.",
     "feature.privacy.title": "Privado y Seguro",
     "feature.privacy.desc": "Los mensajes se transmiten de forma segura y se almacenan con controles de acceso. Nunca vendemos tus datos personales. Tu relación es tu asunto.",
+
+    "situations.label": "Cuándo ayuda",
+    "situations.title": "Para parejas que quieren<br><span class=\"gradient-text\">hablar de otra manera</span>",
+    "situations.subtitle": "We Connect está pensado para la comunicación diaria en pareja: discusiones recurrentes, conversaciones difíciles, distancia emocional y momentos en los que ambas personas necesitan una estructura más tranquila.",
+    "situation.communication.title": "Problemas de comunicación",
+    "situation.communication.desc": "Usa conversaciones guiadas para frenar malentendidos, escuchar sin interrumpir y convertir intercambios tensos en próximos pasos concretos.",
+    "situation.conflict.title": "Discusiones recurrentes",
+    "situation.conflict.desc": "Cuando el mismo conflicto vuelve una y otra vez, el coach IA ayuda a cada persona a nombrar lo importante y pasar del reproche a una comprensión compartida.",
+    "situation.distance.title": "Sentirse distantes",
+    "situation.distance.desc": "Crea un espacio privado para reconectar, hacer mejores preguntas y reconstruir pequeños hábitos de atención antes de que la distancia se instale.",
 
     "howItWorks.label": "Cómo Funciona",
     "howItWorks.title": "Empieza en <span class=\"gradient-text\">3 simples pasos</span>",
@@ -335,7 +366,7 @@ const translations = {
     "faq.a5": "We Connect está disponible en inglés, francés y español. El coach IA puede responder en el idioma que elijas, y toda la interfaz está traducida.",
 
     "cta.title": "¿Listos para construir una relación más fuerte?",
-    "cta.subtitle": "Únete a miles de parejas que se comunican mejor, resuelven conflictos y se acercan más — con una pequeña ayuda de la IA.",
+    "cta.subtitle": "Crea un espacio privado donde ambas personas puedan sentirse escuchadas, practicar mejores conversaciones y avanzar juntas paso a paso.",
     "cta.button": "Empezar Gratis",
 
     "footer.desc": "Coaching de pareja con IA para ayudarte a construir una relación más fuerte y saludable.",

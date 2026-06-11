@@ -1,22 +1,42 @@
 // ===== i18n — language detection & translation =====
 const SUPPORTED_LANGS = ['en', 'fr', 'es'];
 const LANG_META = {
-  en: { flag: '🇬🇧', code: 'EN', locale: 'en_US' },
-  fr: { flag: '🇫🇷', code: 'FR', locale: 'fr_FR' },
-  es: { flag: '🇪🇸', code: 'ES', locale: 'es_ES' }
+  en: { flag: '🇬🇧', code: 'EN', locale: 'en_US', path: '/' },
+  fr: { flag: '🇫🇷', code: 'FR', locale: 'fr_FR', path: '/fr/' },
+  es: { flag: '🇪🇸', code: 'ES', locale: 'es_ES', path: '/es/' }
 };
 
+function languageFromPath() {
+  const firstSegment = window.location.pathname.split('/').filter(Boolean)[0];
+  return SUPPORTED_LANGS.includes(firstSegment) ? firstSegment : null;
+}
+
+function canonicalUrl(lang) {
+  return `https://we-connect-app.com${LANG_META[lang].path}`;
+}
+
+function localizedUrl(lang) {
+  const params = new URLSearchParams(window.location.search);
+  params.delete('lang');
+  const query = params.toString();
+  return `${window.location.origin}${LANG_META[lang].path}${query ? `?${query}` : ''}${window.location.hash}`;
+}
+
 function detectLanguage() {
-  // 1. Check URL param (?lang=fr)
+  // 1. Check localized path (/fr/, /es/)
+  const pathLang = languageFromPath();
+  if (pathLang) return pathLang;
+
+  // 2. Check URL param (?lang=fr)
   const params = new URLSearchParams(window.location.search);
   const paramLang = params.get('lang');
   if (paramLang && SUPPORTED_LANGS.includes(paramLang)) return paramLang;
 
-  // 2. Check localStorage
+  // 3. Check localStorage
   const stored = localStorage.getItem('we-connect-lang');
   if (stored && SUPPORTED_LANGS.includes(stored)) return stored;
 
-  // 3. Check browser language
+  // 4. Check browser language
   const browserLang = (navigator.language || navigator.userLanguage || 'en').slice(0, 2).toLowerCase();
   if (SUPPORTED_LANGS.includes(browserLang)) return browserLang;
 
@@ -44,13 +64,33 @@ function applyTranslations(lang) {
   const metaDesc = document.querySelector('meta[name="description"]');
   if (metaDesc) metaDesc.setAttribute('content', t['meta.description'] || '');
 
-  // Update OG tags
+  const pageLang = languageFromPath() || 'en';
+  const pageUrl = canonicalUrl(pageLang);
+  const canonical = document.querySelector('link[rel="canonical"]');
+  if (canonical) canonical.setAttribute('href', pageUrl);
+
+  document.querySelectorAll('link[rel="alternate"][hreflang]').forEach(link => {
+    const alternateLang = link.getAttribute('hreflang');
+    if (alternateLang === 'x-default') {
+      link.setAttribute('href', canonicalUrl('en'));
+    } else if (LANG_META[alternateLang]) {
+      link.setAttribute('href', canonicalUrl(alternateLang));
+    }
+  });
+
+  // Update OG/Twitter tags
   const ogTitle = document.querySelector('meta[property="og:title"]');
-  if (ogTitle) ogTitle.setAttribute('content', t['meta.title'].split(' — ')[0] + ' — ' + (t['meta.title'].split(' — ')[1] || ''));
+  if (ogTitle) ogTitle.setAttribute('content', t['meta.title'] || '');
   const ogDesc = document.querySelector('meta[property="og:description"]');
-  if (ogDesc) ogDesc.setAttribute('content', t['hero.subtitle'] || '');
+  if (ogDesc) ogDesc.setAttribute('content', t['meta.description'] || '');
+  const ogUrl = document.querySelector('meta[property="og:url"]');
+  if (ogUrl) ogUrl.setAttribute('content', pageUrl);
   const ogLocale = document.querySelector('meta[property="og:locale"]');
   if (ogLocale) ogLocale.setAttribute('content', LANG_META[lang].locale);
+  const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+  if (twitterTitle) twitterTitle.setAttribute('content', t['meta.title'] || '');
+  const twitterDesc = document.querySelector('meta[name="twitter:description"]');
+  if (twitterDesc) twitterDesc.setAttribute('content', t['meta.description'] || '');
 
   // Update html lang attribute
   document.documentElement.lang = lang;
@@ -132,8 +172,9 @@ if (langBtn && langDropdown) {
     opt.addEventListener('click', () => {
       const newLang = opt.dataset.lang;
       if (newLang !== currentLang) {
-        currentLang = newLang;
-        applyTranslations(newLang);
+        localStorage.setItem('we-connect-lang', newLang);
+        window.location.href = localizedUrl(newLang);
+        return;
       }
       langDropdown.classList.remove('open');
     });

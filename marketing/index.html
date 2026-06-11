@@ -3,18 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>We Connect — AI Couples Coaching | Strengthen Your Relationship Together</title>
-  <meta name="description" content="AI-powered couples coaching app. Communicate better, resolve conflicts, and grow together with guided exercises and a personal AI relationship coach. Free to start.">
-  <meta name="keywords" content="couples coaching, relationship coach, relationship communication app, relationship improvement, communication exercises, AI relationship coach">
-  <link rel="canonical" href="https://we-connect-app.com">
+  <title>We Connect — AI Couples Coaching App | Communicate Better Together</title>
+  <meta name="description" content="We Connect helps couples communicate better with a shared AI coach, guided discussions, and practical exercises. Free to start, private, and available in English, French, and Spanish.">
+  <meta name="keywords" content="couples coaching, relationship coach, relationship communication app, relationship improvement, communication exercises, AI relationship coach, couple communication">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://we-connect-app.com/">
+  <link rel="alternate" hreflang="en" href="https://we-connect-app.com/">
+  <link rel="alternate" hreflang="fr" href="https://we-connect-app.com/fr/">
+  <link rel="alternate" hreflang="es" href="https://we-connect-app.com/es/">
+  <link rel="alternate" hreflang="x-default" href="https://we-connect-app.com/">
 
   <!-- Open Graph -->
-  <meta property="og:title" content="We Connect — AI Couples Coaching">
-  <meta property="og:description" content="Communicate better, resolve conflicts, and grow together with guided exercises and a personal AI relationship coach.">
+  <meta property="og:title" content="We Connect — AI Couples Coaching App | Communicate Better Together">
+  <meta property="og:description" content="We Connect helps couples communicate better with a shared AI coach, guided discussions, and practical exercises. Free to start, private, and available in English, French, and Spanish.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://we-connect-app.com">
+  <meta property="og:url" content="https://we-connect-app.com/">
   <meta property="og:site_name" content="We Connect">
   <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="fr_FR">
+  <meta property="og:locale:alternate" content="es_ES">
   <meta property="og:image" content="https://we-connect-app.com/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -22,40 +29,58 @@
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="We Connect — AI Couples Coaching">
-  <meta name="twitter:description" content="Communicate better, resolve conflicts, and grow together with guided exercises and a personal AI relationship coach.">
+  <meta name="twitter:title" content="We Connect — AI Couples Coaching App | Communicate Better Together">
+  <meta name="twitter:description" content="We Connect helps couples communicate better with a shared AI coach, guided discussions, and practical exercises. Free to start, private, and available in English, French, and Spanish.">
   <meta name="twitter:image" content="https://we-connect-app.com/og-image.png">
 
   <!-- Structured Data -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "We Connect",
-    "applicationCategory": "HealthApplication",
-    "operatingSystem": "Web",
-    "url": "https://we-connect-app.com",
-    "description": "AI-powered couples coaching app. Communicate better, resolve conflicts, and grow together with guided exercises and a personal AI relationship coach.",
-    "offers": [
+    "@graph": [
       {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "EUR",
-        "name": "Free"
+        "@type": "Organization",
+        "@id": "https://we-connect-app.com/#organization",
+        "name": "We Connect",
+        "url": "https://we-connect-app.com/",
+        "logo": "https://we-connect-app.com/og-image.png",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "email": "support@we-connect-app.com",
+          "contactType": "customer support",
+          "availableLanguage": ["en", "fr", "es"]
+        }
       },
       {
-        "@type": "Offer",
-        "price": "9.99",
-        "priceCurrency": "EUR",
-        "name": "Essential",
-        "billingIncrement": "P1M"
+        "@type": "WebSite",
+        "@id": "https://we-connect-app.com/#website",
+        "name": "We Connect",
+        "url": "https://we-connect-app.com/",
+        "inLanguage": ["en", "fr", "es"],
+        "publisher": {
+          "@id": "https://we-connect-app.com/#organization"
+        }
       },
       {
-        "@type": "Offer",
-        "price": "19.99",
-        "priceCurrency": "EUR",
-        "name": "Premium",
-        "billingIncrement": "P1M"
+        "@type": "SoftwareApplication",
+        "@id": "https://we-connect-app.com/#app",
+        "name": "We Connect",
+        "alternateName": "We Connect AI couples coach",
+        "applicationCategory": "LifestyleApplication",
+        "operatingSystem": "Web",
+        "url": "https://we-connect-app.com/",
+        "description": "A private AI-powered couples coaching app for guided discussions, relationship communication practice, and partner exercises.",
+        "availableLanguage": ["en", "fr", "es"],
+        "publisher": {
+          "@id": "https://we-connect-app.com/#organization"
+        },
+        "offers": {
+          "@type": "AggregateOffer",
+          "priceCurrency": "EUR",
+          "lowPrice": "0",
+          "highPrice": "19.99",
+          "offerCount": "3"
+        }
       }
     ]
   }
@@ -64,7 +89,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="/styles.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💜</text></svg>">
 </head>
 <body>
@@ -161,7 +186,7 @@
       <div class="section-header" data-animate>
         <span class="section-label" data-i18n="features.label">Features</span>
         <h2 data-i18n-html="features.title">Everything you need to<br><span class="gradient-text">grow together</span></h2>
-        <p data-i18n="features.subtitle">Tools designed by relationship experts, powered by AI, built for real couples.</p>
+        <p data-i18n="features.subtitle">Tools designed around practical relationship communication patterns, powered by AI, built for real couples.</p>
       </div>
       <div class="features-grid">
         <div class="feature-card" data-animate>
@@ -194,6 +219,31 @@
           <h3 data-i18n="feature.privacy.title">Private &amp; Secure</h3>
           <p data-i18n="feature.privacy.desc">Messages are transmitted securely and stored with access controls. We never sell your personal data. Your relationship, your business.</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Situations -->
+  <section class="situations" id="situations">
+    <div class="container">
+      <div class="section-header" data-animate>
+        <span class="section-label" data-i18n="situations.label">When it helps</span>
+        <h2 data-i18n-html="situations.title">For couples who want to<br><span class="gradient-text">talk differently</span></h2>
+        <p data-i18n="situations.subtitle">We Connect is designed for everyday relationship communication: recurring arguments, difficult conversations, emotional distance, and the moments where both partners need a calmer structure.</p>
+      </div>
+      <div class="situations-grid">
+        <article class="situation-card" data-animate>
+          <h3 data-i18n="situation.communication.title">Communication problems</h3>
+          <p data-i18n="situation.communication.desc">Use guided discussions to slow down misunderstandings, listen without interrupting, and turn tense conversations into concrete next steps.</p>
+        </article>
+        <article class="situation-card" data-animate>
+          <h3 data-i18n="situation.conflict.title">Recurring arguments</h3>
+          <p data-i18n="situation.conflict.desc">When the same conflict keeps coming back, the AI coach helps each partner name what matters and move from blame to shared understanding.</p>
+        </article>
+        <article class="situation-card" data-animate>
+          <h3 data-i18n="situation.distance.title">Feeling distant</h3>
+          <p data-i18n="situation.distance.desc">Create a private space to reconnect, ask better questions, and rebuild small habits of attention before distance becomes the default.</p>
+        </article>
       </div>
     </div>
   </section>
@@ -398,7 +448,7 @@
     <div class="container">
       <div class="cta-content" data-animate>
         <h2 data-i18n="cta.title">Ready to build a stronger relationship?</h2>
-        <p data-i18n="cta.subtitle">Join thousands of couples who are communicating better, resolving conflicts, and growing closer — with a little help from AI.</p>
+        <p data-i18n="cta.subtitle">Create a private space where both partners can be heard, practice better conversations, and take small next steps together.</p>
         <a href="https://app.we-connect-app.com" class="btn btn-white btn-lg">
           <span data-i18n="cta.button">Get Started Free</span>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -445,9 +495,9 @@
     </div>
   </footer>
 
-  <script src="consent.js"></script>
-  <script src="i18n.js"></script>
-  <script src="script.js"></script>
-  <script src="pixels.js"></script>
+  <script src="/consent.js"></script>
+  <script src="/i18n.js"></script>
+  <script src="/script.js"></script>
+  <script src="/pixels.js"></script>
 </body>
 </html>

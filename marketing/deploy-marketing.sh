@@ -149,11 +149,25 @@ aws s3 sync "$SCRIPT_DIR/" "s3://${BUCKET}/" \
     --cache-control "public, max-age=86400" \
     --region $REGION
 
-# Set shorter cache for HTML files
-aws s3 cp "$SCRIPT_DIR/index.html" "s3://${BUCKET}/index.html" \
-    --cache-control "public, max-age=300" \
-    --content-type "text/html" \
-    --region $REGION
+# Set shorter cache for HTML files, including localized pages.
+while IFS= read -r HTML_FILE; do
+    S3_KEY="${HTML_FILE#$SCRIPT_DIR/}"
+    aws s3 cp "$HTML_FILE" "s3://${BUCKET}/${S3_KEY}" \
+        --cache-control "public, max-age=300" \
+        --content-type "text/html; charset=utf-8" \
+        --region $REGION
+
+    if [[ "$S3_KEY" == */index.html ]]; then
+        DIRECTORY_KEY="${S3_KEY%index.html}"
+        aws s3api put-object \
+            --bucket "$BUCKET" \
+            --key "$DIRECTORY_KEY" \
+            --body "$HTML_FILE" \
+            --cache-control "public, max-age=300" \
+            --content-type "text/html; charset=utf-8" \
+            --region $REGION > /dev/null
+    fi
+done < <(find "$SCRIPT_DIR" -name "*.html" -type f)
 
 echo "✅ Files uploaded"
 echo ""

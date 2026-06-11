@@ -74,11 +74,12 @@
   var registrations = [];
 
   function detectLanguage() {
+    var firstSegment = window.location.pathname.split('/').filter(Boolean)[0];
     var params = new URLSearchParams(window.location.search);
     var requested = params.get('lang');
     var storedLanguage = safeStorageGet('we-connect-lang');
     var browserLanguage = (navigator.language || navigator.userLanguage || 'en').slice(0, 2).toLowerCase();
-    var candidate = requested || storedLanguage || document.documentElement.lang || browserLanguage;
+    var candidate = firstSegment || requested || storedLanguage || document.documentElement.lang || browserLanguage;
     return TEXT[candidate] ? candidate : 'en';
   }
 

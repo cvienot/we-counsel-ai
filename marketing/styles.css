@@ -578,6 +578,46 @@ img {
   line-height: 1.7;
 }
 
+/* ========== Situations ========== */
+.situations {
+  padding: 110px 0;
+  background: var(--bg);
+}
+
+.situations-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.situation-card {
+  min-height: 220px;
+  padding: 30px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.situation-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(107, 115, 255, 0.35);
+}
+
+.situation-card h3 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.situation-card p {
+  color: var(--text-secondary);
+  font-size: 0.938rem;
+  line-height: 1.75;
+}
+
 /* ========== How It Works ========== */
 .how-it-works {
   padding: 120px 0;
@@ -962,6 +1002,10 @@ img {
     grid-template-columns: repeat(2, 1fr);
   }
 
+  .situations-grid {
+    grid-template-columns: 1fr;
+  }
+
   .pricing-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1020,6 +1064,13 @@ img {
 
   .features-grid {
     grid-template-columns: 1fr;
+  }
+
+  .situations,
+  .features,
+  .how-it-works,
+  .pricing {
+    padding: 84px 0;
   }
 
   .pricing-grid {
