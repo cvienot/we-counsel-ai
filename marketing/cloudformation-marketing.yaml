@@ -56,6 +56,35 @@ Resources:
               StringEquals:
                 AWS:SourceArn: !Sub 'arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}'
 
+  # S3 Bucket for CloudFront standard access logs
+  AccessLogsBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      BucketName: !Sub 'we-connect-cloudfront-logs-${AWS::AccountId}'
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerPreferred
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+            BucketKeyEnabled: true
+      LifecycleConfiguration:
+        Rules:
+          - Id: ExpireCloudFrontMarketingLogsAfter30Days
+            Status: Enabled
+            Prefix: cloudfront/we-connect-marketing/
+            ExpirationInDays: 30
+            AbortIncompleteMultipartUpload:
+              DaysAfterInitiation: 7
+
   # CloudFront Distribution
   CloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
@@ -66,6 +95,11 @@ Resources:
         DefaultRootObject: index.html
         HttpVersion: http2and3
         PriceClass: PriceClass_100
+        Logging:
+          Enabled: true
+          IncludeCookies: false
+          Bucket: !GetAtt AccessLogsBucket.DomainName
+          Prefix: cloudfront/we-connect-marketing/
         Aliases:
           - !Ref DomainName
           - !Sub 'www.${DomainName}'
@@ -135,6 +169,10 @@ Outputs:
   DistributionDomainName:
     Description: CloudFront domain name
     Value: !GetAtt CloudFrontDistribution.DomainName
+
+  AccessLogsBucketName:
+    Description: S3 bucket name for CloudFront standard access logs
+    Value: !Ref AccessLogsBucket
 
   WebsiteUrl:
     Description: Marketing website URL
