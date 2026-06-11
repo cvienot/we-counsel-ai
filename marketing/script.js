@@ -59,38 +59,40 @@ function applyTranslations(lang) {
     if (t[key]) el.innerHTML = t[key];
   });
 
-  // Update meta tags
-  document.title = t['meta.title'] || document.title;
-  const metaDesc = document.querySelector('meta[name="description"]');
-  if (metaDesc) metaDesc.setAttribute('content', t['meta.description'] || '');
+  if (!document.documentElement.hasAttribute('data-static-meta')) {
+    // Update meta tags on translated landing pages. SEO articles keep fixed per-page metadata.
+    document.title = t['meta.title'] || document.title;
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', t['meta.description'] || '');
 
-  const pageLang = languageFromPath() || 'en';
-  const pageUrl = canonicalUrl(pageLang);
-  const canonical = document.querySelector('link[rel="canonical"]');
-  if (canonical) canonical.setAttribute('href', pageUrl);
+    const pageLang = languageFromPath() || 'en';
+    const pageUrl = canonicalUrl(pageLang);
+    const canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) canonical.setAttribute('href', pageUrl);
 
-  document.querySelectorAll('link[rel="alternate"][hreflang]').forEach(link => {
-    const alternateLang = link.getAttribute('hreflang');
-    if (alternateLang === 'x-default') {
-      link.setAttribute('href', canonicalUrl('en'));
-    } else if (LANG_META[alternateLang]) {
-      link.setAttribute('href', canonicalUrl(alternateLang));
-    }
-  });
+    document.querySelectorAll('link[rel="alternate"][hreflang]').forEach(link => {
+      const alternateLang = link.getAttribute('hreflang');
+      if (alternateLang === 'x-default') {
+        link.setAttribute('href', canonicalUrl('en'));
+      } else if (LANG_META[alternateLang]) {
+        link.setAttribute('href', canonicalUrl(alternateLang));
+      }
+    });
 
-  // Update OG/Twitter tags
-  const ogTitle = document.querySelector('meta[property="og:title"]');
-  if (ogTitle) ogTitle.setAttribute('content', t['meta.title'] || '');
-  const ogDesc = document.querySelector('meta[property="og:description"]');
-  if (ogDesc) ogDesc.setAttribute('content', t['meta.description'] || '');
-  const ogUrl = document.querySelector('meta[property="og:url"]');
-  if (ogUrl) ogUrl.setAttribute('content', pageUrl);
-  const ogLocale = document.querySelector('meta[property="og:locale"]');
-  if (ogLocale) ogLocale.setAttribute('content', LANG_META[lang].locale);
-  const twitterTitle = document.querySelector('meta[name="twitter:title"]');
-  if (twitterTitle) twitterTitle.setAttribute('content', t['meta.title'] || '');
-  const twitterDesc = document.querySelector('meta[name="twitter:description"]');
-  if (twitterDesc) twitterDesc.setAttribute('content', t['meta.description'] || '');
+    // Update OG/Twitter tags
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute('content', t['meta.title'] || '');
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) ogDesc.setAttribute('content', t['meta.description'] || '');
+    const ogUrl = document.querySelector('meta[property="og:url"]');
+    if (ogUrl) ogUrl.setAttribute('content', pageUrl);
+    const ogLocale = document.querySelector('meta[property="og:locale"]');
+    if (ogLocale) ogLocale.setAttribute('content', LANG_META[lang].locale);
+    const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+    if (twitterTitle) twitterTitle.setAttribute('content', t['meta.title'] || '');
+    const twitterDesc = document.querySelector('meta[name="twitter:description"]');
+    if (twitterDesc) twitterDesc.setAttribute('content', t['meta.description'] || '');
+  }
 
   // Update html lang attribute
   document.documentElement.lang = lang;
@@ -237,20 +239,28 @@ document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
 const billingToggle = document.getElementById('billingToggle');
 let isAnnual = false;
 
-billingToggle.addEventListener('click', () => {
-  isAnnual = !isAnnual;
-  billingToggle.classList.toggle('active', isAnnual);
+if (billingToggle) {
+  billingToggle.addEventListener('click', () => {
+    isAnnual = !isAnnual;
+    billingToggle.classList.toggle('active', isAnnual);
 
-  document.querySelectorAll('.price[data-monthly]').forEach(el => {
-    const price = isAnnual ? el.dataset.annual : el.dataset.monthly;
-    el.textContent = `€${price}`;
+    document.querySelectorAll('.price[data-monthly]').forEach(el => {
+      const price = isAnnual ? el.dataset.annual : el.dataset.monthly;
+      el.textContent = `€${price}`;
+    });
+
+    const monthlyLabel = document.getElementById('monthlyLabel');
+    const annualLabel = document.getElementById('annualLabel');
+    if (monthlyLabel) {
+      monthlyLabel.style.fontWeight = isAnnual ? '400' : '600';
+      monthlyLabel.style.color = isAnnual ? '' : 'var(--text)';
+    }
+    if (annualLabel) {
+      annualLabel.style.fontWeight = isAnnual ? '600' : '400';
+      annualLabel.style.color = isAnnual ? 'var(--text)' : '';
+    }
   });
-
-  document.getElementById('monthlyLabel').style.fontWeight = isAnnual ? '400' : '600';
-  document.getElementById('monthlyLabel').style.color = isAnnual ? '' : 'var(--text)';
-  document.getElementById('annualLabel').style.fontWeight = isAnnual ? '600' : '400';
-  document.getElementById('annualLabel').style.color = isAnnual ? 'var(--text)' : '';
-});
+}
 
 // ===== Smooth scroll for anchor links =====
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
