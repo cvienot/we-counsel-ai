@@ -3,6 +3,9 @@
 require('dotenv').config({ quiet: true });
 
 const { execFileSync } = require('child_process');
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
 
 const GOOGLE_OAUTH_TOKEN_URL = 'https://oauth2.googleapis.com/token';
 const GOOGLE_ADS_ENDPOINT = 'https://googleads.googleapis.com';
@@ -89,6 +92,20 @@ function requiredEnv(name) {
     throw new Error(`${name} must be set.`);
   }
   return value;
+}
+
+function adcQuotaProject() {
+  try {
+    const adcPath = path.join(os.homedir(), '.config/gcloud/application_default_credentials.json');
+    const adc = JSON.parse(fs.readFileSync(adcPath, 'utf8'));
+    return adc.quota_project_id || null;
+  } catch {
+    return null;
+  }
+}
+
+function googleQuotaProject() {
+  return process.env.GOOGLE_CLOUD_QUOTA_PROJECT || process.env.GOOGLE_QUOTA_PROJECT || adcQuotaProject();
 }
 
 function cleanCustomerId(value) {
@@ -464,12 +481,19 @@ function searchConsoleSiteUrl() {
 
 async function searchConsoleRequest(path, { method = 'GET', body, expected = [200] } = {}) {
   const token = await getGoogleAccessToken('GOOGLE_SEARCH_CONSOLE');
+  const quotaProject = googleQuotaProject();
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  };
+
+  if (quotaProject) {
+    headers['x-goog-user-project'] = quotaProject;
+  }
+
   return fetchJson(`${SEARCH_CONSOLE_ENDPOINT}${path}`, {
     method,
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    },
+    headers,
     body,
     expected
   });

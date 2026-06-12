@@ -19,6 +19,18 @@ Auth is resolved in this order:
 3. `gcloud auth application-default print-access-token`
 4. `gcloud auth print-access-token`
 
+When using local Application Default Credentials, Search Console may require a quota project. The CLI reads it from ADC automatically after:
+
+```bash
+gcloud auth application-default set-quota-project your-project-id
+```
+
+You can also set it explicitly:
+
+```env
+GOOGLE_CLOUD_QUOTA_PROJECT=your-project-id
+```
+
 For refresh-token auth, set either shared values:
 
 ```env
