@@ -29,6 +29,8 @@ const tables = {
       { name: 'termsAcceptedVersion', type: 'S', description: 'Version of terms accepted (e.g., "1.0.0")' },
       { name: 'firstTouchUtm', type: 'M', description: 'First captured UTM campaign parameters' },
       { name: 'lastTouchUtm', type: 'M', description: 'Most recent captured UTM campaign parameters before signup' },
+      { name: 'firstTouchAdParams', type: 'M', description: 'First captured ad click identifiers such as gclid, gbraid, wbraid, and gad_* parameters' },
+      { name: 'lastTouchAdParams', type: 'M', description: 'Most recent captured ad click identifiers before signup' },
       { name: 'landingPage', type: 'S', description: 'Landing page URL captured with first-touch campaign attribution' },
       { name: 'referrer', type: 'S', description: 'Optional referring URL captured with campaign attribution' },
       { name: 'campaignCapturedAt', type: 'S', description: 'ISO timestamp when campaign attribution was captured' }

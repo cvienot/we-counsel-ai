@@ -121,12 +121,18 @@ let currentLang = detectLanguage();
 applyTranslations(currentLang);
 
 // ===== Campaign attribution passthrough =====
+const AD_ATTRIBUTION_PARAMS = new Set(['gclid', 'gbraid', 'wbraid']);
+
+function isCampaignAttributionParam(key) {
+  return key.startsWith('utm_') || key.startsWith('gad_') || AD_ATTRIBUTION_PARAMS.has(key);
+}
+
 function preserveCampaignParams() {
   const currentParams = new URLSearchParams(window.location.search);
   const campaignParams = new URLSearchParams();
 
   currentParams.forEach((value, key) => {
-    if (key.startsWith('utm_') && value) {
+    if (isCampaignAttributionParam(key) && value) {
       campaignParams.set(key, value);
     }
   });

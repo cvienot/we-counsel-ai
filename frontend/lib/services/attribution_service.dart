@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AttributionService {
@@ -9,16 +10,33 @@ class AttributionService {
 
   static const _firstTouchKey = 'we_connect_first_touch_attribution';
   static const _lastTouchKey = 'we_connect_last_touch_attribution';
+  static const _adAttributionKeys = {
+    'gclid',
+    'gbraid',
+    'wbraid',
+    'gad_campaignid',
+    'gad_source',
+  };
 
   Future<void> captureCurrentUri() async {
-    final uri = Uri.base;
-    final utmParams = _extractUtmParams(uri);
+    await _captureUri(Uri.base);
+  }
 
-    if (utmParams.isEmpty) return;
+  @visibleForTesting
+  Future<void> captureUriForTesting(Uri uri) async {
+    await _captureUri(uri);
+  }
+
+  Future<void> _captureUri(Uri uri) async {
+    final utmParams = _extractUtmParams(uri);
+    final adParams = _extractAdAttributionParams(uri);
+
+    if (utmParams.isEmpty && adParams.isEmpty) return;
 
     final now = DateTime.now().toUtc().toIso8601String();
     final record = <String, dynamic>{
-      'utm': utmParams,
+      if (utmParams.isNotEmpty) 'utm': utmParams,
+      if (adParams.isNotEmpty) 'ad': adParams,
       'landingPage': _truncate(uri.toString(), 2048),
       'campaignCapturedAt': now,
     };
@@ -41,6 +59,8 @@ class AttributionService {
     final payload = <String, dynamic>{};
     final firstUtm = firstTouch?['utm'];
     final lastUtm = lastTouch?['utm'];
+    final firstAd = firstTouch?['ad'];
+    final lastAd = lastTouch?['ad'];
 
     if (firstUtm is Map && firstUtm.isNotEmpty) {
       payload['firstTouchUtm'] = Map<String, dynamic>.from(firstUtm);
@@ -48,6 +68,14 @@ class AttributionService {
 
     if (lastUtm is Map && lastUtm.isNotEmpty) {
       payload['lastTouchUtm'] = Map<String, dynamic>.from(lastUtm);
+    }
+
+    if (firstAd is Map && firstAd.isNotEmpty) {
+      payload['firstTouchAdParams'] = Map<String, dynamic>.from(firstAd);
+    }
+
+    if (lastAd is Map && lastAd.isNotEmpty) {
+      payload['lastTouchAdParams'] = Map<String, dynamic>.from(lastAd);
     }
 
     final landingPage = firstTouch?['landingPage'] ?? lastTouch?['landingPage'];
@@ -69,6 +97,19 @@ class AttributionService {
 
     uri.queryParameters.forEach((key, value) {
       if (key.startsWith('utm_') && value.isNotEmpty) {
+        params[_truncate(key, 128)] = _truncate(value, 512);
+      }
+    });
+
+    return params;
+  }
+
+  Map<String, String> _extractAdAttributionParams(Uri uri) {
+    final params = <String, String>{};
+
+    uri.queryParameters.forEach((key, value) {
+      if ((_adAttributionKeys.contains(key) || key.startsWith('gad_')) &&
+          value.isNotEmpty) {
         params[_truncate(key, 128)] = _truncate(value, 512);
       }
     });

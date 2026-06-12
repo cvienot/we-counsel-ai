@@ -41,6 +41,25 @@ const sanitizeUtmParams = (value) => {
   return Object.keys(sanitized).length > 0 ? sanitized : undefined;
 };
 
+const AD_ATTRIBUTION_KEYS = new Set(['gclid', 'gbraid', 'wbraid', 'gad_campaignid', 'gad_source']);
+
+const sanitizeAdParams = (value) => {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return undefined;
+
+  const sanitized = {};
+  for (const [key, rawValue] of Object.entries(value)) {
+    if (!AD_ATTRIBUTION_KEYS.has(key) && !key.startsWith('gad_')) continue;
+    const safeKey = truncateString(key, 128);
+    const safeValue = truncateString(rawValue, 512);
+
+    if (safeKey && safeValue) {
+      sanitized[safeKey] = safeValue;
+    }
+  }
+
+  return Object.keys(sanitized).length > 0 ? sanitized : undefined;
+};
+
 const sanitizeAttribution = (attribution, fallbackTimestamp) => {
   if (!attribution || typeof attribution !== 'object' || Array.isArray(attribution)) {
     return {};
@@ -48,6 +67,8 @@ const sanitizeAttribution = (attribution, fallbackTimestamp) => {
 
   const firstTouchUtm = sanitizeUtmParams(attribution.firstTouchUtm);
   const lastTouchUtm = sanitizeUtmParams(attribution.lastTouchUtm);
+  const firstTouchAdParams = sanitizeAdParams(attribution.firstTouchAdParams);
+  const lastTouchAdParams = sanitizeAdParams(attribution.lastTouchAdParams);
   const landingPage = truncateString(attribution.landingPage, 2048);
   const referrer = truncateString(attribution.referrer, 2048);
   const campaignCapturedAt = truncateString(attribution.campaignCapturedAt, 64);
@@ -55,6 +76,8 @@ const sanitizeAttribution = (attribution, fallbackTimestamp) => {
   const sanitized = {
     ...(firstTouchUtm ? { firstTouchUtm } : {}),
     ...(lastTouchUtm ? { lastTouchUtm } : {}),
+    ...(firstTouchAdParams ? { firstTouchAdParams } : {}),
+    ...(lastTouchAdParams ? { lastTouchAdParams } : {}),
     ...(landingPage ? { landingPage } : {}),
     ...(referrer ? { referrer } : {}),
   };
