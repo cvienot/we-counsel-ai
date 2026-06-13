@@ -21,6 +21,6 @@ void main() {
     expect(find.text('Why AI for couples?'), findsOneWidget);
     expect(find.text('Designed around the couple'), findsOneWidget);
     expect(find.text('Technology that brings you back'), findsOneWidget);
-    expect(find.textContaining('does not replace therapy'), findsOneWidget);
+    expect(find.textContaining('does not replace therapy'), findsNothing);
   });
 }

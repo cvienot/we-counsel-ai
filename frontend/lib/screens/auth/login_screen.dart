@@ -220,14 +220,6 @@ class _MotivationSection extends StatelessWidget {
             title: l10n.whyAiForCouplesTechTitle,
             body: l10n.whyAiForCouplesTechText,
           ),
-          const SizedBox(height: 14),
-          Text(
-            l10n.whyAiForCouplesSafety,
-            style: theme.textTheme.bodySmall?.copyWith(
-              height: 1.4,
-              color: colorScheme.onSurface.withValues(alpha: 0.72),
-            ),
-          ),
         ],
       ),
     );
