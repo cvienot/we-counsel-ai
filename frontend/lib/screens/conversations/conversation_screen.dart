@@ -9,6 +9,7 @@ import '../../services/realtime_service.dart';
 import '../../widgets/message_bubble.dart';
 import '../../widgets/mention_text.dart';
 import '../../widgets/exercise_suggestion_card.dart';
+import '../../widgets/disclaimer_banner.dart';
 import '../../widgets/ctrl_enter_submit.dart';
 import '../../utils/snackbar_utils.dart';
 import '../../widgets/responsive_layout.dart';
