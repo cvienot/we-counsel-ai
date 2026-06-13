@@ -137,7 +137,7 @@ function validateSecrets() {
   }
 
   console.log('✅ All required configuration is present');
-  console.log('   📦 Non-sensitive: AWS_REGION, DYNAMODB_REGION, EMAIL_FROM, FRONTEND_URL, NODE_ENV');
+  console.log('   📦 Non-sensitive: AWS_REGION, DYNAMODB_REGION, EMAIL_FROM, SIGNUP_NOTIFICATION_EMAIL, FRONTEND_URL, NODE_ENV');
   console.log('   🔒 Sensitive (from Secrets Manager): JWT_SECRET, OPENAI_API_KEY, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET');
   console.log('   💳 Stripe price IDs configured for Essential and Premium monthly/annual plans');
 }

@@ -6,6 +6,34 @@ const sesClient = new SESClient({
   region: process.env.AWS_REGION || 'eu-west-3'
 });
 
+const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;'
+}[char]));
+
+const formatOptionalText = (label, value) => {
+  if (value === undefined || value === null || value === '') return '';
+  return `${label}: ${value}\n`;
+};
+
+const formatOptionalHtmlRow = (label, value) => {
+  if (value === undefined || value === null || value === '') return '';
+  return `<tr><td><strong>${escapeHtml(label)}</strong></td><td>${escapeHtml(value)}</td></tr>`;
+};
+
+const formatObjectText = (label, value) => {
+  if (!value || typeof value !== 'object' || Array.isArray(value) || Object.keys(value).length === 0) return '';
+  return `${label}: ${JSON.stringify(value)}\n`;
+};
+
+const formatObjectHtmlRow = (label, value) => {
+  if (!value || typeof value !== 'object' || Array.isArray(value) || Object.keys(value).length === 0) return '';
+  return `<tr><td><strong>${escapeHtml(label)}</strong></td><td><code>${escapeHtml(JSON.stringify(value))}</code></td></tr>`;
+};
+
 const sendInvitationEmail = async ({ to, inviterName, invitationId, message, language = 'en' }) => {
   const invitationUrl = `${process.env.FRONTEND_URL}/invitation/${invitationId}`;
   
@@ -192,6 +220,103 @@ const sendWelcomeEmail = async ({ to, firstName, language = 'en' }) => {
     return result;
   } catch (error) {
     console.error('Error sending welcome email:', error);
+    throw error;
+  }
+};
+
+const sendSignupNotificationEmail = async ({ to, user }) => {
+  const appUrl = process.env.FRONTEND_URL || 'https://app.we-connect-app.com';
+  const subject = 'Nouvelle inscription We Connect';
+  const fullName = `${user.firstName || ''} ${user.lastName || ''}`.trim();
+
+  const htmlRows = [
+    formatOptionalHtmlRow('Nom', fullName),
+    formatOptionalHtmlRow('Email', user.email),
+    formatOptionalHtmlRow('Langue', user.language),
+    formatOptionalHtmlRow('Plan choisi', user.selectedPlan || 'free'),
+    formatOptionalHtmlRow('Date inscription', user.createdAt),
+    formatOptionalHtmlRow('Landing page', user.landingPage),
+    formatOptionalHtmlRow('Referrer', user.referrer),
+    formatObjectHtmlRow('First touch UTM', user.firstTouchUtm),
+    formatObjectHtmlRow('Last touch UTM', user.lastTouchUtm),
+    formatObjectHtmlRow('First touch ads', user.firstTouchAdParams),
+    formatObjectHtmlRow('Last touch ads', user.lastTouchAdParams)
+  ].join('');
+
+  const textBody = [
+    'Nouvelle inscription We Connect',
+    '',
+    formatOptionalText('Nom', fullName),
+    formatOptionalText('Email', user.email),
+    formatOptionalText('Langue', user.language),
+    formatOptionalText('Plan choisi', user.selectedPlan || 'free'),
+    formatOptionalText('Date inscription', user.createdAt),
+    formatOptionalText('Landing page', user.landingPage),
+    formatOptionalText('Referrer', user.referrer),
+    formatObjectText('First touch UTM', user.firstTouchUtm),
+    formatObjectText('Last touch UTM', user.lastTouchUtm),
+    formatObjectText('First touch ads', user.firstTouchAdParams),
+    formatObjectText('Last touch ads', user.lastTouchAdParams),
+    `App: ${appUrl}`
+  ].join('\n').replace(/\n{3,}/g, '\n\n');
+
+  const params = {
+    Source: process.env.EMAIL_FROM,
+    Destination: {
+      ToAddresses: [to]
+    },
+    Message: {
+      Subject: {
+        Data: subject,
+        Charset: 'UTF-8'
+      },
+      Body: {
+        Html: {
+          Data: `
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <meta charset="utf-8">
+              <title>${subject}</title>
+              <style>
+                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                .container { max-width: 640px; margin: 0 auto; padding: 20px; }
+                .content { padding: 20px; background: #f9f9f9; border-radius: 8px; }
+                table { width: 100%; border-collapse: collapse; }
+                td { padding: 8px 0; border-bottom: 1px solid #e5e5e5; vertical-align: top; }
+                td:first-child { width: 160px; color: #555; }
+                code { white-space: pre-wrap; word-break: break-word; }
+                .footer { padding-top: 16px; font-size: 12px; color: #666; }
+              </style>
+            </head>
+            <body>
+              <div class="container">
+                <h1>${subject}</h1>
+                <div class="content">
+                  <table>${htmlRows}</table>
+                  <p class="footer"><a href="${escapeHtml(appUrl)}">Ouvrir l'app We Connect</a></p>
+                </div>
+              </div>
+            </body>
+            </html>
+          `,
+          Charset: 'UTF-8'
+        },
+        Text: {
+          Data: textBody,
+          Charset: 'UTF-8'
+        }
+      }
+    }
+  };
+
+  try {
+    const command = new SendEmailCommand(params);
+    const result = await sesClient.send(command);
+    console.log('Signup notification email sent:', result.MessageId);
+    return result;
+  } catch (error) {
+    console.error('Error sending signup notification email:', error);
     throw error;
   }
 };
@@ -402,6 +527,7 @@ const sendPasswordResetEmail = async ({ to, resetToken, language = 'en' }) => {
 module.exports = {
   sendInvitationEmail,
   sendWelcomeEmail,
+  sendSignupNotificationEmail,
   sendMessageNotification,
   sendPasswordResetEmail
 };

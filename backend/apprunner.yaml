@@ -20,6 +20,8 @@ run:
       value: eu-west-3
     - name: EMAIL_FROM
       value: noreply@we-connect-app.com
+    - name: SIGNUP_NOTIFICATION_EMAIL
+      value: camille.vienot@gmail.com
     - name: FRONTEND_URL
       value: https://app.we-connect-app.com
     

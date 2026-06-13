@@ -41,6 +41,35 @@ const sendWelcomeEmail = async ({ to, firstName, email, language = 'en' }) => {
   return { MessageId: emailData.messageId };
 };
 
+const sendSignupNotificationEmail = async ({ to, user }) => {
+  const email = {
+    type: 'signupNotification',
+    to,
+    user: {
+      userId: user.userId,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      language: user.language,
+      selectedPlan: user.selectedPlan,
+      createdAt: user.createdAt,
+      landingPage: user.landingPage,
+      referrer: user.referrer,
+      firstTouchUtm: user.firstTouchUtm,
+      lastTouchUtm: user.lastTouchUtm,
+      firstTouchAdParams: user.firstTouchAdParams,
+      lastTouchAdParams: user.lastTouchAdParams
+    },
+    sentAt: new Date().toISOString(),
+    messageId: `mock-signup-notification-${Date.now()}-${Math.random()}`
+  };
+
+  global.mockEmailStore.push(email);
+  console.log('📧 MOCK EMAIL (Signup Notification):', { to, userEmail: user.email });
+
+  return { MessageId: email.messageId };
+};
+
 const sendMessageNotification = async ({ to, recipientName, senderName, messagePreview, conversationId, language = 'en' }) => {
   const email = {
     type: 'messageNotification',
@@ -79,6 +108,7 @@ const sendPasswordResetEmail = async ({ to, resetToken, language = 'en' }) => {
 module.exports = {
   sendInvitationEmail,
   sendWelcomeEmail,
+  sendSignupNotificationEmail,
   sendMessageNotification,
   sendPasswordResetEmail
 };

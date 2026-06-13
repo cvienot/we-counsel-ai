@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const { randomUUID } = require('crypto');
 const { docClient, TABLES, QueryCommand, PutCommand, GetCommand, UpdateCommand } = require('../config/database');
 const { emailService } = require('../services');
-const { sendInvitationEmail, sendWelcomeEmail, sendPasswordResetEmail } = emailService;
+const { sendInvitationEmail, sendWelcomeEmail, sendSignupNotificationEmail, sendPasswordResetEmail } = emailService;
 const { authenticateToken } = require('../middleware/authMiddleware');
 
 const router = express.Router();
@@ -185,6 +185,18 @@ router.post('/register', async (req, res) => {
     } catch (emailError) {
       console.error('Failed to send welcome email:', emailError);
       // Don't fail registration if email fails
+    }
+
+    if (process.env.SIGNUP_NOTIFICATION_EMAIL) {
+      try {
+        await sendSignupNotificationEmail({
+          to: process.env.SIGNUP_NOTIFICATION_EMAIL,
+          user: userData
+        });
+      } catch (emailError) {
+        console.error('Failed to send signup notification email:', emailError);
+        // Don't fail registration if the internal notification fails
+      }
     }
 
     // Remove password from response
