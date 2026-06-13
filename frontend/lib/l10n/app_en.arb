@@ -211,6 +211,7 @@
   "createAccount": "Create Account",
   "joinApp": "Join We Connect",
   "startJourneyBetterComm": "Start your journey to better communication",
+  "learnMoreOnWebsite": "Learn more on the We Connect website",
   "pleaseEnterAPassword": "Please enter a password",
   "passwordMinLength": "Password must be at least 6 characters",
   "pleaseConfirmPassword": "Please confirm your password",

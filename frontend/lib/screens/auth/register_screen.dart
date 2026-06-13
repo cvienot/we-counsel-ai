@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/language_provider.dart';
 import '../../l10n/app_localizations.dart';
@@ -22,6 +23,8 @@ class RegisterScreen extends ConsumerStatefulWidget {
 }
 
 class _RegisterScreenState extends ConsumerState<RegisterScreen> {
+  static const _marketingSite = 'https://we-connect-app.com';
+
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -59,6 +62,32 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       return postAuthRedirect(GoRouterState.of(context).uri);
     } catch (_) {
       return '/main-thread';
+    }
+  }
+
+  Uri _marketingSiteUri() {
+    final utmParams = Map.fromEntries(
+      Uri.base.queryParameters.entries.where(
+        (entry) => entry.key.startsWith('utm_') && entry.value.isNotEmpty,
+      ),
+    );
+
+    return Uri.parse(
+      _marketingSite,
+    ).replace(queryParameters: utmParams.isEmpty ? null : utmParams);
+  }
+
+  Future<void> _openMarketingSite() async {
+    final uri = _marketingSiteUri();
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+      return;
+    }
+
+    if (mounted) {
+      final l10n = AppLocalizations.of(context)!;
+      showErrorSnackBar(context, l10n.errorGeneric);
     }
   }
 
@@ -169,7 +198,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       style: Theme.of(context).textTheme.bodyMedium,
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 12),
+                    TextButton.icon(
+                      onPressed: _openMarketingSite,
+                      icon: const Icon(Icons.open_in_new, size: 18),
+                      label: Text(l10n.learnMoreOnWebsite),
+                    ),
+                    const SizedBox(height: 24),
                     Row(
                       children: [
                         Expanded(

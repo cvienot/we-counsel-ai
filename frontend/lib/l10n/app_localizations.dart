@@ -1006,6 +1006,12 @@ abstract class AppLocalizations {
   /// **'Start your journey to better communication'**
   String get startJourneyBetterComm;
 
+  /// No description provided for @learnMoreOnWebsite.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn more on the We Connect website'**
+  String get learnMoreOnWebsite;
+
   /// No description provided for @pleaseEnterAPassword.
   ///
   /// In en, this message translates to:

@@ -500,6 +500,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Start your journey to better communication';
 
   @override
+  String get learnMoreOnWebsite => 'Learn more on the We Connect website';
+
+  @override
   String get pleaseEnterAPassword => 'Please enter a password';
 
   @override

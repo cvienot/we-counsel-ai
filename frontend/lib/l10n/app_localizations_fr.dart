@@ -508,6 +508,9 @@ class AppLocalizationsFr extends AppLocalizations {
       'Commencez votre parcours vers une meilleure communication';
 
   @override
+  String get learnMoreOnWebsite => 'En savoir plus sur le site We Connect';
+
+  @override
   String get pleaseEnterAPassword => 'Veuillez entrer un mot de passe';
 
   @override

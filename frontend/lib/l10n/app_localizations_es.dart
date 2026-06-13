@@ -506,6 +506,9 @@ class AppLocalizationsEs extends AppLocalizations {
       'Comienza tu viaje hacia una mejor comunicación';
 
   @override
+  String get learnMoreOnWebsite => 'Más información en el sitio de We Connect';
+
+  @override
   String get pleaseEnterAPassword => 'Por favor, ingresa una contraseña';
 
   @override
