@@ -988,6 +988,13 @@ class _WaitingRoomScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 32),
                 ElevatedButton.icon(
+                  key: const ValueKey('waiting-room-solo-prep-button'),
+                  onPressed: () => context.push('/solo-prep'),
+                  icon: const Icon(Icons.edit_note),
+                  label: Text(l10n.prepareFirstConversation),
+                ),
+                const SizedBox(height: 12),
+                ElevatedButton.icon(
                   onPressed: () => context.push('/invite'),
                   icon: const Icon(Icons.email),
                   label: Text(l10n.invitePartnerButton),

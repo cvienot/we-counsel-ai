@@ -195,6 +195,84 @@ class AppLocalizationsEn extends AppLocalizations {
       'Share this invitation with your partner to start your relationship communication journey together.';
 
   @override
+  String get prepareFirstConversation => 'Prepare First Conversation';
+
+  @override
+  String get soloPreparationTitle => 'Prepare your first conversation';
+
+  @override
+  String get soloPreparationIntro =>
+      'You can start alone by clarifying what you want to say. Save a draft, then use it when you invite your partner.';
+
+  @override
+  String get soloTopicLabel => 'What do you want to talk about?';
+
+  @override
+  String get soloTopicHint => 'Example: how we handle evenings after work';
+
+  @override
+  String get soloFeelingLabel => 'What are you feeling?';
+
+  @override
+  String get soloFeelingHint =>
+      'Example: I feel distant and a little discouraged';
+
+  @override
+  String get soloNeedLabel => 'What would help you feel heard?';
+
+  @override
+  String get soloNeedHint =>
+      'Example: I need us to listen without interrupting';
+
+  @override
+  String get soloNextStepLabel => 'What small next step would feel realistic?';
+
+  @override
+  String get soloNextStepHint =>
+      'Example: a calm 15-minute conversation this weekend';
+
+  @override
+  String get soloInvitationPreviewTitle => 'Invitation preview';
+
+  @override
+  String get soloSaveDraft => 'Save draft';
+
+  @override
+  String get soloUseForInvitation => 'Use in partner invitation';
+
+  @override
+  String get soloDraftSaved => 'Draft saved';
+
+  @override
+  String get soloSafetyNote =>
+      'If there is fear, violence, coercion, or immediate danger, prioritize safety and contact qualified help before trying a guided conversation.';
+
+  @override
+  String get soloDraftFallbackTopic => 'something important between us';
+
+  @override
+  String get soloDraftFallbackFeeling =>
+      'I would like us to slow down and understand each other better';
+
+  @override
+  String get soloDraftFallbackNeed =>
+      'I need a calmer space where we can both feel heard';
+
+  @override
+  String get soloDraftFallbackNextStep =>
+      'try a short guided conversation together';
+
+  @override
+  String soloInvitationDraft(
+    String topic,
+    String feeling,
+    String need,
+    String nextStep,
+  ) {
+    return 'I would like us to talk about $topic. I am feeling: $feeling. What would help me is: $need. Would you be open to $nextStep with me on We Connect?';
+  }
+
+  @override
   String get createNewConversation => 'Create New Conversation';
 
   @override

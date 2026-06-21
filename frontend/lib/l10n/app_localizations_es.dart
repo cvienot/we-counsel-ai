@@ -199,6 +199,86 @@ class AppLocalizationsEs extends AppLocalizations {
       'Comparta esta invitación con su pareja para comenzar su camino de comunicación relacional juntos.';
 
   @override
+  String get prepareFirstConversation => 'Preparar primera conversación';
+
+  @override
+  String get soloPreparationTitle => 'Prepara tu primera conversación';
+
+  @override
+  String get soloPreparationIntro =>
+      'Puedes empezar a solas aclarando lo que quieres decir. Guarda un borrador y úsalo cuando invites a tu pareja.';
+
+  @override
+  String get soloTopicLabel => '¿De qué quieres hablar?';
+
+  @override
+  String get soloTopicHint =>
+      'Ejemplo: cómo organizamos las tardes después del trabajo';
+
+  @override
+  String get soloFeelingLabel => '¿Qué estás sintiendo?';
+
+  @override
+  String get soloFeelingHint =>
+      'Ejemplo: me siento distante y un poco desanimado/a';
+
+  @override
+  String get soloNeedLabel => '¿Qué te ayudaría a sentirte escuchado/a?';
+
+  @override
+  String get soloNeedHint =>
+      'Ejemplo: necesito que nos escuchemos sin interrumpir';
+
+  @override
+  String get soloNextStepLabel =>
+      '¿Qué pequeño siguiente paso parece realista?';
+
+  @override
+  String get soloNextStepHint =>
+      'Ejemplo: una conversación tranquila de 15 minutos este fin de semana';
+
+  @override
+  String get soloInvitationPreviewTitle => 'Vista previa de la invitación';
+
+  @override
+  String get soloSaveDraft => 'Guardar borrador';
+
+  @override
+  String get soloUseForInvitation => 'Usar en la invitación';
+
+  @override
+  String get soloDraftSaved => 'Borrador guardado';
+
+  @override
+  String get soloSafetyNote =>
+      'Si hay miedo, violencia, coerción o peligro inmediato, prioriza la seguridad y contacta ayuda cualificada antes de intentar una conversación guiada.';
+
+  @override
+  String get soloDraftFallbackTopic => 'algo importante entre nosotros';
+
+  @override
+  String get soloDraftFallbackFeeling =>
+      'me gustaría que bajáramos el ritmo y nos entendiéramos mejor';
+
+  @override
+  String get soloDraftFallbackNeed =>
+      'necesito un espacio más tranquilo donde ambos podamos sentirnos escuchados';
+
+  @override
+  String get soloDraftFallbackNextStep =>
+      'probar una breve conversación guiada juntos';
+
+  @override
+  String soloInvitationDraft(
+    String topic,
+    String feeling,
+    String need,
+    String nextStep,
+  ) {
+    return 'Me gustaría que habláramos de $topic. Estoy sintiendo: $feeling. Lo que me ayudaría es: $need. ¿Estarías dispuesto/a a $nextStep conmigo en We Connect?';
+  }
+
+  @override
   String get createNewConversation => 'Crear Nueva Conversación';
 
   @override
