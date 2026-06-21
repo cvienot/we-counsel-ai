@@ -60,6 +60,16 @@ Future<void> settleWithTimeout(
   }
 }
 
+Future<void> useE2EViewport(WidgetTester tester) async {
+  tester.view.physicalSize = const Size(1200, 1000);
+  tester.view.devicePixelRatio = 1.0;
+  addTearDown(() {
+    tester.view.resetPhysicalSize();
+    tester.view.resetDevicePixelRatio();
+  });
+  await tester.pump();
+}
+
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
@@ -90,6 +100,7 @@ void main() {
     testWidgets('User1 signs up, invites partner, User2 accepts, they exchange messages', (
       WidgetTester tester,
     ) async {
+      await useE2EViewport(tester);
       // Launch the app
       app.main();
 
@@ -746,6 +757,7 @@ void main() {
     testWidgets('User can switch subscription plan', (
       WidgetTester tester,
     ) async {
+      await useE2EViewport(tester);
       // Launch the app
       app.main();
       await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
@@ -966,6 +978,7 @@ void main() {
     testWidgets('Couple inherits highest plan selected at registration', (
       WidgetTester tester,
     ) async {
+      await useE2EViewport(tester);
       // Launch app (required by integration test framework)
       app.main();
       await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
@@ -1708,6 +1721,7 @@ void main() {
       // ============================================
       print('\n📱 Step 3: Verifying commitment card in the UI');
 
+      await useE2EViewport(tester);
       app.main();
       await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
 
@@ -2165,6 +2179,7 @@ void main() {
       print('\n📱 Step 9: UI navigation to progress dashboard');
 
       // Launch the app and log in as User1
+      await useE2EViewport(tester);
       app.main();
       await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
 
@@ -2345,6 +2360,7 @@ void main() {
     testWidgets('Invite partner via UI navigates to waiting room on success', (
       WidgetTester tester,
     ) async {
+      await useE2EViewport(tester);
       // Launch the app
       app.main();
       await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
@@ -2514,6 +2530,7 @@ void main() {
     testWidgets('User can change language from English to French and back', (
       WidgetTester tester,
     ) async {
+      await useE2EViewport(tester);
       // Launch the app
       app.main();
       await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
