@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -334,17 +336,61 @@ class _AuthStateNotifier extends ChangeNotifier {
   }
 }
 
-class SplashScreen extends ConsumerWidget {
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends ConsumerState<SplashScreen> {
+  Timer? _recoveryTimer;
+  bool _showRecoveryActions = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _startRecoveryTimer();
+  }
+
+  @override
+  void dispose() {
+    _recoveryTimer?.cancel();
+    super.dispose();
+  }
+
+  void _startRecoveryTimer() {
+    _recoveryTimer?.cancel();
+    _showRecoveryActions = false;
+    _recoveryTimer = Timer(const Duration(seconds: 12), () {
+      if (mounted && ref.read(authProvider).isLoading) {
+        setState(() => _showRecoveryActions = true);
+      }
+    });
+  }
+
+  Future<void> _retrySessionCheck() async {
+    setState(() => _showRecoveryActions = false);
+    _startRecoveryTimer();
+    await ref.read(authProvider.notifier).checkAuthStatus();
+  }
+
+  Future<void> _signInAgain() async {
+    await ref.read(authProvider.notifier).logout();
+    if (mounted) {
+      context.go('/login');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     // Listen to auth state changes to trigger navigation
     ref.listen<AuthState>(authProvider, (previous, next) {
       if (!next.isLoading) {
         // Auth check is complete, router will handle navigation
       }
     });
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
@@ -373,6 +419,57 @@ class SplashScreen extends ConsumerWidget {
             const CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
             ),
+            if (_showRecoveryActions) ...[
+              const SizedBox(height: 24),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                child: Text(
+                  l10n?.startupTakingLong ??
+                      'This is taking longer than expected.',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                child: Text(
+                  l10n?.startupTakingLongHelp ??
+                      'You can retry the session check or sign in again.',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Colors.white.withValues(alpha: 0.9),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 12,
+                runSpacing: 8,
+                children: [
+                  OutlinedButton(
+                    onPressed: _retrySessionCheck,
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      side: const BorderSide(color: Colors.white),
+                    ),
+                    child: Text(l10n?.retry ?? 'Retry'),
+                  ),
+                  FilledButton(
+                    onPressed: _signInAgain,
+                    style: FilledButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: Theme.of(context).colorScheme.primary,
+                    ),
+                    child: Text(l10n?.signInAgain ?? 'Sign in again'),
+                  ),
+                ],
+              ),
+            ],
           ],
         ),
       ),

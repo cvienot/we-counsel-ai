@@ -274,6 +274,24 @@ abstract class AppLocalizations {
   /// **'Back'**
   String get back;
 
+  /// No description provided for @startupTakingLong.
+  ///
+  /// In en, this message translates to:
+  /// **'This is taking longer than expected.'**
+  String get startupTakingLong;
+
+  /// No description provided for @startupTakingLongHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'You can retry the session check or sign in again.'**
+  String get startupTakingLongHelp;
+
+  /// No description provided for @signInAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in again'**
+  String get signInAgain;
+
   /// No description provided for @invitePartner.
   ///
   /// In en, this message translates to:

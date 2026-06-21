@@ -34,6 +34,9 @@
   "save": "Sauvegarder",
   "close": "Fermer",
   "back": "Retour",
+  "startupTakingLong": "La connexion prend plus de temps que prévu.",
+  "startupTakingLongHelp": "Vous pouvez relancer la vérification de session ou vous reconnecter.",
+  "signInAgain": "Se reconnecter",
 
   "invitePartner": "Inviter Partenaire",
   "inviteYourPartner": "Invitez votre partenaire",

@@ -98,6 +98,17 @@ class AppLocalizationsEs extends AppLocalizations {
   String get back => 'Volver';
 
   @override
+  String get startupTakingLong =>
+      'La conexión está tardando más de lo esperado.';
+
+  @override
+  String get startupTakingLongHelp =>
+      'Puedes reintentar la verificación de sesión o iniciar sesión de nuevo.';
+
+  @override
+  String get signInAgain => 'Iniciar sesión de nuevo';
+
+  @override
   String get invitePartner => 'Invitar Pareja';
 
   @override

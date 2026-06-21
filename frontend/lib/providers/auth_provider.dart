@@ -40,6 +40,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   final ApiService _apiService;
   final RealtimeService _realtimeService = RealtimeService();
   static const Duration _startupTokenReadTimeout = Duration(seconds: 4);
+  static const Duration _startupUserVerificationTimeout = Duration(seconds: 12);
 
   AuthNotifier(this._apiService) : super(const AuthState()) {
     _initializeAuth();
@@ -69,7 +70,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       if (token != null && token.isNotEmpty) {
         // Token exists, verify it's still valid by getting current user
         Environment.log('AUTH: Verifying token with server...');
-        await getCurrentUser();
+        await _restoreCurrentUser();
         Environment.log('AUTH: Token verified successfully');
       } else {
         // No token, user is not authenticated
@@ -229,6 +230,31 @@ class AuthNotifier extends StateNotifier<AuthState> {
         error: e.toString(),
       );
       rethrow;
+    }
+  }
+
+  Future<void> _restoreCurrentUser() async {
+    final response = await _apiService.getCurrentUser().timeout(
+      _startupUserVerificationTimeout,
+    );
+
+    if (response['success'] == true && response['user'] != null) {
+      final user = User.fromJson(response['user']);
+      state = state.copyWith(
+        user: user,
+        isAuthenticated: true,
+        isLoading: false,
+        error: null,
+      );
+
+      _connectRealtimeInBackground('auth restore');
+    } else {
+      state = state.copyWith(
+        user: null,
+        isAuthenticated: false,
+        isLoading: false,
+        error: null,
+      );
     }
   }
 
