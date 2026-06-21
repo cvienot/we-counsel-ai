@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../providers/auth_provider.dart';
 import '../../l10n/app_localizations.dart';
+import '../../services/analytics_service.dart';
 import '../../widgets/ctrl_enter_submit.dart';
 import '../../utils/snackbar_utils.dart';
 import '../../widgets/responsive_layout.dart';
@@ -19,6 +20,12 @@ class _InvitePartnerScreenState extends ConsumerState<InvitePartnerScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _messageController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    AnalyticsService.trackInvitePartnerStart(source: 'invite_screen');
+  }
 
   @override
   void dispose() {
@@ -38,6 +45,9 @@ class _InvitePartnerScreenState extends ConsumerState<InvitePartnerScreen> {
           message: _messageController.text.trim(),
         );
         
+
+        AnalyticsService.trackInvitePartnerSent(method: 'email');
+
         if (mounted) {
           showSuccessSnackBar(context, l10n.invitationSentMessage(email));
           context.go('/main-thread');

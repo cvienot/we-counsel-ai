@@ -34,6 +34,18 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   bool _termsAccepted = false;
 
   @override
+  void initState() {
+    super.initState();
+
+    final currentLanguage = ref.read(currentLocaleProvider).languageCode;
+    final pendingInvitation = ref.read(pendingInvitationProvider);
+    AnalyticsService.trackSignUpStart(
+      source: pendingInvitation != null ? 'invitation' : 'direct',
+      language: currentLanguage,
+    );
+  }
+
+  @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();

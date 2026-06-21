@@ -14,6 +14,20 @@ class AnalyticsService {
     _dispatcher.trackEvent(name, sanitized);
   }
 
+  static void trackAppOpen({
+    required String language,
+    required String entryPath,
+  }) {
+    trackEvent('app_open', {'language': language, 'entry_path': entryPath});
+  }
+
+  static void trackSignUpStart({
+    required String source,
+    required String language,
+  }) {
+    trackEvent('sign_up_start', {'source': source, 'language': language});
+  }
+
   static void trackSignUpComplete({
     required String method,
     required String language,
@@ -26,6 +40,14 @@ class AnalyticsService {
       'plan_tier': planTier,
       'has_invitation': hasInvitation,
     });
+  }
+
+  static void trackInvitePartnerStart({required String source}) {
+    trackEvent('invite_partner_start', {'source': source});
+  }
+
+  static void trackInvitePartnerSent({required String method}) {
+    trackEvent('invite_partner_sent', {'method': method});
   }
 
   static void trackSubscriptionCheckoutStart({

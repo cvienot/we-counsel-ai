@@ -30,6 +30,37 @@ void main() {
     });
   });
 
+  test('tracks app open metadata', () {
+    AnalyticsService.trackAppOpen(language: 'fr', entryPath: '/register');
+
+    expect(dispatcher.events.single.name, 'app_open');
+    expect(dispatcher.events.single.parameters, {
+      'language': 'fr',
+      'entry_path': '/register',
+    });
+  });
+
+  test('tracks sign up start source', () {
+    AnalyticsService.trackSignUpStart(source: 'invitation', language: 'fr');
+
+    expect(dispatcher.events.single.name, 'sign_up_start');
+    expect(dispatcher.events.single.parameters, {
+      'source': 'invitation',
+      'language': 'fr',
+    });
+  });
+
+  test('tracks invite funnel events without partner data', () {
+    AnalyticsService.trackInvitePartnerStart(source: 'invite_screen');
+    AnalyticsService.trackInvitePartnerSent(method: 'email');
+
+    expect(dispatcher.events, hasLength(2));
+    expect(dispatcher.events.first.name, 'invite_partner_start');
+    expect(dispatcher.events.first.parameters, {'source': 'invite_screen'});
+    expect(dispatcher.events.last.name, 'invite_partner_sent');
+    expect(dispatcher.events.last.parameters, {'method': 'email'});
+  });
+
   test('tracks checkout start with subscription value', () {
     AnalyticsService.trackSubscriptionCheckoutStart(
       planTier: 'premium',

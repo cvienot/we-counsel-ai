@@ -29,6 +29,7 @@ import 'screens/exercises/exercise_loader_screen.dart';
 import 'screens/exercises/exercise_history_screen.dart';
 import 'screens/progress/progress_dashboard_screen.dart';
 import 'config/environment.dart';
+import 'services/analytics_service.dart';
 import 'services/attribution_service.dart';
 import 'utils/navigation_utils.dart';
 
@@ -49,14 +50,19 @@ class WeCounselApp extends ConsumerWidget {
 
   // Cache the router so locale changes don't recreate it (which would reset navigation)
   static GoRouter? _cachedRouter;
+  static bool _appOpenTracked = false;
 
   /// Reset the cached router. Call between integration test cases.
-  static void resetRouter() => _cachedRouter = null;
+  static void resetRouter() {
+    _cachedRouter = null;
+    _appOpenTracked = false;
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     _cachedRouter ??= _createRouter(ref);
     final currentLocale = ref.watch(currentLocaleProvider);
+    _trackAppOpenOnce(currentLocale.languageCode);
 
     return MaterialApp.router(
       title: 'We Connect',
@@ -290,6 +296,18 @@ class WeCounselApp extends ConsumerWidget {
         ),
       ],
     );
+  }
+
+  void _trackAppOpenOnce(String language) {
+    if (_appOpenTracked) return;
+    _appOpenTracked = true;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      AnalyticsService.trackAppOpen(
+        language: language,
+        entryPath: Uri.base.path.isEmpty ? '/' : Uri.base.path,
+      );
+    });
   }
 }
 
