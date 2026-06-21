@@ -313,10 +313,9 @@ router.post('/:conversationId/ai-stream', authenticateToken, checkAIMessageLimit
           recentMessages
         );
 
-        const contextString = `${contextPrefix}Conversation: ${conversation.title}${conversation.topic ? `, Topic: ${conversation.topic}` : ''}`;
-
         // Fetch both partner names from the couple
         let partnerNames = null;
+        let waitingForPartner = !req.user.partnerId;
         try {
           const coupleParams = {
             TableName: TABLES.COUPLES,
@@ -328,7 +327,9 @@ router.post('/:conversationId/ai-stream', authenticateToken, checkAIMessageLimit
             const couple = coupleResult.Item;
             const p1Id = couple.partner1Id || couple.user1Id;
             const p2Id = couple.partner2Id || couple.user2Id;
-            
+
+            waitingForPartner = couple.status === 'pending_invitee' || !p1Id || !p2Id;
+
             if (p1Id && p2Id) {
               const [user1Result, user2Result] = await Promise.all([
                 docClient.send(new GetCommand({ TableName: TABLES.USERS, Key: { userId: p1Id } })),
@@ -347,6 +348,11 @@ router.post('/:conversationId/ai-stream', authenticateToken, checkAIMessageLimit
           console.error('Error fetching partner names:', error);
           // Continue without names if fetch fails
         }
+
+        const waitingContext = waitingForPartner
+          ? `\nOnly ${req.user.firstName || 'the current user'} is present in this conversation. Their invited partner has not accepted the invitation yet, so respond only to the present user and help them prepare their own thoughts.`
+          : '';
+        const contextString = `${contextPrefix}Conversation: ${conversation.title}${conversation.topic ? `, Topic: ${conversation.topic}` : ''}${waitingContext}`;
 
         const aiMessageId = randomUUID();
         let aiResponseContent = '';
@@ -387,6 +393,7 @@ router.post('/:conversationId/ai-stream', authenticateToken, checkAIMessageLimit
             messages: [...contextMessages, messageData],
             context: contextString,
             partnerNames,
+            waitingForPartner,
             recentExercises,
             onChunk: async (chunk) => {
               aiResponseContent += chunk;

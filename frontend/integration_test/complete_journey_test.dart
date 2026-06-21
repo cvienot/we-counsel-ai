@@ -2357,7 +2357,7 @@ void main() {
       print('');
     });
 
-    testWidgets('Invite partner via UI navigates to waiting room on success', (
+    testWidgets('Invite partner via UI opens pending AI thread on success', (
       WidgetTester tester,
     ) async {
       await useE2EViewport(tester);
@@ -2372,7 +2372,7 @@ void main() {
           'partner-ui-${DateTime.now().millisecondsSinceEpoch}@test.com';
       final userPassword = 'Test123!';
 
-      print('🧪 Starting Invite UI Navigation Test');
+      print('🧪 Starting Invite UI Pending Thread Test');
       print('   User: $userEmail');
       print('   Partner: $partnerEmail');
 
@@ -2470,23 +2470,22 @@ void main() {
       await tester.tap(sendButton);
 
       // ============================================
-      // STEP 4: Verify navigation back to waiting room
+      // STEP 4: Verify navigation to pending main thread
       // ============================================
-      print('\n🔄 Step 4: Verify redirect to waiting room after invite');
+      print('\n🔄 Step 4: Verify redirect to pending main thread after invite');
 
-      // The invite screen should disappear and we should land on waiting room
-      // with a pending invitation indicator
+      // The invite screen should disappear and we should land on the main
+      // thread, even though the invited partner has not accepted yet.
       final inviteScreenGone = await pumpUntilGone(
         tester,
-        find.text('Invite Your Partner'), // AppBar title on invite screen
+        sendButton,
         timeout: const Duration(seconds: 10),
       );
 
-      // Wait for the waiting room or pending invitation info to appear
-      final backOnWaitingRoom = await pumpUntilFound(
+      final pendingThreadVisible = await pumpUntilFound(
         tester,
-        find.textContaining(partnerEmail),
-        timeout: const Duration(seconds: 10),
+        find.text('Start with Coach Sarah while you wait'),
+        timeout: const Duration(seconds: 15),
       );
 
       // Verify we're NOT still on the invite screen
@@ -2501,12 +2500,12 @@ void main() {
       );
 
       expect(
-        backOnWaitingRoom,
+        pendingThreadVisible,
         isTrue,
-        reason:
-            'Should be back on waiting room showing pending invitation for $partnerEmail',
+        reason: 'Should open the pending main thread after sending invite',
       );
-      print('   ✅ Navigated back to waiting room with pending invitation');
+      expect(inviteScreenGone, isTrue, reason: 'Invite screen should close');
+      print('   ✅ Navigated to pending main thread');
 
       // Verify invitation email was sent
       final inviteEmail = await testHelper.waitForEmail(
@@ -2517,10 +2516,80 @@ void main() {
       expect(inviteEmail, isNotNull, reason: 'Invitation email should be sent');
       print('   ✅ Invitation email sent to $partnerEmail');
 
-      print('\n🎉 Invite UI Navigation Test PASSED');
+      // ============================================
+      // STEP 5: Send a pending-thread AI message and verify couple quota
+      // ============================================
+      print('\n💬 Step 5: Send message while partner is pending');
+
+      final apiLoginResponse = await http.post(
+        Uri.parse('$apiUrl/api/auth/login'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': userEmail, 'password': userPassword}),
+      );
+      expect(apiLoginResponse.statusCode, 200);
+      final apiLoginData = jsonDecode(apiLoginResponse.body);
+      final userToken = apiLoginData['token'] as String;
+      final coupleId = apiLoginData['user']['coupleId'];
+      expect(
+        coupleId,
+        isNotNull,
+        reason: 'Invitation should create a pending couple',
+      );
+
+      final initialUsageResponse = await http.get(
+        Uri.parse('$apiUrl/api/subscriptions/usage'),
+        headers: {'Authorization': 'Bearer $userToken'},
+      );
+      expect(initialUsageResponse.statusCode, 200);
+      final initialUsage = jsonDecode(initialUsageResponse.body)['usage'];
+      expect(initialUsage['coupleId'], coupleId);
+      expect(initialUsage['isIndividual'], isFalse);
+      expect(initialUsage['used'], 0);
+
+      // Let the invitation success snackbar clear so it does not cover the
+      // send button at the bottom of the main thread.
+      await settleWithTimeout(tester, timeout: const Duration(seconds: 5));
+
+      final messageField = find.byType(TextField).first;
+      await tester.enterText(
+        messageField,
+        'I want to prepare this conversation before my partner joins.',
+      );
+      await settleWithTimeout(tester, timeout: const Duration(seconds: 1));
+      await tester.tap(find.byIcon(Icons.send));
+
+      final aiResponse = await testHelper.waitForAIResponse(
+        timeout: const Duration(seconds: 15),
+      );
+      expect(
+        aiResponse['response'],
+        contains('before your partner joins'),
+        reason: 'AI should adapt to the pending-partner context',
+      );
+
+      Map<String, dynamic>? updatedUsage;
+      final usageDeadline = DateTime.now().add(const Duration(seconds: 10));
+      while (DateTime.now().isBefore(usageDeadline)) {
+        final usageResponse = await http.get(
+          Uri.parse('$apiUrl/api/subscriptions/usage'),
+          headers: {'Authorization': 'Bearer $userToken'},
+        );
+        expect(usageResponse.statusCode, 200);
+        updatedUsage = jsonDecode(usageResponse.body)['usage'];
+        if (updatedUsage?['used'] == 1) break;
+        await Future.delayed(const Duration(milliseconds: 500));
+      }
+
+      expect(updatedUsage?['used'], 1);
+      expect(updatedUsage?['coupleId'], coupleId);
+      expect(updatedUsage?['isIndividual'], isFalse);
+      print('   ✅ Pending-thread AI message consumed couple quota');
+
+      print('\n🎉 Invite UI Pending Thread Test PASSED');
       print('✅ Invite form submits successfully');
-      print('✅ User redirected to waiting room after invite');
-      print('✅ Pending invitation shown with partner email');
+      print('✅ User redirected to pending main thread after invite');
+      print('✅ AI response adapts while partner is pending');
+      print('✅ Quota remains tied to the pending couple');
       print('✅ Invitation email sent');
       print('');
     });

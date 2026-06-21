@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { randomUUID } = require('crypto');
-const { docClient, TABLES, QueryCommand, PutCommand, GetCommand, UpdateCommand } = require('../config/database');
+const { docClient, TABLES, QueryCommand, PutCommand, GetCommand, UpdateCommand, TransactWriteCommand } = require('../config/database');
 const { emailService } = require('../services');
 const { sendInvitationEmail, sendWelcomeEmail, sendSignupNotificationEmail, sendPasswordResetEmail } = emailService;
 const { authenticateToken } = require('../middleware/authMiddleware');
@@ -87,6 +87,12 @@ const sanitizeAttribution = (attribution, fallbackTimestamp) => {
   }
 
   return sanitized;
+};
+
+const nextUsageResetDate = (from = new Date()) => {
+  const resetDate = new Date(from);
+  resetDate.setMonth(resetDate.getMonth() + 1, 1);
+  return resetDate;
 };
 
 // @route   POST /api/auth/register
@@ -376,11 +382,15 @@ router.post('/invite-partner', authenticateToken, async (req, res) => {
     };
 
     const existingInvitation = await docClient.send(new QueryCommand(existingInvitationParams));
+    const existingPendingInvitation = existingInvitation.Items[0];
 
     // Use existing invitation ID if found, or create new one
-    const invitationId = existingInvitation.Items.length > 0 
-      ? existingInvitation.Items[0].invitationId 
+    const invitationId = existingPendingInvitation
+      ? existingPendingInvitation.invitationId
       : randomUUID();
+    const currentTimestamp = new Date().toISOString();
+    const coupleId = req.user.coupleId || existingPendingInvitation?.coupleId || randomUUID();
+    const inviterPlan = req.user.selectedPlan || 'free';
     const invitationData = {
       invitationId,
       inviterId,
@@ -388,18 +398,83 @@ router.post('/invite-partner', authenticateToken, async (req, res) => {
       email: email.toLowerCase(),
       message: message || '',
       status: 'pending',
-      createdAt: new Date().toISOString(),
+      coupleId,
+      createdAt: currentTimestamp,
       expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() // 7 days
     };
+    const isResend = !!existingPendingInvitation;
 
-    const invitationParams = {
-      TableName: TABLES.INVITATIONS,
-      Item: invitationData
-    };
+    if (req.user.coupleId) {
+      await docClient.send(new TransactWriteCommand({
+        TransactItems: [
+          {
+            Update: {
+              TableName: TABLES.COUPLES,
+              Key: { coupleId },
+              UpdateExpression: 'SET #status = if_not_exists(#status, :pendingStatus), pendingInviteeEmail = :email, updatedAt = :updatedAt',
+              ExpressionAttributeNames: {
+                '#status': 'status'
+              },
+              ExpressionAttributeValues: {
+                ':pendingStatus': 'pending_invitee',
+                ':email': email.toLowerCase(),
+                ':updatedAt': currentTimestamp
+              }
+            }
+          },
+          {
+            Put: {
+              TableName: TABLES.INVITATIONS,
+              Item: invitationData
+            }
+          }
+        ]
+      }));
+    } else {
+      const coupleData = {
+        coupleId,
+        partner1Id: inviterId,
+        pendingInviteeEmail: email.toLowerCase(),
+        createdAt: currentTimestamp,
+        updatedAt: currentTimestamp,
+        isActive: true,
+        status: 'pending_invitee',
+        subscriptionTier: inviterPlan,
+        subscriptionStatus: 'active',
+        subscriptionStartDate: currentTimestamp,
+        aiMessagesUsed: 0,
+        aiMessagesResetDate: nextUsageResetDate().toISOString()
+      };
 
-    await docClient.send(new PutCommand(invitationParams));
-
-    const isResend = existingInvitation.Items.length > 0;
+      await docClient.send(new TransactWriteCommand({
+        TransactItems: [
+          {
+            Put: {
+              TableName: TABLES.COUPLES,
+              Item: coupleData,
+              ConditionExpression: 'attribute_not_exists(coupleId)'
+            }
+          },
+          {
+            Update: {
+              TableName: TABLES.USERS,
+              Key: { userId: inviterId },
+              UpdateExpression: 'SET coupleId = :coupleId',
+              ConditionExpression: 'attribute_not_exists(partnerId)',
+              ExpressionAttributeValues: {
+                ':coupleId': coupleId
+              }
+            }
+          },
+          {
+            Put: {
+              TableName: TABLES.INVITATIONS,
+              Item: invitationData
+            }
+          }
+        ]
+      }));
+    }
 
     // Send invitation email in inviter's language
     try {

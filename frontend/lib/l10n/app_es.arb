@@ -15,6 +15,11 @@
   "welcomeTitle": "Bienvenidos a su viaje juntos",
   "welcomeMessage": "Este es su espacio principal de conversación donde usted y su pareja pueden compartir pensamientos, sentimientos y recibir orientación de Coach Sarah, su coach de IA.",
   "shareThoughts": "Comparte lo que tienes en mente. Coach Sarah está aquí para ayudar a guiar su conversación.",
+  "waitingConversationTitle": "Empieza con Coach Sarah mientras esperas",
+  "waitingConversationMessage": "Tu invitación sigue pendiente. Puedes usar este espacio para preparar tus ideas con el coach de IA. Cuando tu pareja se una, este hilo se convertirá en su conversación compartida.",
+  "waitingConversationEmptyTitle": "Prepara tu parte de la conversación",
+  "waitingConversationEmptyBody": "Dile a Coach Sarah qué quieres entender antes de que tu pareja se una.",
+  "waitingConversationInputHint": "Comparte lo que quieres preparar...",
 
   "conversations": "Conversaciones",
   "profile": "Perfil",

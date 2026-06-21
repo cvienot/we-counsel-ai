@@ -50,6 +50,26 @@ class AppLocalizationsEs extends AppLocalizations {
       'Comparte lo que tienes en mente. Coach Sarah está aquí para ayudar a guiar su conversación.';
 
   @override
+  String get waitingConversationTitle =>
+      'Empieza con Coach Sarah mientras esperas';
+
+  @override
+  String get waitingConversationMessage =>
+      'Tu invitación sigue pendiente. Puedes usar este espacio para preparar tus ideas con el coach de IA. Cuando tu pareja se una, este hilo se convertirá en su conversación compartida.';
+
+  @override
+  String get waitingConversationEmptyTitle =>
+      'Prepara tu parte de la conversación';
+
+  @override
+  String get waitingConversationEmptyBody =>
+      'Dile a Coach Sarah qué quieres entender antes de que tu pareja se una.';
+
+  @override
+  String get waitingConversationInputHint =>
+      'Comparte lo que quieres preparar...';
+
+  @override
   String get conversations => 'Conversaciones';
 
   @override

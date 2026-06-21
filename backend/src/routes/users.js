@@ -4,6 +4,20 @@ const { authenticateToken } = require('../middleware/authMiddleware');
 const { randomUUID } = require('crypto');
 
 const router = express.Router();
+const tierRank = { free: 0, essential: 1, premium: 2 };
+
+const nextUsageResetDate = (from = new Date()) => {
+  const resetDate = new Date(from);
+  resetDate.setMonth(resetDate.getMonth() + 1, 1);
+  return resetDate;
+};
+
+const selectedCoupleTier = (...plans) => plans.reduce((best, plan) => {
+  const normalizedPlan = plan || 'free';
+  return (tierRank[normalizedPlan] || 0) > (tierRank[best] || 0)
+    ? normalizedPlan
+    : best;
+}, 'free');
 
 // @route   GET /api/users/profile
 // @desc    Get user profile
@@ -234,40 +248,79 @@ router.post('/accept-invitation/:invitationId', authenticateToken, async (req, r
       });
     }
 
-    // Create couple
-    const coupleId = randomUUID();
+    // Complete the pending couple created when the invitation was sent, or
+    // create one for legacy invitations that predate pending-couple support.
+    const coupleId = invitation.coupleId || inviter.coupleId || randomUUID();
     const currentTimestamp = new Date().toISOString();
-    const nextResetDate = new Date();
-    nextResetDate.setMonth(nextResetDate.getMonth() + 1, 1); // First day of next month
-    
+
+    const existingCoupleResult = await docClient.send(new GetCommand({
+      TableName: TABLES.COUPLES,
+      Key: { coupleId }
+    }));
+    const existingCouple = existingCoupleResult.Item;
+
     // Get the higher subscription tier from both users' registration choices
-    const tierRank = { free: 0, essential: 1, premium: 2 };
     const inviterPlan = inviter.selectedPlan || 'free';
     const accepterPlan = req.user.selectedPlan || 'free';
-    const coupleTier = (tierRank[inviterPlan] || 0) >= (tierRank[accepterPlan] || 0) ? inviterPlan : accepterPlan;
+    const coupleTier = selectedCoupleTier(existingCouple?.subscriptionTier, inviterPlan, accepterPlan);
 
-    const coupleData = {
-      coupleId,
-      partner1Id: invitation.inviterId,
-      partner2Id: userId,
-      createdAt: currentTimestamp,
-      isActive: true,
-      // Initialize subscription for the couple with the highest tier either partner selected
-      subscriptionTier: coupleTier,
-      subscriptionStatus: 'active',
-      subscriptionStartDate: currentTimestamp,
-      aiMessagesUsed: 0,
-      aiMessagesResetDate: nextResetDate.toISOString()
-    };
+    const coupleExists = !!existingCouple;
 
     // Start transaction to update all records
     const transactItems = [
-      {
-        Put: {
-          TableName: TABLES.COUPLES,
-          Item: coupleData
-        }
-      },
+      coupleExists
+        ? {
+            Update: {
+              TableName: TABLES.COUPLES,
+              Key: { coupleId },
+              UpdateExpression: `SET
+                partner1Id = :partner1Id,
+                partner2Id = :partner2Id,
+                #status = :status,
+                isActive = :isActive,
+                subscriptionTier = :tier,
+                subscriptionStatus = if_not_exists(subscriptionStatus, :subscriptionStatus),
+                subscriptionStartDate = if_not_exists(subscriptionStartDate, :subscriptionStartDate),
+                aiMessagesUsed = if_not_exists(aiMessagesUsed, :zero),
+                aiMessagesResetDate = if_not_exists(aiMessagesResetDate, :resetDate),
+                updatedAt = :updatedAt
+                REMOVE pendingInviteeEmail`,
+              ExpressionAttributeNames: {
+                '#status': 'status'
+              },
+              ExpressionAttributeValues: {
+                ':partner1Id': invitation.inviterId,
+                ':partner2Id': userId,
+                ':status': 'active',
+                ':isActive': true,
+                ':tier': coupleTier,
+                ':subscriptionStatus': 'active',
+                ':subscriptionStartDate': currentTimestamp,
+                ':zero': 0,
+                ':resetDate': nextUsageResetDate().toISOString(),
+                ':updatedAt': currentTimestamp
+              }
+            }
+          }
+        : {
+            Put: {
+              TableName: TABLES.COUPLES,
+              Item: {
+                coupleId,
+                partner1Id: invitation.inviterId,
+                partner2Id: userId,
+                createdAt: currentTimestamp,
+                updatedAt: currentTimestamp,
+                isActive: true,
+                status: 'active',
+                subscriptionTier: coupleTier,
+                subscriptionStatus: 'active',
+                subscriptionStartDate: currentTimestamp,
+                aiMessagesUsed: 0,
+                aiMessagesResetDate: nextUsageResetDate().toISOString()
+              }
+            }
+          },
       {
         Update: {
           TableName: TABLES.USERS,

@@ -5,7 +5,7 @@ const openai = new OpenAI({
 });
 
 // Streaming function for real-time AI responses
-const generateCoachResponse = async ({ messages, context, partnerNames, recentExercises, onChunk, onComplete, onError }) => {
+const generateCoachResponse = async ({ messages, context, partnerNames, waitingForPartner = false, recentExercises, onChunk, onComplete, onError }) => {
   try {
     // Check for crisis keywords in the latest message
     const lastMessage = messages[messages.length - 1];
@@ -160,6 +160,15 @@ Both partners are present in this conversation: ${partnerNames.partner1} and ${p
 ALWAYS address them by their first names (@${partnerNames.partner1} and @${partnerNames.partner2}).
 NEVER refer to either partner in third person ("he", "she", "your partner") - they are both here.
 
+` : ''}${waitingForPartner ? `SOLO WHILE WAITING FOR PARTNER:
+Only one partner is present right now. Their invited partner has not joined yet.
+- Address only the present user by first name.
+- Do NOT address the invited partner directly or imply they are reading.
+- Help the present user prepare, reflect, regulate, and choose what to share when their partner joins.
+- You may ask what they hope their partner will understand, but keep it grounded in the present user's experience.
+- Do NOT suggest interactive couple exercises yet.
+- Do NOT create commitment markers yet; commitments require both partners to participate.
+
 ` : ''}Context: ${context || 'Ongoing relationship communication support session with both partners present.'}`;
 
     const conversationHistory = messages.map(msg => ({
@@ -188,7 +197,7 @@ NEVER refer to either partner in third person ("he", "she", "your partner") - th
       }
     }
 
-    const shouldSuggestCommitment = detectCommitmentOpportunity(messages, fullResponse, recentExercises);
+    const shouldSuggestCommitment = !waitingForPartner && detectCommitmentOpportunity(messages, fullResponse, recentExercises);
     if (shouldSuggestCommitment && !fullResponse.includes('[COMMITMENT:') && !fullResponse.includes('[EXERCISE:')) {
       const commitmentSuggestion = buildCommitmentSuggestion(messages);
       console.log(`🧭 Conversation ready for action - injecting commitment ${commitmentSuggestion.slug}`);
@@ -198,7 +207,7 @@ NEVER refer to either partner in third person ("he", "she", "your partner") - th
     }
 
     // Fallback: If AI didn't suggest exercise but should have, inject it
-    const shouldSuggestExercise = detectExerciseOpportunity(messages, fullResponse, recentExercises);
+    const shouldSuggestExercise = !waitingForPartner && detectExerciseOpportunity(messages, fullResponse, recentExercises);
     if (shouldSuggestExercise && !fullResponse.includes('[EXERCISE:') && !fullResponse.includes('[COMMITMENT:')) {
       const exerciseToSuggest = pickBestExercise(messages, recentExercises);
       console.log(`⚠️ AI missed exercise opportunity - injecting ${exerciseToSuggest.id} suggestion`);

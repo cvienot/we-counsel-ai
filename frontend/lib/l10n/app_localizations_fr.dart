@@ -50,6 +50,26 @@ class AppLocalizationsFr extends AppLocalizations {
       'Partagez ce qui vous préoccupe. Coach Sarah est là pour vous aider à guider votre conversation.';
 
   @override
+  String get waitingConversationTitle =>
+      'Commencez avec Coach Sarah en attendant';
+
+  @override
+  String get waitingConversationMessage =>
+      'Votre invitation est encore en attente. Vous pouvez préparer vos idées avec le coach IA. Quand votre partenaire rejoindra l\'espace, ce fil deviendra votre conversation partagée.';
+
+  @override
+  String get waitingConversationEmptyTitle =>
+      'Préparez votre côté de la conversation';
+
+  @override
+  String get waitingConversationEmptyBody =>
+      'Dites à Coach Sarah ce que vous voulez comprendre avant l\'arrivée de votre partenaire.';
+
+  @override
+  String get waitingConversationInputHint =>
+      'Partagez ce que vous voulez préparer...';
+
+  @override
   String get conversations => 'Conversations';
 
   @override

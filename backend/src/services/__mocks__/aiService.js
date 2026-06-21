@@ -6,11 +6,11 @@
 // In-memory storage for test assertions
 global.mockAIStore = global.mockAIStore || [];
 
-const generateCoachResponse = async ({ messages, context, recentExercises, onChunk, onComplete, onError }) => {
+const generateCoachResponse = async ({ messages, context, waitingForPartner = false, recentExercises, onChunk, onComplete, onError }) => {
   try {
     // Generate deterministic mock response based on last message
     const lastMessage = messages[messages.length - 1];
-    const mockResponse = generateMockResponse(lastMessage.content);
+    const mockResponse = generateMockResponse(lastMessage.content, { waitingForPartner });
     
     // Store for assertions
     global.mockAIStore.push({
@@ -45,8 +45,12 @@ const generateCoachResponse = async ({ messages, context, recentExercises, onChu
   }
 };
 
-function generateMockResponse(userMessage) {
+function generateMockResponse(userMessage, { waitingForPartner = false } = {}) {
   const lowerMessage = userMessage.toLowerCase();
+
+  if (waitingForPartner) {
+    return "Thanks for sharing this before your partner joins. I'll focus on your perspective for now: what do you most want to understand about your own reaction before inviting them into the conversation?";
+  }
   
   // Generate contextual mock responses
   if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {

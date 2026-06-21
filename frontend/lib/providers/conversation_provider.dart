@@ -83,11 +83,7 @@ class MainThreadState {
   final bool isLoading;
   final String? error;
 
-  const MainThreadState({
-    this.mainThread,
-    this.isLoading = false,
-    this.error,
-  });
+  const MainThreadState({this.mainThread, this.isLoading = false, this.error});
 
   MainThreadState copyWith({
     Conversation? mainThread,
@@ -107,33 +103,29 @@ class MainThreadNotifier extends StateNotifier<MainThreadState> {
   final ApiService _apiService;
   final Ref _ref;
 
-  MainThreadNotifier(this._apiService, this._ref) : super(const MainThreadState());
+  MainThreadNotifier(this._apiService, this._ref)
+    : super(const MainThreadState());
 
   Future<void> loadMainThread() async {
-    // Only load if user has a partner
-    final hasPartner = _ref.read(hasPartnerProvider);
-    if (!hasPartner) {
+    // A pending invitation creates a couple before the partner accepts.
+    final currentUser = _ref.read(currentUserProvider);
+    final hasCouple = currentUser?.coupleId?.isNotEmpty == true;
+    if (!hasCouple) {
       state = state.copyWith(mainThread: null);
       return;
     }
 
     state = state.copyWith(isLoading: true, error: null);
-    
+
     try {
       final response = await _apiService.getMainThread();
-      
+
       if (response['success'] == true && response['mainThread'] != null) {
         final mainThread = Conversation.fromJson(response['mainThread']);
-        state = state.copyWith(
-          mainThread: mainThread,
-          isLoading: false,
-        );
+        state = state.copyWith(mainThread: mainThread, isLoading: false);
       }
     } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      );
+      state = state.copyWith(isLoading: false, error: e.toString());
     }
   }
 }
@@ -143,38 +135,34 @@ class ConversationsNotifier extends StateNotifier<ConversationsState> {
   final ApiService _apiService;
   final Ref _ref;
 
-  ConversationsNotifier(this._apiService, this._ref) : super(const ConversationsState());
+  ConversationsNotifier(this._apiService, this._ref)
+    : super(const ConversationsState());
 
   Future<void> loadConversations() async {
-    // Only load if user has a partner
-    final hasPartner = _ref.read(hasPartnerProvider);
-    if (!hasPartner) {
+    // A pending invitation creates a couple before the partner accepts.
+    final currentUser = _ref.read(currentUserProvider);
+    final hasCouple = currentUser?.coupleId?.isNotEmpty == true;
+    if (!hasCouple) {
       state = state.copyWith(conversations: []);
       return;
     }
 
     state = state.copyWith(isLoading: true, error: null);
-    
+
     try {
       final response = await _apiService.getConversations();
-      
+
       if (response['success'] == true) {
         final List<dynamic> conversationsJson = response['conversations'] ?? [];
         final conversations = conversationsJson
             .map((json) => Conversation.fromJson(json))
             .toList();
-        
-        state = state.copyWith(
-          conversations: conversations,
-          isLoading: false,
-        );
+
+        state = state.copyWith(conversations: conversations, isLoading: false);
       }
     } catch (e) {
       // Error handled by API service
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      );
+      state = state.copyWith(isLoading: false, error: e.toString());
     }
   }
 
@@ -183,17 +171,17 @@ class ConversationsNotifier extends StateNotifier<ConversationsState> {
     String? topic,
   }) async {
     state = state.copyWith(isLoading: true, error: null);
-    
+
     try {
       final response = await _apiService.createConversation(
         title: title,
         topic: topic,
       );
-      
+
       if (response['success'] == true && response['conversation'] != null) {
         final conversation = Conversation.fromJson(response['conversation']);
         final updatedConversations = [conversation, ...state.conversations];
-        
+
         state = state.copyWith(
           conversations: updatedConversations,
           isLoading: false,
@@ -201,10 +189,7 @@ class ConversationsNotifier extends StateNotifier<ConversationsState> {
       }
     } catch (e) {
       // Error handled by API service
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      );
+      state = state.copyWith(isLoading: false, error: e.toString());
       rethrow;
     }
   }
@@ -220,13 +205,17 @@ class ConversationsNotifier extends StateNotifier<ConversationsState> {
         title: title,
         topic: topic,
       );
-      
+
       if (response['success'] == true && response['conversation'] != null) {
-        final updatedConversation = Conversation.fromJson(response['conversation']);
+        final updatedConversation = Conversation.fromJson(
+          response['conversation'],
+        );
         final updatedConversations = state.conversations.map((conv) {
-          return conv.conversationId == conversationId ? updatedConversation : conv;
+          return conv.conversationId == conversationId
+              ? updatedConversation
+              : conv;
         }).toList();
-        
+
         state = state.copyWith(conversations: updatedConversations);
       }
     } catch (e) {
@@ -239,11 +228,11 @@ class ConversationsNotifier extends StateNotifier<ConversationsState> {
   Future<void> deleteConversation(String conversationId) async {
     try {
       await _apiService.deleteConversation(conversationId);
-      
+
       final updatedConversations = state.conversations
           .where((conv) => conv.conversationId != conversationId)
           .toList();
-      
+
       state = state.copyWith(conversations: updatedConversations);
     } catch (e) {
       // Error handled by API service
@@ -263,19 +252,22 @@ class MessagesNotifier extends StateNotifier<MessagesState> {
   final String conversationId;
   final RealtimeService _realtimeService = RealtimeService();
   final StreamingMessageService _streamingService = StreamingMessageService();
-  
+
   StreamSubscription? _newMessageSubscription;
   StreamSubscription? _typingSubscription;
   StreamSubscription? _aiStreamSubscription;
   Timer? _typingTimer;
 
-  MessagesNotifier(this._apiService, this.conversationId) : super(const MessagesState()) {
+  MessagesNotifier(this._apiService, this.conversationId)
+    : super(const MessagesState()) {
     _setupRealtimeListeners();
   }
 
   void _setupRealtimeListeners() {
     // Listen for new messages
-    _newMessageSubscription = _realtimeService.newMessageStream.listen((message) {
+    _newMessageSubscription = _realtimeService.newMessageStream.listen((
+      message,
+    ) {
       if (message.conversationId == conversationId) {
         _addNewMessage(message);
       }
@@ -298,33 +290,35 @@ class MessagesNotifier extends StateNotifier<MessagesState> {
 
   void _addNewMessage(Message message) {
     final updatedMessages = List<Message>.from(state.messages);
-    
+
     // Check if message already exists to prevent duplicates
-    final existingMessageIndex = updatedMessages.indexWhere((m) => m.messageId == message.messageId);
-    
+    final existingMessageIndex = updatedMessages.indexWhere(
+      (m) => m.messageId == message.messageId,
+    );
+
     if (existingMessageIndex != -1) {
       // Message already exists, don't add duplicate
       return;
     }
-    
+
     updatedMessages.add(message);
     updatedMessages.sort((a, b) => a.timestamp.compareTo(b.timestamp));
-    
+
     state = state.copyWith(messages: updatedMessages);
   }
 
   void _updateTypingStatus(Map<String, dynamic> data) {
     final userId = data['userId'] as String;
     final isTyping = data['isTyping'] as bool;
-    
+
     final updatedTypingUsers = Map<String, bool>.from(state.typingUsers);
-    
+
     if (isTyping) {
       updatedTypingUsers[userId] = true;
     } else {
       updatedTypingUsers.remove(userId);
     }
-    
+
     state = state.copyWith(typingUsers: updatedTypingUsers);
   }
 
@@ -332,14 +326,17 @@ class MessagesNotifier extends StateNotifier<MessagesState> {
     final messageId = data['messageId'] as String;
     final chunk = data['chunk'] as String;
     final isComplete = data['isComplete'] as bool;
-    
+
     _streamingService.handleAIStreamChunk(messageId, chunk, isComplete);
-    
-    final updatedStreamingMessages = Map<String, String>.from(state.streamingMessages);
+
+    final updatedStreamingMessages = Map<String, String>.from(
+      state.streamingMessages,
+    );
     final updatedStreamingIds = Set<String>.from(state.streamingMessageIds);
-    
+
     if (!isComplete) {
-      updatedStreamingMessages[messageId] = _streamingService.getStreamingContent(messageId);
+      updatedStreamingMessages[messageId] = _streamingService
+          .getStreamingContent(messageId);
       updatedStreamingIds.add(messageId);
     } else {
       // Don't add the AI message here - it will be added via the real-time message notification
@@ -348,7 +345,7 @@ class MessagesNotifier extends StateNotifier<MessagesState> {
       updatedStreamingIds.remove(messageId);
       _streamingService.cleanupStream(messageId);
     }
-    
+
     state = state.copyWith(
       streamingMessages: updatedStreamingMessages,
       streamingMessageIds: updatedStreamingIds,
@@ -357,17 +354,17 @@ class MessagesNotifier extends StateNotifier<MessagesState> {
 
   Future<void> loadMessages() async {
     state = state.copyWith(isLoading: true, error: null);
-    
+
     try {
       final response = await _apiService.getMessages(conversationId);
-      
+
       if (response['success'] == true) {
         final List<dynamic> messagesJson = response['messages'] ?? [];
         final messages = messagesJson
             .map((json) => Message.fromJson(json))
             .where((message) => !message.isDeleted)
             .toList();
-        
+
         state = state.copyWith(
           messages: messages,
           conversationTitle: response['conversationTitle'],
@@ -376,10 +373,7 @@ class MessagesNotifier extends StateNotifier<MessagesState> {
       }
     } catch (e) {
       // Error handled by API service
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      );
+      state = state.copyWith(isLoading: false, error: e.toString());
     }
   }
 
@@ -388,7 +382,7 @@ class MessagesNotifier extends StateNotifier<MessagesState> {
     String recipientType = 'both',
   }) async {
     state = state.copyWith(isSending: true, error: null);
-    
+
     try {
       // Use streaming message service for AI responses
       final userMessage = await _streamingService.sendMessageWithStreaming(
@@ -396,18 +390,15 @@ class MessagesNotifier extends StateNotifier<MessagesState> {
         content,
         recipientType: recipientType,
       );
-      
+
       if (userMessage != null) {
         // Add user message immediately
         _addNewMessage(userMessage);
       }
-      
+
       state = state.copyWith(isSending: false);
     } catch (e) {
-      state = state.copyWith(
-        isSending: false,
-        error: e.toString(),
-      );
+      state = state.copyWith(isSending: false, error: e.toString());
       rethrow;
     }
   }
@@ -421,13 +412,13 @@ class MessagesNotifier extends StateNotifier<MessagesState> {
         messageId: messageId,
         content: content,
       );
-      
+
       if (response['success'] == true && response['updatedMessage'] != null) {
         final updatedMessage = Message.fromJson(response['updatedMessage']);
         final updatedMessages = state.messages.map((msg) {
           return msg.messageId == messageId ? updatedMessage : msg;
         }).toList();
-        
+
         state = state.copyWith(messages: updatedMessages);
       }
     } catch (e) {
@@ -440,14 +431,14 @@ class MessagesNotifier extends StateNotifier<MessagesState> {
   Future<void> deleteMessage(String messageId) async {
     try {
       await _apiService.deleteMessage(messageId);
-      
+
       // Mark message as deleted locally
       final updatedMessages = state.messages.map((msg) {
-        return msg.messageId == messageId 
+        return msg.messageId == messageId
             ? msg.copyWith(isDeleted: true, deletedAt: DateTime.now())
             : msg;
       }).toList();
-      
+
       state = state.copyWith(messages: updatedMessages);
     } catch (e) {
       // Error handled by API service
@@ -470,7 +461,7 @@ class MessagesNotifier extends StateNotifier<MessagesState> {
   void startTyping() {
     _typingTimer?.cancel();
     _realtimeService.sendTypingStatus(conversationId, true);
-    
+
     // Auto-stop typing after 3 seconds
     _typingTimer = Timer(const Duration(seconds: 3), () {
       stopTyping();
@@ -505,17 +496,23 @@ class MessagesNotifier extends StateNotifier<MessagesState> {
 }
 
 // Providers
-final mainThreadProvider = StateNotifierProvider<MainThreadNotifier, MainThreadState>((ref) {
-  return MainThreadNotifier(ref.read(apiServiceProvider), ref);
-});
+final mainThreadProvider =
+    StateNotifierProvider<MainThreadNotifier, MainThreadState>((ref) {
+      return MainThreadNotifier(ref.read(apiServiceProvider), ref);
+    });
 
-final conversationsProvider = StateNotifierProvider<ConversationsNotifier, ConversationsState>((ref) {
-  return ConversationsNotifier(ref.read(apiServiceProvider), ref);
-});
+final conversationsProvider =
+    StateNotifierProvider<ConversationsNotifier, ConversationsState>((ref) {
+      return ConversationsNotifier(ref.read(apiServiceProvider), ref);
+    });
 
-final messagesProvider = StateNotifierProvider.family<MessagesNotifier, MessagesState, String>((ref, conversationId) {
-  return MessagesNotifier(ref.read(apiServiceProvider), conversationId);
-});
+final messagesProvider =
+    StateNotifierProvider.family<MessagesNotifier, MessagesState, String>((
+      ref,
+      conversationId,
+    ) {
+      return MessagesNotifier(ref.read(apiServiceProvider), conversationId);
+    });
 
 // Helper providers
 final activeConversationsProvider = Provider<List<Conversation>>((ref) {

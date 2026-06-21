@@ -178,6 +178,36 @@ abstract class AppLocalizations {
   /// **'Share what\'s on your mind. Coach Sarah is here to help guide your conversation.'**
   String get shareThoughts;
 
+  /// No description provided for @waitingConversationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Start with Coach Sarah while you wait'**
+  String get waitingConversationTitle;
+
+  /// No description provided for @waitingConversationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your invitation is still pending. You can use this space to prepare your thoughts with the AI coach. When your partner joins, this becomes your shared thread.'**
+  String get waitingConversationMessage;
+
+  /// No description provided for @waitingConversationEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Prepare your side of the conversation'**
+  String get waitingConversationEmptyTitle;
+
+  /// No description provided for @waitingConversationEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell Coach Sarah what you want to understand before your partner joins.'**
+  String get waitingConversationEmptyBody;
+
+  /// No description provided for @waitingConversationInputHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Share what you want to prepare...'**
+  String get waitingConversationInputHint;
+
   /// No description provided for @conversations.
   ///
   /// In en, this message translates to:

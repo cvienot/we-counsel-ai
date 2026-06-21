@@ -15,6 +15,11 @@
   "welcomeTitle": "Welcome to your journey together",
   "welcomeMessage": "This is your main conversation space where you and your partner can share thoughts, feelings, and receive guidance from Coach Sarah, your AI coach.",
   "shareThoughts": "Share what's on your mind. Coach Sarah is here to help guide your conversation.",
+  "waitingConversationTitle": "Start with Coach Sarah while you wait",
+  "waitingConversationMessage": "Your invitation is still pending. You can use this space to prepare your thoughts with the AI coach. When your partner joins, this becomes your shared thread.",
+  "waitingConversationEmptyTitle": "Prepare your side of the conversation",
+  "waitingConversationEmptyBody": "Tell Coach Sarah what you want to understand before your partner joins.",
+  "waitingConversationInputHint": "Share what you want to prepare...",
 
   "conversations": "Conversations",
   "profile": "Profile",

@@ -37,6 +37,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
   Timer? _exercisePollTimer;
   final Set<String> _typingUsers = {};
   bool _isTyping = false;
+  bool _mainThreadLoadScheduled = false;
 
   // Active exercise state
   Map<String, dynamic>? _activeExerciseSession;
@@ -51,9 +52,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
     debugPrint('🏠 MainThreadScreen initState called');
     _messageFocusNode = CtrlEnterSubmit.createFocusNode(_sendMessage);
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadMainThread();
-    });
+    _scheduleMainThreadLoad();
 
     // Listen to typing events
     _typingSubscription = _realtimeService.typingStream.listen((data) {
@@ -185,6 +184,24 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
     });
   }
 
+  void _scheduleMainThreadLoad() {
+    if (_mainThreadLoadScheduled) return;
+
+    _mainThreadLoadScheduled = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!mounted) {
+        _mainThreadLoadScheduled = false;
+        return;
+      }
+
+      try {
+        await _loadMainThread();
+      } finally {
+        _mainThreadLoadScheduled = false;
+      }
+    });
+  }
+
   Future<void> _loadMainThread() async {
     await ref.read(mainThreadProvider.notifier).loadMainThread();
     final mainThread = ref.read(mainThreadProvider).mainThread;
@@ -196,12 +213,25 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
           .loadMessages();
       // Scroll to bottom after messages are loaded
       _scrollToBottom();
-      // Check for active exercise
-      _checkActiveExercise(mainThread.conversationId);
-      // Mark completed exercise suggestions in the thread as non-startable.
-      _loadCompletedExercises(mainThread.conversationId);
-      // Poll for exercise changes every 15 seconds
-      _startExercisePolling(mainThread.conversationId);
+
+      final hasPartner = ref.read(hasPartnerProvider);
+      if (hasPartner) {
+        // Check for active exercise
+        _checkActiveExercise(mainThread.conversationId);
+        // Mark completed exercise suggestions in the thread as non-startable.
+        _loadCompletedExercises(mainThread.conversationId);
+        // Poll for exercise changes every 15 seconds
+        _startExercisePolling(mainThread.conversationId);
+      } else {
+        _exercisePollTimer?.cancel();
+        if (mounted) {
+          setState(() {
+            _activeExerciseSession = null;
+            _activeExerciseData = null;
+            _completedExerciseIds = <String>{};
+          });
+        }
+      }
     }
   }
 
@@ -394,10 +424,19 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
     final hasPartner = ref.watch(hasPartnerProvider);
     final mainThreadState = ref.watch(mainThreadProvider);
     final currentUser = ref.watch(currentUserProvider);
+    final hasCouple = currentUser?.coupleId?.isNotEmpty == true;
+    final isWaitingForPartner = hasCouple && !hasPartner;
 
-    // Show waiting room if no partner
-    if (!hasPartner) {
+    // Show waiting room until an invitation creates a pending couple.
+    if (!hasCouple) {
       return const _WaitingRoomScreen();
+    }
+
+    if (!mainThreadState.isLoading &&
+        mainThreadState.mainThread == null &&
+        mainThreadState.error == null) {
+      _scheduleMainThreadLoad();
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     // Show loading while fetching main thread
@@ -484,16 +523,17 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                   ],
                 ),
               ),
-              PopupMenuItem(
-                onTap: () => context.push('/exercise-history'),
-                child: Row(
-                  children: [
-                    const Icon(Icons.history),
-                    const SizedBox(width: 8),
-                    Text(l10n.exerciseHistory),
-                  ],
+              if (hasPartner)
+                PopupMenuItem(
+                  onTap: () => context.push('/exercise-history'),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.history),
+                      const SizedBox(width: 8),
+                      Text(l10n.exerciseHistory),
+                    ],
+                  ),
                 ),
-              ),
               PopupMenuItem(
                 onTap: () => context.push('/profile'),
                 child: Row(
@@ -556,7 +596,9 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        l10n.welcomeTitle,
+                        isWaitingForPartner
+                            ? l10n.waitingConversationTitle
+                            : l10n.welcomeTitle,
                         style: Theme.of(context).textTheme.titleMedium
                             ?.copyWith(
                               color: Theme.of(context).colorScheme.primary,
@@ -567,7 +609,9 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    l10n.welcomeMessage,
+                    isWaitingForPartner
+                        ? l10n.waitingConversationMessage
+                        : l10n.welcomeMessage,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onPrimaryContainer,
                     ),
@@ -577,7 +621,7 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
             ),
 
             // Active exercise banner
-            if (_activeExerciseSession != null)
+            if (hasPartner && _activeExerciseSession != null)
               ActiveExerciseBanner(
                 exerciseName:
                     _activeExerciseData?['name'] as String? ?? 'Exercise',
@@ -653,12 +697,16 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            l10n.startYourConversation,
+                            isWaitingForPartner
+                                ? l10n.waitingConversationEmptyTitle
+                                : l10n.startYourConversation,
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            l10n.shareThoughts,
+                            isWaitingForPartner
+                                ? l10n.waitingConversationEmptyBody
+                                : l10n.shareThoughts,
                             style: Theme.of(context).textTheme.bodyMedium,
                             textAlign: TextAlign.center,
                           ),
@@ -685,7 +733,8 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                             currentUserName: currentUser?.firstName,
                             partnerName: currentUser?.partner?.firstName,
                             completedExerciseIds: _completedExerciseIds,
-                            onExerciseSuggestion: mainThread != null
+                            onExerciseSuggestion:
+                                hasPartner && mainThread != null
                                 ? (exerciseId) {
                                     _openExerciseSuggestion(
                                       mainThread.conversationId,
@@ -716,7 +765,8 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                             currentUserName: currentUser?.firstName,
                             partnerName: currentUser?.partner?.firstName,
                             completedExerciseIds: _completedExerciseIds,
-                            onExerciseSuggestion: mainThread != null
+                            onExerciseSuggestion:
+                                hasPartner && mainThread != null
                                 ? (exerciseId) {
                                     _openExerciseSuggestion(
                                       mainThread.conversationId,
@@ -804,7 +854,9 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
                       controller: _messageController,
                       focusNode: _messageFocusNode,
                       decoration: InputDecoration(
-                        hintText: l10n.typeMessage,
+                        hintText: isWaitingForPartner
+                            ? l10n.waitingConversationInputHint
+                            : l10n.typeMessage,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(24),
                         ),
