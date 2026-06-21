@@ -60,16 +60,6 @@ Future<void> settleWithTimeout(
   }
 }
 
-/// Use a deterministic viewport large enough for desktop form flows.
-/// The default macOS integration-test viewport is 800x600, which leaves several
-/// primary actions below the fold and makes taps miss their targets.
-void useE2EViewport(WidgetTester tester) {
-  tester.view.physicalSize = const Size(1200, 1000);
-  tester.view.devicePixelRatio = 1.0;
-  addTearDown(tester.view.resetPhysicalSize);
-  addTearDown(tester.view.resetDevicePixelRatio);
-}
-
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
@@ -100,8 +90,6 @@ void main() {
     testWidgets('User1 signs up, invites partner, User2 accepts, they exchange messages', (
       WidgetTester tester,
     ) async {
-      useE2EViewport(tester);
-
       // Launch the app
       app.main();
 
@@ -571,8 +559,6 @@ void main() {
     testWidgets('AI conversation summarization works after 20+ messages', (
       WidgetTester tester,
     ) async {
-      useE2EViewport(tester);
-
       print('\n📊 Testing AI Conversation Summarization');
 
       // Create test users directly via API for faster setup
@@ -760,8 +746,6 @@ void main() {
     testWidgets('User can switch subscription plan', (
       WidgetTester tester,
     ) async {
-      useE2EViewport(tester);
-
       // Launch the app
       app.main();
       await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
@@ -982,8 +966,6 @@ void main() {
     testWidgets('Couple inherits highest plan selected at registration', (
       WidgetTester tester,
     ) async {
-      useE2EViewport(tester);
-
       // Launch app (required by integration test framework)
       app.main();
       await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
@@ -1137,8 +1119,6 @@ void main() {
     testWidgets('Guided exercise: two partners complete an exercise together', (
       WidgetTester tester,
     ) async {
-      useE2EViewport(tester);
-
       print('\n🧘 Testing Guided Exercise Flow');
 
       final ts = DateTime.now().millisecondsSinceEpoch;
@@ -1609,8 +1589,6 @@ void main() {
     testWidgets('Commitment action card can be saved and marked done', (
       WidgetTester tester,
     ) async {
-      useE2EViewport(tester);
-
       print('\n🧭 Testing Commitment Action Card Flow');
 
       final ts = DateTime.now().millisecondsSinceEpoch;
@@ -1861,8 +1839,6 @@ void main() {
     testWidgets('Progress dashboard displays correct stats after activity', (
       WidgetTester tester,
     ) async {
-      useE2EViewport(tester);
-
       print('\n📊 Testing Progress Dashboard');
 
       final ts = DateTime.now().millisecondsSinceEpoch;
@@ -2369,8 +2345,6 @@ void main() {
     testWidgets('Invite partner via UI navigates to waiting room on success', (
       WidgetTester tester,
     ) async {
-      useE2EViewport(tester);
-
       // Launch the app
       app.main();
       await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
@@ -2420,9 +2394,7 @@ void main() {
       final loginFields = find.byType(TextFormField);
       await tester.enterText(loginFields.at(0), userEmail);
       await tester.enterText(loginFields.at(1), userPassword);
-      final signInButton = find.widgetWithText(ElevatedButton, 'Sign In');
-      await tester.ensureVisible(signInButton);
-      await tester.tap(signInButton);
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Sign In'));
       await settleWithTimeout(tester, timeout: const Duration(seconds: 5));
 
       // Wait for waiting room (no partner yet)
@@ -2488,7 +2460,7 @@ void main() {
 
       // The invite screen should disappear and we should land on waiting room
       // with a pending invitation indicator
-      await pumpUntilGone(
+      final inviteScreenGone = await pumpUntilGone(
         tester,
         find.text('Invite Your Partner'), // AppBar title on invite screen
         timeout: const Duration(seconds: 10),
@@ -2536,139 +2508,12 @@ void main() {
       print('✅ Invitation email sent');
       print('');
     });
-
-    testWidgets('Solo preparation draft pre-fills partner invitation', (
-      WidgetTester tester,
-    ) async {
-      useE2EViewport(tester);
-      app.main();
-      await settleWithTimeout(tester, timeout: const Duration(seconds: 3));
-
-      final userEmail =
-          'solo-prep-${DateTime.now().millisecondsSinceEpoch}@test.com';
-      const userPassword = 'Test123!';
-
-      final registerResponse = await http.post(
-        Uri.parse('$apiUrl/api/auth/register'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'email': userEmail,
-          'password': userPassword,
-          'firstName': 'SoloPrep',
-          'lastName': 'User',
-          'language': 'en',
-          'termsAccepted': true,
-          'subscriptionTier': 'free',
-        }),
-      );
-      expect(
-        registerResponse.statusCode,
-        201,
-        reason: 'Test user should be created before solo prep flow',
-      );
-
-      final foundLogin = await pumpUntilFound(
-        tester,
-        find.text('Don\'t have an account? Sign up'),
-        timeout: const Duration(seconds: 10),
-      );
-      expect(foundLogin, isTrue, reason: 'Login screen should appear');
-
-      final loginFields = find.byType(TextFormField);
-      await tester.enterText(loginFields.at(0), userEmail);
-      await tester.enterText(loginFields.at(1), userPassword);
-      await tester.tap(find.widgetWithText(ElevatedButton, 'Sign In'));
-      await settleWithTimeout(tester, timeout: const Duration(seconds: 5));
-
-      final onWaitingRoom = await pumpUntilFound(
-        tester,
-        find.text('Prepare First Conversation'),
-        timeout: const Duration(seconds: 15),
-      );
-      expect(
-        onWaitingRoom,
-        isTrue,
-        reason: 'Solo preparation action should be visible without a partner',
-      );
-
-      final prepareButton = find.byKey(
-        const ValueKey('waiting-room-solo-prep-button'),
-      );
-      await tester.ensureVisible(prepareButton);
-      await tester.tap(prepareButton);
-      await settleWithTimeout(tester, timeout: const Duration(seconds: 2));
-
-      final onSoloPrep = await pumpUntilFound(
-        tester,
-        find.text('Prepare your first conversation'),
-        timeout: const Duration(seconds: 5),
-      );
-      expect(onSoloPrep, isTrue, reason: 'Solo preparation screen should open');
-
-      final prepFields = find.byType(TextFormField);
-      await tester.enterText(prepFields.at(0), 'evenings after work');
-      await tester.enterText(prepFields.at(1), 'distant and discouraged');
-      await tester.enterText(
-        prepFields.at(2),
-        'a calmer space where we listen',
-      );
-      await tester.enterText(
-        prepFields.at(3),
-        'try a short conversation this weekend',
-      );
-      await settleWithTimeout(tester, timeout: const Duration(seconds: 1));
-
-      final saveDraftButton = find.byKey(
-        const ValueKey('solo-prep-save-draft-button'),
-      );
-      await tester.ensureVisible(saveDraftButton);
-      await tester.tap(saveDraftButton);
-      final draftSaved = await pumpUntilFound(
-        tester,
-        find.text('Draft saved'),
-        timeout: const Duration(seconds: 5),
-      );
-      expect(draftSaved, isTrue, reason: 'Solo draft should be saved locally');
-
-      final useInvitationButton = find.byKey(
-        const ValueKey('solo-prep-use-invitation-button'),
-      );
-      await tester.ensureVisible(useInvitationButton);
-      await tester.tap(useInvitationButton);
-      await settleWithTimeout(tester, timeout: const Duration(seconds: 2));
-
-      final onInviteScreen = await pumpUntilFound(
-        tester,
-        find.text('Send Invitation'),
-        timeout: const Duration(seconds: 5),
-      );
-      expect(
-        onInviteScreen,
-        isTrue,
-        reason: 'Using the draft should open the invite screen',
-      );
-
-      final inviteFields = find.byType(TextFormField);
-      final messageField = tester.widget<TextFormField>(inviteFields.at(1));
-      expect(
-        messageField.controller?.text,
-        contains('evenings after work'),
-        reason: 'Invitation message should include the solo topic',
-      );
-      expect(
-        messageField.controller?.text,
-        contains('try a short conversation this weekend'),
-        reason: 'Invitation message should include the prepared next step',
-      );
-    });
   });
 
   group('Language Change E2E Test', () {
     testWidgets('User can change language from English to French and back', (
       WidgetTester tester,
     ) async {
-      useE2EViewport(tester);
-
       // Launch the app
       app.main();
       await settleWithTimeout(tester, timeout: const Duration(seconds: 3));

@@ -86,35 +86,6 @@
     }
   },
   "invitePartnerMessage": "Share this invitation with your partner to start your relationship communication journey together.",
-  "prepareFirstConversation": "Prepare First Conversation",
-  "soloPreparationTitle": "Prepare your first conversation",
-  "soloPreparationIntro": "You can start alone by clarifying what you want to say. Save a draft, then use it when you invite your partner.",
-  "soloTopicLabel": "What do you want to talk about?",
-  "soloTopicHint": "Example: how we handle evenings after work",
-  "soloFeelingLabel": "What are you feeling?",
-  "soloFeelingHint": "Example: I feel distant and a little discouraged",
-  "soloNeedLabel": "What would help you feel heard?",
-  "soloNeedHint": "Example: I need us to listen without interrupting",
-  "soloNextStepLabel": "What small next step would feel realistic?",
-  "soloNextStepHint": "Example: a calm 15-minute conversation this weekend",
-  "soloInvitationPreviewTitle": "Invitation preview",
-  "soloSaveDraft": "Save draft",
-  "soloUseForInvitation": "Use in partner invitation",
-  "soloDraftSaved": "Draft saved",
-  "soloSafetyNote": "If there is fear, violence, coercion, or immediate danger, prioritize safety and contact qualified help before trying a guided conversation.",
-  "soloDraftFallbackTopic": "something important between us",
-  "soloDraftFallbackFeeling": "I would like us to slow down and understand each other better",
-  "soloDraftFallbackNeed": "I need a calmer space where we can both feel heard",
-  "soloDraftFallbackNextStep": "try a short guided conversation together",
-  "soloInvitationDraft": "I would like us to talk about {topic}. I am feeling: {feeling}. What would help me is: {need}. Would you be open to {nextStep} with me on We Connect?",
-  "@soloInvitationDraft": {
-    "placeholders": {
-      "topic": { "type": "String" },
-      "feeling": { "type": "String" },
-      "need": { "type": "String" },
-      "nextStep": { "type": "String" }
-    }
-  },
 
   "createNewConversation": "Create New Conversation",
   "conversationTitle": "Conversation Title",

@@ -30,7 +30,6 @@ import 'screens/settings/payment_success_screen.dart';
 import 'screens/exercises/exercise_loader_screen.dart';
 import 'screens/exercises/exercise_history_screen.dart';
 import 'screens/progress/progress_dashboard_screen.dart';
-import 'screens/solo/solo_preparation_screen.dart';
 import 'config/environment.dart';
 import 'services/analytics_service.dart';
 import 'services/attribution_service.dart';
@@ -240,16 +239,7 @@ class WeCounselApp extends ConsumerWidget {
         ),
         GoRoute(
           path: '/invite',
-          builder: (context, state) {
-            final initialMessage = state.extra is String
-                ? state.extra as String
-                : null;
-            return InvitePartnerScreen(initialMessage: initialMessage);
-          },
-        ),
-        GoRoute(
-          path: '/solo-prep',
-          builder: (context, state) => const SoloPreparationScreen(),
+          builder: (context, state) => const InvitePartnerScreen(),
         ),
         GoRoute(
           path: '/dashboard',
@@ -412,7 +402,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
               AppLocalizations.of(context)?.appSubtitle ??
                   'Your relationship journey together',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.white.withValues(alpha: 0.9),
+                color: Colors.white.withOpacity(0.9),
               ),
             ),
             const SizedBox(height: 48),
