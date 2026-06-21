@@ -806,6 +806,23 @@ img {
   margin-bottom: 18px;
 }
 
+.article-cta-list {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 18px 18px;
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.article-cta-note {
+  margin: 12px 0 0;
+  color: var(--text-light);
+  font-size: 0.84rem;
+  line-height: 1.45;
+  text-align: center;
+}
+
 .related-guides {
   margin-top: 28px;
 }

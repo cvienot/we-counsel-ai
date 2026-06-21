@@ -157,6 +157,37 @@ function preserveCampaignParams() {
 
 preserveCampaignParams();
 
+function ctaLocationFor(link) {
+  const parent = link.closest('nav, section, aside, footer, main');
+  if (!parent) return 'unknown';
+  if (parent.id) return parent.id;
+  if (parent.classList.length > 0) return parent.classList[0];
+  return parent.tagName.toLowerCase();
+}
+
+function trackAppEntryClicks() {
+  document.querySelectorAll('a[href^="https://app.we-connect-app.com"]').forEach(link => {
+    link.addEventListener('click', () => {
+      try {
+        const url = new URL(link.href);
+        const isAppEntryLink = url.origin === 'https://app.we-connect-app.com' && url.pathname === '/';
+
+        if (!isAppEntryLink || !window.WeConnectTags) return;
+
+        window.WeConnectTags.event('cta_click', {
+          cta_location: ctaLocationFor(link),
+          cta_label: link.textContent.trim().replace(/\s+/g, ' ').slice(0, 80),
+          target_path: url.pathname
+        });
+      } catch (_) {
+        // Analytics must never interrupt navigation.
+      }
+    });
+  });
+}
+
+trackAppEntryClicks();
+
 const privacySettingsButton = document.getElementById('privacySettingsButton');
 if (privacySettingsButton) {
   privacySettingsButton.addEventListener('click', () => {
