@@ -421,11 +421,16 @@ class _MainThreadScreenState extends ConsumerState<MainThreadScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final authState = ref.watch(authProvider);
     final hasPartner = ref.watch(hasPartnerProvider);
     final mainThreadState = ref.watch(mainThreadProvider);
     final currentUser = ref.watch(currentUserProvider);
     final hasCouple = currentUser?.coupleId?.isNotEmpty == true;
     final isWaitingForPartner = hasCouple && !hasPartner;
+
+    if (authState.isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
 
     // Show waiting room until an invitation creates a pending couple.
     if (!hasCouple) {

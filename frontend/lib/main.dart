@@ -154,10 +154,11 @@ class WeCounselApp extends ConsumerWidget {
           return routeWithFrom('/login', from);
         }
 
-        // If still loading auth state, stay on splash (but don't redirect away from auth routes)
+        // If still loading auth state, keep the requested URL stable. The
+        // destination screen can show its own loading state until auth settles.
         if (authState.isLoading && !isLoginRoute && !isRegisterRoute) {
-          Environment.log('ROUTER: Still loading, redirect to /splash');
-          return routeWithFrom('/splash', location);
+          Environment.log('ROUTER: Still loading, preserving current route');
+          return null;
         }
 
         // If done loading and not authenticated, go to login (unless already there)
@@ -402,7 +403,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
               AppLocalizations.of(context)?.appSubtitle ??
                   'Your relationship journey together',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.white.withOpacity(0.9),
+                color: Colors.white.withValues(alpha: 0.9),
               ),
             ),
             const SizedBox(height: 48),
