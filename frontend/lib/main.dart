@@ -114,6 +114,9 @@ class WeCounselApp extends ConsumerWidget {
   GoRouter _createRouter(WidgetRef ref) {
     return GoRouter(
       initialLocation: '/splash', // Start with splash to check auth
+      // Marketing links land on "/?utm_..." — initialLocation only applies
+      // when the browser URL is exactly "/", so "/" must be a real route.
+      onException: (context, state, router) => router.go('/splash'),
       debugLogDiagnostics: !Environment.isProduction,
       refreshListenable: _AuthStateNotifier(ref), // Listen to auth changes
       redirect: (context, state) {
@@ -180,6 +183,7 @@ class WeCounselApp extends ConsumerWidget {
         return null;
       },
       routes: [
+        GoRoute(path: '/', redirect: (context, state) => '/splash'),
         GoRoute(
           path: '/splash',
           builder: (context, state) => const SplashScreen(),
