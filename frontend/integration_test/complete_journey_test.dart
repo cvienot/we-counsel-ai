@@ -228,7 +228,7 @@ void main() {
         // Fallback: check for app title (we're on main-thread screen somehow)
         final altCheck = await pumpUntilFound(
           tester,
-          find.text('We Connect'),
+          find.text('Entrelace'),
           timeout: const Duration(seconds: 5),
         );
         expect(

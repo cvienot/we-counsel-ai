@@ -4,11 +4,11 @@
 
 ## 1. Acceptation des conditions
 
-En créant un compte et en utilisant We Connect (« le Service »), vous acceptez d'être lié par ces Conditions d'utilisation. Si vous n'acceptez pas ces conditions, vous ne pouvez pas utiliser le Service.
+En créant un compte et en utilisant Entrelace (« le Service »), vous acceptez d'être lié par ces Conditions d'utilisation. Si vous n'acceptez pas ces conditions, vous ne pouvez pas utiliser le Service.
 
 ## 2. Description du Service
 
-We Connect est une application de coaching conçue pour faciliter la communication entre les couples. Le Service fournit :
+Entrelace est une application de coaching conçue pour faciliter la communication entre les couples. Le Service fournit :
 - Des espaces de conversation privés pour les couples
 - Un accompagnement relationnel assisté par IA
 - Des outils de messagerie et de communication sécurisés
@@ -52,7 +52,7 @@ Vous acceptez de ne pas :
 ## 6. Propriété intellectuelle
 
 ### 6.1 Contenu du service
-- Tout le contenu, les fonctionnalités et les fonctionnalités du Service sont la propriété de We Connect
+- Tout le contenu, les fonctionnalités et les fonctionnalités du Service sont la propriété de Entrelace
 - Vous ne pouvez pas copier, modifier, distribuer ou créer des œuvres dérivées sans autorisation
 
 ### 6.2 Contenu utilisateur
@@ -95,7 +95,7 @@ Vous acceptez de ne pas :
 
 ## 10. Indemnisation
 
-Vous acceptez d'indemniser et de dégager de toute responsabilité We Connect et ses affiliés de toute réclamation, perte ou dommage découlant de :
+Vous acceptez d'indemniser et de dégager de toute responsabilité Entrelace et ses affiliés de toute réclamation, perte ou dommage découlant de :
 - Votre utilisation du Service
 - Votre violation de ces Conditions
 - Votre violation des droits d'une autre partie
@@ -109,7 +109,7 @@ Si vous êtes consommateur, vous pouvez saisir toute juridiction compétente en 
 ## 12. Résolution des différends et médiation de la consommation
 
 ### 12.1 Résolution informelle
-- Avant de déposer une réclamation formelle, veuillez nous contacter à support@we-connect-app.com afin que nous puissions tenter de résoudre le problème à l'amiable.
+- Avant de déposer une réclamation formelle, veuillez nous contacter à support@entrelace.app afin que nous puissions tenter de résoudre le problème à l'amiable.
 
 ### 12.2 Médiation de la consommation
 
@@ -140,20 +140,20 @@ Votre utilisation continue du Service après les modifications constitue l'accep
 - Les abonnements se renouvellent automatiquement sauf annulation avant la période de facturation suivante.
 - Vous pouvez gérer la facturation via le portail client Stripe lorsqu'il est disponible.
 - L'annulation arrête le renouvellement futur mais ne rembourse pas automatiquement les frais passés, sauf obligation légale ou mention contraire dans les conditions de paiement applicables.
-- Si vous êtes consommateur en France, dans l'Union européenne ou dans une juridiction prévoyant un droit légal de rétractation, vous pouvez disposer du droit de vous rétracter d'un abonnement payant dans les 14 jours suivant l'achat. Pour exercer ce droit, contactez support@we-connect-app.com avec l'adresse e-mail utilisée pour le compte et les informations de commande ou de facture concernées.
+- Si vous êtes consommateur en France, dans l'Union européenne ou dans une juridiction prévoyant un droit légal de rétractation, vous pouvez disposer du droit de vous rétracter d'un abonnement payant dans les 14 jours suivant l'achat. Pour exercer ce droit, contactez support@entrelace.app avec l'adresse e-mail utilisée pour le compte et les informations de commande ou de facture concernées.
 - Si vous demandez l'accès immédiat aux fonctionnalités numériques payantes avant la fin du délai de rétractation, vous reconnaissez que le service fourni avant la rétractation peut vous être facturé, lorsque la loi l'autorise. Aucune disposition de ces Conditions ne limite les droits impératifs des consommateurs.
 - En cas d'échec de paiement, l'accès aux fonctionnalités payantes peut être limité, suspendu ou rétrogradé.
 - Nous pouvons modifier les prix ou les fonctionnalités des plans avec un préavis raisonnable lorsque la loi l'exige.
 
 ## 15. Suppression de compte et demandes de données
 
-Vous pouvez demander la suppression de votre compte ou l'export de vos données en contactant support@we-connect-app.com. Certains enregistrements peuvent être conservés lorsque cela est nécessaire pour la sécurité, les obligations légales, fiscales ou comptables, les litiges, la prévention de la fraude ou les sauvegardes.
+Vous pouvez demander la suppression de votre compte ou l'export de vos données en contactant support@entrelace.app. Certains enregistrements peuvent être conservés lorsque cela est nécessaire pour la sécurité, les obligations légales, fiscales ou comptables, les litiges, la prévention de la fraude ou les sauvegardes.
 
 ## 16. Coordonnées
 
 Si vous avez des questions sur ces Conditions, veuillez nous contacter à :
-- Exploitant du Service : Camille Vienot, exploitant We Connect, SIREN 104281621, immatriculé au RNE le 28/04/2026
-- E-mail : support@we-connect-app.com
+- Exploitant du Service : Camille Vienot, exploitant Entrelace, SIREN 104281621, immatriculé au RNE le 28/04/2026
+- E-mail : support@entrelace.app
 
 ## 17. Divisibilité
 
@@ -161,7 +161,7 @@ Si une disposition de ces Conditions est jugée inapplicable ou invalide, cette 
 
 ## 18. Accord complet
 
-Ces Conditions, ainsi que notre Politique de confidentialité, constituent l'intégralité de l'accord entre vous et We Connect concernant le Service.
+Ces Conditions, ainsi que notre Politique de confidentialité, constituent l'intégralité de l'accord entre vous et Entrelace concernant le Service.
 
 ---
 

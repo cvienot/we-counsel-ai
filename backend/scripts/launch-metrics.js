@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
-require('dotenv').config({ quiet: true });
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config({ quiet: true });
+}
 
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
 const { DynamoDBDocumentClient, ScanCommand } = require('@aws-sdk/lib-dynamodb');

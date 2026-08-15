@@ -4,15 +4,15 @@ const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
 
 const BRANDING = {
   business_profile: {
-    name: 'We Connect',
+    name: 'Entrelace',
     product_description: 'AI-assisted couples coaching and communication support.',
-    support_email: 'support@we-connect-app.com',
-    support_url: 'https://we-connect-app.com',
-    url: 'https://we-connect-app.com'
+    support_email: 'support@entrelace.app',
+    support_url: 'https://entrelace.app',
+    url: 'https://entrelace.app'
   },
   settings: {
     dashboard: {
-      display_name: 'We Connect'
+      display_name: 'Entrelace'
     }
   }
 };

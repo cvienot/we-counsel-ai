@@ -1,8 +1,8 @@
 const translations = {
   en: {
     // Meta (handled specially)
-    "meta.title": "We Connect — AI Couples Coaching App | Communicate Better Together",
-    "meta.description": "We Connect helps couples communicate better with a shared AI coach, guided discussions, and practical exercises. Free to start, private, and available in English, French, and Spanish.",
+    "meta.title": "Entrelace — AI Couples Coaching App | Communicate Better Together",
+    "meta.description": "Entrelace helps couples communicate better with a shared AI coach, guided discussions, and practical exercises. Free to start, private, and available in English, French, and Spanish.",
 
     // Nav
     "nav.features": "Features",
@@ -45,7 +45,7 @@ const translations = {
     // Situations
     "situations.label": "When it helps",
     "situations.title": "For couples who want to<br><span class=\"gradient-text\">talk differently</span>",
-    "situations.subtitle": "We Connect is designed for everyday relationship communication: recurring arguments, difficult conversations, emotional distance, and the moments where both partners need a calmer structure.",
+    "situations.subtitle": "Entrelace is designed for everyday relationship communication: recurring arguments, difficult conversations, emotional distance, and the moments where both partners need a calmer structure.",
     "situation.communication.title": "Communication problems",
     "situation.communication.desc": "Use guided discussions to slow down misunderstandings, listen without interrupting, and turn tense conversations into concrete next steps.",
     "situation.conflict.title": "Recurring arguments",
@@ -104,8 +104,8 @@ const translations = {
     // FAQ
     "faq.label": "FAQ",
     "faq.title": "Frequently asked <span class=\"gradient-text\">questions</span>",
-    "faq.q1": "Is We Connect therapy?",
-    "faq.a1": "No. We Connect is a coaching tool for communication practice and relationship reflection. It is not therapy, medical advice, or a substitute for a licensed professional. If you are dealing with serious issues, crisis, abuse, or mental health concerns, contact qualified support.",
+    "faq.q1": "Is Entrelace therapy?",
+    "faq.a1": "No. Entrelace is a coaching tool for communication practice and relationship reflection. It is not therapy, medical advice, or a substitute for a licensed professional. If you are dealing with serious issues, crisis, abuse, or mental health concerns, contact qualified support.",
     "faq.q2": "How does the AI coach work?",
     "faq.a2": "The AI coach uses conversation context to suggest communication prompts, reflection questions, and guided exercises. It is designed to facilitate productive conversations between partners, not to diagnose, treat, or replace professional support.",
     "faq.q3": "Is my data private and secure?",
@@ -113,7 +113,7 @@ const translations = {
     "faq.q4": "Can I try it for free?",
     "faq.a4": "Yes! The Free plan includes 10 AI coach messages per month, unlimited partner messaging, and access to basic exercises. No credit card required to get started.",
     "faq.q5": "What languages are supported?",
-    "faq.a5": "We Connect is available in English, French, and Spanish. The AI coach can respond in the language you choose, and the entire interface is translated.",
+    "faq.a5": "Entrelace is available in English, French, and Spanish. The AI coach can respond in the language you choose, and the entire interface is translated.",
 
     // CTA
     "cta.title": "Ready to build a stronger relationship?",
@@ -130,13 +130,13 @@ const translations = {
     "footer.mediation": "Consumer Mediation",
     "footer.support": "Support",
     "footer.contact": "Contact Us",
-    "footer.copyright": "© 2026 We Connect. All rights reserved.",
+    "footer.copyright": "© 2026 Entrelace. All rights reserved.",
     "footer.mediator": "Consumer mediator: Société Médiation Professionnelle, Alteritae, 5 rue Salvaing, 12000 Rodez, France."
   },
 
   fr: {
-    "meta.title": "We Connect — Coach IA pour couple | Mieux communiquer à deux",
-    "meta.description": "We Connect aide les couples à mieux communiquer avec une discussion guidée par IA, des exercices pratiques et un espace privé à deux. Gratuit pour commencer.",
+    "meta.title": "Entrelace — Coach IA pour couple | Mieux communiquer à deux",
+    "meta.description": "Entrelace aide les couples à mieux communiquer avec une discussion guidée par IA, des exercices pratiques et un espace privé à deux. Gratuit pour commencer.",
 
     "nav.features": "Fonctionnalités",
     "nav.howItWorks": "Comment ça marche",
@@ -174,7 +174,7 @@ const translations = {
 
     "situations.label": "Quand ça aide",
     "situations.title": "Pour les couples qui veulent<br><span class=\"gradient-text\">se parler autrement</span>",
-    "situations.subtitle": "We Connect est pensé pour la communication de couple au quotidien : disputes qui reviennent, conversations difficiles, distance émotionnelle, relation de couple difficile et moments où chacun a besoin d'un cadre plus calme.",
+    "situations.subtitle": "Entrelace est pensé pour la communication de couple au quotidien : disputes qui reviennent, conversations difficiles, distance émotionnelle, relation de couple difficile et moments où chacun a besoin d'un cadre plus calme.",
     "situation.communication.title": "Problèmes de communication dans le couple",
     "situation.communication.desc": "Utilisez une discussion guidée pour ralentir les malentendus, écouter sans couper la parole et transformer les échanges tendus en prochaines étapes concrètes.",
     "situation.conflict.title": "Couple en crise ou disputes récurrentes",
@@ -230,8 +230,8 @@ const translations = {
 
     "faq.label": "FAQ",
     "faq.title": "Questions <span class=\"gradient-text\">fréquentes</span>",
-    "faq.q1": "We Connect est-il une thérapie ?",
-    "faq.a1": "Non. We Connect est un outil de coaching pour pratiquer la communication et réfléchir à sa relation. Ce n'est ni une thérapie, ni un conseil médical, ni un substitut à un professionnel qualifié. En cas de difficultés graves, de crise, de violence ou de problème de santé mentale, contactez une aide qualifiée.",
+    "faq.q1": "Entrelace est-il une thérapie ?",
+    "faq.a1": "Non. Entrelace est un outil de coaching pour pratiquer la communication et réfléchir à sa relation. Ce n'est ni une thérapie, ni un conseil médical, ni un substitut à un professionnel qualifié. En cas de difficultés graves, de crise, de violence ou de problème de santé mentale, contactez une aide qualifiée.",
     "faq.q2": "Comment fonctionne le coach IA ?",
     "faq.a2": "Le coach IA utilise le contexte de conversation pour proposer des pistes de communication, des questions de réflexion et des exercices guidés. Il est conçu pour faciliter des échanges productifs entre partenaires, pas pour diagnostiquer, traiter ou remplacer un accompagnement professionnel.",
     "faq.q3": "Mes données sont-elles privées et sécurisées ?",
@@ -239,7 +239,7 @@ const translations = {
     "faq.q4": "Puis-je essayer gratuitement ?",
     "faq.a4": "Oui ! Le forfait Gratuit inclut 10 messages coach IA par mois, la messagerie partenaire illimitée et l'accès aux exercices de base. Aucune carte bancaire requise pour commencer.",
     "faq.q5": "Quelles langues sont prises en charge ?",
-    "faq.a5": "We Connect est disponible en anglais, français et espagnol. Le coach IA peut répondre dans la langue de votre choix, et toute l'interface est traduite.",
+    "faq.a5": "Entrelace est disponible en anglais, français et espagnol. Le coach IA peut répondre dans la langue de votre choix, et toute l'interface est traduite.",
 
     "cta.title": "Prêts à construire une relation plus forte ?",
     "cta.subtitle": "Créez un espace privé où chacun peut être entendu, pratiquer de meilleures conversations et avancer ensemble par petites étapes.",
@@ -254,13 +254,13 @@ const translations = {
     "footer.mediation": "Médiation de la consommation",
     "footer.support": "Support",
     "footer.contact": "Nous Contacter",
-    "footer.copyright": "© 2026 We Connect. Tous droits réservés.",
+    "footer.copyright": "© 2026 Entrelace. Tous droits réservés.",
     "footer.mediator": "Médiateur de la consommation : Société Médiation Professionnelle, Alteritae, 5 rue Salvaing, 12000 Rodez, France."
   },
 
   es: {
-    "meta.title": "We Connect — Coach IA para parejas | Comuníquense mejor",
-    "meta.description": "We Connect ayuda a las parejas a comunicarse mejor con conversaciones guiadas por IA, ejercicios prácticos y un espacio privado compartido. Gratis para empezar.",
+    "meta.title": "Entrelace — Coach IA para parejas | Comuníquense mejor",
+    "meta.description": "Entrelace ayuda a las parejas a comunicarse mejor con conversaciones guiadas por IA, ejercicios prácticos y un espacio privado compartido. Gratis para empezar.",
 
     "nav.features": "Características",
     "nav.howItWorks": "Cómo Funciona",
@@ -298,7 +298,7 @@ const translations = {
 
     "situations.label": "Cuándo ayuda",
     "situations.title": "Para parejas que quieren<br><span class=\"gradient-text\">hablar de otra manera</span>",
-    "situations.subtitle": "We Connect está pensado para la comunicación diaria en pareja: discusiones recurrentes, conversaciones difíciles, distancia emocional y momentos en los que ambas personas necesitan una estructura más tranquila.",
+    "situations.subtitle": "Entrelace está pensado para la comunicación diaria en pareja: discusiones recurrentes, conversaciones difíciles, distancia emocional y momentos en los que ambas personas necesitan una estructura más tranquila.",
     "situation.communication.title": "Problemas de comunicación",
     "situation.communication.desc": "Usa conversaciones guiadas para frenar malentendidos, escuchar sin interrumpir y convertir intercambios tensos en próximos pasos concretos.",
     "situation.conflict.title": "Discusiones recurrentes",
@@ -354,8 +354,8 @@ const translations = {
 
     "faq.label": "FAQ",
     "faq.title": "Preguntas <span class=\"gradient-text\">frecuentes</span>",
-    "faq.q1": "¿We Connect es terapia?",
-    "faq.a1": "No. We Connect es una herramienta de coaching para practicar la comunicación y reflexionar sobre la relación. No es terapia, asesoramiento médico ni un sustituto de un profesional autorizado. Si enfrentas problemas graves, una crisis, abuso o preocupaciones de salud mental, contacta con apoyo cualificado.",
+    "faq.q1": "¿Entrelace es terapia?",
+    "faq.a1": "No. Entrelace es una herramienta de coaching para practicar la comunicación y reflexionar sobre la relación. No es terapia, asesoramiento médico ni un sustituto de un profesional autorizado. Si enfrentas problemas graves, una crisis, abuso o preocupaciones de salud mental, contacta con apoyo cualificado.",
     "faq.q2": "¿Cómo funciona el coach IA?",
     "faq.a2": "El coach de IA usa el contexto de la conversación para sugerir pautas de comunicación, preguntas de reflexión y ejercicios guiados. Está diseñado para facilitar conversaciones productivas entre parejas, no para diagnosticar, tratar ni reemplazar el apoyo profesional.",
     "faq.q3": "¿Mis datos son privados y seguros?",
@@ -363,7 +363,7 @@ const translations = {
     "faq.q4": "¿Puedo probarlo gratis?",
     "faq.a4": "¡Sí! El plan Gratis incluye 10 mensajes del coach IA por mes, mensajería de pareja ilimitada y acceso a ejercicios básicos. No se requiere tarjeta de crédito para empezar.",
     "faq.q5": "¿Qué idiomas están disponibles?",
-    "faq.a5": "We Connect está disponible en inglés, francés y español. El coach IA puede responder en el idioma que elijas, y toda la interfaz está traducida.",
+    "faq.a5": "Entrelace está disponible en inglés, francés y español. El coach IA puede responder en el idioma que elijas, y toda la interfaz está traducida.",
 
     "cta.title": "¿Listos para construir una relación más fuerte?",
     "cta.subtitle": "Crea un espacio privado donde ambas personas puedan sentirse escuchadas, practicar mejores conversaciones y avanzar juntas paso a paso.",
@@ -378,7 +378,7 @@ const translations = {
     "footer.mediation": "Mediación de consumo",
     "footer.support": "Soporte",
     "footer.contact": "Contáctanos",
-    "footer.copyright": "© 2026 We Connect. Todos los derechos reservados.",
+    "footer.copyright": "© 2026 Entrelace. Todos los derechos reservados.",
     "footer.mediator": "Mediador de consumo: Société Médiation Professionnelle, Alteritae, 5 rue Salvaing, 12000 Rodez, Francia."
   }
 };

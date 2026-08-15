@@ -225,8 +225,8 @@ const sendWelcomeEmail = async ({ to, firstName, language = 'en' }) => {
 };
 
 const sendSignupNotificationEmail = async ({ to, user }) => {
-  const appUrl = process.env.FRONTEND_URL || 'https://app.we-connect-app.com';
-  const subject = 'Nouvelle inscription We Connect';
+  const appUrl = process.env.FRONTEND_URL || 'https://app.entrelace.app';
+  const subject = 'Nouvelle inscription Entrelace';
   const fullName = `${user.firstName || ''} ${user.lastName || ''}`.trim();
 
   const htmlRows = [
@@ -244,7 +244,7 @@ const sendSignupNotificationEmail = async ({ to, user }) => {
   ].join('');
 
   const textBody = [
-    'Nouvelle inscription We Connect',
+    'Nouvelle inscription Entrelace',
     '',
     formatOptionalText('Nom', fullName),
     formatOptionalText('Email', user.email),
@@ -294,7 +294,7 @@ const sendSignupNotificationEmail = async ({ to, user }) => {
                 <h1>${subject}</h1>
                 <div class="content">
                   <table>${htmlRows}</table>
-                  <p class="footer"><a href="${escapeHtml(appUrl)}">Ouvrir l'app We Connect</a></p>
+                  <p class="footer"><a href="${escapeHtml(appUrl)}">Ouvrir l'app Entrelace</a></p>
                 </div>
               </div>
             </body>
@@ -378,7 +378,7 @@ const sendMessageNotification = async ({ to, recipientName, senderName, messageP
             <body>
               <div class="container">
                 <div class="header">
-                  <h1>We Connect</h1>
+                  <h1>Entrelace</h1>
                 </div>
                 <div class="content">
                   <h2>${t.heading(senderName)}</h2>
@@ -473,7 +473,7 @@ const sendPasswordResetEmail = async ({ to, resetToken, language = 'en' }) => {
             <body>
               <div class="container">
                 <div class="header">
-                  <h1>We Connect</h1>
+                  <h1>Entrelace</h1>
                 </div>
                 <div class="content">
                   <h2>${t.heading}</h2>

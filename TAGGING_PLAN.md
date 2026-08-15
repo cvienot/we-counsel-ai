@@ -1,4 +1,4 @@
-# We Connect Tagging Plan
+# Entrelace Tagging Plan
 
 ## Tooling
 

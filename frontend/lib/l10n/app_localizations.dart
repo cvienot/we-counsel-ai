@@ -103,7 +103,7 @@ abstract class AppLocalizations {
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:
-  /// **'We Connect'**
+  /// **'Entrelace'**
   String get appTitle;
 
   /// No description provided for @appSubtitle.
@@ -343,7 +343,7 @@ abstract class AppLocalizations {
   /// No description provided for @invitePartnerDescription.
   ///
   /// In en, this message translates to:
-  /// **'Invite your partner to join you on We Connect. They will receive an email with instructions to create their account and connect with you.'**
+  /// **'Invite your partner to join you on Entrelace. They will receive an email with instructions to create their account and connect with you.'**
   String get invitePartnerDescription;
 
   /// No description provided for @partnerEmailAddress.
@@ -397,7 +397,7 @@ abstract class AppLocalizations {
   /// No description provided for @invitationSentMessage.
   ///
   /// In en, this message translates to:
-  /// **'An invitation has been sent to {email}. They will receive an email with instructions to join you on We Connect.'**
+  /// **'An invitation has been sent to {email}. They will receive an email with instructions to join you on Entrelace.'**
   String invitationSentMessage(String email);
 
   /// No description provided for @failedToSendInvitation.
@@ -433,7 +433,7 @@ abstract class AppLocalizations {
   /// No description provided for @waitingRoomGreeting.
   ///
   /// In en, this message translates to:
-  /// **'Hi {name}! Your coaching journey will begin once your partner joins you on We Connect.'**
+  /// **'Hi {name}! Your coaching journey will begin once your partner joins you on Entrelace.'**
   String waitingRoomGreeting(String name);
 
   /// No description provided for @whatHappensNext.
@@ -457,7 +457,7 @@ abstract class AppLocalizations {
   /// No description provided for @getStartedGreeting.
   ///
   /// In en, this message translates to:
-  /// **'Hi {name}! To begin your coaching journey, invite your partner to join you on We Connect.'**
+  /// **'Hi {name}! To begin your coaching journey, invite your partner to join you on Entrelace.'**
   String getStartedGreeting(String name);
 
   /// No description provided for @howItWorks.
@@ -949,7 +949,7 @@ abstract class AppLocalizations {
   /// No description provided for @welcomeToApp.
   ///
   /// In en, this message translates to:
-  /// **'Welcome to We Connect'**
+  /// **'Welcome to Entrelace'**
   String get welcomeToApp;
 
   /// No description provided for @strengthenRelationship.
@@ -967,7 +967,7 @@ abstract class AppLocalizations {
   /// No description provided for @whyAiForCouplesIntro.
   ///
   /// In en, this message translates to:
-  /// **'Technology often pulls partners into separate worlds. We Connect is built for the opposite: a shared space where both voices can be heard.'**
+  /// **'Technology often pulls partners into separate worlds. Entrelace is built for the opposite: a shared space where both voices can be heard.'**
   String get whyAiForCouplesIntro;
 
   /// No description provided for @whyAiForCouplesSharedSpaceTitle.
@@ -1045,7 +1045,7 @@ abstract class AppLocalizations {
   /// No description provided for @joinApp.
   ///
   /// In en, this message translates to:
-  /// **'Join We Connect'**
+  /// **'Join Entrelace'**
   String get joinApp;
 
   /// No description provided for @startJourneyBetterComm.
@@ -1057,7 +1057,7 @@ abstract class AppLocalizations {
   /// No description provided for @learnMoreOnWebsite.
   ///
   /// In en, this message translates to:
-  /// **'Learn more on the We Connect website'**
+  /// **'Learn more on the Entrelace website'**
   String get learnMoreOnWebsite;
 
   /// No description provided for @pleaseEnterAPassword.
@@ -1159,7 +1159,7 @@ abstract class AppLocalizations {
   /// No description provided for @partnerInvitedYou.
   ///
   /// In en, this message translates to:
-  /// **'Your partner has invited you to join We Connect. Create an account or sign in to start your relationship coaching journey together.'**
+  /// **'Your partner has invited you to join Entrelace. Create an account or sign in to start your relationship coaching journey together.'**
   String get partnerInvitedYou;
 
   /// No description provided for @alreadySignedInAccept.

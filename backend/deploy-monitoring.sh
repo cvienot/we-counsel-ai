@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Deploy production launch monitoring for We Connect.
+# Deploy production launch monitoring for Entrelace.
 # Prerequisites:
 #   1. Deploy DynamoDB stack exports.
 #   2. Deploy App Runner stack exports.
@@ -14,7 +14,7 @@ APP_RUNNER_STACK="${APP_RUNNER_STACK_NAME:-we-counsel-apprunner}"
 TEMPLATE_FILE="cloudformation-monitoring.yaml"
 
 echo "======================================="
-echo "We Connect - Monitoring Deployment"
+echo "Entrelace - Monitoring Deployment"
 echo "======================================="
 echo ""
 

@@ -4,11 +4,11 @@
 
 ## 1. Acceptance of Terms
 
-By creating an account and using We Connect ("the Service"), you agree to be bound by these Terms of Service. If you do not agree to these terms, you may not use the Service.
+By creating an account and using Entrelace ("the Service"), you agree to be bound by these Terms of Service. If you do not agree to these terms, you may not use the Service.
 
 ## 2. Description of Service
 
-We Connect is a coaching application designed to facilitate communication between couples. The Service provides:
+Entrelace is a coaching application designed to facilitate communication between couples. The Service provides:
 - Private conversation spaces for couples
 - AI-assisted coaching support
 - Secure messaging and communication tools
@@ -52,7 +52,7 @@ You agree not to:
 ## 6. Intellectual Property
 
 ### 6.1 Service Content
-- All content, features, and functionality of the Service are owned by We Connect
+- All content, features, and functionality of the Service are owned by Entrelace
 - You may not copy, modify, distribute, or create derivative works without permission
 
 ### 6.2 User Content
@@ -95,7 +95,7 @@ You agree not to:
 
 ## 10. Indemnification
 
-You agree to indemnify and hold harmless We Connect and its affiliates from any claims, losses, or damages arising from:
+You agree to indemnify and hold harmless Entrelace and its affiliates from any claims, losses, or damages arising from:
 - Your use of the Service
 - Your violation of these Terms
 - Your violation of any rights of another party
@@ -109,7 +109,7 @@ If you are a consumer, you may bring claims before any court that is competent u
 ## 12. Dispute Resolution and Consumer Mediation
 
 ### 12.1 Informal Resolution
-- Before filing a formal claim, please contact us at support@we-connect-app.com so we can try to resolve the issue informally.
+- Before filing a formal claim, please contact us at support@entrelace.app so we can try to resolve the issue informally.
 
 ### 12.2 Consumer Mediation
 
@@ -140,20 +140,20 @@ Your continued use of the Service after changes constitutes acceptance of the mo
 - Subscriptions renew automatically unless cancelled before the next billing period.
 - You can manage billing through the Stripe customer portal when available.
 - Cancellation stops future renewal but does not automatically refund past charges unless required by law or stated in the applicable checkout terms.
-- If you are a consumer in France, the European Union, or another jurisdiction with a statutory withdrawal right, you may have the right to withdraw from a paid subscription within 14 days of purchase. To exercise this right, contact support@we-connect-app.com with the email address used for the account and the relevant order or invoice information.
+- If you are a consumer in France, the European Union, or another jurisdiction with a statutory withdrawal right, you may have the right to withdraw from a paid subscription within 14 days of purchase. To exercise this right, contact support@entrelace.app with the email address used for the account and the relevant order or invoice information.
 - If you request immediate access to paid digital features before the end of the withdrawal period, you acknowledge that you may be charged for the paid service supplied before withdrawal, where allowed by law. Nothing in these Terms limits mandatory consumer rights.
 - If a payment fails, access to paid features may be limited, suspended, or downgraded.
 - We may change prices or plan features with reasonable notice where required by law.
 
 ## 15. Account Deletion and Data Requests
 
-You may request account deletion or data export by contacting support@we-connect-app.com. Some records may be retained when required for security, legal, tax, accounting, dispute, fraud prevention, or backup purposes.
+You may request account deletion or data export by contacting support@entrelace.app. Some records may be retained when required for security, legal, tax, accounting, dispute, fraud prevention, or backup purposes.
 
 ## 16. Contact Information
 
 If you have questions about these Terms, please contact us at:
-- Service operator: Camille Vienot, operating We Connect, SIREN 104281621, registered with the RNE on April 28, 2026
-- Email: support@we-connect-app.com
+- Service operator: Camille Vienot, operating Entrelace, SIREN 104281621, registered with the RNE on April 28, 2026
+- Email: support@entrelace.app
 
 ## 17. Severability
 
@@ -161,7 +161,7 @@ If any provision of these Terms is found to be unenforceable or invalid, that pr
 
 ## 18. Entire Agreement
 
-These Terms, together with our Privacy Policy, constitute the entire agreement between you and We Connect regarding the Service.
+These Terms, together with our Privacy Policy, constitute the entire agreement between you and Entrelace regarding the Service.
 
 ---
 

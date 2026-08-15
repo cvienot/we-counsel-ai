@@ -88,7 +88,7 @@ The customer IDs can be written with or without dashes.
 Default site:
 
 ```env
-GOOGLE_SEARCH_CONSOLE_SITE_URL=https://we-connect-app.com/
+GOOGLE_SEARCH_CONSOLE_SITE_URL=https://entrelace.app/
 ```
 
 Examples:
@@ -96,10 +96,10 @@ Examples:
 ```bash
 npm run seo:gsc -- --days=28 --dimensions=query,page --limit=50
 npm run seo:gsc -- --days=28 --dimensions=page --json
-npm run seo:inspect -- --url=https://we-connect-app.com/fr/
+npm run seo:inspect -- --url=https://entrelace.app/fr/
 npm run seo:sitemaps
-npm run seo:submit-sitemap -- --sitemap=https://we-connect-app.com/sitemap.xml
-npm run seo:submit-sitemap -- --sitemap=https://we-connect-app.com/sitemap.xml --yes
+npm run seo:submit-sitemap -- --sitemap=https://entrelace.app/sitemap.xml
+npm run seo:submit-sitemap -- --sitemap=https://entrelace.app/sitemap.xml --yes
 ```
 
 `seo:submit-sitemap` is a dry run unless `--yes` is present.
@@ -111,7 +111,7 @@ Google does not expose a general Search Console API to request indexing for arbi
 No OAuth is required. Use `PAGESPEED_API_KEY` or `--api-key=...` if the anonymous/default project quota is exhausted.
 
 ```bash
-npm run seo:pagespeed -- --url=https://we-connect-app.com/fr/ --strategy=mobile
-npm run seo:pagespeed -- --url=https://we-connect-app.com/fr/ --strategy=mobile --api-key=...
-npm run seo:pagespeed -- --url=https://we-connect-app.com/fr/ --strategy=desktop --json
+npm run seo:pagespeed -- --url=https://entrelace.app/fr/ --strategy=mobile
+npm run seo:pagespeed -- --url=https://entrelace.app/fr/ --strategy=mobile --api-key=...
+npm run seo:pagespeed -- --url=https://entrelace.app/fr/ --strategy=desktop --json
 ```

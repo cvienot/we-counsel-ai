@@ -1,10 +1,10 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'S3 + CloudFront for We Connect marketing website'
+Description: 'S3 + CloudFront for Entrelace marketing website'
 
 Parameters:
   DomainName:
     Type: String
-    Default: we-connect-app.com
+    Default: entrelace.app
     Description: Root domain name
 
   CertificateArn:
@@ -91,7 +91,7 @@ Resources:
     Properties:
       DistributionConfig:
         Enabled: true
-        Comment: !Sub 'We Connect marketing site - ${DomainName}'
+        Comment: !Sub 'Entrelace marketing site - ${DomainName}'
         DefaultRootObject: index.html
         HttpVersion: http2and3
         PriceClass: PriceClass_100

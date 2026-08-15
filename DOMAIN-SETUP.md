@@ -1,9 +1,9 @@
-# Domain Setup Summary - we-connect-app.com
+# Domain Setup Summary - entrelace.app
 
 ## ✅ Completed Steps
 
 ### 1. Route 53 Hosted Zone
-- **Domain**: we-connect-app.com
+- **Domain**: entrelace.app
 - **Hosted Zone ID**: Z0180041362VEUE7TM637
 - **Status**: Created
 - **Cost**: $0.50/month

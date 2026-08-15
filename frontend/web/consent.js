@@ -152,9 +152,9 @@
   }
 
   function getPrivacyUrl() {
-    return window.location.hostname === 'app.we-connect-app.com'
+    return window.location.hostname === 'app.entrelace.app'
       ? '/privacy'
-      : 'https://app.we-connect-app.com/privacy';
+      : 'https://app.entrelace.app/privacy';
   }
 
   function getConsent() {

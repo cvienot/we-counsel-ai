@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'AWS Amplify Hosting for We Connect Flutter Web App'
+Description: 'AWS Amplify Hosting for Entrelace Flutter Web App'
 
 Parameters:
   AppName:

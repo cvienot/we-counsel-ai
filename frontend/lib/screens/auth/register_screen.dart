@@ -23,7 +23,7 @@ class RegisterScreen extends ConsumerStatefulWidget {
 }
 
 class _RegisterScreenState extends ConsumerState<RegisterScreen> {
-  static const _marketingSite = 'https://we-connect-app.com';
+  static const _marketingSite = 'https://entrelace.app';
 
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();

@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'Launch monitoring, dashboard, and alerts for We Connect production'
+Description: 'Launch monitoring, dashboard, and alerts for Entrelace production'
 
 Parameters:
   AlertEmail:
@@ -35,7 +35,7 @@ Resources:
     Type: AWS::SNS::Topic
     Properties:
       TopicName: we-connect-prod-alerts
-      DisplayName: We Connect production launch alerts
+      DisplayName: Entrelace production launch alerts
       Tags:
         - Key: Application
           Value: WeConnect
@@ -771,7 +771,7 @@ Resources:
                   "width": 24,
                   "height": 2,
                   "properties": {
-                    "markdown": "# We Connect Production Launch\\nWatch App Runner traffic/errors, backend application error filters, DynamoDB throttles, SES reputation events, and AWS spend during launch."
+                    "markdown": "# Entrelace Production Launch\\nWatch App Runner traffic/errors, backend application error filters, DynamoDB throttles, SES reputation events, and AWS spend during launch."
                   }
                 },
                 {

@@ -4,11 +4,11 @@
 
 ## 1. Aceptación de los términos
 
-Al crear una cuenta y utilizar We Connect ("el Servicio"), usted acepta estar sujeto a estos Términos de Servicio. Si no está de acuerdo con estos términos, no puede utilizar el Servicio.
+Al crear una cuenta y utilizar Entrelace ("el Servicio"), usted acepta estar sujeto a estos Términos de Servicio. Si no está de acuerdo con estos términos, no puede utilizar el Servicio.
 
 ## 2. Descripción del Servicio
 
-We Connect es una aplicación de coaching diseñada para facilitar la comunicación entre parejas. El Servicio proporciona:
+Entrelace es una aplicación de coaching diseñada para facilitar la comunicación entre parejas. El Servicio proporciona:
 - Espacios de conversación privados para parejas
 - Apoyo de comunicación relacional asistido por IA
 - Herramientas de mensajería y comunicación seguras
@@ -52,7 +52,7 @@ Usted acepta no:
 ## 6. Propiedad intelectual
 
 ### 6.1 Contenido del servicio
-- Todo el contenido, características y funcionalidad del Servicio son propiedad de We Connect
+- Todo el contenido, características y funcionalidad del Servicio son propiedad de Entrelace
 - No puede copiar, modificar, distribuir o crear obras derivadas sin permiso
 
 ### 6.2 Contenido del usuario
@@ -95,7 +95,7 @@ Usted acepta no:
 
 ## 10. Indemnización
 
-Usted acepta indemnizar y eximir de responsabilidad a We Connect y sus afiliados de cualquier reclamo, pérdida o daño que surja de:
+Usted acepta indemnizar y eximir de responsabilidad a Entrelace y sus afiliados de cualquier reclamo, pérdida o daño que surja de:
 - Su uso del Servicio
 - Su violación de estos Términos
 - Su violación de los derechos de otra parte
@@ -109,7 +109,7 @@ Si usted es consumidor, puede presentar reclamaciones ante cualquier tribunal co
 ## 12. Resolución de disputas y mediación de consumo
 
 ### 12.1 Resolución informal
-- Antes de presentar una reclamación formal, póngase en contacto con nosotros en support@we-connect-app.com para que podamos intentar resolver el problema de manera informal.
+- Antes de presentar una reclamación formal, póngase en contacto con nosotros en support@entrelace.app para que podamos intentar resolver el problema de manera informal.
 
 ### 12.2 Mediación de consumo
 
@@ -140,20 +140,20 @@ Su uso continuado del Servicio después de los cambios constituye la aceptación
 - Las suscripciones se renuevan automáticamente salvo cancelación antes del siguiente período de facturación.
 - Puede gestionar la facturación a través del portal de clientes de Stripe cuando esté disponible.
 - La cancelación detiene renovaciones futuras pero no reembolsa automáticamente cargos anteriores salvo que lo exija la ley o se indique en las condiciones de pago aplicables.
-- Si usted es consumidor en Francia, la Unión Europea u otra jurisdicción con derecho legal de desistimiento, puede tener derecho a desistir de una suscripción pagada dentro de los 14 días posteriores a la compra. Para ejercer este derecho, contacte a support@we-connect-app.com con la dirección de correo electrónico usada para la cuenta y la información de pedido o factura correspondiente.
+- Si usted es consumidor en Francia, la Unión Europea u otra jurisdicción con derecho legal de desistimiento, puede tener derecho a desistir de una suscripción pagada dentro de los 14 días posteriores a la compra. Para ejercer este derecho, contacte a support@entrelace.app con la dirección de correo electrónico usada para la cuenta y la información de pedido o factura correspondiente.
 - Si solicita acceso inmediato a funciones digitales pagadas antes de que termine el periodo de desistimiento, reconoce que se le puede cobrar por el servicio pagado suministrado antes del desistimiento, cuando la ley lo permita. Nada en estos Términos limita los derechos obligatorios de los consumidores.
 - Si un pago falla, el acceso a funciones pagas puede limitarse, suspenderse o degradarse.
 - Podemos cambiar precios o funciones de los planes con aviso razonable cuando la ley lo requiera.
 
 ## 15. Eliminación de cuenta y solicitudes de datos
 
-Puede solicitar la eliminación de su cuenta o la exportación de sus datos contactando a support@we-connect-app.com. Algunos registros pueden conservarse cuando sea necesario por seguridad, obligaciones legales, fiscales o contables, disputas, prevención de fraude o copias de seguridad.
+Puede solicitar la eliminación de su cuenta o la exportación de sus datos contactando a support@entrelace.app. Algunos registros pueden conservarse cuando sea necesario por seguridad, obligaciones legales, fiscales o contables, disputas, prevención de fraude o copias de seguridad.
 
 ## 16. Información de contacto
 
 Si tiene preguntas sobre estos Términos, contáctenos en:
-- Operador del Servicio: Camille Vienot, operando We Connect, SIREN 104281621, inscrito en el RNE el 28/04/2026
-- Correo electrónico: support@we-connect-app.com
+- Operador del Servicio: Camille Vienot, operando Entrelace, SIREN 104281621, inscrito en el RNE el 28/04/2026
+- Correo electrónico: support@entrelace.app
 
 ## 17. Divisibilidad
 
@@ -161,7 +161,7 @@ Si alguna disposición de estos Términos se considera inaplicable o inválida, 
 
 ## 18. Acuerdo completo
 
-Estos Términos, junto con nuestra Política de Privacidad, constituyen el acuerdo completo entre usted y We Connect con respecto al Servicio.
+Estos Términos, junto con nuestra Política de Privacidad, constituyen el acuerdo completo entre usted y Entrelace con respecto al Servicio.
 
 ---
 

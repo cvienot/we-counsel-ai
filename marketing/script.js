@@ -12,7 +12,7 @@ function languageFromPath() {
 }
 
 function canonicalUrl(lang) {
-  return `https://we-connect-app.com${LANG_META[lang].path}`;
+  return `https://entrelace.app${LANG_META[lang].path}`;
 }
 
 function localizedUrl(lang) {
@@ -139,9 +139,9 @@ function preserveCampaignParams() {
 
   if ([...campaignParams].length === 0) return;
 
-  document.querySelectorAll('a[href^="https://app.we-connect-app.com"]').forEach(link => {
+  document.querySelectorAll('a[href^="https://app.entrelace.app"]').forEach(link => {
     const url = new URL(link.href);
-    const isAppEntryLink = url.origin === 'https://app.we-connect-app.com' && url.pathname === '/';
+    const isAppEntryLink = url.origin === 'https://app.entrelace.app' && url.pathname === '/';
 
     if (!isAppEntryLink) return;
 
@@ -166,11 +166,11 @@ function ctaLocationFor(link) {
 }
 
 function trackAppEntryClicks() {
-  document.querySelectorAll('a[href^="https://app.we-connect-app.com"]').forEach(link => {
+  document.querySelectorAll('a[href^="https://app.entrelace.app"]').forEach(link => {
     link.addEventListener('click', () => {
       try {
         const url = new URL(link.href);
-        const isAppEntryLink = url.origin === 'https://app.we-connect-app.com' && url.pathname === '/';
+        const isAppEntryLink = url.origin === 'https://app.entrelace.app' && url.pathname === '/';
 
         if (!isAppEntryLink || !window.WeConnectTags) return;
 

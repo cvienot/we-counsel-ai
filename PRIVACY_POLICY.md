@@ -2,15 +2,15 @@
 
 **Last Updated:** May 28, 2026
 
-This Privacy Policy explains how We Connect ("the Service", "we", "us", or "our") collects, uses, stores, and shares personal information when you use the Service.
+This Privacy Policy explains how Entrelace ("the Service", "we", "us", or "our") collects, uses, stores, and shares personal information when you use the Service.
 
 ## 1. Who We Are
 
-We Connect provides an AI-assisted couples coaching and communication service.
+Entrelace provides an AI-assisted couples coaching and communication service.
 
-Data controller: Camille Vienot, operating We Connect, SIREN 104281621, registered with the RNE on April 28, 2026.
+Data controller: Camille Vienot, operating Entrelace, SIREN 104281621, registered with the RNE on April 28, 2026.
 
-Contact: support@we-connect-app.com
+Contact: support@entrelace.app
 
 ## 2. Information We Collect
 
@@ -82,7 +82,7 @@ Account, partner, couple, conversation, exercise, and AI-interaction data are re
 
 Depending on your location, you may have rights to access, correct, delete, restrict, object to processing, withdraw consent, or receive a portable copy of your personal information. We may need to verify your identity before processing a request.
 
-To exercise these rights, contact support@we-connect-app.com.
+To exercise these rights, contact support@entrelace.app.
 
 If you are in France or the European Union and believe your request has not been handled properly, you may lodge a complaint with the CNIL or your local data protection authority.
 
@@ -106,4 +106,4 @@ We may update this Privacy Policy from time to time. Material changes may requir
 
 ## 14. Contact
 
-Questions or requests: support@we-connect-app.com
+Questions or requests: support@entrelace.app

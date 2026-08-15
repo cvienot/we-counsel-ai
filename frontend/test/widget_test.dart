@@ -13,7 +13,7 @@ void main() {
     await tester.pumpWidget(const ProviderScope(child: WeCounselApp()));
     await tester.pump();
 
-    expect(find.text('We Connect'), findsOneWidget);
+    expect(find.text('Entrelace'), findsOneWidget);
     expect(find.byIcon(Icons.favorite), findsOneWidget);
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });

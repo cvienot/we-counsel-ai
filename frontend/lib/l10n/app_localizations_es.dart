@@ -9,7 +9,7 @@ class AppLocalizationsEs extends AppLocalizations {
   AppLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
-  String get appTitle => 'We Connect';
+  String get appTitle => 'Entrelace';
 
   @override
   String get appSubtitle => 'Su viaje de relación juntos';
@@ -139,7 +139,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get invitePartnerDescription =>
-      'Invita a tu pareja a unirse a ti en We Connect. Recibirá un correo electrónico con instrucciones para crear su cuenta y conectarse contigo.';
+      'Invita a tu pareja a unirse a ti en Entrelace. Recibirá un correo electrónico con instrucciones para crear su cuenta y conectarse contigo.';
 
   @override
   String get partnerEmailAddress =>
@@ -193,7 +193,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String waitingRoomGreeting(String name) {
-    return '¡Hola $name! Su viaje de coaching comenzará una vez que su pareja se una a usted en We Connect.';
+    return '¡Hola $name! Su viaje de coaching comenzará una vez que su pareja se una a usted en Entrelace.';
   }
 
   @override
@@ -207,7 +207,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String getStartedGreeting(String name) {
-    return '¡Hola $name! Para comenzar su viaje de coaching, invite a su pareja a unirse en We Connect.';
+    return '¡Hola $name! Para comenzar su viaje de coaching, invite a su pareja a unirse en Entrelace.';
   }
 
   @override
@@ -477,7 +477,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get upgradeOrChangeSubscription => 'Mejorar o cambiar suscripción';
 
   @override
-  String get welcomeToApp => 'Bienvenido a We Connect';
+  String get welcomeToApp => 'Bienvenido a Entrelace';
 
   @override
   String get strengthenRelationship => 'Fortalece tu relación juntos';
@@ -487,7 +487,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get whyAiForCouplesIntro =>
-      'La tecnología a menudo lleva a cada persona a mundos separados. We Connect está pensado para lo contrario: un espacio compartido donde ambas voces pueden ser escuchadas.';
+      'La tecnología a menudo lleva a cada persona a mundos separados. Entrelace está pensado para lo contrario: un espacio compartido donde ambas voces pueden ser escuchadas.';
 
   @override
   String get whyAiForCouplesSharedSpaceTitle =>
@@ -530,14 +530,14 @@ class AppLocalizationsEs extends AppLocalizations {
   String get createAccount => 'Crear Cuenta';
 
   @override
-  String get joinApp => 'Únete a We Connect';
+  String get joinApp => 'Únete a Entrelace';
 
   @override
   String get startJourneyBetterComm =>
       'Comienza tu viaje hacia una mejor comunicación';
 
   @override
-  String get learnMoreOnWebsite => 'Más información en el sitio de We Connect';
+  String get learnMoreOnWebsite => 'Más información en el sitio de Entrelace';
 
   @override
   String get pleaseEnterAPassword => 'Por favor, ingresa una contraseña';
@@ -594,7 +594,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get partnerInvitedYou =>
-      'Tu pareja te ha invitado a unirte a We Connect. Crea una cuenta o inicia sesión para comenzar tu viaje de coaching relacional juntos.';
+      'Tu pareja te ha invitado a unirte a Entrelace. Crea una cuenta o inicia sesión para comenzar tu viaje de coaching relacional juntos.';
 
   @override
   String get alreadySignedInAccept =>

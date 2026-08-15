@@ -7,7 +7,7 @@ class AppConfig {
   );
 
   // App Information
-  static const String appName = 'We Connect';
+  static const String appName = 'Entrelace';
   static const String appVersion = '1.0.0';
 
   // API Timeouts

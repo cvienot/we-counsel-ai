@@ -12,7 +12,7 @@ void main() {
 
     await service.captureUriForTesting(
       Uri.parse(
-        'https://app.we-connect-app.com/?utm_source=google&utm_medium=cpc&utm_campaign=fr_search_launch&gclid=test-gclid&gbraid=test-gbraid&gad_source=1&gad_campaignid=12345',
+        'https://app.entrelace.app/?utm_source=google&utm_medium=cpc&utm_campaign=fr_search_launch&gclid=test-gclid&gbraid=test-gbraid&gad_source=1&gad_campaignid=12345',
       ),
     );
 
@@ -41,12 +41,12 @@ void main() {
 
     await service.captureUriForTesting(
       Uri.parse(
-        'https://app.we-connect-app.com/?utm_source=google&gclid=first-click',
+        'https://app.entrelace.app/?utm_source=google&gclid=first-click',
       ),
     );
     await service.captureUriForTesting(
       Uri.parse(
-        'https://app.we-connect-app.com/?utm_source=google&gclid=last-click',
+        'https://app.entrelace.app/?utm_source=google&gclid=last-click',
       ),
     );
 

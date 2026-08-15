@@ -19,11 +19,11 @@ run:
     - name: DYNAMODB_REGION
       value: eu-west-3
     - name: EMAIL_FROM
-      value: noreply@we-connect-app.com
+      value: noreply@entrelace.app
     - name: SIGNUP_NOTIFICATION_EMAIL
       value: camille.vienot@gmail.com
     - name: FRONTEND_URL
-      value: https://app.we-connect-app.com
+      value: https://app.entrelace.app
     
     # Sensitive secrets loaded from AWS Secrets Manager at runtime
     # JWT_SECRET and OPENAI_API_KEY are fetched by src/config/secrets.js

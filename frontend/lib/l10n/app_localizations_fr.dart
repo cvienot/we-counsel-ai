@@ -9,7 +9,7 @@ class AppLocalizationsFr extends AppLocalizations {
   AppLocalizationsFr([String locale = 'fr']) : super(locale);
 
   @override
-  String get appTitle => 'We Connect';
+  String get appTitle => 'Entrelace';
 
   @override
   String get appSubtitle => 'Votre parcours relationnel ensemble';
@@ -138,7 +138,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get invitePartnerDescription =>
-      'Invitez votre partenaire à vous rejoindre sur We Connect. Il recevra un e-mail avec les instructions pour créer son compte et se connecter avec vous.';
+      'Invitez votre partenaire à vous rejoindre sur Entrelace. Il recevra un e-mail avec les instructions pour créer son compte et se connecter avec vous.';
 
   @override
   String get partnerEmailAddress => 'Adresse e-mail du partenaire';
@@ -171,7 +171,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String invitationSentMessage(String email) {
-    return 'Une invitation a été envoyée à $email. Il recevra un e-mail avec les instructions pour vous rejoindre sur We Connect.';
+    return 'Une invitation a été envoyée à $email. Il recevra un e-mail avec les instructions pour vous rejoindre sur Entrelace.';
   }
 
   @override
@@ -192,7 +192,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String waitingRoomGreeting(String name) {
-    return 'Bonjour $name ! Votre parcours de coaching commencera une fois que votre partenaire vous rejoindra sur We Connect.';
+    return 'Bonjour $name ! Votre parcours de coaching commencera une fois que votre partenaire vous rejoindra sur Entrelace.';
   }
 
   @override
@@ -206,7 +206,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String getStartedGreeting(String name) {
-    return 'Bonjour $name ! Pour commencer votre parcours de coaching, invitez votre partenaire à vous rejoindre sur We Connect.';
+    return 'Bonjour $name ! Pour commencer votre parcours de coaching, invitez votre partenaire à vous rejoindre sur Entrelace.';
   }
 
   @override
@@ -479,7 +479,7 @@ class AppLocalizationsFr extends AppLocalizations {
       'Améliorer ou changer d\'abonnement';
 
   @override
-  String get welcomeToApp => 'Bienvenue sur We Connect';
+  String get welcomeToApp => 'Bienvenue sur Entrelace';
 
   @override
   String get strengthenRelationship => 'Renforcez votre relation ensemble';
@@ -489,7 +489,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get whyAiForCouplesIntro =>
-      'La technologie éloigne souvent les partenaires dans des mondes séparés. We Connect est conçu pour l\'inverse : un espace partagé où les deux voix peuvent être entendues.';
+      'La technologie éloigne souvent les partenaires dans des mondes séparés. Entrelace est conçu pour l\'inverse : un espace partagé où les deux voix peuvent être entendues.';
 
   @override
   String get whyAiForCouplesSharedSpaceTitle => 'Conçu autour du couple';
@@ -531,14 +531,14 @@ class AppLocalizationsFr extends AppLocalizations {
   String get createAccount => 'Créer un Compte';
 
   @override
-  String get joinApp => 'Rejoindre We Connect';
+  String get joinApp => 'Rejoindre Entrelace';
 
   @override
   String get startJourneyBetterComm =>
       'Commencez votre parcours vers une meilleure communication';
 
   @override
-  String get learnMoreOnWebsite => 'En savoir plus sur le site We Connect';
+  String get learnMoreOnWebsite => 'En savoir plus sur le site Entrelace';
 
   @override
   String get pleaseEnterAPassword => 'Veuillez entrer un mot de passe';
@@ -596,7 +596,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get partnerInvitedYou =>
-      'Votre partenaire vous a invité(e) à rejoindre We Connect. Créez un compte ou connectez-vous pour commencer votre parcours de coaching relationnel ensemble.';
+      'Votre partenaire vous a invité(e) à rejoindre Entrelace. Créez un compte ou connectez-vous pour commencer votre parcours de coaching relationnel ensemble.';
 
   @override
   String get alreadySignedInAccept =>

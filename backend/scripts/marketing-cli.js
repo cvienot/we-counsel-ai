@@ -49,10 +49,10 @@ Usage:
   node scripts/marketing-cli.js ads query --gaql="SELECT ..." [--json]
 
   node scripts/marketing-cli.js seo gsc [--days=28] [--dimensions=query,page] [--limit=50] [--json]
-  node scripts/marketing-cli.js seo inspect --url=https://we-connect-app.com/fr/
+  node scripts/marketing-cli.js seo inspect --url=https://entrelace.app/fr/
   node scripts/marketing-cli.js seo sitemaps
-  node scripts/marketing-cli.js seo submit-sitemap --sitemap=https://we-connect-app.com/sitemap.xml [--yes]
-  node scripts/marketing-cli.js seo pagespeed --url=https://we-connect-app.com/fr/ [--strategy=mobile] [--api-key=...]
+  node scripts/marketing-cli.js seo submit-sitemap --sitemap=https://entrelace.app/sitemap.xml [--yes]
+  node scripts/marketing-cli.js seo pagespeed --url=https://entrelace.app/fr/ [--strategy=mobile] [--api-key=...]
 
 Required for Google Ads:
   GOOGLE_ADS_DEVELOPER_TOKEN
@@ -60,7 +60,7 @@ Required for Google Ads:
   GOOGLE_ADS_LOGIN_CUSTOMER_ID     Optional manager account ID
 
 Required for Search Console:
-  GOOGLE_SEARCH_CONSOLE_SITE_URL   Defaults to https://we-connect-app.com/
+  GOOGLE_SEARCH_CONSOLE_SITE_URL   Defaults to https://entrelace.app/
 
 Auth options, checked in this order:
   GOOGLE_ACCESS_TOKEN
@@ -476,7 +476,7 @@ async function runAdsCommand() {
 }
 
 function searchConsoleSiteUrl() {
-  return getStringOption('site', process.env.GOOGLE_SEARCH_CONSOLE_SITE_URL || 'https://we-connect-app.com/');
+  return getStringOption('site', process.env.GOOGLE_SEARCH_CONSOLE_SITE_URL || 'https://entrelace.app/');
 }
 
 async function searchConsoleRequest(path, { method = 'GET', body, expected = [200] } = {}) {
@@ -631,7 +631,7 @@ async function runSitemapsList() {
 }
 
 async function runSitemapSubmit() {
-  const sitemap = getStringOption('sitemap', 'https://we-connect-app.com/sitemap.xml');
+  const sitemap = getStringOption('sitemap', 'https://entrelace.app/sitemap.xml');
   const siteUrl = searchConsoleSiteUrl();
 
   if (!hasFlag('yes')) {
@@ -651,7 +651,7 @@ async function runSitemapSubmit() {
 }
 
 async function runPagespeed() {
-  const url = getStringOption('url', 'https://we-connect-app.com/fr/');
+  const url = getStringOption('url', 'https://entrelace.app/fr/');
   const strategy = getStringOption('strategy', 'mobile');
   const params = new URLSearchParams({
     url,

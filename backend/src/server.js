@@ -61,7 +61,7 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/health', (req, res) => {
   res.status(200).json({
     status: 'OK',
-    message: 'We Connect API is running',
+    message: 'Entrelace API is running',
     timestamp: new Date().toISOString()
   });
 });
@@ -325,7 +325,7 @@ streamingService.on('newMessage', async ({ conversationId, senderUserId, message
 
     // Start server
     app.listen(PORT, () => {
-      console.log(`🚀 We Connect API server running on port ${PORT}`);
+      console.log(`🚀 Entrelace API server running on port ${PORT}`);
       console.log(`📊 Environment: ${process.env.NODE_ENV}`);
       console.log(`🔗 Health check: http://localhost:${PORT}/health`);
       console.log(`📡 Streaming service initialized`);

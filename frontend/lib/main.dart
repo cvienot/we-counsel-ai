@@ -67,7 +67,7 @@ class WeCounselApp extends ConsumerWidget {
     _trackAppOpenOnce(currentLocale.languageCode);
 
     return MaterialApp.router(
-      title: 'We Connect',
+      title: 'Entrelace',
       locale: currentLocale,
       localizationsDelegates: const [
         AppLocalizations.delegate,
@@ -396,7 +396,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
             Icon(Icons.favorite, size: 80, color: Colors.white),
             const SizedBox(height: 24),
             Text(
-              AppLocalizations.of(context)?.appTitle ?? 'We Connect',
+              AppLocalizations.of(context)?.appTitle ?? 'Entrelace',
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,

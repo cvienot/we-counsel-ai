@@ -3,63 +3,75 @@
   xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://we-connect-app.com/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://we-connect-app.com/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://we-connect-app.com/fr/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://we-connect-app.com/es/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://we-connect-app.com/"/>
+    <loc>https://entrelace.app/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://entrelace.app/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://entrelace.app/fr/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://entrelace.app/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://entrelace.app/"/>
     <lastmod>2026-06-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://we-connect-app.com/fr/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://we-connect-app.com/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://we-connect-app.com/fr/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://we-connect-app.com/es/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://we-connect-app.com/"/>
+    <loc>https://entrelace.app/fr/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://entrelace.app/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://entrelace.app/fr/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://entrelace.app/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://entrelace.app/"/>
     <lastmod>2026-06-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://we-connect-app.com/es/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://we-connect-app.com/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://we-connect-app.com/fr/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://we-connect-app.com/es/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://we-connect-app.com/"/>
+    <loc>https://entrelace.app/es/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://entrelace.app/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://entrelace.app/fr/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://entrelace.app/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://entrelace.app/"/>
     <lastmod>2026-06-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://we-connect-app.com/fr/probleme-communication-couple/</loc>
+    <loc>https://entrelace.app/fr/probleme-communication-couple/</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://we-connect-app.com/fr/disputes-recurrentes-couple/</loc>
+    <loc>https://entrelace.app/fr/disputes-recurrentes-couple/</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://we-connect-app.com/fr/renouer-dialogue-couple/</loc>
+    <loc>https://entrelace.app/fr/renouer-dialogue-couple/</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://we-connect-app.com/fr/couple-en-crise-que-faire/</loc>
+    <loc>https://entrelace.app/fr/couple-en-crise-que-faire/</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://we-connect-app.com/fr/exercice-communication-couple/</loc>
+    <loc>https://entrelace.app/fr/exercice-communication-couple/</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://entrelace.app/fr/partenaire-ne-veut-plus-communiquer/</loc>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://entrelace.app/fr/a-propos/</loc>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
 </urlset>

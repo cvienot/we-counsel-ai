@@ -8,7 +8,7 @@ REGION="eu-west-3"
 STACK_NAME="we-counsel-secrets"
 
 echo "===================================="
-echo "We Connect - Secrets Deployment"
+echo "Entrelace - Secrets Deployment"
 echo "===================================="
 echo ""
 

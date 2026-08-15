@@ -18,7 +18,7 @@ void main() {
       ),
     );
 
-    expect(find.text('Learn more on the We Connect website'), findsOneWidget);
+    expect(find.text('Learn more on the Entrelace website'), findsOneWidget);
     expect(find.byIcon(Icons.open_in_new), findsOneWidget);
   });
 }

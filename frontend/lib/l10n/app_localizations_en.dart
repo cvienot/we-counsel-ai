@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'We Connect';
+  String get appTitle => 'Entrelace';
 
   @override
   String get appSubtitle => 'Your relationship journey together';
@@ -138,7 +138,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get invitePartnerDescription =>
-      'Invite your partner to join you on We Connect. They will receive an email with instructions to create their account and connect with you.';
+      'Invite your partner to join you on Entrelace. They will receive an email with instructions to create their account and connect with you.';
 
   @override
   String get partnerEmailAddress => 'Partner\'s Email Address';
@@ -167,7 +167,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String invitationSentMessage(String email) {
-    return 'An invitation has been sent to $email. They will receive an email with instructions to join you on We Connect.';
+    return 'An invitation has been sent to $email. They will receive an email with instructions to join you on Entrelace.';
   }
 
   @override
@@ -188,7 +188,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String waitingRoomGreeting(String name) {
-    return 'Hi $name! Your coaching journey will begin once your partner joins you on We Connect.';
+    return 'Hi $name! Your coaching journey will begin once your partner joins you on Entrelace.';
   }
 
   @override
@@ -202,7 +202,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String getStartedGreeting(String name) {
-    return 'Hi $name! To begin your coaching journey, invite your partner to join you on We Connect.';
+    return 'Hi $name! To begin your coaching journey, invite your partner to join you on Entrelace.';
   }
 
   @override
@@ -470,7 +470,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get upgradeOrChangeSubscription => 'Upgrade or change subscription';
 
   @override
-  String get welcomeToApp => 'Welcome to We Connect';
+  String get welcomeToApp => 'Welcome to Entrelace';
 
   @override
   String get strengthenRelationship => 'Strengthen your relationship together';
@@ -480,7 +480,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get whyAiForCouplesIntro =>
-      'Technology often pulls partners into separate worlds. We Connect is built for the opposite: a shared space where both voices can be heard.';
+      'Technology often pulls partners into separate worlds. Entrelace is built for the opposite: a shared space where both voices can be heard.';
 
   @override
   String get whyAiForCouplesSharedSpaceTitle => 'Designed around the couple';
@@ -523,14 +523,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createAccount => 'Create Account';
 
   @override
-  String get joinApp => 'Join We Connect';
+  String get joinApp => 'Join Entrelace';
 
   @override
   String get startJourneyBetterComm =>
       'Start your journey to better communication';
 
   @override
-  String get learnMoreOnWebsite => 'Learn more on the We Connect website';
+  String get learnMoreOnWebsite => 'Learn more on the Entrelace website';
 
   @override
   String get pleaseEnterAPassword => 'Please enter a password';
@@ -586,7 +586,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get partnerInvitedYou =>
-      'Your partner has invited you to join We Connect. Create an account or sign in to start your relationship coaching journey together.';
+      'Your partner has invited you to join Entrelace. Create an account or sign in to start your relationship coaching journey together.';
 
   @override
   String get alreadySignedInAccept =>

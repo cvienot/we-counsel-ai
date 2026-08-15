@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "appTitle": "We Connect",
+  "appTitle": "Entrelace",
   "appSubtitle": "Your relationship journey together",
 
   "login": "Login",
@@ -46,7 +46,7 @@
   "invitePartner": "Invite Partner",
   "inviteYourPartner": "Invite Your Partner",
   "sendInvitation": "Send Invitation",
-  "invitePartnerDescription": "Invite your partner to join you on We Connect. They will receive an email with instructions to create their account and connect with you.",
+  "invitePartnerDescription": "Invite your partner to join you on Entrelace. They will receive an email with instructions to create their account and connect with you.",
   "partnerEmailAddress": "Partner's Email Address",
   "enterPartnerEmail": "Enter your partner's email address",
   "pleaseEnterPartnerEmail": "Please enter your partner's email",
@@ -55,7 +55,7 @@
   "personalMessageOptional": "Personal Message (Optional)",
   "addPersonalMessage": "Add a personal message to your invitation...",
   "invitationSent": "Invitation Sent!",
-  "invitationSentMessage": "An invitation has been sent to {email}. They will receive an email with instructions to join you on We Connect.",
+  "invitationSentMessage": "An invitation has been sent to {email}. They will receive an email with instructions to join you on Entrelace.",
   "@invitationSentMessage": {
     "placeholders": {
       "email": { "type": "String" }
@@ -66,7 +66,7 @@
   "ok": "OK",
   "waitingForPartner": "Waiting for your partner to join...",
   "waitingForPartnerTitle": "Waiting for your partner",
-  "waitingRoomGreeting": "Hi {name}! Your coaching journey will begin once your partner joins you on We Connect.",
+  "waitingRoomGreeting": "Hi {name}! Your coaching journey will begin once your partner joins you on Entrelace.",
   "@waitingRoomGreeting": {
     "placeholders": {
       "name": { "type": "String" }
@@ -75,7 +75,7 @@
   "whatHappensNext": "What happens next?",
   "sendAnotherInvitation": "Send Another Invitation",
   "getStartedTitle": "Get Started",
-  "getStartedGreeting": "Hi {name}! To begin your coaching journey, invite your partner to join you on We Connect.",
+  "getStartedGreeting": "Hi {name}! To begin your coaching journey, invite your partner to join you on Entrelace.",
   "@getStartedGreeting": {
     "placeholders": {
       "name": { "type": "String" }
@@ -200,10 +200,10 @@
   "changePlan": "Change Plan",
   "upgradeOrChangeSubscription": "Upgrade or change subscription",
 
-  "welcomeToApp": "Welcome to We Connect",
+  "welcomeToApp": "Welcome to Entrelace",
   "strengthenRelationship": "Strengthen your relationship together",
   "whyAiForCouplesTitle": "Why AI for couples?",
-  "whyAiForCouplesIntro": "Technology often pulls partners into separate worlds. We Connect is built for the opposite: a shared space where both voices can be heard.",
+  "whyAiForCouplesIntro": "Technology often pulls partners into separate worlds. Entrelace is built for the opposite: a shared space where both voices can be heard.",
   "whyAiForCouplesSharedSpaceTitle": "Designed around the couple",
   "whyAiForCouplesSharedSpaceText": "The coach sees the conversation as something you create together. It helps slow down the pattern, reflect both perspectives, and avoid becoming one person's echo chamber.",
   "whyAiForCouplesTechTitle": "Technology that brings you back",
@@ -217,9 +217,9 @@
   "loginFailed": "Login failed",
 
   "createAccount": "Create Account",
-  "joinApp": "Join We Connect",
+  "joinApp": "Join Entrelace",
   "startJourneyBetterComm": "Start your journey to better communication",
-  "learnMoreOnWebsite": "Learn more on the We Connect website",
+  "learnMoreOnWebsite": "Learn more on the Entrelace website",
   "pleaseEnterAPassword": "Please enter a password",
   "passwordMinLength": "Password must be at least 6 characters",
   "pleaseConfirmPassword": "Please confirm your password",
@@ -237,7 +237,7 @@
 
   "joinYourPartner": "Join Your Partner",
   "youveBeenInvited": "You've been invited!",
-  "partnerInvitedYou": "Your partner has invited you to join We Connect. Create an account or sign in to start your relationship coaching journey together.",
+  "partnerInvitedYou": "Your partner has invited you to join Entrelace. Create an account or sign in to start your relationship coaching journey together.",
   "alreadySignedInAccept": "You're already signed in. Click below to accept the invitation.",
   "acceptInvitation": "Accept Invitation",
   "invitationInfoSteps": "• If you already have an account, sign in to connect with your partner\n• If you're new, create an account to get started\n• Once connected, you can start conversations together",

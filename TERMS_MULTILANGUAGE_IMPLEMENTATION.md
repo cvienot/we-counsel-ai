@@ -297,7 +297,7 @@ This will install `flutter_markdown` and bundle the asset files.
 
 **Legal Questions:**
 - Consult with legal counsel
-- Contact: support@we-connect-app.com
+- Contact: support@entrelace.app
 
 **Translation Questions:**
 - Hire certified legal translator

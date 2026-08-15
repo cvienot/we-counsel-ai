@@ -2,15 +2,15 @@
 
 **Ultima actualizacion:** 28 de mayo de 2026
 
-Esta Politica de Privacidad explica como We Connect ("el Servicio", "nosotros", "nuestro") recopila, usa, almacena y comparte informacion personal cuando usted utiliza el Servicio.
+Esta Politica de Privacidad explica como Entrelace ("el Servicio", "nosotros", "nuestro") recopila, usa, almacena y comparte informacion personal cuando usted utiliza el Servicio.
 
 ## 1. Quienes Somos
 
-We Connect proporciona un servicio de coaching de pareja y comunicacion asistido por IA.
+Entrelace proporciona un servicio de coaching de pareja y comunicacion asistido por IA.
 
-Responsable del tratamiento: Camille Vienot, operando We Connect, SIREN 104281621, inscrito en el RNE el 28/04/2026.
+Responsable del tratamiento: Camille Vienot, operando Entrelace, SIREN 104281621, inscrito en el RNE el 28/04/2026.
 
-Contacto: support@we-connect-app.com
+Contacto: support@entrelace.app
 
 ## 2. Informacion Que Recopilamos
 
@@ -82,7 +82,7 @@ Los datos de cuenta, pareja, conversacion, ejercicio e interaccion con IA se con
 
 Segun su ubicacion, puede tener derechos de acceso, correccion, eliminacion, restriccion, oposicion, retirada de consentimiento o portabilidad de su informacion personal. Podemos necesitar verificar su identidad antes de procesar una solicitud.
 
-Para ejercer estos derechos, contacte support@we-connect-app.com.
+Para ejercer estos derechos, contacte support@entrelace.app.
 
 Si esta en Francia o en la Union Europea y considera que su solicitud no se ha gestionado correctamente, puede presentar una reclamacion ante la CNIL o ante su autoridad local de proteccion de datos.
 
@@ -106,4 +106,4 @@ Podemos actualizar esta Politica de Privacidad. Los cambios materiales pueden re
 
 ## 14. Contacto
 
-Preguntas o solicitudes: support@we-connect-app.com
+Preguntas o solicitudes: support@entrelace.app

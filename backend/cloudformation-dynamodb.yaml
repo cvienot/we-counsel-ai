@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'DynamoDB tables for We Connect application - all 8 tables matching src/database/schema.js'
+Description: 'DynamoDB tables for Entrelace application - all 8 tables matching src/database/schema.js'
 
 Resources:
   UsersTable:

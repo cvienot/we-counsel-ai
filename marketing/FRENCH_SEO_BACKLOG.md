@@ -20,7 +20,7 @@ Publish 2 articles per week for 10 weeks. Start with practical, non-clinical com
 | P1 | comment parler à son conjoint sans se disputer | `parler-sans-se-disputer` | Wants a practical method before a hard conversation | A simple 4-step conversation frame: subject, feeling, need, next step | Create a private space before the discussion |
 | P1 | on se dispute tout le temps couple | `on-se-dispute-tout-le-temps` | Repeated conflict, high frustration | Identify the conflict loop and choose one repeatable pause/restart rule | Track one recurring topic together |
 | P1 | je n'arrive plus à parler à mon conjoint | `je-n-arrive-plus-a-parler-a-mon-conjoint` | Emotional block, fear of escalation | How to restart with a written first message and a short guided exchange | Start alone with a draft message |
-| P1 | exercice ecoute active couple | `exercice-ecoute-active-couple` | Wants an actionable exercise | 15-minute listening exercise with examples and reformulation prompts | Try the exercise in We Connect |
+| P1 | exercice ecoute active couple | `exercice-ecoute-active-couple` | Wants an actionable exercise | 15-minute listening exercise with examples and reformulation prompts | Try the exercise in Entrelace |
 | P2 | comment renouer le dialogue après une dispute | `renouer-dialogue-apres-dispute` | Repair after conflict | A repair conversation template for the next day, not during escalation | Prepare the repair conversation |
 | P2 | couple qui ne se parle plus | `couple-qui-ne-se-parle-plus` | Silence and distance | Distinguish fatigue, avoidance, resentment, and fear; choose a gentle first step | Create a quiet shared space |
 | P2 | comment exprimer ses besoins dans le couple | `exprimer-ses-besoins-couple` | Communication skill | Turn reproaches into needs without becoming vague or accusatory | Clarify needs before inviting partner |
@@ -46,7 +46,7 @@ Each new article should follow this structure:
 3. Explanation of why the pattern happens.
 4. Concrete signs or examples.
 5. One 10-15 minute exercise or script.
-6. "Ce que We Connect peut apporter" section that frames the app as a structure, not a miracle.
+6. "Ce que Entrelace peut apporter" section that frames the app as a structure, not a miracle.
 7. Safety note for crisis, fear, violence, coercion, or severe distress.
 8. FAQ with 3 questions written for real search phrasing.
 9. Solo-visitor sidebar CTA with article-specific UTM.

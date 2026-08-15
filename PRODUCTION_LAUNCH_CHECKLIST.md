@@ -1,10 +1,10 @@
-# We Connect Production Launch Checklist
+# Entrelace Production Launch Checklist
 
 Created: 2026-05-06
 
 Repo audited: `/Users/c.vienot/projects/we-counsel-reboot`
 
-Assumption: this is the `we-connect-app` production repo because it contains the We Connect marketing site, `we-connect-app.com` domains, App Runner backend config, Amplify frontend config, Stripe payment code, and launch/legal docs.
+Assumption: this is the `we-connect-app` production repo because it contains the Entrelace marketing site, `entrelace.app` domains, App Runner backend config, Amplify frontend config, Stripe payment code, and launch/legal docs.
 
 This is not legal advice. The legal/privacy section should be reviewed by counsel before public launch, especially because the product handles relationship and mental-health-adjacent content.
 
@@ -13,8 +13,8 @@ This is not legal advice. The legal/privacy section should be reviewed by counse
 - [x] Resolve the privacy/legal mismatch before sending traffic.
   - Added standalone privacy policy content in `PRIVACY_POLICY.md` and localized app assets under `frontend/assets/privacy/`.
   - Added public app routes `/terms` and `/privacy`.
-  - Updated the marketing footer so Privacy Policy points to `https://app.we-connect-app.com/privacy`.
-  - Aligned user-facing launch surfaces from "We Coach" to "We Connect".
+  - Updated the marketing footer so Privacy Policy points to `https://app.entrelace.app/privacy`.
+  - Aligned user-facing launch surfaces from "We Coach" to "Entrelace".
 
 - [x] Confirm governing law and venue before public launch.
   - Terms now use French law with consumer-safe jurisdiction wording and no mandatory consumer arbitration.
@@ -177,7 +177,7 @@ Metrics currently reported:
   - `utm_term`: paid-search keyword only.
 
 - [x] Preserve campaign tags across marketing-to-app navigation.
-  - `marketing/script.js` appends current `utm_*` query params to app-entry links that point to `https://app.we-connect-app.com/`.
+  - `marketing/script.js` appends current `utm_*` query params to app-entry links that point to `https://app.entrelace.app/`.
   - Legal links such as `/terms` and `/privacy` are intentionally left unchanged.
 
 - [x] Store attribution at signup.
@@ -208,7 +208,7 @@ Metrics currently reported:
   - Privacy policy now warns users not to share unnecessary sensitive information and documents account-active retention plus legal/security/billing exceptions.
 
 - [x] Update Terms of Service.
-  - [x] Align "We Coach" vs "We Connect".
+  - [x] Align "We Coach" vs "Entrelace".
   - [x] Fill governing law and dispute venue.
   - [x] Add paid subscription, renewal, cancellation, refunds, trials, taxes, and chargeback terms.
   - [x] Add clear AI limitations and crisis/emergency disclaimer.
