@@ -11,6 +11,7 @@ import '../../widgets/ctrl_enter_submit.dart';
 import '../../widgets/responsive_layout.dart';
 import '../../utils/snackbar_utils.dart';
 import '../../utils/navigation_utils.dart';
+import '../../utils/email_validator.dart';
 import '../plan_selection_screen.dart';
 import 'privacy_policy_screen.dart';
 import 'terms_of_service_screen.dart';
@@ -264,9 +265,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         if (value == null || value.isEmpty) {
                           return l10n.pleaseEnterEmail;
                         }
-                        if (!RegExp(
-                          r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                        ).hasMatch(value)) {
+                        if (!isValidEmail(value)) {
                           return l10n.pleaseEnterValidEmail;
                         }
                         return null;

@@ -7,6 +7,7 @@ import '../../widgets/ctrl_enter_submit.dart';
 import '../../widgets/responsive_layout.dart';
 import '../../utils/snackbar_utils.dart';
 import '../../utils/navigation_utils.dart';
+import '../../utils/email_validator.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -117,9 +118,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         if (value == null || value.isEmpty) {
                           return l10n.pleaseEnterEmail;
                         }
-                        if (!RegExp(
-                          r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                        ).hasMatch(value)) {
+                        if (!isValidEmail(value)) {
                           return l10n.pleaseEnterValidEmail;
                         }
                         return null;
