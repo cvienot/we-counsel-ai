@@ -4,6 +4,23 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+const COACH_MODEL = 'gpt-5.2';
+const SUMMARY_MODEL = 'gpt-5-mini';
+
+const buildUsageRecord = (usage, model) => {
+  if (!usage) return null;
+
+  return {
+    model,
+    promptTokens: usage.prompt_tokens || 0,
+    completionTokens: usage.completion_tokens || 0,
+    totalTokens: usage.total_tokens || 0,
+    cachedPromptTokens: usage.prompt_tokens_details?.cached_tokens || 0,
+    reasoningTokens: usage.completion_tokens_details?.reasoning_tokens || 0,
+    recordedAt: new Date().toISOString()
+  };
+};
+
 // Streaming function for real-time AI responses
 const generateCoachResponse = async ({ messages, context, partnerNames, waitingForPartner = false, recentExercises, onChunk, onComplete, onError }) => {
   try {
@@ -177,7 +194,7 @@ Only one partner is present right now. Their invited partner has not joined yet.
     }));
 
     const stream = await openai.chat.completions.create({
-      model: 'gpt-5.2',
+      model: COACH_MODEL,
       messages: [
         { role: 'system', content: systemPrompt },
         ...conversationHistory
@@ -185,11 +202,16 @@ Only one partner is present right now. Their invited partner has not joined yet.
       max_completion_tokens: 600,
       temperature: 0.7,
       stream: true,
+      stream_options: { include_usage: true },
     });
 
     let fullResponse = '';
+    let usage = null;
     
     for await (const chunk of stream) {
+      if (chunk.usage) {
+        usage = chunk.usage;
+      }
       const content = chunk.choices[0]?.delta?.content || '';
       if (content) {
         fullResponse += content;
@@ -216,7 +238,7 @@ Only one partner is present right now. Their invited partner has not joined yet.
       await onChunk(exerciseSuggestion);
     }
 
-    onComplete(fullResponse);
+    await onComplete(fullResponse, buildUsageRecord(usage, COACH_MODEL));
     return fullResponse;
 
   } catch (error) {
@@ -464,33 +486,44 @@ const pickBestExercise = (messages, recentExercises) => {
   return bestExercise;
 };
 
-const summarizeConversation = async ({ messages, conversationTitle }) => {
+const summarizeConversation = async ({ messages, conversationTitle, previousSummary = '' }) => {
   try {
     const messageText = messages.map(msg => 
-      `${msg.senderName}: ${msg.content}`
+      `[${msg.senderType === 'ai' ? 'Coach' : 'Partner'}: ${msg.senderName}] ${msg.content}`
     ).join('\n');
 
     const response = await openai.chat.completions.create({
-      model: 'gpt-5-mini',
+      model: SUMMARY_MODEL,
       messages: [
         {
           role: 'system',
-          content: `You are a relationship communication coach creating a brief summary of a couples conversation. Focus on:
-          - Key topics discussed
-          - Main communication patterns observed
-          - Progress or insights gained
-          - Areas for continued focus
-          Keep the summary professional, empathetic, and constructive. Remember this is communication support, not therapy.`
+          content: `You maintain durable memory for an AI relationship communication coach. Return a concise structured memory in the conversation's language. Use these five English Markdown headings exactly, but write their content in the conversation's language:
+## Couple context
+## Each partner's perspective
+## Unresolved topics
+## Agreements and practices
+## Coach continuity
+
+Rules:
+- Attribute every feeling, need, belief, request, or concern to the person who expressed it. Do not infer motives or take sides.
+- Record only agreements both partners explicitly accepted. A coach suggestion is never an agreement unless the couple accepted it.
+- Preserve relevant context from the previous memory and incorporate only durable new information.
+- Mention prior coach advice only in "Coach continuity" and never present it as a fact about either partner.
+- Omit transient wording, generic encouragement, and clinical interpretation.
+- Be professional, empathetic, constructive, and brief. This is communication coaching, not therapy.`
         },
         {
           role: 'user',
-          content: `Please summarize this conversation titled "${conversationTitle}":\n\n${messageText}`
+          content: `Conversation title: "${conversationTitle}"\n\nPrevious memory:\n${previousSummary || '(none yet)'}\n\nNew conversation messages to incorporate:\n${messageText}`
         }
       ],
-      max_completion_tokens: 300,
+      max_completion_tokens: 400,
     });
 
-    return response.choices[0].message.content;
+    return {
+      summary: response.choices[0].message.content,
+      usage: buildUsageRecord(response.usage, SUMMARY_MODEL)
+    };
 
   } catch (error) {
     console.error('OpenAI summary error:', error);
@@ -546,6 +579,7 @@ I'm here to support your communication as a couple, but the situation you've des
 module.exports = {
   generateCoachResponse,
   summarizeConversation,
+  buildUsageRecord,
   detectCrisisKeywords,
   getCrisisResponse,
   detectCommitmentOpportunity,

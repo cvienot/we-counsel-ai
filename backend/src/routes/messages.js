@@ -10,6 +10,8 @@ const exerciseService = require('../services/exerciseService');
 const { randomUUID } = require('crypto');
 
 const router = express.Router();
+const RECENT_WINDOW = 15;
+const SUMMARY_BATCH_SIZE = 10;
 
 // Helper function to get user's full name with fallback
 const getUserFullName = (user) => {
@@ -18,67 +20,94 @@ const getUserFullName = (user) => {
   return `${firstName} ${lastName}`.trim();
 };
 
-// Helper function to build context with smart summarization
+const deduplicateMessages = (messages) => {
+  const seen = new Set();
+
+  return messages.filter((message) => {
+    const key = message.messageId || `${message.senderId}:${message.timestamp}:${message.content}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+};
+
+const getAllConversationMessages = async (conversationId) => {
+  const messages = [];
+  let lastEvaluatedKey;
+
+  do {
+    const result = await docClient.send(new QueryCommand({
+      TableName: TABLES.MESSAGES,
+      IndexName: 'conversationId-timestamp-index',
+      KeyConditionExpression: 'conversationId = :conversationId',
+      ExpressionAttributeValues: {
+        ':conversationId': conversationId
+      },
+      ScanIndexForward: true,
+      ExclusiveStartKey: lastEvaluatedKey
+    }));
+
+    messages.push(...(result.Items || []));
+    lastEvaluatedKey = result.LastEvaluatedKey;
+  } while (lastEvaluatedKey);
+
+  return deduplicateMessages(messages);
+};
+
+// Keep a small verbatim window and compact only messages that have fallen out of it.
 const buildConversationContext = async (conversation, recentMessages) => {
   const messageCount = conversation.messageCount || 0;
-  const RECENT_WINDOW = 15; // Keep last 15 messages in full
-  const SUMMARY_THRESHOLD = 20; // Summarize every 20 messages
-  
-  let contextMessages = recentMessages;
+  let contextMessages = deduplicateMessages(recentMessages);
   let contextPrefix = '';
 
-  // If we have more messages than the recent window, check if we need to update summary
   if (messageCount > RECENT_WINDOW) {
     const summarizedCount = conversation.summarizedMessageCount || 0;
-    const unsummarizedCount = messageCount - summarizedCount;
+    const eligibleMessageCount = Math.max(0, messageCount - RECENT_WINDOW);
+    const unsummarizedEligibleCount = Math.max(0, eligibleMessageCount - summarizedCount);
 
-    // Need to generate or update summary if we have 20+ new messages since last summary
-    if (unsummarizedCount >= SUMMARY_THRESHOLD) {
-      console.log(`📊 Generating summary for conversation ${conversation.conversationId} (${unsummarizedCount} new messages)`);
+    if (unsummarizedEligibleCount >= SUMMARY_BATCH_SIZE) {
+      console.log(`📊 Updating memory for conversation ${conversation.conversationId} (${unsummarizedEligibleCount} messages ready to compact)`);
       
       try {
-        // Get all messages that haven't been summarized yet
-        const oldMessagesParams = {
-          TableName: TABLES.MESSAGES,
-          IndexName: 'conversationId-timestamp-index',
-          KeyConditionExpression: 'conversationId = :conversationId',
-          ExpressionAttributeValues: {
-            ':conversationId': conversation.conversationId
-          },
-          ScanIndexForward: true, // Oldest first
-          Limit: messageCount - RECENT_WINDOW // Everything except recent window
-        };
+        const allMessages = await getAllConversationMessages(conversation.conversationId);
+        const currentRecentMessages = allMessages.slice(-RECENT_WINDOW);
+        const currentEligibleCount = Math.max(0, allMessages.length - currentRecentMessages.length);
+        const startIndex = Math.min(summarizedCount, currentEligibleCount);
+        const messagesToSummarize = allMessages.slice(startIndex, currentEligibleCount);
 
-        const oldMessagesResult = await docClient.send(new QueryCommand(oldMessagesParams));
-        const messagesToSummarize = oldMessagesResult.Items;
+        if (messagesToSummarize.length < SUMMARY_BATCH_SIZE) {
+          if (conversation.summary) {
+            contextPrefix = `**Session History Summary:**\n${conversation.summary}\n\n**Recent conversation:**\n`;
+          }
+          return { messages: contextMessages, contextPrefix, hasSummary: !!contextPrefix };
+        }
 
-        // Generate summary of older messages
-        console.log(`🔍 Type check: summarizeConversation = ${typeof summarizeConversation}`);
-        const summary = await summarizeConversation({
+        const { summary, usage } = await summarizeConversation({
           messages: messagesToSummarize,
-          conversationTitle: conversation.title
+          conversationTitle: conversation.title,
+          previousSummary: conversation.summary
         });
 
-        // Update conversation with new summary
         const updateParams = {
           TableName: TABLES.CONVERSATIONS,
           Key: { conversationId: conversation.conversationId },
-          UpdateExpression: 'SET summary = :summary, lastSummarizedAt = :timestamp, summarizedMessageCount = :count',
+          UpdateExpression: 'SET summary = :summary, lastSummarizedAt = :timestamp, summarizedMessageCount = :count, lastSummaryUsage = :usage',
           ExpressionAttributeValues: {
             ':summary': summary,
             ':timestamp': new Date().toISOString(),
-            ':count': messageCount - RECENT_WINDOW
+            ':count': startIndex + messagesToSummarize.length,
+            ':usage': usage || null
           }
         };
 
         await docClient.send(new UpdateCommand(updateParams));
         
+        contextMessages = currentRecentMessages;
         contextPrefix = `**Session History Summary:**\n${summary}\n\n**Recent conversation:**\n`;
-        console.log(`✅ Summary generated and stored`);
+        console.log(`✅ Conversation memory updated with ${messagesToSummarize.length} messages`);
       } catch (error) {
-        console.error(`❌ Error generating summary:`, error);
-        console.warn('⚠️ Continuing without a conversation summary for this response');
-        contextMessages = recentMessages;
+        console.error(`❌ Error updating conversation memory:`, error);
+        console.warn('⚠️ Continuing without a memory update for this response');
         contextPrefix = '';
       }
     } else if (conversation.summary) {
@@ -297,7 +326,7 @@ router.post('/:conversationId/ai-stream', authenticateToken, checkAIMessageLimit
             ':conversationId': conversationId
           },
           ScanIndexForward: false,
-          Limit: 15 // Increased from 10 to 15 for better context
+          Limit: RECENT_WINDOW
         };
 
         const recentMessagesResult = await docClient.send(new QueryCommand(recentMessagesParams));
@@ -390,7 +419,9 @@ router.post('/:conversationId/ai-stream', authenticateToken, checkAIMessageLimit
         console.log('🤖 Starting AI response generation for conversation:', conversationId);
         try {
           await generateCoachResponse({
-            messages: [...contextMessages, messageData],
+            // The GSI may or may not have caught up with the newly saved message.
+            // Deduplication keeps the prompt stable in both cases.
+            messages: deduplicateMessages([...contextMessages, messageData]),
             context: contextString,
             partnerNames,
             waitingForPartner,
@@ -399,7 +430,7 @@ router.post('/:conversationId/ai-stream', authenticateToken, checkAIMessageLimit
               aiResponseContent += chunk;
               await streamingService.streamAIResponse(conversationId, aiMessageId, chunk, false);
             },
-            onComplete: async (fullResponse) => {
+            onComplete: async (fullResponse, usage) => {
               // Save complete AI response to database
               const aiResponse = {
                 messageId: aiMessageId,
@@ -410,7 +441,8 @@ router.post('/:conversationId/ai-stream', authenticateToken, checkAIMessageLimit
                 content: fullResponse,
                 recipientType: 'both',
                 timestamp: Date.now(),
-                createdAt: new Date().toISOString()
+                createdAt: new Date().toISOString(),
+                ...(usage ? { aiUsage: usage } : {})
               };
 
               const aiMessageParams = {
