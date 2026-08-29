@@ -4,8 +4,8 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const COACH_MODEL = 'gpt-5.2';
-const SUMMARY_MODEL = 'gpt-5-mini';
+const COACH_MODEL = 'gpt-5.6-terra';
+const SUMMARY_MODEL = 'gpt-5.6-luna';
 
 const buildUsageRecord = (usage, model) => {
   if (!usage) return null;
