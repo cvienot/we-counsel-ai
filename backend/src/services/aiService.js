@@ -200,7 +200,6 @@ Only one partner is present right now. Their invited partner has not joined yet.
         ...conversationHistory
       ],
       max_completion_tokens: 600,
-      temperature: 0.7,
       stream: true,
       stream_options: { include_usage: true },
     });

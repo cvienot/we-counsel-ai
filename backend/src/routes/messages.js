@@ -500,14 +500,14 @@ router.post('/:conversationId/ai-stream', authenticateToken, checkAIMessageLimit
             await docClient.send(new PutCommand(errorMessageParams));
 
             // Update conversation count for error message too
-            await docClient.update({
+            await docClient.send(new UpdateCommand({
               ...updateConversationParams,
               UpdateExpression: 'SET lastMessageAt = :lastMessageAt, messageCount = messageCount + :increment',
               ExpressionAttributeValues: {
                 ':lastMessageAt': new Date().toISOString(),
                 ':increment': 1
               }
-            }).promise();
+            }));
 
             // Send error message to both users via streaming
             streamingService.sendMessageNotification(conversationId, 'ai-counsellor', errorMessage);
